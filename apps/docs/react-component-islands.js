@@ -4,6 +4,7 @@ import { Button } from "./generated/react/Button.js?v=1";
 import { Checkbox } from "./generated/react/Checkbox.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
+import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
 
 const mounted = new WeakMap();
@@ -12,6 +13,7 @@ const reactComponents = {
   checkbox: Checkbox,
   "icon-button": IconButton,
   input: Input,
+  "radio-button": RadioButton,
   select: Select,
 };
 
@@ -42,6 +44,15 @@ function SelectIsland({ initialProps }) {
   });
 }
 
+function RadioButtonIsland({ initialProps }) {
+  const [checked, setChecked] = React.useState(Boolean(initialProps.checked));
+  return React.createElement(RadioButton, {
+    ...initialProps,
+    checked,
+    onCheckedChange: setChecked,
+  });
+}
+
 function parseProps(node) {
   try {
     return JSON.parse(node.dataset.reactProps ?? "{}");
@@ -65,6 +76,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(CheckboxIsland, { initialProps: props })
         : node.dataset.reactComponent === "select"
           ? React.createElement(SelectIsland, { initialProps: props })
+        : node.dataset.reactComponent === "radio-button"
+          ? React.createElement(RadioButtonIsland, { initialProps: props })
         : React.createElement(Component, props),
     );
   }

@@ -128,6 +128,14 @@ function escapeAttribute(value) {
     .replace(/>/g, "&gt;");
 }
 
+function demoSlug(value) {
+  return String(value)
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
 function reactButtonDemo(demo = {}) {
   const props = componentDemoProps("button", demo);
   const state = props.state ?? demo.state ?? "default";
@@ -163,12 +171,21 @@ function reactCheckboxDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="checkbox" data-component-source="react" data-doc-component="checkbox" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactRadioButtonDemo(demo = {}) {
+  const props = componentDemoProps("radio-button", demo);
+  props.name = `${props.name || "radio-button-demo"}-${demoSlug(`${props.label}-${props.value}-${props.state}-${props.variant}`)}`;
+  const state = props.state ?? demo.state ?? "unselected";
+  const variant = props.variant ?? demo.variant ?? "default";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="radio-button" data-component-source="react" data-doc-component="radio-button" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
   if (component === "button") return reactButtonDemo(demo);
   if (component === "checkbox") return reactCheckboxDemo(demo);
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "input") return reactInputDemo(demo);
+  if (component === "radio-button") return reactRadioButtonDemo(demo);
   if (component === "select") return reactSelectDemo(demo);
   const node = renderComponentDemo(component, demo);
   persistNativeFieldState(node);
