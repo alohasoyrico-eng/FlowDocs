@@ -1,4 +1,4 @@
-import { hydrateDateRangePicker, hydrateCombobox, hydrateCountrySelector } from "#design-system/components";
+import { hydrateCombobox, hydrateCountrySelector } from "#design-system/components";
 import { iconGlyph } from "./icon-system.js";
 
 export function setupStatefulComponentDemos(root = document) {
@@ -351,6 +351,5 @@ function setupDatePickerDemos(root = document) {
 function setupDateRangePickerDemos(root = document) {
   root.querySelectorAll('[data-doc-component="date-range-picker"]:not([data-stateful-ready="true"])').forEach((picker) => {
     picker.dataset.statefulReady = "true";
-    hydrateDateRangePicker(picker);
   });
 }
