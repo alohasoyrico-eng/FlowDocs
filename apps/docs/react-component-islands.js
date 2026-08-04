@@ -16,6 +16,7 @@ import { Input } from "./generated/react/Input.js?v=1";
 import { PhoneInput } from "./generated/react/PhoneInput.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
+import { SegmentedControl } from "./generated/react/SegmentedControl.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
@@ -39,6 +40,7 @@ const reactComponents = {
   "phone-input": PhoneInput,
   "radio-button": RadioButton,
   select: Select,
+  "segmented-control": SegmentedControl,
   switch: Switch,
   tag: Tag,
   tooltip: Tooltip,
@@ -140,6 +142,20 @@ function SelectIsland({ initialProps }) {
   });
 }
 
+function SegmentedControlIsland({ initialProps }) {
+  const fallbackKey = initialProps.items?.find?.((item) => item.selected)?.key
+    ?? initialProps.items?.find?.((item) => item.selected)?.value
+    ?? initialProps.items?.[0]?.key
+    ?? initialProps.items?.[0]?.value
+    ?? "";
+  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? fallbackKey);
+  return React.createElement(SegmentedControl, {
+    ...initialProps,
+    selectedKey,
+    onValueChange: setSelectedKey,
+  });
+}
+
 function RadioButtonIsland({ initialProps }) {
   const [checked, setChecked] = React.useState(Boolean(initialProps.checked));
   return React.createElement(RadioButton, {
@@ -204,6 +220,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(PhoneInputIsland, { initialProps: props })
         : node.dataset.reactComponent === "select"
           ? React.createElement(SelectIsland, { initialProps: props })
+        : node.dataset.reactComponent === "segmented-control"
+          ? React.createElement(SegmentedControlIsland, { initialProps: props })
         : node.dataset.reactComponent === "radio-button"
           ? React.createElement(RadioButtonIsland, { initialProps: props })
         : node.dataset.reactComponent === "switch"
