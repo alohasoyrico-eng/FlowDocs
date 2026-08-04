@@ -135,9 +135,17 @@ function reactButtonDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="button" data-component-source="react" data-doc-component="button" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactIconButtonDemo(demo = {}) {
+  const props = componentDemoProps("icon-button", demo);
+  const state = demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "ghost";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="icon-button" data-component-source="react" data-doc-component="icon-button" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
   if (component === "button") return reactButtonDemo(demo);
+  if (component === "icon-button") return reactIconButtonDemo(demo);
   const node = renderComponentDemo(component, demo);
   persistNativeFieldState(node);
   node.className = [node.className, "docs-package-demo"].filter(Boolean).join(" ");
