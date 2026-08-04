@@ -1,0 +1,39 @@
+.icon-button-scenario {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(var(--doc-column-min), .65fr);
+  gap: var(--sys-space-5);
+  align-items: stretch;
+}
+
+.icon-button-console {
+  display: grid;
+  gap: var(--sys-space-4);
+  padding: var(--sys-space-5);
+  border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
+  border-radius: var(--sys-frame-radius-container);
+  background: var(--sys-energy-surface-primary);
+}
+
+.icon-button-console header {
+  display: flex;
+  gap: var(--sys-space-2);
+  align-items: center;
+}
+
+.icon-button-console header small {
+  display: block;
+  color: var(--sys-energy-text-secondary);
+}
+
+.icon-button-toolbar {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--sys-space-3);
+  align-items: center;
+}
+
+@media (max-width: 52rem) {
+  .icon-button-scenario {
+    grid-template-columns: 1fr;
+  }
+}

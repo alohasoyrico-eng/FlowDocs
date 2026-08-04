@@ -1,0 +1,41 @@
+{
+  "name": "documentation-site",
+  "version": "0.3.0-platform-mvp",
+  "private": true,
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alohasoyrico-eng/FlowDocs.git"
+  },
+  "dependencies": {
+    "flow": "file:../Flow3.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "imports": {
+    "#design-system/components": "flow/components",
+    "#design-system/react": "flow/react",
+    "#design-system/components-css": "flow/components/styles.css",
+    "#design-system/tokens-css": "flow/tokens/styles.css",
+    "#design-system/content/catalog": "flow/content/catalog",
+    "#design-system/content/component-docs": "flow/content/component-docs",
+    "#design-system/content/component-copy": "flow/content/component-copy",
+    "#design-system/content/pattern-copy": "flow/content/pattern-copy",
+    "#design-system/content/component-implementation-status": "flow/content/component-implementation-status",
+    "#design-system/content/foundation-copy": "flow/content/foundation-copy",
+    "#design-system/content/primitive-copy": "flow/content/primitive-copy",
+    "#design-system/content/reference-copy": "flow/content/reference-copy",
+    "#design-system/content/template-blueprints": "flow/content/template-blueprints",
+    "#design-system/content/home": "flow/content/home",
+    "#design-system/content/i18n-ui": "flow/content/i18n-ui",
+    "#design-system/specs/system": "flow/specs/system"
+  },
+  "scripts": {
+    "build:docs-content": "node scripts/build-docs-content.mjs",
+    "build:docs-assets": "node scripts/build-docs-assets.mjs",
+    "build:docs": "npm run build:docs-content && npm run build:docs-assets",
+    "audit:docs": "node audit/audit-docs.js",
+    "audit:docs-runtime": "node audit/audit-docs-runtime.mjs",
+    "validate:docs": "npm run build:docs && npm run audit:docs && npm run audit:docs-runtime"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "open-doodles",
+  "name": "Open Doodles",
+  "creator": "Pablo Stanley",
+  "license": "CC0",
+  "source": "https://www.opendoodles.com/about",
+  "allowedFormats": ["svg", "png", "gif"],
+  "defaultFormat": "png",
+  "usage": "Approved source for editorial, onboarding, empty-state, and guidance illustrations when Flow owns purpose, accessibility, theme, and fallback behavior."
+}

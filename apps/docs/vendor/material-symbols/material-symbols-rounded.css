@@ -1,0 +1,38 @@
+@font-face {
+  font-family: 'Material Symbols Rounded';
+  font-style: normal;
+  font-weight: 400;
+  src: url("./material-symbols-rounded-400.ttf") format("truetype");
+}
+@font-face {
+  font-family: 'Material Symbols Rounded';
+  font-style: normal;
+  font-weight: 500;
+  src: url("./material-symbols-rounded-500.ttf") format("truetype");
+}
+@font-face {
+  font-family: 'Material Symbols Rounded';
+  font-style: normal;
+  font-weight: 600;
+  src: url("./material-symbols-rounded-600.ttf") format("truetype");
+}
+@font-face {
+  font-family: 'Material Symbols Rounded';
+  font-style: normal;
+  font-weight: 700;
+  src: url("./material-symbols-rounded-700.ttf") format("truetype");
+}
+
+.material-symbols-rounded {
+  font-family: 'Material Symbols Rounded';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+}

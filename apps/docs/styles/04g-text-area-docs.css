@@ -1,0 +1,17 @@
+.text-area-scenario {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(var(--doc-column-min), .65fr);
+  gap: var(--sys-space-5);
+  align-items: stretch;
+}
+
+.text-area-stack {
+  display: grid;
+  gap: var(--sys-space-3);
+}
+
+@media (max-width: 52rem) {
+  .text-area-scenario {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,63 @@
+.select-scenario {
+  display: grid;
+  grid-template-columns: minmax(var(--sys-frame-content-search-min), 1fr) minmax(var(--sys-frame-content-menu-min), 0.8fr);
+  gap: var(--sys-frame-gap-component-lg);
+  margin-block-start: var(--sys-frame-gap-component-lg);
+}
+
+.filter-console {
+  display: grid;
+  gap: var(--sys-frame-gap-component-lg);
+  padding: var(--sys-frame-padding-container);
+  border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
+  border-radius: var(--sys-frame-radius-container);
+  background: var(--sys-energy-surface-secondary);
+}
+
+.filter-console header {
+  display: flex;
+  gap: var(--sys-frame-gap-component);
+  align-items: center;
+}
+
+.filter-console header > span {
+  display: grid;
+  place-items: center;
+  inline-size: var(--sys-frame-doc-icon-md);
+  block-size: var(--sys-frame-doc-icon-md);
+  border-radius: var(--sys-radius-full);
+  background: var(--sys-energy-surface-accent);
+  color: var(--sys-energy-action-primary);
+}
+
+.filter-console small {
+  display: block;
+  color: var(--sys-energy-text-secondary);
+}
+
+.select-stack {
+  display: grid;
+  gap: var(--sys-frame-gap-component);
+}
+
+.select-density-scale {
+  display: grid;
+  gap: var(--sys-frame-gap-component);
+}
+
+.select-density-scale > div {
+  display: grid;
+  gap: var(--sys-space-2);
+}
+
+.select-density-scale > div::before {
+  content: attr(data-density-label);
+  justify-self: start;
+  padding: var(--sys-space-1) var(--sys-space-2);
+  border-radius: var(--sys-frame-radius-full);
+  background: var(--sys-energy-surface-primary);
+  color: var(--sys-energy-text-secondary);
+  font-size: var(--sys-voice-size-caption);
+  font-weight: var(--sys-voice-weight-bold);
+  text-transform: uppercase;
+}
