@@ -1,4 +1,4 @@
-import { hydrateDatePicker, hydrateDateRangePicker, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput } from "#design-system/components";
+import { hydrateDatePicker, hydrateDateRangePicker, hydrateCombobox, hydrateCountrySelector } from "#design-system/components";
 import { iconGlyph } from "./icon-system.js";
 
 export function setupStatefulComponentDemos(root = document) {
@@ -339,7 +339,6 @@ function setupCodeInputDemos(root = document) {
 function setupPhoneInputDemos(root = document) {
   root.querySelectorAll('[data-doc-component="phone-input"]:not([data-stateful-ready="true"]), .phone-input-demo:not([data-stateful-ready="true"])').forEach((phoneInput) => {
     phoneInput.dataset.statefulReady = "true";
-    hydratePhoneInput(phoneInput);
   });
 }
 

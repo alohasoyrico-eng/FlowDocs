@@ -74,6 +74,9 @@ for (const file of fs.readdirSync(reactOutputDir).filter((name) => name.endsWith
     fs.readFileSync(outputFile, "utf8").replaceAll(
       '"@design-system/components/platforms"',
       '"../components/platforms/index.js?v=1"'
+    ).replaceAll(
+      '"@design-system/components"',
+      '"../components/index.js?v=1"'
     )
   );
 }

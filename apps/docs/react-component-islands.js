@@ -8,6 +8,7 @@ import { Checkbox } from "./generated/react/Checkbox.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
+import { PhoneInput } from "./generated/react/PhoneInput.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
@@ -23,6 +24,7 @@ const reactComponents = {
   "code-input": CodeInput,
   "icon-button": IconButton,
   input: Input,
+  "phone-input": PhoneInput,
   "radio-button": RadioButton,
   select: Select,
   switch: Switch,
@@ -80,6 +82,20 @@ function CodeInputIsland({ initialProps }) {
     ...initialProps,
     value,
     onValueChange: setValue,
+  });
+}
+
+function PhoneInputIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "");
+  const [country, setCountry] = React.useState(initialProps.country ?? "MX");
+  return React.createElement(PhoneInput, {
+    ...initialProps,
+    value,
+    country,
+    onValueChange: (nationalNumber, meta) => {
+      setValue(nationalNumber);
+      if (meta?.country) setCountry(meta.country);
+    },
   });
 }
 
@@ -148,6 +164,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(CheckboxIsland, { initialProps: props })
         : node.dataset.reactComponent === "code-input"
           ? React.createElement(CodeInputIsland, { initialProps: props })
+        : node.dataset.reactComponent === "phone-input"
+          ? React.createElement(PhoneInputIsland, { initialProps: props })
         : node.dataset.reactComponent === "select"
           ? React.createElement(SelectIsland, { initialProps: props })
         : node.dataset.reactComponent === "radio-button"
