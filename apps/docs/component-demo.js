@@ -185,6 +185,12 @@ function reactSwitchDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="switch" data-component-source="react" data-doc-component="switch" data-demo-variant="default" data-demo-state="${escapeAttribute(state)}" data-variant="default" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactTextAreaDemo(demo = {}) {
+  const props = componentDemoProps("text-area", demo);
+  const state = props.state ?? demo.state ?? "default";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="text-area" data-component-source="react" data-doc-component="text-area" data-demo-variant="default" data-demo-state="${escapeAttribute(state)}" data-variant="default" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
   if (component === "button") return reactButtonDemo(demo);
@@ -194,6 +200,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "radio-button") return reactRadioButtonDemo(demo);
   if (component === "select") return reactSelectDemo(demo);
   if (component === "switch") return reactSwitchDemo(demo);
+  if (component === "text-area") return reactTextAreaDemo(demo);
   const node = renderComponentDemo(component, demo);
   persistNativeFieldState(node);
   node.className = [node.className, "docs-package-demo"].filter(Boolean).join(" ");

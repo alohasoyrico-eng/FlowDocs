@@ -1,8 +1,7 @@
-import { hydrateDatePicker, hydrateDateRangePicker, hydrateCardExpiryInput, hydrateCardNumberInput, hydrateCardSecurityCodeInput, hydrateCodeInput, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput, hydrateTextArea } from "#design-system/components";
+import { hydrateDatePicker, hydrateDateRangePicker, hydrateCardExpiryInput, hydrateCardNumberInput, hydrateCardSecurityCodeInput, hydrateCodeInput, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput } from "#design-system/components";
 import { iconGlyph } from "./icon-system.js";
 
 export function setupStatefulComponentDemos(root = document) {
-  setupTextAreaPackageDemos(root);
   setupComboboxDemos(root);
   setupCountrySelectorDemos(root);
   setupChipDemos(root);
@@ -31,13 +30,6 @@ function setStyleProperty(node, name, value) {
     return;
   }
   node?.setAttribute?.("style", `${node.getAttribute?.("style") ?? ""}; ${name}: ${value}`);
-}
-
-function setupTextAreaPackageDemos(root = document) {
-  root.querySelectorAll('[data-doc-component="text-area"]:not([data-stateful-ready="true"])').forEach((demo) => {
-    demo.dataset.statefulReady = "true";
-    hydrateTextArea(demo);
-  });
 }
 
 function setupCardNumberInputDemos(root = document) {
