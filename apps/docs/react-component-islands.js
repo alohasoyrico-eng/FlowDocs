@@ -6,6 +6,7 @@ import { CardExpiryInput } from "./generated/react/CardExpiryInput.js?v=1";
 import { CardNumberInput } from "./generated/react/CardNumberInput.js?v=1";
 import { CardSecurityCodeInput } from "./generated/react/CardSecurityCodeInput.js?v=1";
 import { Checkbox } from "./generated/react/Checkbox.js?v=1";
+import { Chip } from "./generated/react/Chip.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { DatePicker } from "./generated/react/DatePicker.js?v=1";
 import { DateRangePicker } from "./generated/react/DateRangePicker.js?v=1";
@@ -26,6 +27,7 @@ const reactComponents = {
   "card-number-input": CardNumberInput,
   "card-security-code-input": CardSecurityCodeInput,
   checkbox: Checkbox,
+  chip: Chip,
   "code-input": CodeInput,
   "date-picker": DatePicker,
   "date-range-picker": DateRangePicker,

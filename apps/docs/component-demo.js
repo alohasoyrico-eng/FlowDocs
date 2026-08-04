@@ -157,6 +157,13 @@ function reactTagDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="tag" data-component-source="react" data-doc-component="tag" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactChipDemo(demo = {}) {
+  const props = componentDemoProps("chip", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "filter";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="chip" data-component-source="react" data-doc-component="chip" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactIconButtonDemo(demo = {}) {
   const props = componentDemoProps("icon-button", demo);
   const state = demo.state ?? "default";
@@ -259,6 +266,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "card-number-input") return reactCardNumberInputDemo(demo);
   if (component === "card-security-code-input") return reactCardSecurityCodeInputDemo(demo);
   if (component === "checkbox") return reactCheckboxDemo(demo);
+  if (component === "chip") return reactChipDemo(demo);
   if (component === "code-input") return reactCodeInputDemo(demo);
   if (component === "date-picker") return reactDatePickerDemo(demo);
   if (component === "date-range-picker") return reactDateRangePickerDemo(demo);
