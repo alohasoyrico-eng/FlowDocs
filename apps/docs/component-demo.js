@@ -265,6 +265,13 @@ function reactTextAreaDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="text-area" data-component-source="react" data-doc-component="text-area" data-demo-variant="default" data-demo-state="${escapeAttribute(state)}" data-variant="default" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactTooltipDemo(demo = {}) {
+  const props = componentDemoProps("tooltip", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "default";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="tooltip" data-component-source="react" data-doc-component="tooltip" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
   if (component === "avatar") return reactAvatarDemo(demo);
@@ -286,6 +293,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "switch") return reactSwitchDemo(demo);
   if (component === "tag") return reactTagDemo(demo);
   if (component === "text-area") return reactTextAreaDemo(demo);
+  if (component === "tooltip") return reactTooltipDemo(demo);
   const node = renderComponentDemo(component, demo);
   persistNativeFieldState(node);
   node.className = [node.className, "docs-package-demo"].filter(Boolean).join(" ");

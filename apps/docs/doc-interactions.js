@@ -1,5 +1,5 @@
 import { setupButtonPlaygrounds } from "./button-playground-interactions.js";
-import { setupComponentDemoInteractions } from "./component-demo-interactions.js?v=275";
+import { setupComponentDemoInteractions } from "./component-demo-interactions.js?v=276";
 import { setupCandidatePatternInteractions } from "./pattern-candidate-interactions.js?v=9";
 import { setupDesktopPatternInteractions } from "./pattern-desktop-interactions.js?v=9";
 import { setupMobilePatternInteractions } from "./pattern-mobile-interactions.js?v=4";

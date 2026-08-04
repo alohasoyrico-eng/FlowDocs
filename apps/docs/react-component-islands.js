@@ -18,6 +18,7 @@ import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
+import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
 
 const mounted = new WeakMap();
@@ -40,6 +41,7 @@ const reactComponents = {
   select: Select,
   switch: Switch,
   tag: Tag,
+  tooltip: Tooltip,
   "text-area": TextArea,
 };
 

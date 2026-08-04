@@ -1,6 +1,6 @@
 import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=211";
 import { playgroundStaticControls } from "./gold-component-data.js?v=203";
-import { componentDemo } from "./component-demo.js?v=60";
+import { componentDemo } from "./component-demo.js?v=61";
 
 export function simpleDemo(component, demo = {}) {
   return componentDemo(component, demo) || "";

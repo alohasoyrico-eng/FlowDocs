@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=254";
 
 export function renderTooltipGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, tooltipDemoFromData); }
 export function tooltipDemo(label = "Show layout columns.", trigger = "Grid", placement = "top", variant = "default", state = "closed", iconName = "help") { return simpleDemo("tooltip", { label, trigger, placement, variant, state, icon: iconName }); }
