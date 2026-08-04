@@ -3,17 +3,28 @@ import { createRoot } from "react-dom/client";
 import { Button } from "./generated/react/Button.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
+import { Select } from "./generated/react/Select.js?v=1";
 
 const mounted = new WeakMap();
 const reactComponents = {
   button: Button,
   "icon-button": IconButton,
   input: Input,
+  select: Select,
 };
 
 function InputIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
   return React.createElement(Input, {
+    ...initialProps,
+    value,
+    onValueChange: setValue,
+  });
+}
+
+function SelectIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "");
+  return React.createElement(Select, {
     ...initialProps,
     value,
     onValueChange: setValue,
@@ -39,6 +50,8 @@ export function setupReactComponentIslands(root = document) {
     reactRoot.render(
       node.dataset.reactComponent === "input"
         ? React.createElement(InputIsland, { initialProps: props })
+        : node.dataset.reactComponent === "select"
+          ? React.createElement(SelectIsland, { initialProps: props })
         : React.createElement(Component, props),
     );
   }
