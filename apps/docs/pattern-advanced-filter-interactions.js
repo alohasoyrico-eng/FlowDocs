@@ -1,4 +1,4 @@
-import { hydrateSelect } from "#design-system/components";
+import { hydrateSelect } from "./generated/components/components/fields.js?v=21";
 
 export function setupAdvancedFilters(root = document) {
   root.querySelectorAll("[data-advanced-filters-demo]:not([data-advanced-filters-ready='true'])").forEach((demo) => {
