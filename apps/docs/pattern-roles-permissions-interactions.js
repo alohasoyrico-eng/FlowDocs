@@ -1,4 +1,4 @@
-import { createBadge } from "#design-system/components";
+import { createTransitionalBadge } from "./generated/components/components/status.js?v=1";
 
 const PERMISSION_COLUMNS = ["capability", "manager", "finance", "support"];
 const CONTROL_RULES = {
@@ -93,7 +93,7 @@ function findRoleCell(demo, capability, column) {
 
 function renderRoleBadge(cell, state) {
   if (!cell) return;
-  cell.replaceChildren(createBadge({ label: state.label, tone: state.tone, variant: "status" }));
+  cell.replaceChildren(createTransitionalBadge({ label: state.label, tone: state.tone, variant: "status" }));
 }
 
 function updateAuditEvent(demo, { label, description, status, state = "verified", tone = "success" }) {

@@ -143,6 +143,13 @@ function reactButtonDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="button" data-component-source="react" data-doc-component="button" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactBadgeDemo(demo = {}) {
+  const props = componentDemoProps("badge", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "status";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="badge" data-component-source="react" data-doc-component="badge" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactIconButtonDemo(demo = {}) {
   const props = componentDemoProps("icon-button", demo);
   const state = demo.state ?? "default";
@@ -239,6 +246,7 @@ function reactTextAreaDemo(demo = {}) {
 
 export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
+  if (component === "badge") return reactBadgeDemo(demo);
   if (component === "button") return reactButtonDemo(demo);
   if (component === "card-expiry-input") return reactCardExpiryInputDemo(demo);
   if (component === "card-number-input") return reactCardNumberInputDemo(demo);
