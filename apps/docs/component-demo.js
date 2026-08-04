@@ -189,6 +189,13 @@ function reactCheckboxDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="checkbox" data-component-source="react" data-doc-component="checkbox" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactCodeInputDemo(demo = {}) {
+  const props = componentDemoProps("code-input", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "sms";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="code-input" data-component-source="react" data-doc-component="code-input" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactRadioButtonDemo(demo = {}) {
   const props = componentDemoProps("radio-button", demo);
   props.name = `${props.name || "radio-button-demo"}-${demoSlug(`${props.label}-${props.value}-${props.state}-${props.variant}`)}`;
@@ -216,6 +223,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "card-number-input") return reactCardNumberInputDemo(demo);
   if (component === "card-security-code-input") return reactCardSecurityCodeInputDemo(demo);
   if (component === "checkbox") return reactCheckboxDemo(demo);
+  if (component === "code-input") return reactCodeInputDemo(demo);
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "input") return reactInputDemo(demo);
   if (component === "radio-button") return reactRadioButtonDemo(demo);

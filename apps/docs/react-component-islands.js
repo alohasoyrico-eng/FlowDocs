@@ -5,6 +5,7 @@ import { CardExpiryInput } from "./generated/react/CardExpiryInput.js?v=1";
 import { CardNumberInput } from "./generated/react/CardNumberInput.js?v=1";
 import { CardSecurityCodeInput } from "./generated/react/CardSecurityCodeInput.js?v=1";
 import { Checkbox } from "./generated/react/Checkbox.js?v=1";
+import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
@@ -19,6 +20,7 @@ const reactComponents = {
   "card-number-input": CardNumberInput,
   "card-security-code-input": CardSecurityCodeInput,
   checkbox: Checkbox,
+  "code-input": CodeInput,
   "icon-button": IconButton,
   input: Input,
   "radio-button": RadioButton,
@@ -69,6 +71,15 @@ function CheckboxIsland({ initialProps }) {
     ...initialProps,
     checked,
     onCheckedChange: setChecked,
+  });
+}
+
+function CodeInputIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "");
+  return React.createElement(CodeInput, {
+    ...initialProps,
+    value,
+    onValueChange: setValue,
   });
 }
 
@@ -135,6 +146,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(CardSecurityCodeInputIsland, { initialProps: props })
         : node.dataset.reactComponent === "checkbox"
           ? React.createElement(CheckboxIsland, { initialProps: props })
+        : node.dataset.reactComponent === "code-input"
+          ? React.createElement(CodeInputIsland, { initialProps: props })
         : node.dataset.reactComponent === "select"
           ? React.createElement(SelectIsland, { initialProps: props })
         : node.dataset.reactComponent === "radio-button"

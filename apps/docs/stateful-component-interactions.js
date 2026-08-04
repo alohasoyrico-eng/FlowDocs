@@ -1,4 +1,4 @@
-import { hydrateDatePicker, hydrateDateRangePicker, hydrateCodeInput, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput } from "#design-system/components";
+import { hydrateDatePicker, hydrateDateRangePicker, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput } from "#design-system/components";
 import { iconGlyph } from "./icon-system.js";
 
 export function setupStatefulComponentDemos(root = document) {
@@ -333,7 +333,6 @@ function setupPopoverDemos(root = document) {
 function setupCodeInputDemos(root = document) {
   root.querySelectorAll('[data-doc-component="code-input"]:not([data-stateful-ready="true"]), .code-input-demo:not([data-stateful-ready="true"])').forEach((otp) => {
     otp.dataset.statefulReady = "true";
-    hydrateCodeInput(otp);
   });
 }
 
