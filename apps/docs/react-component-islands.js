@@ -6,6 +6,7 @@ import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
+import { Switch } from "./generated/react/Switch.js?v=1";
 
 const mounted = new WeakMap();
 const reactComponents = {
@@ -15,6 +16,7 @@ const reactComponents = {
   input: Input,
   "radio-button": RadioButton,
   select: Select,
+  switch: Switch,
 };
 
 function InputIsland({ initialProps }) {
@@ -53,6 +55,15 @@ function RadioButtonIsland({ initialProps }) {
   });
 }
 
+function SwitchIsland({ initialProps }) {
+  const [checked, setChecked] = React.useState(Boolean(initialProps.checked));
+  return React.createElement(Switch, {
+    ...initialProps,
+    checked,
+    onCheckedChange: setChecked,
+  });
+}
+
 function parseProps(node) {
   try {
     return JSON.parse(node.dataset.reactProps ?? "{}");
@@ -78,6 +89,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(SelectIsland, { initialProps: props })
         : node.dataset.reactComponent === "radio-button"
           ? React.createElement(RadioButtonIsland, { initialProps: props })
+        : node.dataset.reactComponent === "switch"
+          ? React.createElement(SwitchIsland, { initialProps: props })
         : React.createElement(Component, props),
     );
   }
