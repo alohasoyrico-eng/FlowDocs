@@ -1,8 +1,7 @@
-import { hydrateDatePicker, hydrateDateRangePicker, hydrateCardExpiryInput, hydrateCardNumberInput, hydrateCardSecurityCodeInput, hydrateCodeInput, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput, hydrateInput, hydrateSelect, hydrateTextArea } from "#design-system/components";
+import { hydrateDatePicker, hydrateDateRangePicker, hydrateCardExpiryInput, hydrateCardNumberInput, hydrateCardSecurityCodeInput, hydrateCodeInput, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput, hydrateSelect, hydrateTextArea } from "#design-system/components";
 import { iconGlyph } from "./icon-system.js";
 
 export function setupStatefulComponentDemos(root = document) {
-  setupInputDemos(root);
   setupTextAreaPackageDemos(root);
   setupSelectDemos(root);
   setupComboboxDemos(root);
@@ -60,13 +59,6 @@ function setupCardSecurityCodeInputDemos(root = document) {
   root.querySelectorAll('[data-doc-component="card-security-code-input"]:not([data-stateful-ready="true"])').forEach((demo) => {
     demo.dataset.statefulReady = "true";
     hydrateCardSecurityCodeInput(demo);
-  });
-}
-
-function setupInputDemos(root = document) {
-  root.querySelectorAll('[data-doc-component="input"]:not([data-stateful-ready="true"])').forEach((demo) => {
-    demo.dataset.statefulReady = "true";
-    hydrateInput(demo);
   });
 }
 

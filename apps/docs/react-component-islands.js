@@ -2,12 +2,23 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { Button } from "./generated/react/Button.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
+import { Input } from "./generated/react/Input.js?v=1";
 
 const mounted = new WeakMap();
 const reactComponents = {
   button: Button,
   "icon-button": IconButton,
+  input: Input,
 };
+
+function InputIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "");
+  return React.createElement(Input, {
+    ...initialProps,
+    value,
+    onValueChange: setValue,
+  });
+}
 
 function parseProps(node) {
   try {
@@ -24,6 +35,11 @@ export function setupReactComponentIslands(root = document) {
     const reactRoot = mounted.get(node) ?? createRoot(node);
     mounted.set(node, reactRoot);
     node.dataset.reactMounted = "true";
-    reactRoot.render(React.createElement(Component, parseProps(node)));
+    const props = parseProps(node);
+    reactRoot.render(
+      node.dataset.reactComponent === "input"
+        ? React.createElement(InputIsland, { initialProps: props })
+        : React.createElement(Component, props),
+    );
   }
 }
