@@ -169,6 +169,12 @@ function reactCardExpiryInputDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="card-expiry-input" data-component-source="react" data-doc-component="card-expiry-input" data-demo-variant="default" data-demo-state="${escapeAttribute(state)}" data-variant="default" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactCardSecurityCodeInputDemo(demo = {}) {
+  const props = componentDemoProps("card-security-code-input", demo);
+  const state = props.state ?? demo.state ?? "default";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="card-security-code-input" data-component-source="react" data-doc-component="card-security-code-input" data-demo-variant="default" data-demo-state="${escapeAttribute(state)}" data-variant="default" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactSelectDemo(demo = {}) {
   const props = componentDemoProps("select", demo);
   const state = props.state ?? demo.state ?? "default";
@@ -208,6 +214,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "button") return reactButtonDemo(demo);
   if (component === "card-expiry-input") return reactCardExpiryInputDemo(demo);
   if (component === "card-number-input") return reactCardNumberInputDemo(demo);
+  if (component === "card-security-code-input") return reactCardSecurityCodeInputDemo(demo);
   if (component === "checkbox") return reactCheckboxDemo(demo);
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "input") return reactInputDemo(demo);
