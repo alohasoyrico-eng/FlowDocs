@@ -34,6 +34,7 @@
     "build:docs-content": "node scripts/build-docs-content.mjs",
     "build:docs-assets": "node scripts/build-docs-assets.mjs",
     "build:docs": "npm run build:docs-content && npm run build:docs-assets",
+    "serve": "node scripts/serve-docs.mjs",
     "audit:docs": "node audit/audit-docs.js",
     "audit:docs-runtime": "node audit/audit-docs-runtime.mjs",
     "validate:docs": "npm run build:docs && npm run audit:docs && npm run audit:docs-runtime"
