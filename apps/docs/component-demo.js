@@ -156,9 +156,17 @@ function reactSelectDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="select" data-component-source="react" data-doc-component="select" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactCheckboxDemo(demo = {}) {
+  const props = componentDemoProps("checkbox", demo);
+  const state = props.state ?? demo.state ?? "unchecked";
+  const variant = props.variant ?? demo.variant ?? "default";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="checkbox" data-component-source="react" data-doc-component="checkbox" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
   if (component === "button") return reactButtonDemo(demo);
+  if (component === "checkbox") return reactCheckboxDemo(demo);
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "input") return reactInputDemo(demo);
   if (component === "select") return reactSelectDemo(demo);

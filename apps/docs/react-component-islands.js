@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Button } from "./generated/react/Button.js?v=1";
+import { Checkbox } from "./generated/react/Checkbox.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
@@ -8,6 +9,7 @@ import { Select } from "./generated/react/Select.js?v=1";
 const mounted = new WeakMap();
 const reactComponents = {
   button: Button,
+  checkbox: Checkbox,
   "icon-button": IconButton,
   input: Input,
   select: Select,
@@ -19,6 +21,15 @@ function InputIsland({ initialProps }) {
     ...initialProps,
     value,
     onValueChange: setValue,
+  });
+}
+
+function CheckboxIsland({ initialProps }) {
+  const [checked, setChecked] = React.useState(Boolean(initialProps.checked));
+  return React.createElement(Checkbox, {
+    ...initialProps,
+    checked,
+    onCheckedChange: setChecked,
   });
 }
 
@@ -50,6 +61,8 @@ export function setupReactComponentIslands(root = document) {
     reactRoot.render(
       node.dataset.reactComponent === "input"
         ? React.createElement(InputIsland, { initialProps: props })
+        : node.dataset.reactComponent === "checkbox"
+          ? React.createElement(CheckboxIsland, { initialProps: props })
         : node.dataset.reactComponent === "select"
           ? React.createElement(SelectIsland, { initialProps: props })
         : React.createElement(Component, props),
