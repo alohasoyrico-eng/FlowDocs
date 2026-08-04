@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { Avatar } from "./generated/react/Avatar.js?v=1";
 import { Badge } from "./generated/react/Badge.js?v=1";
 import { Button } from "./generated/react/Button.js?v=1";
 import { CardExpiryInput } from "./generated/react/CardExpiryInput.js?v=1";
@@ -21,6 +22,7 @@ import { TextArea } from "./generated/react/TextArea.js?v=1";
 
 const mounted = new WeakMap();
 const reactComponents = {
+  avatar: Avatar,
   badge: Badge,
   button: Button,
   "card-expiry-input": CardExpiryInput,
