@@ -150,6 +150,13 @@ function reactBadgeDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="badge" data-component-source="react" data-doc-component="badge" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactTagDemo(demo = {}) {
+  const props = componentDemoProps("tag", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "metadata";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="tag" data-component-source="react" data-doc-component="tag" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactIconButtonDemo(demo = {}) {
   const props = componentDemoProps("icon-button", demo);
   const state = demo.state ?? "default";
@@ -261,6 +268,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "radio-button") return reactRadioButtonDemo(demo);
   if (component === "select") return reactSelectDemo(demo);
   if (component === "switch") return reactSwitchDemo(demo);
+  if (component === "tag") return reactTagDemo(demo);
   if (component === "text-area") return reactTextAreaDemo(demo);
   const node = renderComponentDemo(component, demo);
   persistNativeFieldState(node);
