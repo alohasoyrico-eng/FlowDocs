@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Button } from "./generated/react/Button.js?v=1";
+import { CardNumberInput } from "./generated/react/CardNumberInput.js?v=1";
 import { Checkbox } from "./generated/react/Checkbox.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
@@ -12,6 +13,7 @@ import { TextArea } from "./generated/react/TextArea.js?v=1";
 const mounted = new WeakMap();
 const reactComponents = {
   button: Button,
+  "card-number-input": CardNumberInput,
   checkbox: Checkbox,
   "icon-button": IconButton,
   input: Input,
@@ -24,6 +26,15 @@ const reactComponents = {
 function InputIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
   return React.createElement(Input, {
+    ...initialProps,
+    value,
+    onValueChange: setValue,
+  });
+}
+
+function CardNumberInputIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "");
+  return React.createElement(CardNumberInput, {
     ...initialProps,
     value,
     onValueChange: setValue,
@@ -94,6 +105,8 @@ export function setupReactComponentIslands(root = document) {
     reactRoot.render(
       node.dataset.reactComponent === "input"
         ? React.createElement(InputIsland, { initialProps: props })
+        : node.dataset.reactComponent === "card-number-input"
+          ? React.createElement(CardNumberInputIsland, { initialProps: props })
         : node.dataset.reactComponent === "checkbox"
           ? React.createElement(CheckboxIsland, { initialProps: props })
         : node.dataset.reactComponent === "select"

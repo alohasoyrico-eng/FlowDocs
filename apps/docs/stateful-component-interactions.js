@@ -1,4 +1,4 @@
-import { hydrateDatePicker, hydrateDateRangePicker, hydrateCardExpiryInput, hydrateCardNumberInput, hydrateCardSecurityCodeInput, hydrateCodeInput, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput } from "#design-system/components";
+import { hydrateDatePicker, hydrateDateRangePicker, hydrateCardExpiryInput, hydrateCardSecurityCodeInput, hydrateCodeInput, hydrateCombobox, hydrateCountrySelector, hydratePhoneInput } from "#design-system/components";
 import { iconGlyph } from "./icon-system.js";
 
 export function setupStatefulComponentDemos(root = document) {
@@ -35,7 +35,6 @@ function setStyleProperty(node, name, value) {
 function setupCardNumberInputDemos(root = document) {
   root.querySelectorAll('[data-doc-component="card-number-input"]:not([data-stateful-ready="true"])').forEach((demo) => {
     demo.dataset.statefulReady = "true";
-    hydrateCardNumberInput(demo);
   });
 }
 
