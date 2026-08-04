@@ -1,9 +1,9 @@
-import { hydrateSelect } from "./generated/components/components/fields.js?v=21";
+import { hydrateTransitionalSelect } from "./generated/components/components/fields.js?v=21";
 
 export function setupAdvancedFilters(root = document) {
   root.querySelectorAll("[data-advanced-filters-demo]:not([data-advanced-filters-ready='true'])").forEach((demo) => {
     demo.dataset.advancedFiltersReady = "true";
-    hydrateSelect(demo);
+    hydrateTransitionalSelect(demo);
     demo.querySelectorAll("[data-advanced-filter-table] tbody tr").forEach((row) => {
       const cells = [...row.children];
       row.dataset.region = cells[2]?.textContent.trim() ?? "";
