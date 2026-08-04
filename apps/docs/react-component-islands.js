@@ -6,6 +6,7 @@ import { CardNumberInput } from "./generated/react/CardNumberInput.js?v=1";
 import { CardSecurityCodeInput } from "./generated/react/CardSecurityCodeInput.js?v=1";
 import { Checkbox } from "./generated/react/Checkbox.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
+import { DatePicker } from "./generated/react/DatePicker.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
 import { PhoneInput } from "./generated/react/PhoneInput.js?v=1";
@@ -22,6 +23,7 @@ const reactComponents = {
   "card-security-code-input": CardSecurityCodeInput,
   checkbox: Checkbox,
   "code-input": CodeInput,
+  "date-picker": DatePicker,
   "icon-button": IconButton,
   input: Input,
   "phone-input": PhoneInput,
@@ -79,6 +81,15 @@ function CheckboxIsland({ initialProps }) {
 function CodeInputIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
   return React.createElement(CodeInput, {
+    ...initialProps,
+    value,
+    onValueChange: setValue,
+  });
+}
+
+function DatePickerIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "");
+  return React.createElement(DatePicker, {
     ...initialProps,
     value,
     onValueChange: setValue,
@@ -164,6 +175,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(CheckboxIsland, { initialProps: props })
         : node.dataset.reactComponent === "code-input"
           ? React.createElement(CodeInputIsland, { initialProps: props })
+        : node.dataset.reactComponent === "date-picker"
+          ? React.createElement(DatePickerIsland, { initialProps: props })
         : node.dataset.reactComponent === "phone-input"
           ? React.createElement(PhoneInputIsland, { initialProps: props })
         : node.dataset.reactComponent === "select"
