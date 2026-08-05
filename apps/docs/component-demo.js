@@ -235,7 +235,10 @@ function reactSpinnerDemo(demo = {}) {
   const variant = props.tone ?? demo.tone ?? "accent";
   return `<span class="docs-react-island docs-package-demo" data-react-component="spinner" data-component-source="react" data-doc-component="spinner" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
-
+function reactStepperDemo(demo = {}) {
+  const props = componentDemoProps("stepper", demo), state = demo.state ?? "active", variant = props.orientation ?? demo.variant ?? "horizontal";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="stepper" data-component-source="react" data-doc-component="stepper" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="true" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
 function reactSkeletonDemo(demo = {}) {
   const props = componentDemoProps("skeleton", demo);
   const state = props.state ?? demo.state ?? "loading";
@@ -374,6 +377,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "skeleton") return reactSkeletonDemo(demo);
   if (component === "slider") return reactSliderDemo(demo);
   if (component === "spinner") return reactSpinnerDemo(demo);
+  if (component === "stepper") return reactStepperDemo(demo);
   if (component === "switch") return reactSwitchDemo(demo);
   if (component === "tag") return reactTagDemo(demo);
   if (component === "toast") return reactToastDemo(demo);
@@ -388,8 +392,7 @@ export function componentDemo(component, demo = {}) {
   node.setAttribute("data-demo-variant", demo.variant ?? "standard");
   node.setAttribute("data-demo-state", demo.state ?? "default");
   const hasAttribute = (name) => Boolean(node.hasAttribute?.(name) || node.getAttribute?.(name) != null || node.attributes?.[name] != null);
-  if (!hasAttribute("data-variant")) node.setAttribute("data-variant", demo.variant ?? "standard");
-  if (!hasAttribute("data-state")) node.setAttribute("data-state", demo.state ?? "default");
+  if (!hasAttribute("data-variant")) node.setAttribute("data-variant", demo.variant ?? "standard"); if (!hasAttribute("data-state")) node.setAttribute("data-state", demo.state ?? "default");
   node.setAttribute("data-full-width", String(Boolean(demo.fullWidth)));
   queueChartHydration();
   return node.outerHTML;

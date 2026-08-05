@@ -27,6 +27,7 @@ import { SegmentedControl } from "./generated/react/SegmentedControl.js?v=1";
 import { Skeleton } from "./generated/react/Skeleton.js?v=1";
 import { Slider } from "./generated/react/Slider.js?v=1";
 import { Spinner } from "./generated/react/Spinner.js?v=1";
+import { Stepper } from "./generated/react/Stepper.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
 import { Toast } from "./generated/react/Toast.js?v=1";
@@ -62,6 +63,7 @@ const reactComponents = {
   skeleton: Skeleton,
   slider: Slider,
   spinner: Spinner,
+  stepper: Stepper,
   switch: Switch,
   tag: Tag,
   toast: Toast,
