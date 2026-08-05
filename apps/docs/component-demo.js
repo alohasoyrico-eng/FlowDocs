@@ -121,19 +121,11 @@ function markPackageControls(node) {
 }
 
 function escapeAttribute(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function demoSlug(value) {
-  return String(value)
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+  return String(value).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
 function reactButtonDemo(demo = {}) {
@@ -279,6 +271,11 @@ function reactPhoneInputDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="phone-input" data-component-source="react" data-doc-component="phone-input" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactPaginationDemo(demo = {}) {
+  const props = componentDemoProps("pagination", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "numbered";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="pagination" data-component-source="react" data-doc-component="pagination" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactProgressIndicatorDemo(demo = {}) {
   const props = componentDemoProps("progress-indicator", demo);
   const state = props.state ?? demo.state ?? "active";
@@ -368,6 +365,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "inline-validation") return reactInlineValidationDemo(demo);
   if (component === "input") return reactInputDemo(demo);
+  if (component === "pagination") return reactPaginationDemo(demo);
   if (component === "phone-input") return reactPhoneInputDemo(demo);
   if (component === "progress-indicator") return reactProgressIndicatorDemo(demo);
   if (component === "radio-button") return reactRadioButtonDemo(demo);

@@ -18,6 +18,7 @@ import { ErrorPanel } from "./generated/react/ErrorPanel.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { InlineValidation } from "./generated/react/InlineValidation.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
+import { Pagination } from "./generated/react/Pagination.js?v=1";
 import { PhoneInput } from "./generated/react/PhoneInput.js?v=1";
 import { ProgressIndicator } from "./generated/react/ProgressIndicator.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
@@ -52,6 +53,7 @@ const reactComponents = {
   "icon-button": IconButton,
   "inline-validation": InlineValidation,
   input: Input,
+  pagination: Pagination,
   "phone-input": PhoneInput,
   "progress-indicator": ProgressIndicator,
   "radio-button": RadioButton,
@@ -153,6 +155,15 @@ function PhoneInputIsland({ initialProps }) {
   });
 }
 
+function PaginationIsland({ initialProps }) {
+  const [page, setPage] = React.useState(initialProps.page ?? 1);
+  return React.createElement(Pagination, {
+    ...initialProps,
+    page,
+    onPageChange: setPage,
+  });
+}
+
 function SelectIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
   return React.createElement(Select, {
@@ -247,6 +258,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(DateRangePickerIsland, { initialProps: props })
         : node.dataset.reactComponent === "phone-input"
           ? React.createElement(PhoneInputIsland, { initialProps: props })
+        : node.dataset.reactComponent === "pagination"
+          ? React.createElement(PaginationIsland, { initialProps: props })
         : node.dataset.reactComponent === "select"
           ? React.createElement(SelectIsland, { initialProps: props })
         : node.dataset.reactComponent === "segmented-control"
