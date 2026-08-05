@@ -136,7 +136,6 @@ function reactButtonDemo(demo = {}) {
   const props = componentDemoProps("button", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "primary";
   return reactIsland("button", props, state, variant, props.fullWidth);
 }
-
 function reactAccordionDemo(demo = {}) {
   const props = componentDemoProps("accordion", demo), state = demo.state ?? "open", variant = demo.variant ?? "single";
   return reactIsland("accordion", props, state, variant, demo.fullWidth);
@@ -167,6 +166,10 @@ function reactChipDemo(demo = {}) {
   return reactIsland("chip", props, state, variant);
 }
 
+function reactComboboxDemo(demo = {}) {
+  const props = componentDemoProps("combobox", demo), state = props.state ?? demo.state ?? "default";
+  return reactIsland("combobox", props, state, "default", props.fullWidth);
+}
 function reactIconButtonDemo(demo = {}) {
   const props = componentDemoProps("icon-button", demo), state = demo.state ?? "default", variant = props.variant ?? demo.variant ?? "ghost";
   return reactIsland("icon-button", props, state, variant);
@@ -353,6 +356,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "checkbox") return reactCheckboxDemo(demo);
   if (component === "chip") return reactChipDemo(demo);
   if (component === "code-input") return reactCodeInputDemo(demo);
+  if (component === "combobox") return reactComboboxDemo(demo);
   if (component === "date-picker") return reactDatePickerDemo(demo);
   if (component === "date-range-picker") return reactDateRangePickerDemo(demo);
   if (component === "dialog") return reactDialogDemo(demo);

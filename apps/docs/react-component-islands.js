@@ -11,6 +11,7 @@ import { CardSecurityCodeInput } from "./generated/react/CardSecurityCodeInput.j
 import { Checkbox } from "./generated/react/Checkbox.js?v=1";
 import { Chip } from "./generated/react/Chip.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
+import { Combobox } from "./generated/react/Combobox.js?v=1";
 import { DatePicker } from "./generated/react/DatePicker.js?v=1";
 import { DateRangePicker } from "./generated/react/DateRangePicker.js?v=1";
 import { Dialog } from "./generated/react/Dialog.js?v=1";
@@ -51,6 +52,7 @@ const reactComponents = {
   checkbox: Checkbox,
   chip: Chip,
   "code-input": CodeInput,
+  combobox: Combobox,
   "date-picker": DatePicker,
   "date-range-picker": DateRangePicker,
   dialog: Dialog,
@@ -127,6 +129,15 @@ function CheckboxIsland({ initialProps }) {
 function CodeInputIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
   return React.createElement(CodeInput, {
+    ...initialProps,
+    value,
+    onValueChange: setValue,
+  });
+}
+
+function ComboboxIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "");
+  return React.createElement(Combobox, {
     ...initialProps,
     value,
     onValueChange: setValue,
@@ -276,6 +287,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(CheckboxIsland, { initialProps: props })
         : node.dataset.reactComponent === "code-input"
           ? React.createElement(CodeInputIsland, { initialProps: props })
+        : node.dataset.reactComponent === "combobox"
+          ? React.createElement(ComboboxIsland, { initialProps: props })
         : node.dataset.reactComponent === "date-picker"
           ? React.createElement(DatePickerIsland, { initialProps: props })
         : node.dataset.reactComponent === "date-range-picker"
