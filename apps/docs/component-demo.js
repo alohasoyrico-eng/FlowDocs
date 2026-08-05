@@ -276,7 +276,7 @@ function reactProgressIndicatorDemo(demo = {}) {
   return reactIsland("progress-indicator", props, state, variant, props.fullWidth);
 }
 function reactQuickActionDemo(demo = {}) { const props = componentDemoProps("quick-action", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("quick-action", props, state, variant); }
-function reactMovementRowDemo(demo = {}) { const props = componentDemoProps("movement-row", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("movement-row", props, state, variant, props.fullWidth); } function reactRouteSummaryDemo(demo = {}) { const props = componentDemoProps("route-summary", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("route-summary", props, state, variant, props.fullWidth); } function reactStationPinDemo(demo = {}) { const props = componentDemoProps("station-pin", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "fuel"; return reactIsland("station-pin", props, state, variant); }
+function reactCardSummaryDemo(demo = {}) { const props = componentDemoProps("card-summary", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "physical"; return reactIsland("card-summary", props, state, variant, props.fullWidth); } function reactMovementRowDemo(demo = {}) { const props = componentDemoProps("movement-row", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("movement-row", props, state, variant, props.fullWidth); } function reactRouteSummaryDemo(demo = {}) { const props = componentDemoProps("route-summary", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("route-summary", props, state, variant, props.fullWidth); } function reactStationPinDemo(demo = {}) { const props = componentDemoProps("station-pin", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "fuel"; return reactIsland("station-pin", props, state, variant); }
 function reactDatePickerDemo(demo = {}) {
   const props = componentDemoProps("date-picker", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "calendar";
   return reactIsland("date-picker", props, state, variant, props.fullWidth);
@@ -294,7 +294,6 @@ function reactDrawerDemo(demo = {}) {
   const props = componentDemoProps("drawer", demo), state = props.state ?? demo.state ?? "closed", variant = props.variant ?? demo.variant ?? "side-sheet";
   return reactIsland("drawer", { ...props, open: Boolean(demo.open) }, state, variant, props.fullWidth);
 }
-
 function reactEmptyStateDemo(demo = {}) {
   const props = componentDemoProps("empty-state", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "first-use";
   return reactIsland("empty-state", props, state, variant, props.fullWidth);
@@ -344,6 +343,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "card-expiry-input") return reactCardExpiryInputDemo(demo);
   if (component === "card-number-input") return reactCardNumberInputDemo(demo);
   if (component === "card-security-code-input") return reactCardSecurityCodeInputDemo(demo);
+  if (component === "card-summary") return reactCardSummaryDemo(demo);
   if (component === "checkbox") return reactCheckboxDemo(demo);
   if (component === "chip") return reactChipDemo(demo);
   if (component === "code-input") return reactCodeInputDemo(demo);
