@@ -5,6 +5,7 @@ import { Avatar } from "./generated/react/Avatar.js?v=1";
 import { Badge } from "./generated/react/Badge.js?v=1";
 import { Breadcrumbs } from "./generated/react/Breadcrumbs.js?v=1";
 import { Button } from "./generated/react/Button.js?v=1";
+import { Card } from "./generated/react/Card.js?v=1";
 import { CardExpiryInput } from "./generated/react/CardExpiryInput.js?v=1";
 import { CardNumberInput } from "./generated/react/CardNumberInput.js?v=1";
 import { CardSecurityCodeInput } from "./generated/react/CardSecurityCodeInput.js?v=1";
@@ -46,6 +47,7 @@ const reactComponents = {
   badge: Badge,
   breadcrumbs: Breadcrumbs,
   button: Button,
+  card: Card,
   "card-expiry-input": CardExpiryInput,
   "card-number-input": CardNumberInput,
   "card-security-code-input": CardSecurityCodeInput,

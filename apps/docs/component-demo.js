@@ -1,8 +1,6 @@
 import { componentDemoProps, hydrateChartPanel, renderComponentDemo } from "#design-system/components";
 
-const chartLibrary = typeof window === "undefined"
-  ? Promise.resolve(null)
-  : import("./generated/vendor/echarts.esm.min.js?v=1").catch(() => null);
+const chartLibrary = typeof window === "undefined" ? Promise.resolve(null) : import("./generated/vendor/echarts.esm.min.js?v=1").catch(() => null);
 
 let chartHydrationQueued = false;
 
@@ -131,21 +129,22 @@ function demoSlug(value) {
 function reactIsland(component, props, state = "default", variant = "standard", fullWidth = false) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="${component}" data-component-source="react" data-doc-component="${component}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
-
 function reactButtonDemo(demo = {}) {
   const props = componentDemoProps("button", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "primary";
   return reactIsland("button", props, state, variant, props.fullWidth);
+}
+function reactCardDemo(demo = {}) {
+  const props = componentDemoProps("card", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "default";
+  return reactIsland("card", props, state, variant, props.fullWidth);
 }
 function reactAccordionDemo(demo = {}) {
   const props = componentDemoProps("accordion", demo), state = demo.state ?? "open", variant = demo.variant ?? "single";
   return reactIsland("accordion", props, state, variant, demo.fullWidth);
 }
-
 function reactAvatarDemo(demo = {}) {
   const props = componentDemoProps("avatar", demo), state = props.state ?? demo.state ?? "default", variant = demo.variant ?? (props.src ? "image" : props.status && props.status !== "none" ? "status" : "initials");
   return reactIsland("avatar", props, state, variant);
 }
-
 function reactBadgeDemo(demo = {}) {
   const props = componentDemoProps("badge", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "status";
   return reactIsland("badge", props, state, variant);
@@ -155,7 +154,6 @@ function reactBreadcrumbsDemo(demo = {}) {
   const props = componentDemoProps("breadcrumbs", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard";
   return reactIsland("breadcrumbs", props, state, variant, props.fullWidth);
 }
-
 function reactTagDemo(demo = {}) {
   const props = componentDemoProps("tag", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "metadata";
   return reactIsland("tag", props, state, variant);
@@ -165,11 +163,11 @@ function reactChipDemo(demo = {}) {
   const props = componentDemoProps("chip", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "filter";
   return reactIsland("chip", props, state, variant);
 }
-
 function reactComboboxDemo(demo = {}) {
   const props = componentDemoProps("combobox", demo), state = props.state ?? demo.state ?? "default";
   return reactIsland("combobox", props, state, "default", props.fullWidth);
 }
+
 function reactIconButtonDemo(demo = {}) {
   const props = componentDemoProps("icon-button", demo), state = demo.state ?? "default", variant = props.variant ?? demo.variant ?? "ghost";
   return reactIsland("icon-button", props, state, variant);
@@ -350,6 +348,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "badge") return reactBadgeDemo(demo);
   if (component === "breadcrumbs") return reactBreadcrumbsDemo(demo);
   if (component === "button") return reactButtonDemo(demo);
+  if (component === "card") return reactCardDemo(demo);
   if (component === "card-expiry-input") return reactCardExpiryInputDemo(demo);
   if (component === "card-number-input") return reactCardNumberInputDemo(demo);
   if (component === "card-security-code-input") return reactCardSecurityCodeInputDemo(demo);
