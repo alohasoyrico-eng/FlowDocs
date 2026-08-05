@@ -227,6 +227,7 @@ function reactTabsDemo(demo = {}) {
   const props = componentDemoProps("tabs", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "default";
   return reactIsland("tabs", props, state, variant, demo.fullWidth);
 }
+function reactTableDemo(demo = {}) { const props = componentDemoProps("table", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("table", props, state, variant, true); }
 function reactSkeletonDemo(demo = {}) {
   const props = componentDemoProps("skeleton", demo);
   const state = props.state ?? demo.state ?? "loading";
@@ -377,6 +378,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "stepper") return reactStepperDemo(demo);
   if (component === "switch") return reactSwitchDemo(demo);
   if (component === "tabs") return reactTabsDemo(demo);
+  if (component === "table") return reactTableDemo(demo);
   if (component === "tag") return reactTagDemo(demo);
   if (component === "toast") return reactToastDemo(demo);
   if (component === "text-area") return reactTextAreaDemo(demo);

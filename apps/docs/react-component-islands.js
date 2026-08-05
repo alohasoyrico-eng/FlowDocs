@@ -36,6 +36,7 @@ import { Spinner } from "./generated/react/Spinner.js?v=1";
 import { Stepper } from "./generated/react/Stepper.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
 import { Tabs } from "./generated/react/Tabs.js?v=1";
+import { Table } from "./generated/react/Table.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
 import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
@@ -79,6 +80,7 @@ const reactComponents = {
   stepper: Stepper,
   switch: Switch,
   tabs: Tabs,
+  table: Table,
   tag: Tag,
   toast: Toast,
   tooltip: Tooltip,
