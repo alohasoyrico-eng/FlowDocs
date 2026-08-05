@@ -296,6 +296,11 @@ function reactDialogDemo(demo = {}) {
   return reactIsland("dialog", { ...props, open: Boolean(demo.open) }, state, variant, props.fullWidth);
 }
 
+function reactDrawerDemo(demo = {}) {
+  const props = componentDemoProps("drawer", demo), state = props.state ?? demo.state ?? "closed", variant = props.variant ?? demo.variant ?? "side-sheet";
+  return reactIsland("drawer", { ...props, open: Boolean(demo.open) }, state, variant, props.fullWidth);
+}
+
 function reactEmptyStateDemo(demo = {}) {
   const props = componentDemoProps("empty-state", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "first-use";
   return reactIsland("empty-state", props, state, variant, props.fullWidth);
@@ -351,6 +356,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "date-picker") return reactDatePickerDemo(demo);
   if (component === "date-range-picker") return reactDateRangePickerDemo(demo);
   if (component === "dialog") return reactDialogDemo(demo);
+  if (component === "drawer") return reactDrawerDemo(demo);
   if (component === "empty-state") return reactEmptyStateDemo(demo);
   if (component === "error-panel") return reactErrorPanelDemo(demo);
   if (component === "icon-button") return reactIconButtonDemo(demo);

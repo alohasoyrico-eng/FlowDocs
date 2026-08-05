@@ -14,6 +14,7 @@ import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { DatePicker } from "./generated/react/DatePicker.js?v=1";
 import { DateRangePicker } from "./generated/react/DateRangePicker.js?v=1";
 import { Dialog } from "./generated/react/Dialog.js?v=1";
+import { Drawer } from "./generated/react/Drawer.js?v=1";
 import { EmptyState } from "./generated/react/EmptyState.js?v=1";
 import { ErrorPanel } from "./generated/react/ErrorPanel.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
@@ -53,6 +54,7 @@ const reactComponents = {
   "date-picker": DatePicker,
   "date-range-picker": DateRangePicker,
   dialog: Dialog,
+  drawer: Drawer,
   "empty-state": EmptyState,
   "error-panel": ErrorPanel,
   "icon-button": IconButton,
