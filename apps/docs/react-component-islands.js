@@ -19,6 +19,7 @@ import { Dialog } from "./generated/react/Dialog.js?v=1";
 import { Drawer } from "./generated/react/Drawer.js?v=1";
 import { EmptyState } from "./generated/react/EmptyState.js?v=1";
 import { ErrorPanel } from "./generated/react/ErrorPanel.js?v=1";
+import { FloatingActionButton } from "./generated/react/FloatingActionButton.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { InlineValidation } from "./generated/react/InlineValidation.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
@@ -66,6 +67,7 @@ const reactComponents = {
   drawer: Drawer,
   "empty-state": EmptyState,
   "error-panel": ErrorPanel,
+  "floating-action-button": FloatingActionButton,
   "icon-button": IconButton,
   "inline-validation": InlineValidation,
   input: Input,

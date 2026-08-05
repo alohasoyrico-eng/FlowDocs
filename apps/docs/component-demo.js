@@ -178,7 +178,7 @@ function reactInputDemo(demo = {}) { const props = componentDemoProps("input", d
 function reactKpiTileDemo(demo = {}) { const props = componentDemoProps("kpi-tile", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("kpi-tile", props, state, variant, props.fullWidth); }
 
 function reactListDemo(demo = {}) { const props = componentDemoProps("list", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("list", props, state, variant, props.fullWidth); }
-
+function reactFloatingActionButtonDemo(demo = {}) { const props = componentDemoProps("floating-action-button", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "primary"; return reactIsland("floating-action-button", props, state, variant); }
 function reactCardNumberInputDemo(demo = {}) {
   const props = componentDemoProps("card-number-input", demo);
   const state = props.state ?? demo.state ?? "default";
@@ -359,6 +359,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "drawer") return reactDrawerDemo(demo);
   if (component === "empty-state") return reactEmptyStateDemo(demo);
   if (component === "error-panel") return reactErrorPanelDemo(demo);
+  if (component === "floating-action-button") return reactFloatingActionButtonDemo(demo);
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "inline-validation") return reactInlineValidationDemo(demo);
   if (component === "input") return reactInputDemo(demo);
