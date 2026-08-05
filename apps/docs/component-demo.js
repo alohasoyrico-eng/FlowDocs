@@ -273,42 +273,37 @@ function reactPopoverDemo(demo = {}) {
 }
 function reactPaginationDemo(demo = {}) {
   const props = componentDemoProps("pagination", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "numbered";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="pagination" data-component-source="react" data-doc-component="pagination" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  return reactIsland("pagination", props, state, variant, props.fullWidth);
 }
 
 function reactProgressIndicatorDemo(demo = {}) {
-  const props = componentDemoProps("progress-indicator", demo);
-  const state = props.state ?? demo.state ?? "active";
-  const variant = props.indeterminate ? "indeterminate" : props.tone ?? demo.tone ?? "accent";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="progress-indicator" data-component-source="react" data-doc-component="progress-indicator" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("progress-indicator", demo), state = props.state ?? demo.state ?? "active", variant = props.indeterminate ? "indeterminate" : props.tone ?? demo.tone ?? "accent";
+  return reactIsland("progress-indicator", props, state, variant, props.fullWidth);
 }
 
 function reactDatePickerDemo(demo = {}) {
-  const props = componentDemoProps("date-picker", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "calendar";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="date-picker" data-component-source="react" data-doc-component="date-picker" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("date-picker", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "calendar";
+  return reactIsland("date-picker", props, state, variant, props.fullWidth);
 }
 
 function reactDateRangePickerDemo(demo = {}) {
-  const props = componentDemoProps("date-range-picker", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "calendar";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="date-range-picker" data-component-source="react" data-doc-component="date-range-picker" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("date-range-picker", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "calendar";
+  return reactIsland("date-range-picker", props, state, variant, props.fullWidth);
+}
+
+function reactDialogDemo(demo = {}) {
+  const props = componentDemoProps("dialog", demo), state = props.state ?? demo.state ?? "closed", variant = props.variant ?? demo.variant ?? "confirmation";
+  return reactIsland("dialog", { ...props, open: Boolean(demo.open) }, state, variant, props.fullWidth);
 }
 
 function reactEmptyStateDemo(demo = {}) {
-  const props = componentDemoProps("empty-state", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "first-use";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="empty-state" data-component-source="react" data-doc-component="empty-state" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("empty-state", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "first-use";
+  return reactIsland("empty-state", props, state, variant, props.fullWidth);
 }
 
 function reactErrorPanelDemo(demo = {}) {
-  const props = componentDemoProps("error-panel", demo);
-  const state = props.state ?? demo.state ?? "error";
-  const variant = props.variant ?? demo.variant ?? "panel";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="error-panel" data-component-source="react" data-doc-component="error-panel" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("error-panel", demo), state = props.state ?? demo.state ?? "error", variant = props.variant ?? demo.variant ?? "panel";
+  return reactIsland("error-panel", props, state, variant, props.fullWidth);
 }
 
 function reactRadioButtonDemo(demo = {}) {
@@ -326,23 +321,18 @@ function reactSwitchDemo(demo = {}) {
 }
 
 function reactTextAreaDemo(demo = {}) {
-  const props = componentDemoProps("text-area", demo);
-  const state = props.state ?? demo.state ?? "default";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="text-area" data-component-source="react" data-doc-component="text-area" data-demo-variant="default" data-demo-state="${escapeAttribute(state)}" data-variant="default" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("text-area", demo), state = props.state ?? demo.state ?? "default";
+  return reactIsland("text-area", props, state, "default", props.fullWidth);
 }
 
 function reactTooltipDemo(demo = {}) {
-  const props = componentDemoProps("tooltip", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "default";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="tooltip" data-component-source="react" data-doc-component="tooltip" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("tooltip", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "default";
+  return reactIsland("tooltip", props, state, variant);
 }
 
 function reactToastDemo(demo = {}) {
-  const props = componentDemoProps("toast", demo);
-  const state = props.state ?? demo.state ?? "visible";
-  const variant = props.variant ?? demo.variant ?? "status";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="toast" data-component-source="react" data-doc-component="toast" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("toast", demo), state = props.state ?? demo.state ?? "visible", variant = props.variant ?? demo.variant ?? "status";
+  return reactIsland("toast", props, state, variant);
 }
 
 export function componentDemo(component, demo = {}) {
@@ -360,6 +350,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "code-input") return reactCodeInputDemo(demo);
   if (component === "date-picker") return reactDatePickerDemo(demo);
   if (component === "date-range-picker") return reactDateRangePickerDemo(demo);
+  if (component === "dialog") return reactDialogDemo(demo);
   if (component === "empty-state") return reactEmptyStateDemo(demo);
   if (component === "error-panel") return reactErrorPanelDemo(demo);
   if (component === "icon-button") return reactIconButtonDemo(demo);
