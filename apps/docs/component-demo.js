@@ -173,12 +173,9 @@ function reactInlineValidationDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="inline-validation" data-component-source="react" data-doc-component="inline-validation" data-demo-variant="${escapeAttribute(state)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(state)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
-function reactInputDemo(demo = {}) {
-  const props = componentDemoProps("input", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "text";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="input" data-component-source="react" data-doc-component="input" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
-}
+function reactInputDemo(demo = {}) { const props = componentDemoProps("input", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "text"; return reactIsland("input", props, state, variant, props.fullWidth); }
+
+function reactKpiTileDemo(demo = {}) { const props = componentDemoProps("kpi-tile", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("kpi-tile", props, state, variant, props.fullWidth); }
 
 function reactListDemo(demo = {}) { const props = componentDemoProps("list", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("list", props, state, variant, props.fullWidth); }
 
@@ -363,6 +360,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "inline-validation") return reactInlineValidationDemo(demo);
   if (component === "input") return reactInputDemo(demo);
+  if (component === "kpi-tile") return reactKpiTileDemo(demo);
   if (component === "list") return reactListDemo(demo);
   if (component === "menu") return reactMenuDemo(demo);
   if (component === "pagination") return reactPaginationDemo(demo);
