@@ -276,12 +276,11 @@ function reactProgressIndicatorDemo(demo = {}) {
   return reactIsland("progress-indicator", props, state, variant, props.fullWidth);
 }
 function reactQuickActionDemo(demo = {}) { const props = componentDemoProps("quick-action", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("quick-action", props, state, variant); }
-function reactMovementRowDemo(demo = {}) { const props = componentDemoProps("movement-row", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("movement-row", props, state, variant, props.fullWidth); }
+function reactMovementRowDemo(demo = {}) { const props = componentDemoProps("movement-row", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("movement-row", props, state, variant, props.fullWidth); } function reactRouteSummaryDemo(demo = {}) { const props = componentDemoProps("route-summary", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("route-summary", props, state, variant, props.fullWidth); }
 function reactDatePickerDemo(demo = {}) {
   const props = componentDemoProps("date-picker", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "calendar";
   return reactIsland("date-picker", props, state, variant, props.fullWidth);
 }
-
 function reactDateRangePickerDemo(demo = {}) {
   const props = componentDemoProps("date-range-picker", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "calendar";
   return reactIsland("date-range-picker", props, state, variant, props.fullWidth);
@@ -371,6 +370,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "progress-indicator") return reactProgressIndicatorDemo(demo);
   if (component === "quick-action") return reactQuickActionDemo(demo);
   if (component === "radio-button") return reactRadioButtonDemo(demo);
+  if (component === "route-summary") return reactRouteSummaryDemo(demo);
   if (component === "select") return reactSelectDemo(demo);
   if (component === "segmented-control") return reactSegmentedControlDemo(demo);
   if (component === "skeleton") return reactSkeletonDemo(demo);

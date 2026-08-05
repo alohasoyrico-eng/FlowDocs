@@ -34,6 +34,7 @@ import { Popover } from "./generated/react/Popover.js?v=1";
 import { ProgressIndicator } from "./generated/react/ProgressIndicator.js?v=1";
 import { QuickAction } from "./generated/react/QuickAction.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
+import { RouteSummary } from "./generated/react/RouteSummary.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
 import { SegmentedControl } from "./generated/react/SegmentedControl.js?v=1";
 import { Skeleton } from "./generated/react/Skeleton.js?v=1";
@@ -85,6 +86,7 @@ const reactComponents = {
   "progress-indicator": ProgressIndicator,
   "quick-action": QuickAction,
   "radio-button": RadioButton,
+  "route-summary": RouteSummary,
   select: Select,
   "segmented-control": SegmentedControl,
   skeleton: Skeleton,
