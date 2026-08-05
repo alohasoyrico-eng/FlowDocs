@@ -286,6 +286,13 @@ function reactEmptyStateDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="empty-state" data-component-source="react" data-doc-component="empty-state" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactErrorPanelDemo(demo = {}) {
+  const props = componentDemoProps("error-panel", demo);
+  const state = props.state ?? demo.state ?? "error";
+  const variant = props.variant ?? demo.variant ?? "panel";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="error-panel" data-component-source="react" data-doc-component="error-panel" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactRadioButtonDemo(demo = {}) {
   const props = componentDemoProps("radio-button", demo);
   props.name = `${props.name || "radio-button-demo"}-${demoSlug(`${props.label}-${props.value}-${props.state}-${props.variant}`)}`;
@@ -327,6 +334,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "date-picker") return reactDatePickerDemo(demo);
   if (component === "date-range-picker") return reactDateRangePickerDemo(demo);
   if (component === "empty-state") return reactEmptyStateDemo(demo);
+  if (component === "error-panel") return reactErrorPanelDemo(demo);
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "inline-validation") return reactInlineValidationDemo(demo);
   if (component === "input") return reactInputDemo(demo);
