@@ -22,6 +22,7 @@ import { ErrorPanel } from "./generated/react/ErrorPanel.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { InlineValidation } from "./generated/react/InlineValidation.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
+import { Menu } from "./generated/react/Menu.js?v=1";
 import { Pagination } from "./generated/react/Pagination.js?v=1";
 import { PhoneInput } from "./generated/react/PhoneInput.js?v=1";
 import { Popover } from "./generated/react/Popover.js?v=1";
@@ -64,6 +65,7 @@ const reactComponents = {
   "icon-button": IconButton,
   "inline-validation": InlineValidation,
   input: Input,
+  menu: Menu,
   pagination: Pagination,
   "phone-input": PhoneInput,
   popover: Popover,

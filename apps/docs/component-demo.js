@@ -150,19 +150,13 @@ function reactBadgeDemo(demo = {}) {
   return reactIsland("badge", props, state, variant);
 }
 
-function reactBreadcrumbsDemo(demo = {}) {
-  const props = componentDemoProps("breadcrumbs", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard";
-  return reactIsland("breadcrumbs", props, state, variant, props.fullWidth);
-}
+function reactBreadcrumbsDemo(demo = {}) { const props = componentDemoProps("breadcrumbs", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("breadcrumbs", props, state, variant, props.fullWidth); }
 function reactTagDemo(demo = {}) {
   const props = componentDemoProps("tag", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "metadata";
   return reactIsland("tag", props, state, variant);
 }
 
-function reactChipDemo(demo = {}) {
-  const props = componentDemoProps("chip", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "filter";
-  return reactIsland("chip", props, state, variant);
-}
+function reactChipDemo(demo = {}) { const props = componentDemoProps("chip", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "filter"; return reactIsland("chip", props, state, variant); }
 function reactComboboxDemo(demo = {}) {
   const props = componentDemoProps("combobox", demo), state = props.state ?? demo.state ?? "default";
   return reactIsland("combobox", props, state, "default", props.fullWidth);
@@ -272,6 +266,10 @@ function reactPopoverDemo(demo = {}) {
   const props = componentDemoProps("popover", demo), state = props.state ?? demo.state ?? "closed", variant = props.variant ?? demo.variant ?? "information";
   return reactIsland("popover", props, state, variant, props.fullWidth);
 }
+function reactMenuDemo(demo = {}) {
+  const props = componentDemoProps("menu", demo), state = props.state ?? demo.state ?? "closed", variant = props.variant ?? demo.variant ?? "actions";
+  return reactIsland("menu", props, state, variant);
+}
 function reactPaginationDemo(demo = {}) {
   const props = componentDemoProps("pagination", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "numbered";
   return reactIsland("pagination", props, state, variant, props.fullWidth);
@@ -365,6 +363,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "inline-validation") return reactInlineValidationDemo(demo);
   if (component === "input") return reactInputDemo(demo);
+  if (component === "menu") return reactMenuDemo(demo);
   if (component === "pagination") return reactPaginationDemo(demo);
   if (component === "phone-input") return reactPhoneInputDemo(demo);
   if (component === "popover") return reactPopoverDemo(demo);
