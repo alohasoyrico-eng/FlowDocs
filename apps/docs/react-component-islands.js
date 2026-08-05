@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { Accordion } from "./generated/react/Accordion.js?v=1";
 import { Avatar } from "./generated/react/Avatar.js?v=1";
 import { Badge } from "./generated/react/Badge.js?v=1";
+import { Breadcrumbs } from "./generated/react/Breadcrumbs.js?v=1";
 import { Button } from "./generated/react/Button.js?v=1";
 import { CardExpiryInput } from "./generated/react/CardExpiryInput.js?v=1";
 import { CardNumberInput } from "./generated/react/CardNumberInput.js?v=1";
@@ -36,6 +37,7 @@ const reactComponents = {
   accordion: Accordion,
   avatar: Avatar,
   badge: Badge,
+  breadcrumbs: Breadcrumbs,
   button: Button,
   "card-expiry-input": CardExpiryInput,
   "card-number-input": CardNumberInput,

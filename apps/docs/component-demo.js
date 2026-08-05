@@ -164,6 +164,13 @@ function reactBadgeDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="badge" data-component-source="react" data-doc-component="badge" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactBreadcrumbsDemo(demo = {}) {
+  const props = componentDemoProps("breadcrumbs", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "standard";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="breadcrumbs" data-component-source="react" data-doc-component="breadcrumbs" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactTagDemo(demo = {}) {
   const props = componentDemoProps("tag", demo);
   const state = props.state ?? demo.state ?? "default";
@@ -346,6 +353,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "accordion") return reactAccordionDemo(demo);
   if (component === "avatar") return reactAvatarDemo(demo);
   if (component === "badge") return reactBadgeDemo(demo);
+  if (component === "breadcrumbs") return reactBreadcrumbsDemo(demo);
   if (component === "button") return reactButtonDemo(demo);
   if (component === "card-expiry-input") return reactCardExpiryInputDemo(demo);
   if (component === "card-number-input") return reactCardNumberInputDemo(demo);
