@@ -272,11 +272,11 @@ function reactPaginationDemo(demo = {}) {
   const props = componentDemoProps("pagination", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "numbered";
   return reactIsland("pagination", props, state, variant, props.fullWidth);
 }
-
 function reactProgressIndicatorDemo(demo = {}) {
   const props = componentDemoProps("progress-indicator", demo), state = props.state ?? demo.state ?? "active", variant = props.indeterminate ? "indeterminate" : props.tone ?? demo.tone ?? "accent";
   return reactIsland("progress-indicator", props, state, variant, props.fullWidth);
 }
+function reactQuickActionDemo(demo = {}) { const props = componentDemoProps("quick-action", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("quick-action", props, state, variant); }
 
 function reactDatePickerDemo(demo = {}) {
   const props = componentDemoProps("date-picker", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "calendar";
@@ -369,6 +369,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "phone-input") return reactPhoneInputDemo(demo);
   if (component === "popover") return reactPopoverDemo(demo);
   if (component === "progress-indicator") return reactProgressIndicatorDemo(demo);
+  if (component === "quick-action") return reactQuickActionDemo(demo);
   if (component === "radio-button") return reactRadioButtonDemo(demo);
   if (component === "select") return reactSelectDemo(demo);
   if (component === "segmented-control") return reactSegmentedControlDemo(demo);

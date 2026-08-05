@@ -31,6 +31,7 @@ import { Pagination } from "./generated/react/Pagination.js?v=1";
 import { PhoneInput } from "./generated/react/PhoneInput.js?v=1";
 import { Popover } from "./generated/react/Popover.js?v=1";
 import { ProgressIndicator } from "./generated/react/ProgressIndicator.js?v=1";
+import { QuickAction } from "./generated/react/QuickAction.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
 import { SegmentedControl } from "./generated/react/SegmentedControl.js?v=1";
@@ -80,6 +81,7 @@ const reactComponents = {
   "phone-input": PhoneInput,
   popover: Popover,
   "progress-indicator": ProgressIndicator,
+  "quick-action": QuickAction,
   "radio-button": RadioButton,
   select: Select,
   "segmented-control": SegmentedControl,
