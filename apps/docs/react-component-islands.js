@@ -15,6 +15,7 @@ import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { InlineValidation } from "./generated/react/InlineValidation.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
 import { PhoneInput } from "./generated/react/PhoneInput.js?v=1";
+import { ProgressIndicator } from "./generated/react/ProgressIndicator.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
 import { SegmentedControl } from "./generated/react/SegmentedControl.js?v=1";
@@ -41,6 +42,7 @@ const reactComponents = {
   "inline-validation": InlineValidation,
   input: Input,
   "phone-input": PhoneInput,
+  "progress-indicator": ProgressIndicator,
   "radio-button": RadioButton,
   select: Select,
   "segmented-control": SegmentedControl,

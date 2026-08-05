@@ -251,6 +251,13 @@ function reactPhoneInputDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="phone-input" data-component-source="react" data-doc-component="phone-input" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactProgressIndicatorDemo(demo = {}) {
+  const props = componentDemoProps("progress-indicator", demo);
+  const state = props.state ?? demo.state ?? "active";
+  const variant = props.indeterminate ? "indeterminate" : props.tone ?? demo.tone ?? "accent";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="progress-indicator" data-component-source="react" data-doc-component="progress-indicator" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactDatePickerDemo(demo = {}) {
   const props = componentDemoProps("date-picker", demo);
   const state = props.state ?? demo.state ?? "default";
@@ -309,6 +316,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "inline-validation") return reactInlineValidationDemo(demo);
   if (component === "input") return reactInputDemo(demo);
   if (component === "phone-input") return reactPhoneInputDemo(demo);
+  if (component === "progress-indicator") return reactProgressIndicatorDemo(demo);
   if (component === "radio-button") return reactRadioButtonDemo(demo);
   if (component === "select") return reactSelectDemo(demo);
   if (component === "segmented-control") return reactSegmentedControlDemo(demo);
