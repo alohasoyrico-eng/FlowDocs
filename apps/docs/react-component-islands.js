@@ -25,6 +25,7 @@ import { Skeleton } from "./generated/react/Skeleton.js?v=1";
 import { Spinner } from "./generated/react/Spinner.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
+import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
 
@@ -55,6 +56,7 @@ const reactComponents = {
   spinner: Spinner,
   switch: Switch,
   tag: Tag,
+  toast: Toast,
   tooltip: Tooltip,
   "text-area": TextArea,
 };
