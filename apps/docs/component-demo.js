@@ -276,7 +276,7 @@ function reactProgressIndicatorDemo(demo = {}) {
   return reactIsland("progress-indicator", props, state, variant, props.fullWidth);
 }
 function reactQuickActionDemo(demo = {}) { const props = componentDemoProps("quick-action", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("quick-action", props, state, variant); }
-function reactCardSummaryDemo(demo = {}) { const props = componentDemoProps("card-summary", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "physical"; return reactIsland("card-summary", props, state, variant, props.fullWidth); } function reactMovementRowDemo(demo = {}) { const props = componentDemoProps("movement-row", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("movement-row", props, state, variant, props.fullWidth); } function reactRouteSummaryDemo(demo = {}) { const props = componentDemoProps("route-summary", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("route-summary", props, state, variant, props.fullWidth); } function reactStationPinDemo(demo = {}) { const props = componentDemoProps("station-pin", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "fuel"; return reactIsland("station-pin", props, state, variant); }
+function reactAuditEventDemo(demo = {}) { const props = componentDemoProps("audit-event", demo), state = props.state ?? demo.state ?? "default"; return reactIsland("audit-event", props, state, "standard"); } function reactCardSummaryDemo(demo = {}) { const props = componentDemoProps("card-summary", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "physical"; return reactIsland("card-summary", props, state, variant, props.fullWidth); } function reactMovementRowDemo(demo = {}) { const props = componentDemoProps("movement-row", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("movement-row", props, state, variant, props.fullWidth); } function reactRouteSummaryDemo(demo = {}) { const props = componentDemoProps("route-summary", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("route-summary", props, state, variant, props.fullWidth); } function reactStationPinDemo(demo = {}) { const props = componentDemoProps("station-pin", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "fuel"; return reactIsland("station-pin", props, state, variant); }
 function reactDatePickerDemo(demo = {}) {
   const props = componentDemoProps("date-picker", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "calendar";
   return reactIsland("date-picker", props, state, variant, props.fullWidth);
@@ -336,6 +336,7 @@ export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
   if (component === "accordion") return reactAccordionDemo(demo);
   if (component === "avatar") return reactAvatarDemo(demo);
+  if (component === "audit-event") return reactAuditEventDemo(demo);
   if (component === "badge") return reactBadgeDemo(demo);
   if (component === "breadcrumbs") return reactBreadcrumbsDemo(demo);
   if (component === "button") return reactButtonDemo(demo);
@@ -393,7 +394,6 @@ export function componentDemo(component, demo = {}) {
   node.setAttribute("data-demo-state", demo.state ?? "default");
   const hasAttribute = (name) => Boolean(node.hasAttribute?.(name) || node.getAttribute?.(name) != null || node.attributes?.[name] != null);
   if (!hasAttribute("data-variant")) node.setAttribute("data-variant", demo.variant ?? "standard"); if (!hasAttribute("data-state")) node.setAttribute("data-state", demo.state ?? "default");
-  node.setAttribute("data-full-width", String(Boolean(demo.fullWidth)));
-  queueChartHydration();
+  node.setAttribute("data-full-width", String(Boolean(demo.fullWidth))); queueChartHydration();
   return node.outerHTML;
 }
