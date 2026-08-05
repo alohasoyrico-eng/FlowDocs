@@ -11,6 +11,7 @@ import { Chip } from "./generated/react/Chip.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { DatePicker } from "./generated/react/DatePicker.js?v=1";
 import { DateRangePicker } from "./generated/react/DateRangePicker.js?v=1";
+import { EmptyState } from "./generated/react/EmptyState.js?v=1";
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { InlineValidation } from "./generated/react/InlineValidation.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
@@ -39,6 +40,7 @@ const reactComponents = {
   "code-input": CodeInput,
   "date-picker": DatePicker,
   "date-range-picker": DateRangePicker,
+  "empty-state": EmptyState,
   "icon-button": IconButton,
   "inline-validation": InlineValidation,
   input: Input,
