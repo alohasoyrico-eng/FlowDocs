@@ -23,6 +23,7 @@ import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
 import { SegmentedControl } from "./generated/react/SegmentedControl.js?v=1";
 import { Skeleton } from "./generated/react/Skeleton.js?v=1";
+import { Slider } from "./generated/react/Slider.js?v=1";
 import { Spinner } from "./generated/react/Spinner.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
@@ -55,6 +56,7 @@ const reactComponents = {
   select: Select,
   "segmented-control": SegmentedControl,
   skeleton: Skeleton,
+  slider: Slider,
   spinner: Spinner,
   switch: Switch,
   tag: Tag,
@@ -190,6 +192,15 @@ function SwitchIsland({ initialProps }) {
   });
 }
 
+function SliderIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? 0);
+  return React.createElement(Slider, {
+    ...initialProps,
+    value,
+    onValueChange: setValue,
+  });
+}
+
 function TextAreaIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
   return React.createElement(TextArea, {
@@ -242,6 +253,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(RadioButtonIsland, { initialProps: props })
         : node.dataset.reactComponent === "switch"
           ? React.createElement(SwitchIsland, { initialProps: props })
+        : node.dataset.reactComponent === "slider"
+          ? React.createElement(SliderIsland, { initialProps: props })
         : node.dataset.reactComponent === "text-area"
           ? React.createElement(TextAreaIsland, { initialProps: props })
         : React.createElement(Component, props),

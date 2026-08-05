@@ -244,6 +244,13 @@ function reactSkeletonDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="skeleton" data-component-source="react" data-doc-component="skeleton" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactSliderDemo(demo = {}) {
+  const props = componentDemoProps("slider", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "continuous";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="slider" data-component-source="react" data-doc-component="slider" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactCheckboxDemo(demo = {}) {
   const props = componentDemoProps("checkbox", demo);
   const state = props.state ?? demo.state ?? "unchecked";
@@ -359,6 +366,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "select") return reactSelectDemo(demo);
   if (component === "segmented-control") return reactSegmentedControlDemo(demo);
   if (component === "skeleton") return reactSkeletonDemo(demo);
+  if (component === "slider") return reactSliderDemo(demo);
   if (component === "spinner") return reactSpinnerDemo(demo);
   if (component === "switch") return reactSwitchDemo(demo);
   if (component === "tag") return reactTagDemo(demo);
