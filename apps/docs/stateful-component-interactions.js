@@ -1,9 +1,8 @@
-import { hydrateCombobox, hydrateCountrySelector } from "#design-system/components";
+import { hydrateCombobox } from "#design-system/components";
 import { iconGlyph } from "./icon-system.js";
 
 export function setupStatefulComponentDemos(root = document) {
   setupComboboxDemos(root);
-  setupCountrySelectorDemos(root);
   setupChipDemos(root);
   setupTabsDemos(root);
   setupSliderDemos(root);
@@ -54,13 +53,6 @@ function setupComboboxDemos(root = document) {
   root.querySelectorAll('[data-doc-component="combobox"]:not([data-stateful-ready="true"])').forEach((demo) => {
     demo.dataset.statefulReady = "true";
     hydrateCombobox(demo);
-  });
-}
-
-function setupCountrySelectorDemos(root = document) {
-  root.querySelectorAll('[data-doc-component="country-selector"]:not([data-stateful-ready="true"])').forEach((demo) => {
-    demo.dataset.statefulReady = "true";
-    hydrateCountrySelector(demo);
   });
 }
 

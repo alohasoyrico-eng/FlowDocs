@@ -157,10 +157,8 @@ function reactTagDemo(demo = {}) {
 }
 
 function reactChipDemo(demo = {}) { const props = componentDemoProps("chip", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "filter"; return reactIsland("chip", props, state, variant); }
-function reactComboboxDemo(demo = {}) {
-  const props = componentDemoProps("combobox", demo), state = props.state ?? demo.state ?? "default";
-  return reactIsland("combobox", props, state, "default", props.fullWidth);
-}
+function reactComboboxDemo(demo = {}) { const props = componentDemoProps("combobox", demo), state = props.state ?? demo.state ?? "default"; return reactIsland("combobox", props, state, "default", props.fullWidth); }
+function reactCountrySelectorDemo(demo = {}) { const props = componentDemoProps("country-selector", demo), state = props.state ?? demo.state ?? "default", variant = props.inline ? "inline" : "default"; return reactIsland("country-selector", props, state, variant, demo.fullWidth); }
 
 function reactIconButtonDemo(demo = {}) {
   const props = componentDemoProps("icon-button", demo), state = demo.state ?? "default", variant = props.variant ?? demo.variant ?? "ghost";
@@ -353,6 +351,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "chip") return reactChipDemo(demo);
   if (component === "code-input") return reactCodeInputDemo(demo);
   if (component === "combobox") return reactComboboxDemo(demo);
+  if (component === "country-selector") return reactCountrySelectorDemo(demo);
   if (component === "date-picker") return reactDatePickerDemo(demo);
   if (component === "date-range-picker") return reactDateRangePickerDemo(demo);
   if (component === "dialog") return reactDialogDemo(demo);

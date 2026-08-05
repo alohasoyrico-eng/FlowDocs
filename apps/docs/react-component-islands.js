@@ -13,6 +13,7 @@ import { Checkbox } from "./generated/react/Checkbox.js?v=1";
 import { Chip } from "./generated/react/Chip.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { Combobox } from "./generated/react/Combobox.js?v=1";
+import { CountrySelector } from "./generated/react/CountrySelector.js?v=1";
 import { DatePicker } from "./generated/react/DatePicker.js?v=1";
 import { DateRangePicker } from "./generated/react/DateRangePicker.js?v=1";
 import { Dialog } from "./generated/react/Dialog.js?v=1";
@@ -61,6 +62,7 @@ const reactComponents = {
   chip: Chip,
   "code-input": CodeInput,
   combobox: Combobox,
+  "country-selector": CountrySelector,
   "date-picker": DatePicker,
   "date-range-picker": DateRangePicker,
   dialog: Dialog,
@@ -155,6 +157,16 @@ function ComboboxIsland({ initialProps }) {
     ...initialProps,
     value,
     onValueChange: setValue,
+  });
+}
+
+function CountrySelectorIsland({ initialProps }) {
+  const [country, setCountry] = React.useState(initialProps.country ?? initialProps.value ?? "MX");
+  return React.createElement(CountrySelector, {
+    ...initialProps,
+    country,
+    value: country,
+    onValueChange: setCountry,
   });
 }
 
@@ -303,6 +315,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(CodeInputIsland, { initialProps: props })
         : node.dataset.reactComponent === "combobox"
           ? React.createElement(ComboboxIsland, { initialProps: props })
+        : node.dataset.reactComponent === "country-selector"
+          ? React.createElement(CountrySelectorIsland, { initialProps: props })
         : node.dataset.reactComponent === "date-picker"
           ? React.createElement(DatePickerIsland, { initialProps: props })
         : node.dataset.reactComponent === "date-range-picker"
