@@ -128,53 +128,43 @@ function demoSlug(value) {
   return String(value).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
+function reactIsland(component, props, state = "default", variant = "standard", fullWidth = false) {
+  return `<span class="docs-react-island docs-package-demo" data-react-component="${component}" data-component-source="react" data-doc-component="${component}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactButtonDemo(demo = {}) {
-  const props = componentDemoProps("button", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "primary";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="button" data-component-source="react" data-doc-component="button" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("button", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "primary";
+  return reactIsland("button", props, state, variant, props.fullWidth);
 }
 
 function reactAccordionDemo(demo = {}) {
-  const props = componentDemoProps("accordion", demo);
-  const state = demo.state ?? "open";
-  const variant = demo.variant ?? "single";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="accordion" data-component-source="react" data-doc-component="accordion" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("accordion", demo), state = demo.state ?? "open", variant = demo.variant ?? "single";
+  return reactIsland("accordion", props, state, variant, demo.fullWidth);
 }
 
 function reactAvatarDemo(demo = {}) {
-  const props = componentDemoProps("avatar", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = demo.variant ?? (props.src ? "image" : props.status && props.status !== "none" ? "status" : "initials");
-  return `<span class="docs-react-island docs-package-demo" data-react-component="avatar" data-component-source="react" data-doc-component="avatar" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("avatar", demo), state = props.state ?? demo.state ?? "default", variant = demo.variant ?? (props.src ? "image" : props.status && props.status !== "none" ? "status" : "initials");
+  return reactIsland("avatar", props, state, variant);
 }
 
 function reactBadgeDemo(demo = {}) {
-  const props = componentDemoProps("badge", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "status";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="badge" data-component-source="react" data-doc-component="badge" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("badge", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "status";
+  return reactIsland("badge", props, state, variant);
 }
 
 function reactBreadcrumbsDemo(demo = {}) {
-  const props = componentDemoProps("breadcrumbs", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "standard";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="breadcrumbs" data-component-source="react" data-doc-component="breadcrumbs" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("breadcrumbs", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard";
+  return reactIsland("breadcrumbs", props, state, variant, props.fullWidth);
 }
 
 function reactTagDemo(demo = {}) {
-  const props = componentDemoProps("tag", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "metadata";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="tag" data-component-source="react" data-doc-component="tag" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("tag", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "metadata";
+  return reactIsland("tag", props, state, variant);
 }
 
 function reactChipDemo(demo = {}) {
-  const props = componentDemoProps("chip", demo);
-  const state = props.state ?? demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "filter";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="chip" data-component-source="react" data-doc-component="chip" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("chip", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "filter";
+  return reactIsland("chip", props, state, variant);
 }
 
 function reactIconButtonDemo(demo = {}) {
@@ -237,7 +227,12 @@ function reactSpinnerDemo(demo = {}) {
 }
 function reactStepperDemo(demo = {}) {
   const props = componentDemoProps("stepper", demo), state = demo.state ?? "active", variant = props.orientation ?? demo.variant ?? "horizontal";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="stepper" data-component-source="react" data-doc-component="stepper" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="true" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  return reactIsland("stepper", props, state, variant, true);
+}
+
+function reactTabsDemo(demo = {}) {
+  const props = componentDemoProps("tabs", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "default";
+  return reactIsland("tabs", props, state, variant, demo.fullWidth);
 }
 function reactSkeletonDemo(demo = {}) {
   const props = componentDemoProps("skeleton", demo);
@@ -379,6 +374,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "spinner") return reactSpinnerDemo(demo);
   if (component === "stepper") return reactStepperDemo(demo);
   if (component === "switch") return reactSwitchDemo(demo);
+  if (component === "tabs") return reactTabsDemo(demo);
   if (component === "tag") return reactTagDemo(demo);
   if (component === "toast") return reactToastDemo(demo);
   if (component === "text-area") return reactTextAreaDemo(demo);

@@ -29,6 +29,7 @@ import { Slider } from "./generated/react/Slider.js?v=1";
 import { Spinner } from "./generated/react/Spinner.js?v=1";
 import { Stepper } from "./generated/react/Stepper.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
+import { Tabs } from "./generated/react/Tabs.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
 import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
@@ -65,6 +66,7 @@ const reactComponents = {
   spinner: Spinner,
   stepper: Stepper,
   switch: Switch,
+  tabs: Tabs,
   tag: Tag,
   toast: Toast,
   tooltip: Tooltip,
@@ -207,6 +209,20 @@ function SwitchIsland({ initialProps }) {
   });
 }
 
+function TabsIsland({ initialProps }) {
+  const fallbackKey = initialProps.items?.find?.((item) => item.selected)?.key
+    ?? initialProps.items?.find?.((item) => item.selected)?.value
+    ?? initialProps.items?.[0]?.key
+    ?? initialProps.items?.[0]?.value
+    ?? "";
+  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? fallbackKey);
+  return React.createElement(Tabs, {
+    ...initialProps,
+    selectedKey,
+    onValueChange: setSelectedKey,
+  });
+}
+
 function SliderIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? 0);
   return React.createElement(Slider, {
@@ -270,6 +286,8 @@ export function setupReactComponentIslands(root = document) {
           ? React.createElement(RadioButtonIsland, { initialProps: props })
         : node.dataset.reactComponent === "switch"
           ? React.createElement(SwitchIsland, { initialProps: props })
+        : node.dataset.reactComponent === "tabs"
+          ? React.createElement(TabsIsland, { initialProps: props })
         : node.dataset.reactComponent === "slider"
           ? React.createElement(SliderIsland, { initialProps: props })
         : node.dataset.reactComponent === "text-area"
