@@ -180,6 +180,8 @@ function reactInputDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="input" data-component-source="react" data-doc-component="input" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactListDemo(demo = {}) { const props = componentDemoProps("list", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("list", props, state, variant, props.fullWidth); }
+
 function reactCardNumberInputDemo(demo = {}) {
   const props = componentDemoProps("card-number-input", demo);
   const state = props.state ?? demo.state ?? "default";
@@ -335,10 +337,7 @@ function reactTooltipDemo(demo = {}) {
   return reactIsland("tooltip", props, state, variant);
 }
 
-function reactToastDemo(demo = {}) {
-  const props = componentDemoProps("toast", demo), state = props.state ?? demo.state ?? "visible", variant = props.variant ?? demo.variant ?? "status";
-  return reactIsland("toast", props, state, variant);
-}
+function reactToastDemo(demo = {}) { const props = componentDemoProps("toast", demo), state = props.state ?? demo.state ?? "visible", variant = props.variant ?? demo.variant ?? "status"; return reactIsland("toast", props, state, variant); }
 
 export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
@@ -364,6 +363,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "inline-validation") return reactInlineValidationDemo(demo);
   if (component === "input") return reactInputDemo(demo);
+  if (component === "list") return reactListDemo(demo);
   if (component === "menu") return reactMenuDemo(demo);
   if (component === "pagination") return reactPaginationDemo(demo);
   if (component === "phone-input") return reactPhoneInputDemo(demo);
