@@ -27,6 +27,7 @@ import { Input } from "./generated/react/Input.js?v=1";
 import { KpiTile } from "./generated/react/KpiTile.js?v=1";
 import { List } from "./generated/react/List.js?v=1";
 import { Menu } from "./generated/react/Menu.js?v=1";
+import { MovementRow } from "./generated/react/MovementRow.js?v=1";
 import { Pagination } from "./generated/react/Pagination.js?v=1";
 import { PhoneInput } from "./generated/react/PhoneInput.js?v=1";
 import { Popover } from "./generated/react/Popover.js?v=1";
@@ -77,6 +78,7 @@ const reactComponents = {
   "kpi-tile": KpiTile,
   list: List,
   menu: Menu,
+  "movement-row": MovementRow,
   pagination: Pagination,
   "phone-input": PhoneInput,
   popover: Popover,

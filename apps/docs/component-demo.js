@@ -12,7 +12,6 @@ async function hydrateChartDemos(root = document) {
     hydrateChartPanel(chart, { echarts });
   }
 }
-
 function queueChartHydration() {
   if (chartHydrationQueued || typeof document === "undefined" || typeof window === "undefined") return;
   chartHydrationQueued = true;
@@ -277,7 +276,7 @@ function reactProgressIndicatorDemo(demo = {}) {
   return reactIsland("progress-indicator", props, state, variant, props.fullWidth);
 }
 function reactQuickActionDemo(demo = {}) { const props = componentDemoProps("quick-action", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("quick-action", props, state, variant); }
-
+function reactMovementRowDemo(demo = {}) { const props = componentDemoProps("movement-row", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("movement-row", props, state, variant, props.fullWidth); }
 function reactDatePickerDemo(demo = {}) {
   const props = componentDemoProps("date-picker", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "calendar";
   return reactIsland("date-picker", props, state, variant, props.fullWidth);
@@ -365,6 +364,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "kpi-tile") return reactKpiTileDemo(demo);
   if (component === "list") return reactListDemo(demo);
   if (component === "menu") return reactMenuDemo(demo);
+  if (component === "movement-row") return reactMovementRowDemo(demo);
   if (component === "pagination") return reactPaginationDemo(demo);
   if (component === "phone-input") return reactPhoneInputDemo(demo);
   if (component === "popover") return reactPopoverDemo(demo);
