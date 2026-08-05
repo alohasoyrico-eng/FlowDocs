@@ -168,10 +168,8 @@ function reactChipDemo(demo = {}) {
 }
 
 function reactIconButtonDemo(demo = {}) {
-  const props = componentDemoProps("icon-button", demo);
-  const state = demo.state ?? "default";
-  const variant = props.variant ?? demo.variant ?? "ghost";
-  return `<span class="docs-react-island docs-package-demo" data-react-component="icon-button" data-component-source="react" data-doc-component="icon-button" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  const props = componentDemoProps("icon-button", demo), state = demo.state ?? "default", variant = props.variant ?? demo.variant ?? "ghost";
+  return reactIsland("icon-button", props, state, variant);
 }
 
 function reactInlineValidationDemo(demo = {}) {
@@ -269,6 +267,10 @@ function reactPhoneInputDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="phone-input" data-component-source="react" data-doc-component="phone-input" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactPopoverDemo(demo = {}) {
+  const props = componentDemoProps("popover", demo), state = props.state ?? demo.state ?? "closed", variant = props.variant ?? demo.variant ?? "information";
+  return reactIsland("popover", props, state, variant, props.fullWidth);
+}
 function reactPaginationDemo(demo = {}) {
   const props = componentDemoProps("pagination", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "numbered";
   return `<span class="docs-react-island docs-package-demo" data-react-component="pagination" data-component-source="react" data-doc-component="pagination" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
@@ -365,6 +367,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "input") return reactInputDemo(demo);
   if (component === "pagination") return reactPaginationDemo(demo);
   if (component === "phone-input") return reactPhoneInputDemo(demo);
+  if (component === "popover") return reactPopoverDemo(demo);
   if (component === "progress-indicator") return reactProgressIndicatorDemo(demo);
   if (component === "radio-button") return reactRadioButtonDemo(demo);
   if (component === "select") return reactSelectDemo(demo);
