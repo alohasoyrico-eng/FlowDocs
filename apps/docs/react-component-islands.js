@@ -42,6 +42,7 @@ import { Table } from "./generated/react/Table.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
 import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
+import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
 
 const mounted = new WeakMap();
@@ -88,6 +89,7 @@ const reactComponents = {
   tag: Tag,
   toast: Toast,
   tooltip: Tooltip,
+  "tree-view": TreeView,
   "text-area": TextArea,
 };
 

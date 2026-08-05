@@ -334,6 +334,8 @@ function reactTooltipDemo(demo = {}) {
   return reactIsland("tooltip", props, state, variant);
 }
 
+function reactTreeViewDemo(demo = {}) { const props = componentDemoProps("tree-view", demo), state = props.state ?? demo.state ?? "expanded", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("tree-view", props, state, variant, props.fullWidth); }
+
 function reactToastDemo(demo = {}) { const props = componentDemoProps("toast", demo), state = props.state ?? demo.state ?? "visible", variant = props.variant ?? demo.variant ?? "status"; return reactIsland("toast", props, state, variant); }
 
 export function componentDemo(component, demo = {}) {
@@ -378,9 +380,8 @@ export function componentDemo(component, demo = {}) {
   if (component === "tabs") return reactTabsDemo(demo);
   if (component === "table") return reactTableDemo(demo);
   if (component === "tag") return reactTagDemo(demo);
-  if (component === "toast") return reactToastDemo(demo);
-  if (component === "text-area") return reactTextAreaDemo(demo);
-  if (component === "tooltip") return reactTooltipDemo(demo);
+  if (component === "toast") return reactToastDemo(demo); if (component === "text-area") return reactTextAreaDemo(demo);
+  if (component === "tooltip") return reactTooltipDemo(demo); if (component === "tree-view") return reactTreeViewDemo(demo);
   const node = renderComponentDemo(component, demo);
   persistNativeFieldState(node);
   node.className = [node.className, "docs-package-demo"].filter(Boolean).join(" ");
