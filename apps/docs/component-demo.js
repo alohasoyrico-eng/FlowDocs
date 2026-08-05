@@ -143,6 +143,13 @@ function reactButtonDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="button" data-component-source="react" data-doc-component="button" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactAccordionDemo(demo = {}) {
+  const props = componentDemoProps("accordion", demo);
+  const state = demo.state ?? "open";
+  const variant = demo.variant ?? "single";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="accordion" data-component-source="react" data-doc-component="accordion" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactAvatarDemo(demo = {}) {
   const props = componentDemoProps("avatar", demo);
   const state = props.state ?? demo.state ?? "default";
@@ -329,6 +336,7 @@ function reactToastDemo(demo = {}) {
 
 export function componentDemo(component, demo = {}) {
   if (typeof document === "undefined" || typeof document.createTextNode !== "function") return "";
+  if (component === "accordion") return reactAccordionDemo(demo);
   if (component === "avatar") return reactAvatarDemo(demo);
   if (component === "badge") return reactBadgeDemo(demo);
   if (component === "button") return reactButtonDemo(demo);

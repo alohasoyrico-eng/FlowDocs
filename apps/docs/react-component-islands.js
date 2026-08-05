@@ -1,5 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { Accordion } from "./generated/react/Accordion.js?v=1";
 import { Avatar } from "./generated/react/Avatar.js?v=1";
 import { Badge } from "./generated/react/Badge.js?v=1";
 import { Button } from "./generated/react/Button.js?v=1";
@@ -31,6 +32,7 @@ import { TextArea } from "./generated/react/TextArea.js?v=1";
 
 const mounted = new WeakMap();
 const reactComponents = {
+  accordion: Accordion,
   avatar: Avatar,
   badge: Badge,
   button: Button,
