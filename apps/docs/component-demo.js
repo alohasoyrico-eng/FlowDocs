@@ -230,6 +230,13 @@ function reactSpinnerDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="spinner" data-component-source="react" data-doc-component="spinner" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="false" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactSkeletonDemo(demo = {}) {
+  const props = componentDemoProps("skeleton", demo);
+  const state = props.state ?? demo.state ?? "loading";
+  const variant = props.variant ?? demo.variant ?? "text";
+  return `<span class="docs-react-island docs-package-demo" data-react-component="skeleton" data-component-source="react" data-doc-component="skeleton" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(props.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 function reactCheckboxDemo(demo = {}) {
   const props = componentDemoProps("checkbox", demo);
   const state = props.state ?? demo.state ?? "unchecked";
@@ -320,6 +327,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "radio-button") return reactRadioButtonDemo(demo);
   if (component === "select") return reactSelectDemo(demo);
   if (component === "segmented-control") return reactSegmentedControlDemo(demo);
+  if (component === "skeleton") return reactSkeletonDemo(demo);
   if (component === "spinner") return reactSpinnerDemo(demo);
   if (component === "switch") return reactSwitchDemo(demo);
   if (component === "tag") return reactTagDemo(demo);

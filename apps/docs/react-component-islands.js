@@ -19,6 +19,7 @@ import { ProgressIndicator } from "./generated/react/ProgressIndicator.js?v=1";
 import { RadioButton } from "./generated/react/RadioButton.js?v=1";
 import { Select } from "./generated/react/Select.js?v=1";
 import { SegmentedControl } from "./generated/react/SegmentedControl.js?v=1";
+import { Skeleton } from "./generated/react/Skeleton.js?v=1";
 import { Spinner } from "./generated/react/Spinner.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
 import { Tag } from "./generated/react/Tag.js?v=1";
@@ -46,6 +47,7 @@ const reactComponents = {
   "radio-button": RadioButton,
   select: Select,
   "segmented-control": SegmentedControl,
+  skeleton: Skeleton,
   spinner: Spinner,
   switch: Switch,
   tag: Tag,
