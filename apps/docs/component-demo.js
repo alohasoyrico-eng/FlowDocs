@@ -53,63 +53,7 @@ function persistNativeFieldState(node) {
   }
 }
 
-const nestedPackageSelectors = [
-  ".accordion",
-  ".animated-moment",
-  ".audit-event",
-  ".avatar",
-  ".badge",
-  ".biometric-prompt",
-  ".breadcrumbs",
-  ".button",
-  ".card",
-  ".card-expiry-input",
-  ".card-number-input",
-  ".card-security-code-input",
-  ".card-summary",
-  ".chart-panel",
-  ".checkbox",
-  ".chip",
-  ".code-input",
-  ".combobox",
-  ".country-selector",
-  ".date-picker",
-  ".date-range-picker",
-  ".dialog",
-  ".drawer",
-  ".empty-state",
-  ".error-panel",
-  ".fab",
-  ".icon-button",
-  ".inline-validation",
-  ".input",
-  ".kpi-tile",
-  ".list",
-  ".menu",
-  ".motion-boundary",
-  ".movement-row",
-  ".pagination",
-  ".phone-input",
-  ".popover",
-  ".progress-indicator",
-  ".quick-action",
-  ".radio",
-  ".route-summary",
-  ".segmented-control",
-  ".select-control",
-  ".skeleton",
-  ".slider",
-  ".spinner",
-  ".station-pin",
-  ".stepper",
-  ".switch",
-  ".table",
-  ".tag",
-  ".text-area",
-  ".toast",
-  ".tooltip",
-  ".tree-view",
-];
+const nestedPackageSelectors = [".accordion", ".animated-moment", ".audit-event", ".avatar", ".badge", ".biometric-prompt", ".breadcrumbs", ".button", ".card", ".card-expiry-input", ".card-number-input", ".card-security-code-input", ".card-summary", ".chart-panel", ".checkbox", ".chip", ".code-input", ".combobox", ".country-selector", ".date-picker", ".date-range-picker", ".dialog", ".drawer", ".empty-state", ".error-panel", ".fab", ".icon-button", ".inline-validation", ".input", ".kpi-tile", ".list", ".menu", ".motion-boundary", ".movement-row", ".pagination", ".phone-input", ".popover", ".progress-indicator", ".quick-action", ".radio", ".route-summary", ".segmented-control", ".select-control", ".skeleton", ".slider", ".spinner", ".station-pin", ".stepper", ".switch", ".table", ".tag", ".text-area", ".toast", ".tooltip", ".tree-view"];
 
 function markPackageControls(node) {
   for (const control of Array.from(node.querySelectorAll?.(nestedPackageSelectors.join(",")) ?? [])) {
@@ -135,6 +79,11 @@ function reactButtonDemo(demo = {}) {
 function reactCardDemo(demo = {}) {
   const props = componentDemoProps("card", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "default";
   return reactIsland("card", props, state, variant, props.fullWidth);
+}
+function reactChartPanelDemo(demo = {}) {
+  const props = componentDemoProps("chart-panel", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "sparkline";
+  queueChartHydration();
+  return reactIsland("chart-panel", props, state, variant, props.fullWidth);
 }
 function reactAccordionDemo(demo = {}) {
   const props = componentDemoProps("accordion", demo), state = demo.state ?? "open", variant = demo.variant ?? "single";
@@ -345,6 +294,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "card-number-input") return reactCardNumberInputDemo(demo);
   if (component === "card-security-code-input") return reactCardSecurityCodeInputDemo(demo);
   if (component === "card-summary") return reactCardSummaryDemo(demo);
+  if (component === "chart-panel") return reactChartPanelDemo(demo);
   if (component === "checkbox") return reactCheckboxDemo(demo);
   if (component === "chip") return reactChipDemo(demo);
   if (component === "code-input") return reactCodeInputDemo(demo);

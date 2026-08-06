@@ -13,6 +13,7 @@ import { CardExpiryInput } from "./generated/react/CardExpiryInput.js?v=1";
 import { CardNumberInput } from "./generated/react/CardNumberInput.js?v=1";
 import { CardSecurityCodeInput } from "./generated/react/CardSecurityCodeInput.js?v=1";
 import { CardSummary } from "./generated/react/CardSummary.js?v=1";
+import { ChartPanel } from "./generated/react/ChartPanel.js?v=1";
 import { Checkbox } from "./generated/react/Checkbox.js?v=1";
 import { Chip } from "./generated/react/Chip.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
@@ -70,6 +71,7 @@ const reactComponents = {
   "card-number-input": CardNumberInput,
   "card-security-code-input": CardSecurityCodeInput,
   "card-summary": CardSummary,
+  "chart-panel": ChartPanel,
   checkbox: Checkbox,
   chip: Chip,
   "code-input": CodeInput,
