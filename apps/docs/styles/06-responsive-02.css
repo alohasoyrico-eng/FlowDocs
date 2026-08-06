@@ -184,7 +184,7 @@
 }
 
 @media (max-width: 420px) {
-  .detail-tabs.tabs-demo [role="tab"] {
+  .detail-tabs.detail-tablist [role="tab"] {
     padding-inline: var(--sys-space-2);
   }
 }

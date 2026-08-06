@@ -76,7 +76,7 @@ export function renderDetailContent({ artifactTypeLabel, collection, componentIm
         </div>
       </header>
       <div class="detail-layout">
-        <nav class="detail-tabs tabs-demo" data-variant="default" role="tablist" aria-label="${entry.title} ${ui("shell.sections")}">
+        <nav class="detail-tabs detail-tablist" data-variant="default" role="tablist" aria-label="${entry.title} ${ui("shell.sections")}">
           ${tabs.map((tab, index) => `<button type="button" class="${index === 0 ? "active" : ""}" data-tab="${tab.id}" role="tab" aria-selected="${String(index === 0)}" tabindex="${index === 0 ? "0" : "-1"}">${icon(tabIcon(tab))}<span>${tab.label}</span></button>`).join("")}
         </nav>
         <section class="tab-panel" id="tabPanel">${tabs[0].body}</section>

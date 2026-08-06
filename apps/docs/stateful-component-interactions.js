@@ -75,7 +75,7 @@ function setupChipDemos(root = document) {
 }
 
 function setupTabsDemos(root = document) {
-  root.querySelectorAll('[data-doc-component="tabs"]:not([data-stateful-ready="true"]), .tabs-demo:not([data-stateful-ready="true"])').forEach((tablist) => {
+  root.querySelectorAll('[data-doc-component="tabs"]:not([data-stateful-ready="true"]), .detail-tablist:not([data-stateful-ready="true"])').forEach((tablist) => {
     tablist.dataset.statefulReady = "true";
     const tabs = [...tablist.querySelectorAll("[data-tabs-item], [role='tab']")];
     const updateIndicator = (tab) => {
