@@ -149,9 +149,9 @@ function setupSegmentedControlDemos(root = document) {
     const indicator = control.querySelector(".segmented-control__indicator");
     const syncIndicator = (item) => {
       const index = Math.max(0, items.indexOf(item));
-      setStyleProperty(control, "--segmented-control-count", String(Math.max(items.length, 1)));
-      setStyleProperty(indicator, "--segmented-control-count", String(Math.max(items.length, 1)));
-      setStyleProperty(indicator, "--segmented-control-index", String(index));
+      setStyleProperty(control, "--comp-segmented-control-count", String(Math.max(items.length, 1)));
+      setStyleProperty(indicator, "--comp-segmented-control-count", String(Math.max(items.length, 1)));
+      setStyleProperty(indicator, "--comp-segmented-control-index", String(index));
     };
     const activate = (item) => {
       items.forEach((option) => {
