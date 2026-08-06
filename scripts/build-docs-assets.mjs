@@ -75,9 +75,11 @@ for (const file of fs.readdirSync(reactOutputDir).filter((name) => name.endsWith
     fs.readFileSync(outputFile, "utf8")
       .replaceAll('"@design-system/components/platforms"', `"../components/platforms/index.js${extensionSuffix}"`)
       .replaceAll('"@alohasoyrico-eng/flow/components/platforms"', `"../components/platforms/index.js${extensionSuffix}"`)
+      .replaceAll('"#flow/platforms"', `"../components/platforms/index.js${extensionSuffix}"`)
       .replaceAll('"../../components/src/platforms/index.js"', `"../components/platforms/index.js${extensionSuffix}"`)
       .replaceAll('"@design-system/components"', `"../components/index.js${extensionSuffix}"`)
       .replaceAll('"@alohasoyrico-eng/flow/components"', `"../components/index.js${extensionSuffix}"`)
+      .replaceAll('"#flow/components"', `"../components/index.js${extensionSuffix}"`)
       .replaceAll('"../../components/src/index.js"', `"../components/index.js${extensionSuffix}"`)
   );
 }
