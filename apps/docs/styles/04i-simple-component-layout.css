@@ -112,6 +112,16 @@
   inline-size: 100%;
 }
 
+.docs-react-island.docs-package-demo[data-doc-component="movement-row"] {
+  display: inline-flex;
+  inline-size: min(100%, var(--component-content-size-lg));
+  max-inline-size: 100%;
+}
+
+.docs-react-island.docs-package-demo[data-doc-component="movement-row"] > .movement-row {
+  inline-size: 100%;
+}
+
 .docs-demo-layout--popover.simple-demo-row {
   align-items: flex-start;
 }
