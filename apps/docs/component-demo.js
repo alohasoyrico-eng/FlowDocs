@@ -1,4 +1,4 @@
-import { componentDemoProps, hydrateChartPanel, renderComponentDemo } from "#design-system/components";
+import { componentDemoProps, hydrateChartPanel } from "#design-system/components";
 
 const chartLibrary = typeof window === "undefined" ? Promise.resolve(null) : import("./generated/vendor/echarts.esm.min.js?v=1").catch(() => null);
 
@@ -31,34 +31,6 @@ if (typeof window !== "undefined" && typeof MutationObserver !== "undefined") {
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startObserver, { once: true });
   else startObserver();
-}
-
-function persistNativeFieldState(node) {
-  for (const input of Array.from(node.querySelectorAll?.("input") ?? [])) {
-    if (input.value) input.setAttribute("value", input.value);
-    if (input.placeholder) input.setAttribute("placeholder", input.placeholder);
-    if (input.checked) input.setAttribute("checked", "");
-    if (input.disabled) input.setAttribute("disabled", "");
-  }
-  for (const select of Array.from(node.querySelectorAll?.("select") ?? [])) {
-    for (const option of Array.from(select.options ?? [])) {
-      if (option.selected) option.setAttribute("selected", "");
-    }
-    if (select.disabled) select.setAttribute("disabled", "");
-  }
-  for (const textarea of Array.from(node.querySelectorAll?.("textarea") ?? [])) {
-    if (textarea.value) textarea.textContent = textarea.value;
-    if (textarea.placeholder) textarea.setAttribute("placeholder", textarea.placeholder);
-    if (textarea.disabled) textarea.setAttribute("disabled", "");
-  }
-}
-
-const nestedPackageSelectors = [".accordion", ".animated-moment", ".audit-event", ".avatar", ".badge", ".biometric-prompt", ".breadcrumbs", ".button", ".card", ".card-expiry-input", ".card-number-input", ".card-security-code-input", ".card-summary", ".chart-panel", ".checkbox", ".chip", ".code-input", ".combobox", ".country-selector", ".date-picker", ".date-range-picker", ".dialog", ".drawer", ".empty-state", ".error-panel", ".fab", ".icon-button", ".inline-validation", ".input", ".kpi-tile", ".list", ".menu", ".motion-boundary", ".movement-row", ".pagination", ".phone-input", ".popover", ".progress-indicator", ".quick-action", ".radio", ".route-summary", ".segmented-control", ".select-control", ".skeleton", ".slider", ".spinner", ".station-pin", ".stepper", ".switch", ".table", ".tag", ".text-area", ".toast", ".tooltip", ".tree-view"];
-
-function markPackageControls(node) {
-  for (const control of Array.from(node.querySelectorAll?.(nestedPackageSelectors.join(",")) ?? [])) {
-    control.classList?.add("docs-package-demo");
-  }
 }
 
 function escapeAttribute(value) {
@@ -336,16 +308,5 @@ export function componentDemo(component, demo = {}) {
   if (component === "tag") return reactTagDemo(demo);
   if (component === "toast") return reactToastDemo(demo); if (component === "text-area") return reactTextAreaDemo(demo);
   if (component === "tooltip") return reactTooltipDemo(demo); if (component === "tree-view") return reactTreeViewDemo(demo);
-  const node = renderComponentDemo(component, demo);
-  persistNativeFieldState(node);
-  node.className = [node.className, "docs-package-demo"].filter(Boolean).join(" ");
-  markPackageControls(node);
-  node.setAttribute("data-component-source", "package");
-  node.setAttribute("data-doc-component", component);
-  node.setAttribute("data-demo-variant", demo.variant ?? "standard");
-  node.setAttribute("data-demo-state", demo.state ?? "default");
-  const hasAttribute = (name) => Boolean(node.hasAttribute?.(name) || node.getAttribute?.(name) != null || node.attributes?.[name] != null);
-  if (!hasAttribute("data-variant")) node.setAttribute("data-variant", demo.variant ?? "standard"); if (!hasAttribute("data-state")) node.setAttribute("data-state", demo.state ?? "default");
-  node.setAttribute("data-full-width", String(Boolean(demo.fullWidth))); queueChartHydration();
-  return node.outerHTML;
+  return `<span class="docs-demo-error" data-doc-component="${escapeAttribute(component)}">Missing React demo for ${escapeAttribute(component)}</span>`;
 }
