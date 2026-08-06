@@ -124,6 +124,7 @@ function reactInputDemo(demo = {}) { const props = componentDemoProps("input", d
 function reactKpiTileDemo(demo = {}) { const props = componentDemoProps("kpi-tile", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("kpi-tile", props, state, variant, props.fullWidth); }
 
 function reactListDemo(demo = {}) { const props = componentDemoProps("list", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard"; return reactIsland("list", props, state, variant, props.fullWidth); }
+function reactMotionBoundaryDemo(demo = {}) { const props = componentDemoProps("motion-boundary", demo), state = props.state ?? demo.state ?? "active", variant = props.variant ?? demo.variant ?? "fade"; return reactIsland("motion-boundary", props, state, variant, props.fullWidth); }
 function reactFloatingActionButtonDemo(demo = {}) { const props = componentDemoProps("floating-action-button", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "primary"; return reactIsland("floating-action-button", props, state, variant); }
 function reactCardNumberInputDemo(demo = {}) {
   const props = componentDemoProps("card-number-input", demo);
@@ -313,6 +314,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "kpi-tile") return reactKpiTileDemo(demo);
   if (component === "list") return reactListDemo(demo);
   if (component === "menu") return reactMenuDemo(demo);
+  if (component === "motion-boundary") return reactMotionBoundaryDemo(demo);
   if (component === "movement-row") return reactMovementRowDemo(demo);
   if (component === "pagination") return reactPaginationDemo(demo);
   if (component === "phone-input") return reactPhoneInputDemo(demo);
