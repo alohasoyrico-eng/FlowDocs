@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Accordion } from "./generated/react/Accordion.js?v=1";
+import { AnimatedMoment } from "./generated/react/AnimatedMoment.js?v=1";
 import { AuditEvent } from "./generated/react/AuditEvent.js?v=1";
 import { Avatar } from "./generated/react/Avatar.js?v=1";
 import { Badge } from "./generated/react/Badge.js?v=1";
@@ -56,6 +57,7 @@ import { TextArea } from "./generated/react/TextArea.js?v=1";
 const mounted = new WeakMap();
 const reactComponents = {
   accordion: Accordion,
+  "animated-moment": AnimatedMoment,
   "audit-event": AuditEvent,
   avatar: Avatar,
   badge: Badge,
