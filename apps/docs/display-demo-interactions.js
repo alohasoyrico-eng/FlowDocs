@@ -1,23 +1,6 @@
 export function setupAccordionDemos(root = document) {
-  root.querySelectorAll('[data-doc-component="accordion"]:not([data-demo-ready="true"]), .accordion-demo:not([data-demo-ready="true"])').forEach((accordion) => {
+  root.querySelectorAll('[data-doc-component="accordion"]:not([data-demo-ready="true"])').forEach((accordion) => {
     accordion.dataset.demoReady = "true";
-    const multiple = accordion.dataset.multiple === "true";
-    accordion.querySelectorAll("[data-accordion-trigger]").forEach((trigger) => {
-      trigger.addEventListener("click", () => {
-        const item = trigger.closest(".accordion-demo__item, [data-accordion-item]");
-        const next = item?.dataset.open !== "true";
-        if (!multiple) accordion.querySelectorAll(".accordion-demo__item, [data-accordion-item]").forEach((other) => {
-          other.dataset.open = "false";
-          other.querySelector("[data-accordion-trigger]")?.setAttribute("aria-expanded", "false");
-          const panel = other.querySelector("[data-accordion-panel]");
-          if (panel) panel.hidden = true;
-        });
-        item.dataset.open = String(next);
-        trigger.setAttribute("aria-expanded", String(next));
-        const panel = item.querySelector("[data-accordion-panel]");
-        if (panel) panel.hidden = !next;
-      });
-    });
   });
 }
 
