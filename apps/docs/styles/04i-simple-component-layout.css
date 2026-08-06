@@ -102,6 +102,16 @@
   max-inline-size: 100%;
 }
 
+.docs-react-island.docs-package-demo[data-doc-component="card-summary"] {
+  display: inline-flex;
+  inline-size: min(100%, var(--component-content-size-md));
+  max-inline-size: 100%;
+}
+
+.docs-react-island.docs-package-demo[data-doc-component="card-summary"] > .card-summary {
+  inline-size: 100%;
+}
+
 .docs-demo-layout--popover.simple-demo-row {
   align-items: flex-start;
 }
