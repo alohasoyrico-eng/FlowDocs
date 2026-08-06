@@ -335,7 +335,7 @@ function setupPhoneInputDemos(root = document) {
 }
 
 function setupDatePickerDemos(root = document) {
-  root.querySelectorAll('[data-doc-component="date-picker"]:not([data-stateful-ready="true"]), .date-picker-demo:not([data-stateful-ready="true"])').forEach((picker) => {
+  root.querySelectorAll('[data-doc-component="date-picker"]:not([data-stateful-ready="true"])').forEach((picker) => {
     picker.dataset.statefulReady = "true";
   });
 }
