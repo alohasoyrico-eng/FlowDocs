@@ -67,17 +67,18 @@ const reactDistSource = firstExistingPath([
 ]);
 if (!reactDistSource) throw new Error("Unable to locate @design-system/react dist for docs assets.");
 fs.cpSync(reactDistSource, reactOutputDir, { recursive: true });
-for (const file of fs.readdirSync(reactOutputDir).filter((name) => name.endsWith(".js"))) {
+for (const file of fs.readdirSync(reactOutputDir).filter((name) => name.endsWith(".js") || name.endsWith(".d.ts"))) {
   const outputFile = path.join(reactOutputDir, file);
+  const extensionSuffix = file.endsWith(".js") ? "?v=1" : "";
   fs.writeFileSync(
     outputFile,
-    fs.readFileSync(outputFile, "utf8").replaceAll(
-      '"@design-system/components/platforms"',
-      '"../components/platforms/index.js?v=1"'
-    ).replaceAll(
-      '"@design-system/components"',
-      '"../components/index.js?v=1"'
-    )
+    fs.readFileSync(outputFile, "utf8")
+      .replaceAll('"@design-system/components/platforms"', `"../components/platforms/index.js${extensionSuffix}"`)
+      .replaceAll('"@alohasoyrico-eng/flow/components/platforms"', `"../components/platforms/index.js${extensionSuffix}"`)
+      .replaceAll('"../../components/src/platforms/index.js"', `"../components/platforms/index.js${extensionSuffix}"`)
+      .replaceAll('"@design-system/components"', `"../components/index.js${extensionSuffix}"`)
+      .replaceAll('"@alohasoyrico-eng/flow/components"', `"../components/index.js${extensionSuffix}"`)
+      .replaceAll('"../../components/src/index.js"', `"../components/index.js${extensionSuffix}"`)
   );
 }
 fs.writeFileSync(tokenOutputFile, `${generatedHeader("packages/tokens/styles/tokens.css")}${tokenSource}`);
