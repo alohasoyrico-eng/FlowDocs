@@ -5,6 +5,7 @@ import { AnimatedMoment } from "./generated/react/AnimatedMoment.js?v=1";
 import { AuditEvent } from "./generated/react/AuditEvent.js?v=1";
 import { Avatar } from "./generated/react/Avatar.js?v=1";
 import { Badge } from "./generated/react/Badge.js?v=1";
+import { BiometricPrompt } from "./generated/react/BiometricPrompt.js?v=1";
 import { Breadcrumbs } from "./generated/react/Breadcrumbs.js?v=1";
 import { Button } from "./generated/react/Button.js?v=1";
 import { Card } from "./generated/react/Card.js?v=1";
@@ -61,6 +62,7 @@ const reactComponents = {
   "audit-event": AuditEvent,
   avatar: Avatar,
   badge: Badge,
+  "biometric-prompt": BiometricPrompt,
   breadcrumbs: Breadcrumbs,
   button: Button,
   card: Card,
