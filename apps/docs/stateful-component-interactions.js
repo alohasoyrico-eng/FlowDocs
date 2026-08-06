@@ -294,31 +294,8 @@ function setupPaginationDemos(root = document) {
 }
 
 function setupPopoverDemos(root = document) {
-  root.querySelectorAll('[data-doc-component="popover"]:not([data-stateful-ready="true"]), .popover-demo:not([data-stateful-ready="true"])').forEach((popover) => {
+  root.querySelectorAll('[data-doc-component="popover"]:not([data-stateful-ready="true"])').forEach((popover) => {
     popover.dataset.statefulReady = "true";
-    const trigger = popover.querySelector("[data-popover-trigger], .popover-demo__trigger");
-    const panel = popover.querySelector("[role='dialog']");
-    if (!trigger || !panel) return;
-    const setOpen = (open) => {
-      popover.dataset.open = String(open);
-      trigger.setAttribute("aria-expanded", String(open));
-      const trailingIcon = trigger.querySelector(".button__icon--trailing");
-      if (trailingIcon) trailingIcon.textContent = open ? "expand_less" : "expand_more";
-      panel.hidden = !open;
-    };
-    setOpen(popover.dataset.open === "true" || ["open", "focus", "warning"].includes(popover.dataset.state));
-    trigger.addEventListener("click", () => setOpen(popover.dataset.open !== "true"));
-    popover.querySelectorAll("[data-popover-action]").forEach((action) => {
-      action.addEventListener("click", () => {
-        setOpen(false);
-        trigger.focus();
-      });
-    });
-    popover.addEventListener("keydown", (event) => {
-      if (event.key !== "Escape") return;
-      setOpen(false);
-      trigger.focus();
-    });
   });
 }
 
