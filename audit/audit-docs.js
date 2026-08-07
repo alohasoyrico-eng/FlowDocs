@@ -23,6 +23,8 @@ const {
 } = require("./audit-content-ownership.js");
 const {
   checkDocsComponentCssOwnership,
+  checkDocsPackageMarkupOwnership,
+  checkPatternComponentBoundaryOwnership,
   checkDocsPackageImportBoundary,
   checkPublicClassNamespaceOwnership,
 } = require("./audit-css-ownership.js");
@@ -44,6 +46,8 @@ checkReferenceCopyOwnership();
 checkDocsContentOwnership();
 checkFoundationCascadeContracts();
 checkDocsComponentCssOwnership();
+checkDocsPackageMarkupOwnership();
+checkPatternComponentBoundaryOwnership();
 checkDocsPackageImportBoundary();
 checkPublicClassNamespaceOwnership();
 

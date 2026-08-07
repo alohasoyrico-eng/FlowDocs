@@ -34,7 +34,7 @@ function bottomSheetPatternDemo({
           <div class="bottom-sheet-demo__body">
             ${items.map((item) => `<span>${typeof item === "string" ? item : item.label}</span>`).join("")}
           </div>
-          ${actions.length ? `<footer>${actions.map((action) => packageDemo("button", action, { "data-sheet-action": action.variant === "secondary" ? "secondary" : "primary" })).join("")}</footer>` : ""}
+          ${actions.length ? `<footer>${actions.map((action) => packageDemo("button", action)).join("")}</footer>` : ""}
         </div>
       </div>
     </section>

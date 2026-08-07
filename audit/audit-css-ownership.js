@@ -1,5 +1,76 @@
 const { fs, path, docsAppDir, docsCssFile, resolveBoundaryPath, read, readDocsCss, add } = require("./audit-context.js");
 
+const docsAllowedComponentMarkupAuthors = new Set([
+  "apps/docs/component-demo.js",
+  "apps/docs/react-component-islands.js",
+]);
+
+const docsAllowedPackageClassTokens = new Map([
+  ["apps/docs/docs-layout.js", new Set(["tag"])],
+]);
+
+const packageComponentClassRoots = new Set([
+  "accordion",
+  "animated-moment",
+  "audit-event",
+  "avatar",
+  "badge",
+  "biometric-prompt",
+  "breadcrumbs",
+  "button",
+  "card",
+  "card-expiry-input",
+  "card-number-input",
+  "card-security-code-input",
+  "card-summary",
+  "chart-panel",
+  "checkbox",
+  "chip",
+  "code-input",
+  "combobox",
+  "country-flag",
+  "country-selector",
+  "date-picker",
+  "date-range-picker",
+  "dialog",
+  "drawer",
+  "empty-state",
+  "error-panel",
+  "fab",
+  "field",
+  "icon-button",
+  "inline-validation",
+  "input",
+  "kpi-tile",
+  "list",
+  "menu",
+  "motion-boundary",
+  "movement-row",
+  "pagination",
+  "phone-input",
+  "popover",
+  "progress",
+  "quick-action",
+  "radio",
+  "route-summary",
+  "segmented-control",
+  "select",
+  "select-control",
+  "skeleton",
+  "slider",
+  "spinner",
+  "station-pin",
+  "stepper",
+  "switch",
+  "table",
+  "tabs",
+  "tag",
+  "text-area",
+  "toast",
+  "tooltip",
+  "tree-view",
+]);
+
 function checkDocsComponentCssOwnership() {
   const cssIndex = read(docsCssFile);
   const removedDemoFiles = [
@@ -44,6 +115,71 @@ function checkDocsComponentCssOwnership() {
     const customSpinnerIndex = text.search(/(?:__spinner|@keyframes\s+[a-z0-9-]*spin|border-block-start-color:\s*transparent)/i);
     if (customSpinnerIndex >= 0) {
       add("errors", file, lineForIndex(text, customSpinnerIndex), "Docs must not define custom loading spinner anatomy; use the package Spinner component.");
+    }
+  }
+}
+
+function checkDocsPackageMarkupOwnership() {
+  for (const file of walkFiles(docsAppDir, (candidate) => /\.(?:html|js)$/.test(candidate))) {
+    const relativeFile = normalize(path.relative(process.cwd(), file));
+    if (docsAllowedComponentMarkupAuthors.has(relativeFile)) continue;
+    const source = read(file);
+    const classStrings = [...source.matchAll(/\bclass(?:Name)?\s*[:=]\s*["'`]([^"'`]+)["'`]/g)];
+    for (const match of classStrings) {
+      const tokens = match[1].split(/\s+/).filter(Boolean);
+      for (const token of tokens) {
+        const rootToken = packageRootForClassToken(token);
+        if (!rootToken) continue;
+        if (docsAllowedPackageClassTokens.get(relativeFile)?.has(rootToken)) continue;
+        add(
+          "errors",
+          file,
+          lineForIndex(source, match.index),
+          `Docs must not author Package component class "${token}" directly; compose ${rootToken} through componentDemo(), packageDemo(), or a React island.`
+        );
+      }
+    }
+  }
+}
+
+function checkPatternComponentBoundaryOwnership() {
+  const bottomSheetCss = path.join(docsAppDir, "styles/05d-bottom-sheet-docs.css");
+  if (fs.existsSync(bottomSheetCss)) {
+    const text = read(bottomSheetCss);
+    const componentNamespace = /--comp-bottom-sheet-[a-z0-9-]+/g;
+    let match;
+    while ((match = componentNamespace.exec(text))) {
+      add("errors", bottomSheetCss, lineForIndex(text, match.index), "Bottom Sheet is a pattern, not a component; use --pattern-bottom-sheet-* for pattern-local tokens.");
+    }
+
+    const buttonAnatomySelectors = [
+      {
+        pattern: /\.bottom-sheet-demo\s+button(?::|[\s,{])/g,
+        message: "Bottom Sheet pattern must compose package Button; docs CSS may not style raw button anatomy inside the pattern.",
+      },
+      {
+        pattern: /\.bottom-sheet-demo\s+footer\s+button(?::|[\s,{])/g,
+        message: "Bottom Sheet pattern footer may lay out package Button demos, but must not restyle button anatomy.",
+      },
+      {
+        pattern: /\.bottom-sheet-demo\s+\[data-sheet-action=/g,
+        message: "Bottom Sheet pattern actions must use package Button variants; data-sheet-action must not become a second Button styling API.",
+      },
+    ];
+    for (const check of buttonAnatomySelectors) {
+      check.pattern.lastIndex = 0;
+      while ((match = check.pattern.exec(text))) {
+        add("errors", bottomSheetCss, lineForIndex(text, match.index), check.message);
+      }
+    }
+  }
+
+  const mobileInteractions = path.join(docsAppDir, "pattern-mobile-interactions.js");
+  if (fs.existsSync(mobileInteractions)) {
+    const text = read(mobileInteractions);
+    const staleSelector = text.indexOf(".bottom-sheet__scrim");
+    if (staleSelector >= 0) {
+      add("errors", mobileInteractions, lineForIndex(text, staleSelector), "Bottom Sheet pattern interactions must target pattern markup, not removed package Bottom Sheet classes.");
     }
   }
 }
@@ -96,6 +232,17 @@ function checkPublicClassNamespaceOwnership() {
       }
     }
   }
+}
+
+function packageRootForClassToken(token) {
+  for (const rootToken of packageComponentClassRoots) {
+    if (token === rootToken || token.startsWith(`${rootToken}__`) || token.startsWith(`${rootToken}--`)) return rootToken;
+  }
+  return "";
+}
+
+function normalize(value) {
+  return value.split(path.sep).join("/");
 }
 
 function checkDocsPackageImportBoundary() {
@@ -178,4 +325,4 @@ function checkDocsPackageImportBoundary() {
   }
 }
 
-module.exports = { checkDocsComponentCssOwnership, checkPublicClassNamespaceOwnership, checkDocsPackageImportBoundary };
+module.exports = { checkDocsComponentCssOwnership, checkDocsPackageMarkupOwnership, checkPatternComponentBoundaryOwnership, checkPublicClassNamespaceOwnership, checkDocsPackageImportBoundary };

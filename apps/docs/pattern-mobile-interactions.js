@@ -54,7 +54,7 @@ function openFullscreenSheet(demo) {
   if (!demo) return;
   demo.querySelector("[data-fullscreen-sheet]")?.removeAttribute("hidden");
   const sheet = demo.querySelector("[data-fullscreen-sheet-component]");
-  const scrim = sheet?.querySelector(".bottom-sheet__scrim");
+  const scrim = sheet?.querySelector(".bottom-sheet-demo__scrim");
   if (scrim?.hidden) sheet.querySelector("[data-overlay-open]")?.click();
   updateFullscreenStep(demo, Number(demo.dataset.stepIndex || 0));
 }
