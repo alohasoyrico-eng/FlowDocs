@@ -52,7 +52,7 @@ function normalizeTopbarSearch() {
 function normalizeTopbarUtilities() {
   const languageToggle = document.querySelector("#languageToggle");
   if (languageToggle && !languageToggle.querySelector(".language-toggle__code")) {
-    languageToggle.classList.add("icon-button", "language-toggle");
+    languageToggle.classList.add("docs-icon-button", "language-toggle");
     languageToggle.innerHTML = '<span class="material-symbol" data-icon="language" aria-hidden="true">language</span><span class="language-toggle__code"></span>';
   }
   document.querySelector("#themeToggle")?.setAttribute("aria-pressed", document.body.dataset.contrast === "quiet" ? "true" : "false");

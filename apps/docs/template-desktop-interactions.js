@@ -1,3 +1,5 @@
+import { componentDemo } from "./component-demo.js?v=60";
+
 export function setupDesktopTemplateInteractions() {
   document.addEventListener("click", handleDesktopTemplateClick);
 }
@@ -116,11 +118,16 @@ function addConfigurationAuditEvent(demo, label = "Configuration changed") {
   if (!demo) return;
   const log = demo.querySelector("[data-config-audit-log]");
   if (!log) return;
-  const event = document.createElement("article");
-  event.className = "audit-event docs-package-demo";
-  event.dataset.componentSource = "package";
-  event.dataset.docComponent = "audit-event";
-  event.innerHTML = `<span class="audit-event__icon" aria-hidden="true">manage_history</span><div class="audit-event__content"><strong>${label}</strong><p>Action captured by Configuration Console.</p><small>Just now - Admin</small></div><em>Logged</em>`;
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = componentDemo("audit-event", {
+    label,
+    description: "Action captured by Configuration Console.",
+    meta: "Just now - Admin",
+    status: "Logged",
+    icon: "manage_history",
+  });
+  const event = wrapper.firstElementChild;
+  if (!event) return;
   log.prepend(event);
 }
 

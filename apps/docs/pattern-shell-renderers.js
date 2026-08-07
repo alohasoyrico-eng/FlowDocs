@@ -42,7 +42,7 @@ export function renderTopbarPattern({ packageDemo }) {
         ariaLabel: "Search Design System",
       })}
       <div class="top-actions template-pattern-topbar__actions">
-        <button class="icon-button pattern-notification-button" type="button" aria-label="Notifications: 3 unread" data-template-notifications>
+        <button class="pattern-doc-icon-button pattern-notification-button" type="button" aria-label="Notifications: 3 unread" data-template-notifications>
           <span class="material-symbol" data-icon="notifications" aria-hidden="true">notifications</span>
           <span class="pattern-action-badge">
             ${packageDemo("badge", { label: "3", tone: "warning", variant: "count", ariaLabel: "3 unread notifications" })}

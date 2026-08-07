@@ -35,7 +35,7 @@
     justify-self: end;
   }
 
-  .icon-button.menu-button {
+  .docs-icon-button.menu-button {
     grid-column: 1;
     grid-row: 1;
     display: grid;

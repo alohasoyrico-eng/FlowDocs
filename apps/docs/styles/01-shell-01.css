@@ -306,7 +306,7 @@ input {
   white-space: nowrap;
 }
 
-.icon-button.menu-button {
+.docs-icon-button.menu-button {
   display: none;
   border-color: transparent;
   border-radius: var(--sys-frame-radius-container);

@@ -277,8 +277,8 @@
   color: var(--sys-energy-text-primary);
 }
 
-.pattern-stage .breadcrumbs a,
-.pattern-stage .breadcrumbs a[href] {
+.pattern-stage .docs-breadcrumbs a,
+.pattern-stage .docs-breadcrumbs a[href] {
   display: inline-flex;
   align-items: center;
   min-inline-size: var(--sys-frame-height-control-sm);

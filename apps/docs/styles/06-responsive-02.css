@@ -200,7 +200,7 @@
     padding-block: var(--sys-space-sm);
   }
 
-  .icon-button.menu-button {
+  .docs-icon-button.menu-button {
     grid-area: menu;
     inline-size: var(--sys-frame-height-control-sm);
     block-size: var(--sys-frame-height-control-sm);
@@ -228,7 +228,7 @@
     gap: var(--sys-space-xs);
   }
 
-  .top-actions .icon-button,
+  .top-actions .docs-icon-button,
   .top-actions .language-toggle {
     inline-size: var(--sys-frame-doc-icon-md);
     block-size: var(--sys-frame-doc-icon-md);
@@ -242,6 +242,6 @@
   }
 }
 
-.reference-header .breadcrumbs {
+.reference-header .docs-breadcrumbs {
   padding: 0;
 }

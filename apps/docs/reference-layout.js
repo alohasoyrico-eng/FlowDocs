@@ -7,7 +7,7 @@ export function configureReferenceLayout(nextDeps) {
 export function referenceBreadcrumbs(collection, entry) {
   const { html, label, ui } = deps;
   return html`
-    <nav class="breadcrumbs" aria-label="${ui("shell.breadcrumbs")}">
+    <nav class="docs-breadcrumbs" aria-label="${ui("shell.breadcrumbs")}">
       <a href="#/home">${ui("shell.home")}</a>
       <span>/</span>
       <a href="#/${collection}">${label(collection)}</a>

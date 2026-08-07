@@ -15,7 +15,7 @@ export function renderShell({ active = "", collectionIcon, collections, content,
   return html`
     <div class="app-shell">
       <aside class="sidebar" aria-label="${ui("shell.designNavigation")}">
-        <button class="icon-button sidebar-close" type="button" data-nav-close aria-label="Close navigation">${icon("close")}</button>
+        <button class="docs-icon-button sidebar-close" type="button" data-nav-close aria-label="Close navigation">${icon("close")}</button>
         ${drawerGroups}
         <a class="${active === "stack" ? "active" : ""}" href="#/stack"><span class="sidebar-label">${icon(collectionIcon("stack"))}<span>${ui("shell.stack")}</span></span></a>
       </aside>
@@ -58,7 +58,7 @@ export function renderDetailContent({ artifactTypeLabel, collection, componentIm
     <article class="detail-page" data-detail="${collection}:${id}">
       <header class="detail-hero">
         <div class="detail-hero-content">
-          <nav class="breadcrumbs" aria-label="${ui("shell.breadcrumbs")}">
+          <nav class="docs-breadcrumbs" aria-label="${ui("shell.breadcrumbs")}">
             <a href="#/home">${ui("shell.home")}</a>
             <span>/</span>
             <a href="#/${collection}">${label(collection)}</a>

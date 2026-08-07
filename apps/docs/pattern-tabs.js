@@ -85,7 +85,7 @@ function sidebarPatternPanel(entry) {
           <a href="#/stack"><span class="sidebar-label">${icon("layers")}<span>${ui("shell.stack")}</span></span></a>
         </aside>
         <main class="pattern-workspace" aria-label="Section preview">
-          <nav class="breadcrumbs" aria-label="Breadcrumbs">
+          <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
             <a href="#/home">Home</a><span>/</span><a href="#/patterns">Patterns</a><span>/</span><strong>Sidebar</strong>
           </nav>
           <section>
