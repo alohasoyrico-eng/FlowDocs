@@ -5,7 +5,7 @@ export type TagVariant = "metadata" | "status" | "platform" | "link";
 export type TagTone = "neutral" | "info" | "success" | "warning" | "danger";
 export type TagState = "default" | "hover" | "pressed" | "focus" | "disabled";
 
-export interface TagProps extends Omit<HTMLAttributes<HTMLSpanElement> & ButtonHTMLAttributes<HTMLButtonElement>, "disabled"> {
+export interface TagProps extends Omit<HTMLAttributes<HTMLSpanElement> & ButtonHTMLAttributes<HTMLButtonElement>, "style" | "disabled" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   variant?: TagVariant;
   tone?: TagTone;
@@ -13,6 +13,7 @@ export interface TagProps extends Omit<HTMLAttributes<HTMLSpanElement> & ButtonH
   icon?: string;
   interactive?: boolean;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 export interface TagComponent extends ForwardRefExoticComponent<TagProps & RefAttributes<HTMLSpanElement | HTMLButtonElement>> {

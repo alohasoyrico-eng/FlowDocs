@@ -1,25 +1,26 @@
-import type { ForwardRefExoticComponent, HTMLAttributes, ReactNode, RefAttributes } from "react";
+import type { ButtonHTMLAttributes, ForwardRefExoticComponent, HTMLAttributes, MouseEvent, ReactNode, RefAttributes } from "react";
 import { accordionPlatformContract } from "../components/platforms/index.js";
 
 export type AccordionDensity = "sm" | "md" | "lg";
+export type AccordionVariant = "single" | "multiple";
 
-export interface AccordionItem {
-  id?: string;
-  title?: string;
-  label?: string;
-  content?: ReactNode;
-  description?: ReactNode;
+export interface AccordionItem extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "type" | "children" | "aria-controls" | "aria-expanded" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+  id: string;
+  title: string;
+  content: ReactNode;
   open?: boolean;
   disabled?: boolean;
   icon?: string;
   meta?: string;
 }
 
-export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
+export interface AccordionProps extends Omit<HTMLAttributes<HTMLDivElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   items: AccordionItem[];
+  variant?: AccordionVariant;
   multiple?: boolean;
+  expandedIds?: string[];
   density?: AccordionDensity;
-  onExpandedChange?: (expandedIds: string[]) => void;
+  onExpandedChange?: (expandedIds: string[], event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface AccordionComponent extends ForwardRefExoticComponent<AccordionProps & RefAttributes<HTMLDivElement>> {

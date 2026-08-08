@@ -1,41 +1,48 @@
 import React, { forwardRef, useMemo } from "react";
 import { stepperPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const allowedOrientations = new Set(["horizontal", "vertical"]);
-const allowedDensities = new Set(["sm", "md", "lg"]);
+
+function hasStableStepId(step) {
+  return step?.id !== undefined && step?.id !== null && step?.id !== "";
+}
 
 function normalizeSteps(steps) {
-  const sourceSteps = Array.isArray(steps) && steps.length ? steps : [{ label: "Step 1" }];
-  return sourceSteps.map((step, index) => ({
+  const sourceSteps = Array.isArray(steps) ? steps : [];
+  return sourceSteps.filter((step) => step?.label && hasStableStepId(step)).map((step) => ({
     ...step,
-    label: step?.label ?? `Step ${index + 1}`,
-    description: step?.description ?? "",
+    id: String(step.id),
+    label: step.label,
+    description: step?.description,
   }));
 }
 
 export const Stepper = forwardRef(function Stepper({
-  steps = [],
+  steps,
   current = 0,
-  label = "Progress",
+  label,
   orientation = "horizontal",
   density,
   className = "",
   ...rest
 }, ref) {
   const resolvedOrientation = allowedOrientations.has(orientation) ? orientation : "horizontal";
-  const resolvedDensity = allowedDensities.has(density) ? density : "md";
+  const resolvedDensity = normalizeFlowDensity(density);
   const resolvedSteps = useMemo(() => normalizeSteps(steps), [steps]);
   const currentIndex = Math.max(0, Math.min(Number(current) || 0, resolvedSteps.length - 1));
+  if (!label) return null;
+  if (!resolvedSteps.length) return null;
 
   return React.createElement(
     "ol",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["stepper", className].filter(Boolean).join(" "),
       "aria-label": label,
       "data-orientation": resolvedOrientation,
-      "data-density": resolvedDensity,
+      ...flowDensityProps(resolvedDensity),
       "data-current": String(currentIndex),
     },
     resolvedSteps.flatMap((step, index) => {
@@ -43,9 +50,9 @@ export const Stepper = forwardRef(function Stepper({
       const item = React.createElement(
         "li",
         {
-          key: `step-${step.id ?? step.label ?? index}`,
+          key: `step-${step.id}`,
           className: "stepper__item",
-          "data-state": stepState,
+          ...flowStateProps(stepState),
           "aria-current": index === currentIndex ? "step" : undefined,
         },
         React.createElement(
@@ -64,9 +71,9 @@ export const Stepper = forwardRef(function Stepper({
       return [
         item,
         React.createElement("span", {
-          key: `connector-${step.id ?? step.label ?? index}`,
+          key: `connector-${step.id}`,
           className: "stepper__connector",
-          "data-state": index < currentIndex ? "complete" : "pending",
+          ...flowStateProps(index < currentIndex ? "complete" : "pending"),
           "aria-hidden": "true",
         }),
       ];

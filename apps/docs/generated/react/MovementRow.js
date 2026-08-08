@@ -1,9 +1,9 @@
 import React, { forwardRef } from "react";
 import { movementRowPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["standard", "refund", "declined", "compact"]);
 const validStates = new Set(["default", "hover", "focus", "pending", "error", "disabled"]);
-const validDensities = new Set(["sm", "md", "lg"]);
 const validCategories = new Set(["fuel", "charge", "toll", "food", "transfer", "income"]);
 const categoryIcons = {
   fuel: "local_gas_station",
@@ -14,19 +14,15 @@ const categoryIcons = {
   income: "south_west",
 };
 
-function normalize(value, allowed, fallback) {
-  return allowed.has(value) ? value : fallback;
-}
-
 export const MovementRow = forwardRef(function MovementRow({
   label,
-  meta = "",
-  amount = "",
-  status = "",
+  meta,
+  amount,
+  status,
   category = "transfer",
   variant = "standard",
   state = "default",
-  density = "md",
+  density,
   fullWidth = false,
   disabled = false,
   onSelect,
@@ -34,15 +30,16 @@ export const MovementRow = forwardRef(function MovementRow({
   type = "button",
   ...rest
 }, ref) {
-  const resolvedVariant = normalize(variant, validVariants, "standard");
-  const resolvedCategory = normalize(category, validCategories, "transfer");
-  const inferredState = status === "Pending" ? "pending" : status === "Declined" ? "error" : "default";
-  const resolvedState = disabled ? "disabled" : validStates.has(state) ? state : inferredState;
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const resolvedLabel = label ?? "Movement";
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "standard");
+  const resolvedCategory = normalizeFlowValue(category, validCategories, "transfer");
+  const resolvedState = disabled ? "disabled" : normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
+  if (!label) return null;
+  const canInteract = Boolean(onSelect || rest.onClick);
   const blocked = disabled || resolvedState === "disabled";
+  const Element = canInteract ? "button" : "article";
   const selectMeta = {
-    label: resolvedLabel,
+    label,
     meta,
     amount,
     status,
@@ -52,35 +49,39 @@ export const MovementRow = forwardRef(function MovementRow({
   };
 
   return React.createElement(
-    "button",
+    Element,
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
-      type: ["button", "submit", "reset"].includes(type) ? type : "button",
+      type: canInteract && ["button", "submit", "reset"].includes(type) ? type : undefined,
       className: ["movement-row", className].filter(Boolean).join(" "),
-      disabled: blocked,
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      disabled: canInteract ? blocked : undefined,
+      "aria-disabled": !canInteract && blocked ? "true" : undefined,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-category": resolvedCategory,
       "data-full-width": String(Boolean(fullWidth)),
-      onClick: (event) => {
-        if (blocked) return;
-        onSelect?.(selectMeta);
-        rest.onClick?.(event);
-      },
+      onClick: canInteract
+        ? (event) => {
+          if (blocked) return;
+          rest.onClick?.(event);
+          if (event.defaultPrevented) return;
+          onSelect?.(selectMeta, event);
+        }
+        : undefined,
     },
     React.createElement("span", { className: "movement-row__icon material-symbol", "aria-hidden": "true" }, categoryIcons[resolvedCategory]),
     React.createElement(
       "span",
       { className: "movement-row__content" },
-      React.createElement("strong", null, resolvedLabel),
+      React.createElement("strong", null, label),
       meta ? React.createElement("small", null, meta) : null,
     ),
     React.createElement(
       "span",
       { className: "movement-row__value" },
-      React.createElement("strong", { className: "movement-row__amount" }, amount),
+      amount ? React.createElement("strong", { className: "movement-row__amount" }, amount) : null,
       status ? React.createElement("small", { className: "movement-row__status" }, status) : null,
     ),
   );

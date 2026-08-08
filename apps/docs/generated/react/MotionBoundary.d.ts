@@ -8,13 +8,14 @@ import type { motionBoundaryPlatformContract } from "../components/platforms/ind
 export type MotionBoundaryVariant = "fade" | "slide" | "collapse" | "route";
 export type MotionBoundaryState = "idle" | "entering" | "active" | "exiting" | "reduced-motion" | "disabled";
 
-export interface MotionBoundaryProps extends HTMLAttributes<HTMLDivElement> {
+export interface MotionBoundaryProps extends Omit<HTMLAttributes<HTMLDivElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   description?: string;
   variant?: MotionBoundaryVariant;
   state?: MotionBoundaryState;
   icon?: string;
   reducedMotion?: boolean;
+  stateLabel?: string;
 }
 
 export interface MotionBoundaryComponent extends ForwardRefExoticComponent<MotionBoundaryProps & RefAttributes<HTMLDivElement>> {

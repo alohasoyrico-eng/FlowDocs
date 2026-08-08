@@ -2,11 +2,11 @@ import React, { forwardRef } from "react";
 import { errorPanelPlatformContract } from "../components/platforms/index.js?v=1";
 import { Button } from "./Button.js";
 import { Spinner } from "./Spinner.js";
+import { flowStateProps, flowVariantProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["inline", "panel", "blocking", "empty-recovery"]);
 const validStates = new Set(["default", "warning", "error", "critical", "loading", "disabled"]);
 const validTones = new Set(["warning", "error", "critical"]);
-const validDensities = new Set(["sm", "md", "lg"]);
 
 function normalizeVariant(variant) {
   return validVariants.has(variant) ? variant : "panel";
@@ -14,10 +14,6 @@ function normalizeVariant(variant) {
 
 function normalizeState(state) {
   return validStates.has(state) ? state : "error";
-}
-
-function normalizeDensity(density) {
-  return validDensities.has(density) ? density : "md";
 }
 
 function resolveTone(state, tone) {
@@ -28,13 +24,13 @@ function resolveTone(state, tone) {
 }
 
 export const ErrorPanel = forwardRef(function ErrorPanel({
-  label = "Something needs attention",
-  description = "",
+  label,
+  description,
   action,
   tone = "error",
   variant = "panel",
   state = "error",
-  density = "md",
+  density,
   fullWidth = false,
   icon = "",
   role,
@@ -44,28 +40,32 @@ export const ErrorPanel = forwardRef(function ErrorPanel({
 }, ref) {
   const resolvedVariant = normalizeVariant(variant);
   const resolvedState = normalizeState(state);
-  const resolvedDensity = normalizeDensity(density);
+  const resolvedDensity = normalizeFlowDensity(density);
   const resolvedTone = resolveTone(resolvedState, tone);
   const resolvedRole = role ?? (resolvedTone === "warning" || resolvedState === "loading" ? "status" : "alert");
   const actionLabel = action?.label;
+  const actionKey = action?.key;
+  const canRenderAction = Boolean(actionLabel && actionKey !== undefined && actionKey !== null && actionKey !== "");
+
+  if (!label) return null;
 
   return React.createElement(
     "section",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["error-panel", `error-panel--${resolvedTone}`, className].filter(Boolean).join(" "),
       role: resolvedRole,
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-full-width": String(Boolean(fullWidth)),
     },
     React.createElement(
       "span",
       { className: "error-panel__icon", "aria-hidden": "true" },
       resolvedState === "loading"
-        ? React.createElement(Spinner, { label: "Loading error panel", density: "sm", decorative: true })
+        ? React.createElement(Spinner, { density: resolvedDensity || undefined, decorative: true })
         : icon || (resolvedTone === "warning" ? "warning" : "error"),
     ),
     React.createElement(
@@ -74,17 +74,18 @@ export const ErrorPanel = forwardRef(function ErrorPanel({
       React.createElement("strong", null, label),
       description ? React.createElement("p", null, description) : null,
     ),
-    actionLabel
+    canRenderAction
       ? React.createElement(Button, {
         ...action,
         label: actionLabel,
-        density: action.density ?? resolvedDensity,
+        density: action.density ?? (resolvedDensity || undefined),
         variant: action.variant ?? "secondary",
         disabled: resolvedState === "disabled" || action.disabled,
         loading: resolvedState === "loading" || action.loading,
         onClick: (event) => {
           action.onClick?.(event);
-          onAction?.(action.key ?? actionLabel);
+          if (event.defaultPrevented) return;
+          onAction?.(actionKey, event);
         },
       })
       : null,

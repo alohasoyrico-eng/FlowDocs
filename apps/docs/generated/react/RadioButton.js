@@ -1,5 +1,8 @@
 import React, { forwardRef, useState } from "react";
 import { radioButtonPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
+
+const validVariants = new Set(["default", "descriptive", "compact", "critical"]);
 
 function normalizeState({ checked, disabled, state, error }) {
   if (disabled) return "disabled";
@@ -11,12 +14,12 @@ function normalizeState({ checked, disabled, state, error }) {
 
 export const RadioButton = forwardRef(function RadioButton({
   label,
-  description = "",
-  error = "",
+  description,
+  error,
   variant = "default",
   state = "unselected",
   density,
-  checked = false,
+  checked,
   disabled = false,
   name = "",
   value = "",
@@ -25,7 +28,9 @@ export const RadioButton = forwardRef(function RadioButton({
   className = "",
   ...rest
 }, ref) {
-  const [currentChecked, setCurrentChecked] = useState(Boolean(checked));
+  const isCheckedControlled = checked !== undefined;
+  const [internalChecked, setInternalChecked] = useState(Boolean(checked));
+  const currentChecked = isCheckedControlled ? Boolean(checked) : internalChecked;
   const normalizedState = normalizeState({
     checked: currentChecked,
     disabled,
@@ -33,12 +38,14 @@ export const RadioButton = forwardRef(function RadioButton({
     error,
   });
   const isInvalid = normalizedState === "error" || Boolean(error);
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "default");
+  if (!label) return null;
 
   const handleChange = (event) => {
     if (disabled) return;
     const nextChecked = event.currentTarget.checked;
-    setCurrentChecked(nextChecked);
-    onCheckedChange?.(nextChecked, { value });
+    if (!isCheckedControlled) setInternalChecked(nextChecked);
+    onCheckedChange?.(nextChecked, { value }, event);
   };
 
   return React.createElement(
@@ -46,13 +53,13 @@ export const RadioButton = forwardRef(function RadioButton({
     {
       className: ["choice radio", className].filter(Boolean).join(" "),
       "data-checked": String(currentChecked),
-      "data-variant": variant,
-      "data-state": normalizedState,
-      "data-density": density || undefined,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(normalizedState),
+      ...flowDensityProps(density),
       "data-invalid": isInvalid ? "true" : undefined,
     },
     React.createElement("input", {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       type: "radio",
       className: "choice__input",
@@ -68,7 +75,7 @@ export const RadioButton = forwardRef(function RadioButton({
     React.createElement(
       "span",
       { className: "choice__text" },
-      React.createElement("span", { className: "choice__label" }, label ?? "Radio button"),
+      React.createElement("span", { className: "choice__label" }, label),
       description ? React.createElement("span", { className: "choice__description" }, description) : null,
       error ? React.createElement("span", { className: "choice__error" }, error) : null,
     ),

@@ -1,45 +1,52 @@
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import { tabsPlatformContract } from "../components/platforms/index.js?v=1";
 import { Badge } from "./Badge.js";
+import { flowVariantProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const allowedVariants = new Set(["default", "underline"]);
 
 function itemKey(item) {
-  return item?.key ?? item?.value ?? item?.label ?? "";
+  return item?.key ?? item?.value ?? "";
+}
+
+function hasStableItemKey(item) {
+  const key = item?.key ?? item?.value;
+  return key !== undefined && key !== null && key !== "";
 }
 
 function normalizeItems(items) {
-  const sourceItems = Array.isArray(items) && items.length ? items : [
-    { key: "overview", label: "Overview" },
-    { key: "details", label: "Details" },
-    { key: "settings", label: "Settings" },
-  ];
-  return sourceItems.map((item, index) => ({
+  const sourceItems = Array.isArray(items) ? items : [];
+  return sourceItems.filter((item) => item?.label && hasStableItemKey(item)).map((item) => ({
     ...item,
-    key: itemKey(item) || `tab-${index + 1}`,
-    label: item?.label ?? itemKey(item) ?? `Tab ${index + 1}`,
+    key: itemKey(item),
+    label: item.label,
   }));
 }
 
 function selectedFromItems(items, selectedKey) {
-  return selectedKey || itemKey(items.find((item) => item.selected)) || itemKey(items[0]) || "";
+  if (selectedKey !== undefined) return selectedKey;
+  const selectedItemKey = itemKey(items.find((item) => item.selected));
+  return selectedItemKey !== "" ? selectedItemKey : itemKey(items[0]);
 }
 
 export const Tabs = forwardRef(function Tabs({
-  label = "Tabs",
-  items = [],
-  selectedKey = "",
+  label,
+  items,
+  selectedKey,
   variant = "default",
+  density,
   onValueChange,
   className = "",
   ...rest
 }, ref) {
   const normalizedItems = useMemo(() => normalizeItems(items), [items]);
+  const isSelectedKeyControlled = selectedKey !== undefined;
   const [currentKey, setCurrentKey] = useState(() => selectedFromItems(normalizedItems, selectedKey));
   const rootRef = useRef(null);
   const tabRefs = useRef(new Map());
   const resolvedVariant = allowedVariants.has(variant) ? variant : "default";
-  const activeKey = selectedKey || currentKey || selectedFromItems(normalizedItems, selectedKey);
+  const resolvedDensity = normalizeFlowDensity(density);
+  const activeKey = isSelectedKeyControlled ? selectedKey : currentKey || selectedFromItems(normalizedItems, selectedKey);
 
   const syncIndicator = (key = activeKey) => {
     const root = rootRef.current;
@@ -47,12 +54,7 @@ export const Tabs = forwardRef(function Tabs({
     if (!root || !tab) return;
     root.style.setProperty("--comp-tabs-indicator-left", `${tab.offsetLeft ?? 0}px`);
     root.style.setProperty("--comp-tabs-indicator-width", `${tab.offsetWidth ?? 0}px`);
-    root.dataset.indicatorSynced = "true";
   };
-
-  useEffect(() => {
-    setCurrentKey(selectedFromItems(normalizedItems, selectedKey));
-  }, [normalizedItems, selectedKey]);
 
   useEffect(() => {
     syncIndicator(activeKey);
@@ -63,31 +65,33 @@ export const Tabs = forwardRef(function Tabs({
     return () => observer.disconnect();
   }, [activeKey, normalizedItems]);
 
-  const commitKey = (nextKey, restoreFocus = false) => {
+  const commitKey = (nextKey, restoreFocus = false, event) => {
     const tab = normalizedItems.find((item) => item.key === nextKey);
     if (!tab || tab.disabled) return;
-    setCurrentKey(nextKey);
-    onValueChange?.(nextKey);
+    if (!isSelectedKeyControlled) setCurrentKey(nextKey);
+    onValueChange?.(nextKey, event);
     const schedule = globalThis.requestAnimationFrame ?? ((callback) => globalThis.setTimeout?.(callback, 0));
     schedule(() => syncIndicator(nextKey));
     if (restoreFocus) schedule(() => tabRefs.current.get(nextKey)?.focus());
   };
 
   const enabled = normalizedItems.filter((item) => !item.disabled);
-  const move = (direction) => {
+  const move = (direction, event) => {
     if (!enabled.length) return;
     const currentIndex = Math.max(0, enabled.findIndex((item) => item.key === activeKey));
-    commitKey(enabled[(currentIndex + direction + enabled.length) % enabled.length]?.key, true);
+    commitKey(enabled[(currentIndex + direction + enabled.length) % enabled.length]?.key, true, event);
   };
-  const moveToEdge = (edge) => {
+  const moveToEdge = (edge, event) => {
     const next = edge === "first" ? enabled[0] : enabled[enabled.length - 1];
-    if (next) commitKey(next.key, true);
+    if (next) commitKey(next.key, true, event);
   };
+
+  if (!normalizedItems.length) return null;
 
   return React.createElement(
     "div",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref: (node) => {
         rootRef.current = node;
         if (typeof ref === "function") ref(node);
@@ -96,14 +100,17 @@ export const Tabs = forwardRef(function Tabs({
       className: ["tabs", className].filter(Boolean).join(" "),
       role: "tablist",
       "aria-label": label,
-      "data-variant": resolvedVariant,
+      ...flowVariantProps(resolvedVariant),
+      ...flowDensityProps(resolvedDensity),
     },
     normalizedItems.map((item) => {
       const selected = item.key === activeKey;
-      const badge = item.badge ?? (item.count != null ? { label: String(item.count), variant: "count", tone: "neutral" } : null);
+      const badge = item.badge?.label ? item.badge : null;
+      const { key, value, label: itemLabel, icon, badge: itemBadge, selected: itemSelected, disabled, onClick, onKeyDown, ...itemRest } = item;
       return React.createElement(
         "button",
         {
+          ...itemRest,
           key: item.key,
           ref: (node) => {
             if (node) tabRefs.current.set(item.key, node);
@@ -112,35 +119,41 @@ export const Tabs = forwardRef(function Tabs({
           type: "button",
           className: "tabs__tab",
           role: "tab",
-          disabled: Boolean(item.disabled),
+          disabled: Boolean(disabled),
           tabIndex: selected ? 0 : -1,
           "aria-selected": String(selected),
           "data-tabs-item": "",
           "data-key": item.key,
-          onClick: () => commitKey(item.key),
+          onClick: (event) => {
+            onClick?.(event);
+            if (event.defaultPrevented) return;
+            commitKey(item.key, false, event);
+          },
           onKeyDown: (event) => {
+            onKeyDown?.(event);
+            if (event.defaultPrevented) return;
             if (event.key === "ArrowRight") {
               event.preventDefault();
-              move(1);
+              move(1, event);
             } else if (event.key === "ArrowLeft") {
               event.preventDefault();
-              move(-1);
+              move(-1, event);
             } else if (event.key === "Home") {
               event.preventDefault();
-              moveToEdge("first");
+              moveToEdge("first", event);
             } else if (event.key === "End") {
               event.preventDefault();
-              moveToEdge("last");
+              moveToEdge("last", event);
             }
           },
         },
-        item.icon ? React.createElement("span", { className: "tabs__icon", "aria-hidden": "true" }, item.icon) : null,
-        React.createElement("span", { className: "tabs__label" }, item.label),
+        icon ? React.createElement("span", { className: "tabs__icon", "aria-hidden": "true" }, icon) : null,
+        React.createElement("span", { className: "tabs__label" }, itemLabel),
         badge ? React.createElement(Badge, {
-          label: badge.label ?? String(badge.count ?? ""),
+          label: badge.label,
           tone: badge.tone ?? "neutral",
           variant: badge.variant ?? "count",
-          ariaLabel: badge.ariaLabel ?? "",
+          density: resolvedDensity || undefined,
         }) : null,
       );
     }),

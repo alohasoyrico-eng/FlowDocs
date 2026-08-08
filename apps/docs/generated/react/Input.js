@@ -1,7 +1,9 @@
 import React, { forwardRef, useId, useState } from "react";
 import { inputPlatformContract } from "../components/platforms/index.js?v=1";
 import { Spinner } from "./Spinner.js";
+import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
 
+const validVariants = new Set(["text", "email", "password", "number", "currency", "unit", "search"]);
 const numericVariants = new Set(["number", "currency", "unit"]);
 
 function resolveInputState({ disabled = false, loading = false, error = "", state, value = "" } = {}) {
@@ -33,12 +35,12 @@ function autocompleteForVariant(variant) {
   return undefined;
 }
 
-function formatValue(value, variant) {
+function formatValue(value, variant, locale) {
   const stringValue = value == null ? "" : String(value);
   if (!stringValue || variant !== "currency") return stringValue;
   const numeric = Number(stringValue.replace(/[^\d.-]/g, ""));
   if (!Number.isFinite(numeric)) return stringValue;
-  return new Intl.NumberFormat("es-MX", {
+  return new Intl.NumberFormat(locale, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(numeric);
@@ -63,7 +65,7 @@ export const Input = forwardRef(function Input({
   helper = "",
   helperText,
   error = "",
-  value = "",
+  value,
   name = "",
   placeholder = "",
   disabled = false,
@@ -81,34 +83,60 @@ export const Input = forwardRef(function Input({
   autocomplete,
   align = "start",
   revealable = false,
+  revealed: revealedProp,
+  revealLabel,
+  hideLabel,
+  locale,
   onValueChange,
+  onRevealChange,
   className = "",
   id,
   ...rest
 }, ref) {
   const generatedId = useId();
   const inputId = id ?? `input-${generatedId}`;
-  const resolvedType = typeForVariant(variant, type);
-  const isRevealable = Boolean(revealable) || variant === "password" || resolvedType === "password";
-  const [revealed, setRevealed] = useState(false);
-  const resolvedState = resolveInputState({ disabled, loading, error, state, value });
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "text");
+  const resolvedType = typeForVariant(resolvedVariant, type);
+  const isRevealable = Boolean(revealable) || resolvedVariant === "password" || resolvedType === "password";
+  const canReveal = Boolean(isRevealable && revealLabel && hideLabel);
+  const isValueControlled = value !== undefined;
+  const isRevealControlled = revealedProp !== undefined;
+  const [internalValue, setInternalValue] = useState(value ?? "");
+  const [internalRevealed, setInternalRevealed] = useState(Boolean(revealedProp));
+  const currentValue = isValueControlled ? value ?? "" : internalValue;
+  const revealed = isRevealControlled ? Boolean(revealedProp) : internalRevealed;
+  const resolvedState = resolveInputState({ disabled, loading, error, state, value: currentValue });
   const resolvedHelper = error || helperText || helper;
   const isDisabled = Boolean(disabled) || Boolean(loading);
-  const resolvedAlign = align === "end" || (align === "start" && numericVariants.has(variant)) ? "end" : "start";
+  const resolvedAlign = align === "end" || (align === "start" && numericVariants.has(resolvedVariant)) ? "end" : "start";
   const describedBy = [resolvedHelper ? `${inputId}-helper` : "", rest["aria-describedby"]].filter(Boolean).join(" ") || undefined;
-  const inputType = isRevealable && revealed ? "text" : resolvedType;
+  const inputType = canReveal && revealed ? "text" : resolvedType;
+
+  if (!label) return null;
+
+  const handleChange = (event) => {
+    const meta = normalizeValue(event.target.value, resolvedVariant);
+    if (!isValueControlled) setInternalValue(meta.value);
+    onValueChange?.(meta.value, meta, event);
+  };
+
+  const handleRevealClick = (event) => {
+    const nextRevealed = !revealed;
+    if (!isRevealControlled) setInternalRevealed(nextRevealed);
+    onRevealChange?.(nextRevealed, event);
+  };
 
   return React.createElement(
     "label",
     {
       className: ["field", className].filter(Boolean).join(" "),
-      "data-state": resolvedState,
-      "data-density": density || undefined,
-      "data-variant": variant,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
+      ...flowVariantProps(resolvedVariant),
       "data-mono": mono ? "true" : undefined,
       "data-align": resolvedAlign === "end" ? "end" : undefined,
     },
-    React.createElement("span", { className: "field__label", id: `${inputId}-label` }, label ?? "Input"),
+    React.createElement("span", { className: "field__label", id: `${inputId}-label` }, label),
     React.createElement(
       "span",
       { className: "field__control" },
@@ -119,42 +147,42 @@ export const Input = forwardRef(function Input({
         ? React.createElement("span", { className: "field__prefix", "aria-hidden": "true" }, prefix)
         : null,
       React.createElement("input", {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
         id: inputId,
         className: "input",
         name,
         type: inputType,
-        value: formatValue(value, variant),
+        value: formatValue(currentValue, resolvedVariant, locale),
         placeholder,
         disabled: isDisabled,
         required,
-        inputMode: inputMode || inputModeForVariant(variant),
-        autoComplete: autocomplete || autocompleteForVariant(variant),
+        inputMode: inputMode || inputModeForVariant(resolvedVariant),
+        autoComplete: autocomplete || autocompleteForVariant(resolvedVariant),
         "aria-labelledby": `${inputId}-label`,
         "aria-describedby": describedBy,
         "aria-invalid": error ? "true" : rest["aria-invalid"],
-        onChange: (event) => onValueChange?.(normalizeValue(event.target.value, variant).value, normalizeValue(event.target.value, variant)),
+        onChange: handleChange,
       }),
       suffix
         ? React.createElement("span", { className: "field__suffix", "aria-hidden": "true" }, suffix)
         : null,
-      isRevealable
+      canReveal
         ? React.createElement(
           "button",
           {
             className: "field-action field__action",
             type: "button",
             disabled: isDisabled,
-            "aria-label": revealed ? "Hide value" : "Show value",
+            "aria-label": revealed ? hideLabel : revealLabel,
             "aria-pressed": String(revealed),
             "data-field-action": "reveal",
-            onClick: () => setRevealed((current) => !current),
+            onClick: handleRevealClick,
           },
           React.createElement("span", { className: "field-action__icon", "aria-hidden": "true" }, revealed ? "visibility_off" : "visibility"),
         )
         : null,
-      loading ? React.createElement(Spinner, { label: `${label ?? "Input"} loading`, density: "sm", decorative: true, className: "field__icon field__icon--loading" }) : null,
+      loading ? React.createElement(Spinner, { density, decorative: true, className: "field__icon field__icon--loading" }) : null,
     ),
     resolvedHelper
       ? React.createElement("span", { className: "field__helper", id: `${inputId}-helper`, role: error ? "alert" : undefined }, resolvedHelper)

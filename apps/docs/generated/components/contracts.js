@@ -1,14 +1,13 @@
 export const componentContracts = {
   button: {
     factory: "@design-system/react/button",
-    internalFactory: "createTransitionalActionButton",
     element: "button",
     purpose: "Trigger a clear action with semantic emphasis, intent, state, and accessible label.",
     variants: ["primary", "secondary", "tertiary", "outlined", "ghost"],
     intents: ["default", "danger", "warning"],
     states: ["default", "hover", "focus", "pressed", "disabled", "loading"],
     props: [
-      { name: "label", type: "string", required: true },
+      { name: "label", type: "string", required: false },
       { name: "variant", type: "\"primary\" | \"secondary\" | \"tertiary\" | \"outlined\" | \"ghost\"", required: false },
       { name: "intent", type: "\"default\" | \"danger\" | \"warning\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
@@ -29,7 +28,6 @@ export const componentContracts = {
   },
   iconButton: {
     factory: "@design-system/react/icon-button",
-    internalFactory: "createTransitionalActionIconButton",
     element: "button",
     purpose: "Trigger a compact icon-only utility with a fixed circular hit area, required accessible label, optional badge, and selected state only for true toggles.",
     variants: ["ghost", "tonal", "primary", "accent"],
@@ -55,7 +53,6 @@ export const componentContracts = {
   },
   input: {
     factory: "@design-system/react/input",
-    internalFactory: "createTransitionalFieldInput",
     element: "label",
     purpose: "Capture short free-form input with visible label, helper or recovery text, density, state, optional icon, qualifiers, capture role, and native input semantics.",
     variants: ["text", "email", "password", "number", "currency", "unit", "search"],
@@ -83,7 +80,8 @@ export const componentContracts = {
       { name: "inputMode", type: "string", required: false },
       { name: "autocomplete", type: "string", required: false },
       { name: "align", type: "\"start\" | \"end\"", required: false },
-      { name: "revealable", type: "boolean", required: false }
+      { name: "revealable", type: "boolean", required: false },
+      { name: "onValueChange", type: "(value: string, meta: InputValueMeta) => void", required: false }
     ],
     accessibility: [
       "Keep the visible label associated with the input.",
@@ -95,7 +93,6 @@ export const componentContracts = {
   },
   cardNumberInput: {
     factory: "@design-system/react/card-number-input",
-    internalFactory: "createTransitionalPaymentCardNumberInput",
     element: "label",
     purpose: "Capture one grouped card number with numeric keyboard, cc-number autocomplete, local Luhn validation, helper/error copy, and Design System field states.",
     variants: ["default"],
@@ -126,7 +123,6 @@ export const componentContracts = {
   },
   cardExpiryInput: {
     factory: "@design-system/react/card-expiry-input",
-    internalFactory: "createTransitionalPaymentCardExpiryInput",
     element: "label",
     purpose: "Capture one card expiry date in MM/YY format with numeric keyboard, cc-exp autocomplete, local month and expiry validation, helper/error copy, and Design System field states.",
     variants: ["default"],
@@ -158,7 +154,6 @@ export const componentContracts = {
   },
   cardSecurityCodeInput: {
     factory: "@design-system/react/card-security-code-input",
-    internalFactory: "createTransitionalPaymentCardSecurityCodeInput",
     element: "label",
     purpose: "Capture one card security code with numeric keyboard, cc-csc autocomplete, local length validation, optional reveal, helper/error copy, and Design System field states.",
     variants: ["default"],
@@ -177,7 +172,6 @@ export const componentContracts = {
       { name: "name", type: "string", required: false },
       { name: "placeholder", type: "string", required: false },
       { name: "expectedLength", type: "3 | 4", required: false },
-      { name: "validationMessage", type: "string", required: false },
       { name: "revealable", type: "boolean", required: false },
       { name: "revealed", type: "boolean", required: false },
       { name: "onValueChange", type: "(digits: string, meta: CardSecurityCodeMeta) => void", required: false }
@@ -192,7 +186,6 @@ export const componentContracts = {
   },
   select: {
     factory: "@design-system/react/select",
-    internalFactory: "createTransitionalFieldSelect",
     element: "label",
     purpose: "Let users choose one option from a named operational set.",
     variants: ["default", "inline"],
@@ -202,18 +195,19 @@ export const componentContracts = {
       { name: "label", type: "string", required: true },
       { name: "helper", type: "string", required: false },
       { name: "icon", type: "string", required: false },
-      { name: "options", type: "Array<{ label: string, value?: string, meta?: string, disabled?: boolean }>", required: true },
+      { name: "options", type: "SelectOption[]", required: true },
       { name: "value", type: "string", required: false },
       { name: "name", type: "string", required: false },
       { name: "disabled", type: "boolean", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "variant", type: "\"default\" | \"inline\"", required: false },
       { name: "state", type: "\"default\" | \"open\" | \"focus\" | \"filled\" | \"loading\" | \"error\" | \"disabled\"", required: false },
-      { name: "onValueChange", type: "(value: string, meta: { label: string, meta: string }) => void", required: false }
+      { name: "onValueChange", type: "(value: string, meta: SelectValueMeta) => void", required: false }
     ],
     accessibility: [
       "Keep the visible label associated with the select.",
       "Use helper text for context, not as the only label.",
+      "Require option label and value before composing choices.",
       "Represent unavailable choices with disabled options.",
       "Open with Enter, Space, ArrowDown, or ArrowUp and move through enabled options with arrow keys.",
       "Use the inline variant only when Select is embedded inside another field surface."
@@ -221,7 +215,6 @@ export const componentContracts = {
   },
   combobox: {
     factory: "@design-system/react/combobox",
-    internalFactory: "createCombobox",
     element: "label",
     purpose: "Let users type to filter and choose one option from a known operational set.",
     variants: ["default"],
@@ -231,7 +224,7 @@ export const componentContracts = {
       { name: "label", type: "string", required: true },
       { name: "helper", type: "string", required: false },
       { name: "icon", type: "string", required: false },
-      { name: "options", type: "Array<{ label: string, value?: string, meta?: string, disabled?: boolean }>", required: true },
+      { name: "options", type: "ComboboxOption[]", required: true },
       { name: "value", type: "string", required: false },
       { name: "name", type: "string", required: false },
       { name: "placeholder", type: "string", required: false },
@@ -239,11 +232,12 @@ export const componentContracts = {
       { name: "disabled", type: "boolean", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "state", type: "\"default\" | \"open\" | \"focus\" | \"filled\" | \"empty\" | \"error\" | \"disabled\"", required: false },
-      { name: "onValueChange", type: "(value: string, meta: { label: string, meta: string, inputValue?: string, cleared?: boolean }) => void", required: false }
+      { name: "onValueChange", type: "(value: string, meta: ComboboxValueMeta) => void", required: false }
     ],
     accessibility: [
       "Keep the visible label associated with the editable combobox input.",
       "Use aria-autocomplete=list with a listbox of filtered options.",
+      "Require option label and value before composing choices.",
       "Expose active option with aria-activedescendant while the listbox is open.",
       "Provide visible empty-state copy when filtering produces no results.",
       "Do not use Combobox for global search, async command palettes, multi-select, or form submission flows."
@@ -251,7 +245,6 @@ export const componentContracts = {
   },
   card: {
     factory: "@design-system/react/card",
-    internalFactory: "createCard",
     element: "article",
     purpose: "Group a product summary, state, supporting detail, and optional actions.",
     variants: ["default", "minimal", "elevated", "ghost"],
@@ -263,32 +256,33 @@ export const componentContracts = {
       { name: "unit", type: "string", required: false },
       { name: "detail", type: "string", required: false },
       { name: "status", type: "string", required: false },
-      { name: "trend", type: "up | down | neutral", required: false },
+      { name: "trend", type: "\"up\" | \"down\" | \"neutral\"", required: false },
       { name: "icon", type: "string", required: false },
       { name: "media", type: "string", required: false },
       { name: "mediaAlt", type: "string", required: false },
-      { name: "variant", type: "default | minimal | elevated | ghost", required: false },
-      { name: "composition", type: "standard | compact | media | stats", required: false },
-      { name: "state", type: "default | hover | focus | selected | loading | error | disabled | muted | interactive", required: false },
-      { name: "density", type: "sm | md | lg", required: false },
+      { name: "variant", type: "\"default\" | \"minimal\" | \"elevated\" | \"ghost\"", required: false },
+      { name: "composition", type: "\"standard\" | \"compact\" | \"media\" | \"stats\"", required: false },
+      { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"selected\" | \"loading\" | \"error\" | \"disabled\" | \"muted\" | \"interactive\"", required: false },
+      { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "fullWidth", type: "boolean", required: false },
       { name: "interactive", type: "boolean", required: false },
       { name: "selected", type: "boolean", required: false },
       { name: "disabled", type: "boolean", required: false },
       { name: "loading", type: "boolean", required: false },
-      { name: "actions", type: "(ButtonProps | IconButtonProps & { iconOnly?: boolean })[]", required: false },
-      { name: "onAction", type: "event", required: false }
+      { name: "actionKey", type: "string", required: false },
+      { name: "actions", type: "CardAction[]", required: false },
+      { name: "onAction", type: "(key: string, action?: CardAction, event?: MouseEvent<HTMLElement>) => void", required: false }
     ],
     accessibility: [
       "Use a meaningful title.",
       "Keep status visible as text, not color alone.",
       "Use real buttons for nested actions.",
+      "Require stable action keys before composing nested or whole-card actions.",
       "When the whole Card is interactive, expose role button, keyboard activation, and aria-pressed for selected state."
     ]
   },
   checkbox: {
     factory: "@design-system/react/checkbox",
-    internalFactory: "createTransitionalChoiceCheckbox",
     element: "label",
     purpose: "Let users choose one or more independent options with visible label, optional description, and native checkbox semantics.",
     variants: ["default", "descriptive", "select-all", "compact"],
@@ -306,7 +300,8 @@ export const componentContracts = {
       { name: "disabled", type: "boolean", required: false },
       { name: "name", type: "string", required: false },
       { name: "value", type: "string", required: false },
-      { name: "required", type: "boolean", required: false }
+      { name: "required", type: "boolean", required: false },
+      { name: "onCheckedChange", type: "(checked: boolean, meta: CheckboxValueMeta) => void", required: false }
     ],
     accessibility: [
       "Use native checkbox input semantics.",
@@ -316,7 +311,6 @@ export const componentContracts = {
   },
   switch: {
     factory: "@design-system/react/switch",
-    internalFactory: "createTransitionalChoiceSwitch",
     element: "label",
     purpose: "Toggle a persistent on/off setting with visible label, optional description, and switch semantics.",
     variants: ["default"],
@@ -331,7 +325,8 @@ export const componentContracts = {
       { name: "checked", type: "boolean", required: false },
       { name: "disabled", type: "boolean", required: false },
       { name: "name", type: "string", required: false },
-      { name: "required", type: "boolean", required: false }
+      { name: "required", type: "boolean", required: false },
+      { name: "onCheckedChange", type: "(checked: boolean, meta: SwitchValueMeta) => void", required: false }
     ],
     accessibility: [
       "Use role switch on the native checkbox input.",
@@ -341,7 +336,6 @@ export const componentContracts = {
   },
   radioButton: {
     factory: "@design-system/react/radio-button",
-    internalFactory: "createTransitionalChoiceRadioButton",
     element: "label",
     purpose: "Represent one option in a mutually exclusive choice set with visible label and native radio semantics.",
     variants: ["default", "descriptive", "compact", "critical"],
@@ -358,7 +352,8 @@ export const componentContracts = {
       { name: "disabled", type: "boolean", required: false },
       { name: "name", type: "string", required: true },
       { name: "value", type: "string", required: false },
-      { name: "required", type: "boolean", required: false }
+      { name: "required", type: "boolean", required: false },
+      { name: "onCheckedChange", type: "(checked: boolean, meta: RadioButtonValueMeta) => void", required: false }
     ],
     accessibility: [
       "Use native radio input semantics.",
@@ -368,7 +363,6 @@ export const componentContracts = {
   },
   textArea: {
     factory: "@design-system/react/text-area",
-    internalFactory: "createTransitionalFieldTextArea",
     element: "label",
     purpose: "Capture multi-line text with visible label, optional helper, and native textarea behavior.",
     variants: ["default"],
@@ -401,7 +395,6 @@ export const componentContracts = {
   },
   badge: {
     factory: "@design-system/react/badge",
-    internalFactory: "createTransitionalBadge",
     element: "span",
     purpose: "Show compact status, count, or metadata that remains readable without relying on color alone.",
     variants: ["count", "dot", "status", "icon"],
@@ -425,7 +418,6 @@ export const componentContracts = {
   },
   chip: {
     factory: "@design-system/react/chip",
-    internalFactory: "createTransitionalChip",
     element: "span | button",
     purpose: "Show a compact selected filter, token, or removable value with visible label and optional interaction state.",
     variants: ["filter", "input", "suggestion", "assist"],
@@ -451,7 +443,6 @@ export const componentContracts = {
   },
   tag: {
     factory: "@design-system/react/tag",
-    internalFactory: "createTransitionalTag",
     element: "span | button",
     purpose: "Show compact metadata or optional metadata action with stable tone, icon, and label.",
     variants: ["metadata", "status", "platform", "link"],
@@ -474,28 +465,29 @@ export const componentContracts = {
   },
   tabs: {
     factory: "@design-system/react/tabs",
-    internalFactory: "createTabs",
     element: "div",
     purpose: "Switch between sibling views inside one bounded region with tablist, tab selection, and keyboard-ready semantics.",
     variants: ["default", "underline"],
     intents: ["default"],
     states: ["default", "hover", "selected", "focus", "overflow", "disabled"],
     props: [
-      { name: "label", type: "string", required: true },
-      { name: "items", type: "Array<{ key?: string, value?: string, label: string, icon?: string, count?: number, badge?: BadgeProps, disabled?: boolean }>", required: true },
+      { name: "label", type: "string", required: false },
+      { name: "items", type: "TabsItem[]", required: true },
       { name: "selectedKey", type: "string", required: false },
       { name: "onValueChange", type: "(key: string) => void", required: false },
-      { name: "variant", type: "\"default\" | \"underline\"", required: false }
+      { name: "variant", type: "\"default\" | \"underline\"", required: false },
+      { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false }
     ],
     accessibility: [
       "Use role tablist and role tab.",
       "Expose selected state with aria-selected.",
+      "Require stable item key or value before composing tabs.",
+      "Use badge only through explicit TabsBadge labels; do not synthesize badges from count shorthands.",
       "Keep roving tab index aligned with selection."
     ]
   },
   tooltip: {
     factory: "@design-system/react/tooltip",
-    internalFactory: "createTransitionalTooltip",
     element: "span",
     purpose: "Expose short contextual help from a trigger without adding interactive content to the bubble.",
     variants: ["default", "icon-help", "metric", "disabled-help"],
@@ -510,6 +502,7 @@ export const componentContracts = {
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"open\" | \"disabled\" | \"dismissed\"", required: false },
       { name: "disabled", type: "boolean", required: false },
+      { name: "open", type: "boolean", required: false },
       { name: "onOpenChange", type: "(open: boolean) => void", required: false }
     ],
     accessibility: [
@@ -520,7 +513,6 @@ export const componentContracts = {
   },
   toast: {
     factory: "@design-system/react/toast",
-    internalFactory: "createToast",
     element: "article",
     purpose: "Show non-blocking feedback with status or alert semantics, concise copy, and optional single action.",
     variants: ["status", "progress", "warning", "recovery", "undo"],
@@ -545,7 +537,6 @@ export const componentContracts = {
   },
   progressIndicator: {
     factory: "@design-system/react/progress-indicator",
-    internalFactory: "createProgressIndicator",
     element: "div",
     purpose: "Communicate visible system progress with determinate or indeterminate linear progressbar semantics; compact circular waiting belongs to Spinner.",
     variants: ["linear", "indeterminate"],
@@ -559,7 +550,7 @@ export const componentContracts = {
       { name: "showValue", type: "boolean", required: false },
       { name: "tone", type: "\"accent\" | \"success\" | \"warning\" | \"danger\" | \"ink\"", required: false },
       { name: "state", type: "\"default\" | \"active\" | \"indeterminate\" | \"paused\" | \"complete\" | \"error\" | \"disabled\"", required: false },
-      { name: "density", type: "\"sm\" | \"md\"", required: false },
+      { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "fullWidth", type: "boolean", required: false }
     ],
     accessibility: [
@@ -571,7 +562,6 @@ export const componentContracts = {
   },
   spinner: {
     factory: "@design-system/react/spinner",
-    internalFactory: "createSpinner",
     element: "span",
     purpose: "Indicate compact indeterminate loading without implying progress value.",
     variants: ["circular"],
@@ -592,15 +582,15 @@ export const componentContracts = {
   },
   accordion: {
     factory: "@design-system/react/accordion",
-    internalFactory: "createAccordion",
     element: "div",
     purpose: "Reveal and hide bounded content sections without owning the surrounding process.",
     variants: ["single", "multiple"],
     intents: ["default"],
     states: ["closed", "open", "disabled"],
     props: [
-      { name: "items", type: "Array<{ title: string, content: string | Node, open?: boolean, icon?: string, meta?: string, disabled?: boolean }>", required: true },
+      { name: "items", type: "AccordionItem[]", required: true },
       { name: "multiple", type: "boolean", required: false },
+      { name: "expandedIds", type: "string[]", required: false },
       { name: "onExpandedChange", type: "(expandedIds: string[]) => void", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "variant", type: "\"single\" | \"multiple\"", required: false }
@@ -608,12 +598,13 @@ export const componentContracts = {
     accessibility: [
       "Use buttons for section triggers.",
       "Connect triggers and panels with aria-controls and aria-labelledby.",
+      "Require stable item ids before composing triggers and panels.",
+      "Use title and content as the only AccordionItem title and panel sources; do not alias label or description.",
       "Expose open state with aria-expanded."
     ]
   },
   slider: {
     factory: "@design-system/react/slider",
-    internalFactory: "createSlider",
     element: "label",
     purpose: "Choose a numeric value from a bounded range with visible label, output, and native range semantics.",
     variants: ["continuous", "stepped", "bounded", "threshold", "paired-value"],
@@ -629,9 +620,11 @@ export const componentContracts = {
       { name: "state", type: "\"default\" | \"focus\" | \"dragging\" | \"disabled\" | \"error\" | \"complete\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "unit", type: "string", required: false },
+      { name: "disabled", type: "boolean", required: false },
+      { name: "name", type: "string", required: false },
       { name: "valueLabel", type: "string", required: false },
       { name: "formatValue", type: "(value: number) => string", required: false },
-      { name: "onValueChange", type: "(value: number) => void", required: false }
+      { name: "onValueChange", type: "(value: number, meta: SliderValueMeta) => void", required: false }
     ],
     accessibility: [
       "Use native range input semantics.",
@@ -641,7 +634,6 @@ export const componentContracts = {
   },
   avatar: {
     factory: "@design-system/react/avatar",
-    internalFactory: "createTransitionalAvatar",
     element: "span",
     purpose: "Represent a person, actor, or system identity with initials, optional image, and optional presence status.",
     variants: ["initials", "image", "status"],
@@ -651,10 +643,9 @@ export const componentContracts = {
       { name: "name", type: "string", required: true },
       { name: "src", type: "string", required: false },
       { name: "size", type: "AvatarSize", required: false },
-      { name: "density", type: "AvatarSize", required: false },
+      { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "status", type: "AvatarStatus", required: false },
-      { name: "state", type: "AvatarState", required: false },
-      { name: "ariaLabel", type: "string", required: false }
+      { name: "state", type: "AvatarState", required: false }
     ],
     accessibility: [
       "Expose a readable identity label.",
@@ -664,14 +655,13 @@ export const componentContracts = {
   },
   skeleton: {
     factory: "@design-system/react/skeleton",
-    internalFactory: "createSkeleton",
     element: "div",
     purpose: "Indicate loading structure while content is pending without implying final content values.",
     variants: ["text", "title", "circle", "card", "pill", "row", "media", "chart", "table"],
     intents: ["default"],
     states: ["default", "loading", "stale", "paused", "loaded", "disabled"],
     props: [
-      { name: "label", type: "string", required: false },
+      { name: "label", type: "string", required: true },
       { name: "variant", type: "\"text\" | \"title\" | \"circle\" | \"card\" | \"pill\" | \"row\" | \"media\" | \"chart\" | \"table\"", required: false },
       { name: "lines", type: "number", required: false },
       { name: "rows", type: "number", required: false },
@@ -690,7 +680,6 @@ export const componentContracts = {
   },
   dialog: {
     factory: "@design-system/react/dialog",
-    internalFactory: "createDialog",
     element: "div",
     purpose: "Mount one blocking dialog surface with trigger, modal semantics, title, description, and local actions.",
     variants: ["confirmation", "destructive", "form", "review", "success"],
@@ -700,14 +689,14 @@ export const componentContracts = {
       { name: "label", type: "string", required: true },
       { name: "description", type: "string", required: false },
       { name: "triggerLabel", type: "string", required: false },
-      { name: "actions", type: "ButtonProps[]", required: false },
+      { name: "actions", type: "DialogAction[]", required: false },
       { name: "open", type: "boolean", required: false },
       { name: "tone", type: "\"neutral\" | \"info\" | \"success\" | \"danger\"", required: false },
       { name: "variant", type: "\"confirmation\" | \"destructive\" | \"form\" | \"review\" | \"success\"", required: false },
       { name: "state", type: "\"open\" | \"focus\" | \"closing\" | \"default\" | \"closed\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "icon", type: "string", required: false },
-      { name: "fields", type: "InputProps[]", required: false },
+      { name: "fields", type: "DialogField[]", required: false },
       { name: "id", type: "string", required: false },
       { name: "onOpenChange", type: "(open: boolean) => void", required: false },
       { name: "onAction", type: "(key: string) => void", required: false }
@@ -716,12 +705,13 @@ export const componentContracts = {
       "Use role dialog and aria-modal when open.",
       "Connect title through aria-labelledby.",
       "Move focus into the dialog on open and restore it to the trigger on close.",
+      "Require stable action keys before composing local actions.",
+      "Require stable field names before composing form inputs.",
       "Use patterns for confirmation policy, irreversible actions, and process recovery."
     ]
   },
   menu: {
     factory: "@design-system/react/menu",
-    internalFactory: "createMenu",
     element: "span",
     purpose: "Expose one compact contextual action list anchored to a trigger.",
     variants: ["actions", "grouped", "selection", "danger", "icon-trigger", "avatar-trigger"],
@@ -729,7 +719,7 @@ export const componentContracts = {
     states: ["default", "closed", "open", "focus", "disabled"],
     props: [
       { name: "triggerLabel", type: "string", required: true },
-      { name: "items", type: "Array<{ label?: string, icon?: string, key?: string, disabled?: boolean, separator?: boolean, tone?: string, shortcut?: string }>", required: true },
+      { name: "items", type: "Array<MenuItem | \"divider\">", required: true },
       { name: "open", type: "boolean", required: false },
       { name: "variant", type: "\"actions\" | \"grouped\" | \"selection\" | \"danger\" | \"icon-trigger\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
@@ -746,12 +736,12 @@ export const componentContracts = {
     accessibility: [
       "Use aria-haspopup menu on the trigger.",
       "Use role menu and menuitem.",
+      "Require stable item keys before composing menuitem controls.",
       "Use patterns for command routing, permissions, and high-risk actions."
     ]
   },
   drawer: {
     factory: "@design-system/react/drawer",
-    internalFactory: "createDrawer",
     element: "div",
     purpose: "Mount one side drawer surface with trigger, dialog semantics, header, body, and local actions.",
     variants: ["side-sheet", "filter", "detail", "edit", "review"],
@@ -766,8 +756,8 @@ export const componentContracts = {
       { name: "tone", type: "\"neutral\" | \"info\" | \"danger\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "side", type: "\"left\" | \"right\"", required: false },
-      { name: "fields", type: "Array<{ label: string, value?: string }>", required: false },
-      { name: "actions", type: "ButtonProps[]", required: false },
+      { name: "fields", type: "DrawerField[]", required: false },
+      { name: "actions", type: "DrawerAction[]", required: false },
       { name: "open", type: "boolean", required: false },
       { name: "id", type: "string", required: false },
       { name: "onOpenChange", type: "(open: boolean) => void", required: false },
@@ -776,21 +766,23 @@ export const componentContracts = {
     accessibility: [
       "Use dialog semantics when the drawer overlays content.",
       "Keep header, body, and footer order predictable.",
+      "Require stable action keys before composing local actions.",
+      "Require stable content keys and field names before composing body content.",
       "Use patterns for edit lifecycle, validation, submit, and support handoff."
     ]
   },
   table: {
     factory: "@design-system/react/table",
-    internalFactory: "createTable",
     element: "div",
     purpose: "Render comparable records with semantic table structure, columns, rows, row keys, and optional local sort indicators.",
     variants: ["standard", "dense", "sortable", "selectable", "expandable"],
     intents: ["data"],
     states: ["default", "hover", "focus", "selected", "sorted", "expanded"],
     props: [
-      { name: "columns", type: "Array<{ key: string, label: string, sortable?: boolean, align?: string, mono?: boolean, sortValue?: Function, render?: Function }>", required: true },
-      { name: "rows", type: "Array<Record<string, string | number | object>>", required: true },
-      { name: "rowKey", type: "string", required: true },
+      { name: "label", type: "string", required: true },
+      { name: "columns", type: "TableColumn[]", required: true },
+      { name: "rows", type: "Array<Record<string, TableCellValue>>", required: true },
+      { name: "rowKey", type: "string", required: false },
       { name: "variant", type: "\"standard\" | \"dense\" | \"sortable\" | \"selectable\" | \"expandable\"", required: false },
       { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"selected\" | \"sorted\" | \"expanded\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
@@ -799,20 +791,22 @@ export const componentContracts = {
       { name: "sortDir", type: "\"ascending\" | \"descending\"", required: false },
       { name: "selectedKey", type: "string", required: false },
       { name: "expandedKey", type: "string", required: false },
-      { name: "renderDetail", type: "(row: TableRow) => Node | string", required: false },
-      { name: "onSortChange", type: "(sort: { key: string, direction: string }) => void", required: false },
+      { name: "renderDetail", type: "(row: TableRow) => ReactNode", required: false },
+      { name: "onSortChange", type: "(sort: TableSort) => void", required: false },
       { name: "onRowSelect", type: "(key: string) => void", required: false },
       { name: "onExpandedChange", type: "(key: string) => void", required: false }
     ],
     accessibility: [
       "Use native table semantics.",
       "Expose aria-sort on sortable columns.",
+      "Require visible column labels instead of exposing technical column keys.",
+      "Require stable row keys before composing table rows.",
+      "Do not derive selected or expanded rows from visual state alone.",
       "Use patterns for remote data, filtering, pagination, expansion, and row processs."
     ]
   },
   biometricPrompt: {
     factory: "@design-system/react/biometric-prompt",
-    internalFactory: "createBiometricPrompt",
     element: "section",
     purpose: "Show one local biometric authentication prompt with icon, copy, primary action, fallback text, and explicit state.",
     variants: ["fingerprint", "face", "passcode", "fallback"],
@@ -826,7 +820,7 @@ export const componentContracts = {
       { name: "actionLabel", type: "string", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "fullWidth", type: "boolean", required: false },
-      { name: "fallback", type: "string", required: true }
+      { name: "fallback", type: "string", required: false }
     ],
     accessibility: [
       "Provide visible prompt copy and an accessible group label.",
@@ -836,14 +830,13 @@ export const componentContracts = {
   },
   treeView: {
     factory: "@design-system/react/tree-view",
-    internalFactory: "createTreeView",
     element: "ul",
     purpose: "Render one hierarchical navigation or selection tree with tree and treeitem semantics.",
     variants: ["standard"],
     intents: ["navigation", "selection"],
     states: ["default", "hover", "focus", "expanded", "selected", "disabled"],
     props: [
-      { name: "label", type: "string", required: true },
+      { name: "label", type: "string", required: false },
       { name: "nodes", type: "TreeViewNode[]", required: true },
       { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"expanded\" | \"selected\" | \"disabled\"", required: false },
       { name: "selectedKey", type: "string", required: false },
@@ -854,12 +847,12 @@ export const componentContracts = {
     accessibility: [
       "Use role tree and treeitem.",
       "Expose aria-level, aria-expanded, and aria-selected where applicable.",
+      "Require a stable node key or id before composing treeitems.",
       "Use patterns for permission editors, drag and drop, and multi-pane tree processs."
     ]
   },
   motionBoundary: {
     factory: "@design-system/react/motion-boundary",
-    internalFactory: "createMotionBoundary",
     element: "div",
     purpose: "Wrap one bounded region with explicit local motion state, variant, and reduced-motion signal.",
     variants: ["fade", "slide", "collapse", "route"],
@@ -870,7 +863,9 @@ export const componentContracts = {
       { name: "description", type: "string", required: false },
       { name: "variant", type: "MotionBoundaryVariant", required: false },
       { name: "state", type: "MotionBoundaryState", required: false },
-      { name: "reducedMotion", type: "boolean", required: false }
+      { name: "icon", type: "string", required: false },
+      { name: "reducedMotion", type: "boolean", required: false },
+      { name: "stateLabel", type: "string", required: false }
     ],
     accessibility: [
       "Keep a visible label for the bounded region.",
@@ -880,7 +875,6 @@ export const componentContracts = {
   },
   animatedMoment: {
     factory: "@design-system/react/animated-moment",
-    internalFactory: "createAnimatedMoment",
     element: "div",
     purpose: "Render one bounded animation moment with label, state, static fallback text, and no process orchestration.",
     variants: ["success", "empty", "loading", "celebration"],
@@ -891,9 +885,11 @@ export const componentContracts = {
       { name: "description", type: "string", required: false },
       { name: "variant", type: "AnimatedMomentVariant", required: false },
       { name: "state", type: "AnimatedMomentState", required: false },
-      { name: "density", type: "sm | md | lg", required: false },
+      { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "fullWidth", type: "boolean", required: false },
       { name: "icon", type: "IconName", required: false },
+      { name: "animationSource", type: "string", required: false },
+      { name: "animationData", type: "AnimatedMomentAnimationData", required: false },
       { name: "reducedMotionFallback", type: "string", required: false }
     ],
     accessibility: [
@@ -904,7 +900,6 @@ export const componentContracts = {
   },
   emptyState: {
     factory: "@design-system/react/empty-state",
-    internalFactory: "createEmptyState",
     element: "section",
     purpose: "Explain a bounded empty condition with title, optional description, icon, and one local action.",
     variants: ["first-use", "search-empty", "permission", "error", "maintenance"],
@@ -914,7 +909,7 @@ export const componentContracts = {
       { name: "title", type: "string", required: true },
       { name: "description", type: "string", required: false },
       { name: "icon", type: "string", required: false },
-      { name: "action", type: "ButtonProps", required: false },
+      { name: "action", type: "EmptyStateAction", required: false },
       { name: "variant", type: "\"first-use\" | \"search-empty\" | \"permission\" | \"error\" | \"maintenance\"", required: false },
       { name: "state", type: "\"default\" | \"action\" | \"search-empty\" | \"permission\" | \"loading\" | \"error\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
@@ -923,43 +918,45 @@ export const componentContracts = {
     ],
     accessibility: [
       "Keep the empty-state title visible.",
+      "Use title as the only visible heading source; do not alias label into the heading.",
       "Use one local action at most.",
+      "Require a stable action key before composing the local action.",
       "Do not turn empty state into a multi-step onboarding pattern."
     ]
   },
   list: {
     factory: "@design-system/react/list",
-    internalFactory: "createList",
     element: "ul",
     purpose: "Render a bounded collection of rows with label, metadata, optional icon, and optional value.",
     variants: ["standard", "compact", "action", "status", "media"],
     intents: ["default"],
     states: ["default", "hover", "selected", "loading", "error", "disabled"],
     props: [
-      { name: "items", type: "Array<{ key?: string, label: string, meta?: string, value?: string, icon?: string, state?: string, tone?: string }>", required: true },
+      { name: "items", type: "ListItem[]", required: true },
       { name: "variant", type: "\"standard\" | \"compact\" | \"action\" | \"status\" | \"media\"", required: false },
       { name: "state", type: "\"default\" | \"hover\" | \"selected\" | \"loading\" | \"error\" | \"disabled\"", required: false },
       { name: "interactive", type: "boolean", required: false },
       { name: "label", type: "string", required: false },
+      { name: "selectedKey", type: "string", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "onSelect", type: "(key: string) => void", required: false }
     ],
     accessibility: [
       "Use list semantics for bounded collections.",
       "Keep row labels visible.",
+      "Require stable item keys before composing rows or enabling row selection.",
       "Use interactive rows only when a parent pattern owns the action."
     ]
   },
   kpiTile: {
     factory: "@design-system/react/kpi-tile",
-    internalFactory: "createKpiTile",
     element: "article",
     purpose: "Show one compact operational metric with label, value, optional delta, trend, threshold tone, sparkline hint, and optional drill-in affordance.",
     variants: ["standard", "delta", "threshold", "sparkline", "drill-in"],
     intents: ["neutral", "info", "success", "warning", "danger"],
     states: ["default", "hover", "focus", "selected", "loading", "risk", "disabled"],
     props: [
-      { name: "label", type: "string", required: true },
+      { name: "label", type: "string", required: false },
       { name: "value", type: "string", required: true },
       { name: "delta", type: "string", required: false },
       { name: "trend", type: "\"up\" | \"down\" | \"flat\"", required: false },
@@ -973,19 +970,18 @@ export const componentContracts = {
       { name: "selected", type: "boolean", required: false },
       { name: "disabled", type: "boolean", required: false },
       { name: "loading", type: "boolean", required: false },
-      { name: "ariaLabel", type: "string", required: false },
       { name: "onSelect", type: "(metric: KpiTileMeta) => void", required: false }
     ],
     accessibility: [
       "Keep label and value readable as text.",
       "Do not encode trend only in color.",
       "Use button or link semantics when the tile drills in.",
+      "Require href or onSelect before showing drill-in affordance.",
       "Use dashboard patterns for metric grouping, formulas, thresholds, and cross-panel drill-down."
     ]
   },
   floatingActionButton: {
     factory: "@design-system/react/floating-action-button",
-    internalFactory: "createFloatingActionButton",
     element: "button",
     purpose: "Expose a prominent local primary action with icon-only or extended label treatment.",
     variants: ["primary", "accent", "extended", "mini"],
@@ -1010,14 +1006,13 @@ export const componentContracts = {
   },
   breadcrumbs: {
     factory: "@design-system/react/breadcrumbs",
-    internalFactory: "createBreadcrumbs",
     element: "nav",
     purpose: "Show the current location path inside one hierarchy without owning route architecture, side navigation, or page history.",
     variants: ["standard", "compact", "overflow", "mobile"],
     intents: ["navigation"],
     states: ["default", "hover", "focus", "collapsed", "current", "disabled"],
     props: [
-      { name: "items", type: "Array<{ label: string, href?: string, current?: boolean, onClick?: Function }>", required: true },
+      { name: "items", type: "BreadcrumbItem[]", required: true },
       { name: "label", type: "string", required: false },
       { name: "maxItems", type: "number", required: false },
       { name: "separator", type: "string", required: false },
@@ -1030,25 +1025,28 @@ export const componentContracts = {
     accessibility: [
       "Use nav with an accessible label.",
       "Mark the current page with aria-current.",
+      "Require stable item id or href before composing breadcrumb targets.",
       "Use links only for navigable ancestors.",
       "Escalate route guards, side navigation, IA, and history behavior to navigation patterns."
     ]
   },
   pagination: {
     factory: "@design-system/react/pagination",
-    internalFactory: "createPagination",
     element: "nav",
     purpose: "Move through discrete pages of one bounded result set with numbered controls and ellipsis collapse.",
     variants: ["numbered"],
     intents: ["navigation"],
     states: ["default", "hover", "focus", "selected", "disabled"],
     props: [
-      { name: "page", type: "number", required: true },
+      { name: "page", type: "number", required: false },
       { name: "pageCount", type: "number", required: true },
-      { name: "label", type: "string", required: false },
+      { name: "label", type: "string", required: true },
+      { name: "previousLabel", type: "string", required: true },
+      { name: "nextLabel", type: "string", required: true },
+      { name: "getPageLabel", type: "(page: number) => string", required: true },
       { name: "variant", type: "numbered", required: false },
-      { name: "state", type: "default | hover | focus | selected | disabled", required: false },
-      { name: "density", type: "sm | md | lg", required: false },
+      { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"selected\" | \"disabled\"", required: false },
+      { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "fullWidth", type: "boolean", required: false },
       { name: "disabled", type: "boolean", required: false },
       { name: "onPageChange", type: "(page: number) => void", required: false }
@@ -1062,7 +1060,6 @@ export const componentContracts = {
   },
   auditEvent: {
     factory: "@design-system/react/audit-event",
-    internalFactory: "createAuditEvent",
     element: "article",
     purpose: "Represent one audit trail event with actor/action label, description, metadata, and status.",
     variants: ["standard"],
@@ -1087,7 +1084,6 @@ export const componentContracts = {
   },
   errorPanel: {
     factory: "@design-system/react/error-panel",
-    internalFactory: "createErrorPanel",
     element: "section",
     purpose: "Show a bounded error or warning message with recovery copy and optional local action.",
     variants: ["inline", "panel", "blocking", "empty-recovery"],
@@ -1096,7 +1092,7 @@ export const componentContracts = {
     props: [
       { name: "label", type: "string", required: true },
       { name: "description", type: "string", required: false },
-      { name: "action", type: "ButtonProps", required: false },
+      { name: "action", type: "ErrorPanelAction", required: false },
       { name: "tone", type: "\"warning\" | \"error\" | \"critical\"", required: false },
       { name: "variant", type: "\"inline\" | \"panel\" | \"blocking\" | \"empty-recovery\"", required: false },
       { name: "state", type: "\"default\" | \"warning\" | \"error\" | \"critical\" | \"loading\" | \"disabled\"", required: false },
@@ -1109,12 +1105,12 @@ export const componentContracts = {
     accessibility: [
       "Use alert for errors and status for warnings.",
       "Keep recovery copy visible.",
+      "Require a stable action key before composing the local action.",
       "Use patterns for multi-step recovery processs."
     ]
   },
   inlineValidation: {
     factory: "@design-system/react/inline-validation",
-    internalFactory: "createInlineValidation",
     element: "div",
     purpose: "Pair one field with inline validation copy and state without owning form submission.",
     variants: ["info", "success", "warning", "error"],
@@ -1134,34 +1130,34 @@ export const componentContracts = {
     accessibility: [
       "Connect message with aria-describedby.",
       "Use aria-invalid for error state.",
+      "Require a visible label before composing the field.",
       "Use live=true only when validation appears after user action; error maps to alert and non-error states map to status.",
       "Keep validation copy near the field."
     ]
   },
   stepper: {
     factory: "@design-system/react/stepper",
-    internalFactory: "createStepper",
     element: "ol",
     purpose: "Show local progress across a short ordered sequence without owning wizard routing, validation, recovery, or submission.",
     variants: ["horizontal", "vertical"],
     intents: ["default"],
     states: ["pending", "active", "complete"],
     props: [
-      { name: "steps", type: "Array<{ label: string, description?: string }>", required: true },
+      { name: "steps", type: "StepperStep[]", required: true },
       { name: "current", type: "number", required: false },
-      { name: "label", type: "string", required: false },
+      { name: "label", type: "string", required: true },
       { name: "orientation", type: "\"horizontal\" | \"vertical\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false }
     ],
     accessibility: [
       "Use ordered list semantics.",
       "Mark the current step with aria-current.",
+      "Require stable step ids before composing progress items and connectors.",
       "Use patterns for branching or route-owned wizards."
     ]
   },
   chartPanel: {
     factory: "@design-system/react/chart-panel",
-    internalFactory: "createChartPanel",
     element: "article",
     purpose: "Show one compact chart summary by framing the Charts primitive with title, value, caption, ECharts option output, and read-only fallback plot.",
     variants: ["sparkline", "bars", "line", "area", "donut", "pareto", "bullet", "comparison", "compact"],
@@ -1174,9 +1170,9 @@ export const componentContracts = {
       { name: "values", type: "number[]", required: false },
       { name: "valueLabels", type: "string[]", required: false },
       { name: "labels", type: "string[]", required: false },
-      { name: "segments", type: "Array<{ label: string, value: number }>", required: false },
-      { name: "series", type: "Array<{ label: string, values: number[] }>", required: false },
-      { name: "comparisons", type: "Array<{ label: string, values: number[] }>", required: false },
+      { name: "segments", type: "ChartPanelSegment[]", required: false },
+      { name: "series", type: "ChartPanelSeries[]", required: false },
+      { name: "comparisons", type: "ChartPanelSeries[]", required: false },
       { name: "variant", type: "\"sparkline\" | \"bars\" | \"line\" | \"area\" | \"donut\" | \"pareto\" | \"bullet\" | \"comparison\" | \"compact\"", required: false },
       { name: "state", type: "\"default\" | \"focus\" | \"hover\" | \"warning\" | \"error\" | \"disabled\"", required: false },
       { name: "tone", type: "\"neutral\" | \"info\" | \"warning\" | \"danger\"", required: false },
@@ -1187,12 +1183,13 @@ export const componentContracts = {
       "Expose a readable chart label through the Charts primitive textSummary.",
       "Treat decorative plot marks as hidden while preserving tableFallback and echartsOption.",
       "Hydrate with Apache ECharts when the runtime provides it; otherwise keep the accessible Flow fallback.",
+      "Require stable ids before composing explicit series or comparison series.",
+      "Require real point labels before composing interactive fallback points; do not synthesize point keys from indexes.",
       "Use chart patterns for legends, filters, and series toggles."
     ]
   },
   stationPin: {
     factory: "@design-system/react/station-pin",
-    internalFactory: "createStationPin",
     element: "button",
     purpose: "Represent one map station marker or cluster entry with accessible station label.",
     variants: ["fuel", "ev", "service", "cluster"],
@@ -1200,6 +1197,7 @@ export const componentContracts = {
     states: ["default", "hover", "focus", "selected", "unavailable", "disabled"],
     props: [
       { name: "label", type: "string", required: true },
+      { name: "value", type: "string", required: false },
       { name: "meta", type: "string", required: false },
       { name: "icon", type: "string", required: false },
       { name: "count", type: "number", required: false },
@@ -1213,13 +1211,13 @@ export const componentContracts = {
     ],
     accessibility: [
       "Expose station name in aria-label.",
+      "Require a station label before deriving visible value or map primitive labels.",
       "Do not rely on marker icon alone.",
       "Use map patterns for clustering, routing, and viewport behavior."
     ]
   },
   routeSummary: {
     factory: "@design-system/react/route-summary",
-    internalFactory: "createRouteSummary",
     element: "article",
     purpose: "Summarize one route option with metrics and optional local actions.",
     variants: ["standard", "compact", "compare", "policy"],
@@ -1228,8 +1226,8 @@ export const componentContracts = {
     props: [
       { name: "label", type: "string", required: true },
       { name: "description", type: "string", required: false },
-      { name: "metrics", type: "Array<{ label: string, value: string }>", required: false },
-      { name: "actions", type: "ButtonProps[]", required: false },
+      { name: "metrics", type: "RouteMetric[]", required: false },
+      { name: "actions", type: "RouteSummaryAction[]", required: false },
       { name: "variant", type: "\"standard\" | \"compact\" | \"compare\" | \"policy\"", required: false },
       { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"selected\" | \"warning\" | \"disabled\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
@@ -1241,13 +1239,15 @@ export const componentContracts = {
     ],
     accessibility: [
       "Keep route metrics visible as text.",
+      "Require stable metric keys before composing metric rows.",
+      "Require stable action keys before composing local actions.",
+      "Require compact icon actions to resolve a non-empty accessible label.",
       "Use actions only for local route decisions.",
       "Use route patterns for comparison, map state, and navigation."
     ]
   },
   codeInput: {
     factory: "@design-system/react/code-input",
-    internalFactory: "createTransitionalSecurityCodeInput",
     element: "label",
     purpose: "Capture SMS, OTP, or approval codes through one logical input with fixed visual slots and helper text.",
     variants: ["sms", "otp", "approval", "masked", "compact"],
@@ -1261,7 +1261,7 @@ export const componentContracts = {
       { name: "masked", type: "boolean", required: false },
       { name: "helper", type: "string", required: false },
       { name: "disabled", type: "boolean", required: false },
-      { name: "state", type: "string", required: false },
+      { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"complete\" | \"warning\" | \"error\" | \"disabled\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "error", type: "string", required: false },
       { name: "onValueChange", type: "(value: string) => void", required: false },
@@ -1276,7 +1276,6 @@ export const componentContracts = {
   },
   phoneInput: {
     factory: "@design-system/react/phone-input",
-    internalFactory: "createTransitionalPhoneInput",
     element: "label",
     purpose: "Capture a phone number with visible label, compact country selector, calling code, helper, and native tel input.",
     variants: ["country-code", "compact", "otp-handoff", "readonly"],
@@ -1287,11 +1286,11 @@ export const componentContracts = {
       { name: "value", type: "string", required: false },
       { name: "prefix", type: "string", required: false },
       { name: "country", type: "string", required: false },
-      { name: "countries", type: "Array<{ country: string, label: string, callingCode: string, nationalLength: number }>", required: false },
+      { name: "countries", type: "PhoneCountry[]", required: false },
       { name: "variant", type: "\"country-code\" | \"compact\" | \"otp-handoff\" | \"readonly\"", required: false },
       { name: "helper", type: "string", required: false },
       { name: "disabled", type: "boolean", required: false },
-      { name: "state", type: "string", required: false },
+      { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"valid\" | \"warning\" | \"error\" | \"disabled\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "error", type: "string", required: false },
       { name: "onValueChange", type: "(nationalNumber: string, meta: PhoneMeta) => void", required: false }
@@ -1305,17 +1304,16 @@ export const componentContracts = {
   },
   countrySelector: {
     factory: "@design-system/react/country-selector",
-    internalFactory: "createCountrySelector",
     element: "span",
     purpose: "Choose one country with visible flag, country code, calling code, option layer, and keyboard selection.",
     variants: ["default", "inline"],
     intents: ["selection"],
     states: ["default", "open", "focus", "error", "disabled"],
     props: [
-      { name: "label", type: "string", required: false },
+      { name: "label", type: "string", required: true },
       { name: "value", type: "string", required: false },
       { name: "country", type: "string", required: false },
-      { name: "countries", type: "Array<{ country: string, label: string, callingCode: string, nationalLength: number }>", required: false },
+      { name: "countries", type: "CountrySelectorCountry[]", required: false },
       { name: "disabled", type: "boolean", required: false },
       { name: "invalid", type: "boolean", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
@@ -1333,7 +1331,6 @@ export const componentContracts = {
   },
   datePicker: {
     factory: "@design-system/react/date-picker",
-    internalFactory: "createTransitionalDatePicker",
     element: "div",
     purpose: "Capture one operational date with visible label, readable selected value, calendar affordance, locale rules, disabled dates, and validation states.",
     variants: ["calendar"],
@@ -1347,10 +1344,16 @@ export const componentContracts = {
       { name: "error", type: "string", required: false },
       { name: "min", type: "string", required: false },
       { name: "max", type: "string", required: false },
+      { name: "locale", type: "string | string[]", required: false },
+      { name: "weekdays", type: "string[]", required: false },
+      { name: "calendarLabel", type: "string", required: false },
+      { name: "previousMonthLabel", type: "string", required: false },
+      { name: "nextMonthLabel", type: "string", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"selected\" | \"warning\" | \"error\" | \"disabled\"", required: false },
       { name: "invalid", type: "boolean", required: false },
       { name: "disabled", type: "boolean", required: false },
+      { name: "open", type: "boolean", required: false },
       { name: "onValueChange", type: "(value: string) => void", required: false },
       { name: "onOpenChange", type: "(open: boolean) => void", required: false }
     ],
@@ -1363,7 +1366,6 @@ export const componentContracts = {
   },
   dateRangePicker: {
     factory: "@design-system/react/date-range-picker",
-    internalFactory: "createTransitionalDateRangePicker",
     element: "div",
     purpose: "Capture one bounded start/end date range with visible label, readable range value, local presets, calendar surface, and keyboard selection.",
     variants: ["calendar-range"],
@@ -1371,19 +1373,25 @@ export const componentContracts = {
     states: ["default", "hover", "focus", "selected", "warning", "error", "disabled"],
     props: [
       { name: "label", type: "string", required: true },
-      { name: "value", type: "{ from?: string; to?: string }", required: false },
+      { name: "value", type: "DateRangePickerValue", required: false },
       { name: "from", type: "string", required: false },
       { name: "to", type: "string", required: false },
       { name: "placeholder", type: "string", required: false },
       { name: "helper", type: "string", required: false },
       { name: "error", type: "string", required: false },
+      { name: "locale", type: "string | string[]", required: false },
+      { name: "weekdays", type: "string[]", required: false },
+      { name: "calendarLabel", type: "string", required: false },
+      { name: "previousMonthLabel", type: "string", required: false },
+      { name: "nextMonthLabel", type: "string", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"selected\" | \"warning\" | \"error\" | \"disabled\"", required: false },
       { name: "invalid", type: "boolean", required: false },
       { name: "disabled", type: "boolean", required: false },
       { name: "presets", type: "boolean", required: false },
-      { name: "presetItems", type: "Array<{ label: string; days: number }>", required: false },
-      { name: "onValueChange", type: "(range: { from?: string; to?: string }) => void", required: false },
+      { name: "presetItems", type: "DateRangePickerPreset[]", required: false },
+      { name: "open", type: "boolean", required: false },
+      { name: "onValueChange", type: "(value: DateRangePickerValue) => void", required: false },
       { name: "onOpenChange", type: "(open: boolean) => void", required: false }
     ],
     accessibility: [
@@ -1395,7 +1403,6 @@ export const componentContracts = {
   },
   segmentedControl: {
     factory: "@design-system/react/segmented-control",
-    internalFactory: "createSegmentedControl",
     element: "div",
     purpose: "Switch between a small set of local mutually exclusive modes.",
     variants: ["outlined", "toolbar", "compact", "icon-only"],
@@ -1403,7 +1410,7 @@ export const componentContracts = {
     states: ["default", "hover", "focus", "selected", "warning", "disabled"],
     props: [
       { name: "label", type: "string", required: true },
-      { name: "items", type: "Array<{ key?: string, value?: string, label: string, icon?: string }>", required: true },
+      { name: "items", type: "SegmentedControlItem[]", required: true },
       { name: "selectedKey", type: "string", required: false },
       { name: "onValueChange", type: "(key: string) => void", required: false },
       { name: "variant", type: "\"outlined\" | \"toolbar\" | \"compact\" | \"icon-only\"", required: false },
@@ -1412,12 +1419,12 @@ export const componentContracts = {
     accessibility: [
       "Use tablist semantics for mode selection.",
       "Expose selected state with aria-selected.",
+      "Require stable item key or value before composing segment controls.",
       "Keep the option count small and local."
     ]
   },
   popover: {
     factory: "@design-system/react/popover",
-    internalFactory: "createPopover",
     element: "span",
     purpose: "Attach a small contextual dialog to one trigger without owning broader process state.",
     variants: ["information", "action", "form", "metric"],
@@ -1434,20 +1441,22 @@ export const componentContracts = {
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "fullWidth", type: "boolean", required: false },
       { name: "disabled", type: "boolean", required: false },
-      { name: "actions", type: "Array<{ label: string, variant?: string, key?: string }>", required: false },
-      { name: "field", type: "{ label?: string, value?: string, placeholder?: string, helper?: string }", required: false },
+      { name: "actions", type: "PopoverAction[]", required: false },
+      { name: "field", type: "PopoverField", required: false },
+      { name: "open", type: "boolean", required: false },
       { name: "onOpenChange", type: "(open: boolean) => void", required: false },
       { name: "onAction", type: "(key: string) => void", required: false }
     ],
     accessibility: [
       "Expose dialog relationship with aria-haspopup and aria-controls.",
       "Keep panel content short and contextual.",
+      "Require visible field labels before composing form inputs.",
+      "Require stable action keys before composing local actions.",
       "Use patterns for multi-step decisions inside a popover."
     ]
   },
   cardSummary: {
     factory: "@design-system/react/card-summary",
-    internalFactory: "createCardSummary",
     element: "article",
     purpose: "Summarize one card with identity metadata, masked number, status, and compact metrics.",
     variants: ["physical", "virtual", "compact", "limit"],
@@ -1459,23 +1468,24 @@ export const componentContracts = {
       { name: "number", type: "string", required: false },
       { name: "expires", type: "string", required: false },
       { name: "status", type: "string", required: false },
-      { name: "metrics", type: "Array<{ label: string, value: string }>", required: false },
+      { name: "metrics", type: "CardSummaryMetric[]", required: false },
       { name: "variant", type: "\"physical\" | \"virtual\" | \"compact\" | \"limit\"", required: false },
       { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"active\" | \"warning\" | \"frozen\" | \"disabled\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "icon", type: "string", required: false },
       { name: "fullWidth", type: "boolean", required: false },
-      { name: "disabled", type: "boolean", required: false }
+      { name: "disabled", type: "boolean", required: false },
+      { name: "onSelect", type: "(meta: MovementRowMeta) => void", required: false }
     ],
     accessibility: [
       "Keep card identity and status visible.",
       "Use masked values for card numbers.",
+      "Require stable metric keys before composing metric rows.",
       "Use card management patterns for lifecycle actions."
     ]
   },
   movementRow: {
     factory: "@design-system/react/movement-row",
-    internalFactory: "createMovementRow",
     element: "button",
     purpose: "Represent one movement row with label, metadata, amount, and status.",
     variants: ["standard", "refund", "declined", "compact"],
@@ -1491,7 +1501,8 @@ export const componentContracts = {
       { name: "state", type: "\"default\" | \"hover\" | \"focus\" | \"pending\" | \"error\" | \"disabled\"", required: false },
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "fullWidth", type: "boolean", required: false },
-      { name: "disabled", type: "boolean", required: false }
+      { name: "disabled", type: "boolean", required: false },
+      { name: "onSelect", type: "(meta: MovementRowMeta) => void", required: false }
     ],
     accessibility: [
       "Expose the row as a button only when it opens local detail.",
@@ -1501,7 +1512,6 @@ export const componentContracts = {
   },
   quickAction: {
     factory: "@design-system/react/quick-action",
-    internalFactory: "createQuickAction",
     element: "div",
     purpose: "Expose one compact local action with optional icon, badge, variant, state, and density without becoming a grouped actions pattern.",
     variants: ["standard", "destructive", "compact", "wide"],
@@ -1516,7 +1526,9 @@ export const componentContracts = {
       { name: "density", type: "\"sm\" | \"md\" | \"lg\"", required: false },
       { name: "loading", type: "boolean", required: false },
       { name: "disabled", type: "boolean", required: false },
-      { name: "tone", type: "\"neutral\" | \"danger\"", required: false }
+      { name: "tone", type: "\"neutral\" | \"danger\"", required: false },
+      { name: "type", type: "\"button\" | \"submit\" | \"reset\"", required: false },
+      { name: "onAction", type: "(meta: QuickActionMeta) => void", required: false }
     ],
     accessibility: [
       "Keep the action label visible.",

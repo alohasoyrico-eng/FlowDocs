@@ -1,9 +1,11 @@
 import React, { forwardRef } from "react";
 import { chipPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowToneProps, flowStateProps, flowVariantProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["filter", "input", "suggestion", "assist"]);
 const validTones = new Set(["default", "danger", "warning"]);
 const validStates = new Set(["default", "hover", "pressed", "selected", "focus", "disabled"]);
+const validTypes = new Set(["button", "submit", "reset"]);
 
 function normalizeVariant(variant) {
   return validVariants.has(variant) ? variant : "filter";
@@ -30,7 +32,7 @@ export const Chip = forwardRef(function Chip({
   removable = false,
   icon = "",
   interactive = false,
-  onRemoveLabel = "",
+  onRemoveLabel,
   onRemove,
   onSelectedChange,
   className = "",
@@ -41,42 +43,47 @@ export const Chip = forwardRef(function Chip({
   const resolvedTone = normalizeTone(tone);
   const isSelected = Boolean(selected) || state === "selected";
   const resolvedState = normalizeState({ disabled, selected: isSelected, state });
-  const isInteractive = Boolean(interactive) || isSelected || removable || typeof onSelectedChange === "function" || typeof onRemove === "function";
+  const canRemove = Boolean(removable && onRemoveLabel && onRemove);
+  const resolvedType = validTypes.has(type) ? type : "button";
+  const canInteract = Boolean(rest.onClick || canRemove || typeof onSelectedChange === "function" || resolvedType === "submit" || resolvedType === "reset");
+  const isInteractive = (Boolean(interactive) || isSelected || canRemove || typeof onSelectedChange === "function") && canInteract;
   const element = isInteractive ? "button" : "span";
+
+  if (!label) return null;
 
   function handleClick(event) {
     rest.onClick?.(event);
     if (event.defaultPrevented || resolvedState === "disabled") return;
-    if (removable) {
-      onRemove?.(label ?? "Chip");
+    if (canRemove) {
+      onRemove?.(label, event);
       return;
     }
     if (typeof onSelectedChange === "function") {
-      onSelectedChange(!isSelected);
+      onSelectedChange(!isSelected, event);
     }
   }
 
   return React.createElement(
     element,
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["chip", className].filter(Boolean).join(" "),
-      type: isInteractive ? type : undefined,
+      type: isInteractive ? resolvedType : undefined,
       disabled: isInteractive ? resolvedState === "disabled" : undefined,
       onClick: isInteractive ? handleClick : rest.onClick,
-      "aria-label": removable ? onRemoveLabel || `Remove ${label ?? "chip"}` : rest["aria-label"],
+      "aria-label": canRemove ? onRemoveLabel : rest["aria-label"],
       "aria-pressed": isInteractive ? String(isSelected) : undefined,
       "aria-disabled": !isInteractive && resolvedState === "disabled" ? "true" : undefined,
-      "data-variant": resolvedVariant,
-      "data-tone": resolvedTone,
-      "data-state": resolvedState,
+      ...flowVariantProps(resolvedVariant),
+      ...flowToneProps(resolvedTone),
+      ...flowStateProps(resolvedState),
       "data-selected": String(isSelected),
-      "data-chip-remove": removable ? "true" : undefined,
+      "data-chip-remove": canRemove ? "true" : undefined,
     },
     icon ? React.createElement("span", { className: "chip__icon", "aria-hidden": "true" }, icon) : null,
-    React.createElement("span", { className: "chip__label" }, label ?? "Chip"),
-    removable ? React.createElement("span", { className: "chip__remove", "data-chip-remove-icon": "true", "aria-hidden": "true" }, "close") : null,
+    React.createElement("span", { className: "chip__label" }, label),
+    canRemove ? React.createElement("span", { className: "chip__remove", "data-chip-remove-icon": "true", "aria-hidden": "true" }, "close") : null,
   );
 });
 

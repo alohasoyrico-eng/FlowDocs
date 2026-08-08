@@ -2,23 +2,19 @@ import React, { forwardRef } from "react";
 import { quickActionPlatformContract } from "../components/platforms/index.js?v=1";
 import { Badge } from "./Badge.js";
 import { Spinner } from "./Spinner.js";
+import { flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["standard", "destructive", "compact", "wide"]);
 const validStates = new Set(["default", "hover", "focus", "pressed", "loading", "warning", "disabled"]);
-const validDensities = new Set(["sm", "md", "lg"]);
 const validTypes = new Set(["button", "submit", "reset"]);
-
-function normalize(value, allowed, fallback) {
-  return allowed.has(value) ? value : fallback;
-}
 
 export const QuickAction = forwardRef(function QuickAction({
   label,
   icon = "",
   badge = "",
-  variant = "standard",
+  variant,
   state = "default",
-  density = "md",
+  density,
   loading = false,
   tone = "neutral",
   disabled = false,
@@ -27,46 +23,50 @@ export const QuickAction = forwardRef(function QuickAction({
   className = "",
   ...rest
 }, ref) {
-  const resolvedLabel = label ?? "Action";
+  const resolvedLabel = label;
   const resolvedVariant = validVariants.has(variant) ? variant : tone === "danger" ? "destructive" : "standard";
-  const resolvedState = disabled ? "disabled" : loading || state === "loading" ? "loading" : normalize(state, validStates, "default");
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const blocked = resolvedState === "disabled" || resolvedState === "loading";
+  const resolvedState = disabled ? "disabled" : loading || state === "loading" ? "loading" : normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const resolvedType = validTypes.has(type) ? type : "button";
+  const canInteract = Boolean(onAction || rest.onClick || resolvedType === "submit" || resolvedType === "reset");
+  const blocked = resolvedState === "disabled" || resolvedState === "loading" || !canInteract;
+  if (!resolvedLabel) return null;
 
   return React.createElement(
     "div",
     {
       className: ["quick-action", className].filter(Boolean).join(" "),
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
     },
     React.createElement(
       "button",
       {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
-        type: validTypes.has(type) ? type : "button",
+        type: resolvedType,
         className: "quick-action__control",
         disabled: blocked,
         "aria-label": resolvedLabel,
         "aria-busy": resolvedState === "loading" ? "true" : undefined,
         onClick: (event) => {
           if (blocked) return;
-          onAction?.({ label: resolvedLabel, variant: resolvedVariant, state: resolvedState });
           rest.onClick?.(event);
+          if (event.defaultPrevented) return;
+          onAction?.({ label: resolvedLabel, variant: resolvedVariant, state: resolvedState }, event);
         },
       },
       React.createElement(
         "span",
         { className: "quick-action__icon", "aria-hidden": "true" },
         resolvedState === "loading"
-          ? React.createElement(Spinner, { label: `${resolvedLabel} loading`, density: "sm", decorative: true })
+          ? React.createElement(Spinner, { density: resolvedDensity || undefined, decorative: true })
           : icon,
       ),
     ),
-    React.createElement("span", { className: "quick-action__label" }, resolvedLabel),
-    badge ? React.createElement(Badge, { label: badge, variant: "count" }) : null,
+    resolvedLabel ? React.createElement("span", { className: "quick-action__label" }, resolvedLabel) : null,
+    badge ? React.createElement(Badge, { label: badge, variant: "count", density: resolvedDensity || undefined }) : null,
   );
 });
 

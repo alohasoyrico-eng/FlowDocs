@@ -1,4 +1,4 @@
-import type { ForwardRefExoticComponent, HTMLAttributes, RefAttributes } from "react";
+import type { ForwardRefExoticComponent, HTMLAttributes, MouseEvent, RefAttributes } from "react";
 import { toastPlatformContract } from "../components/platforms/index.js";
 
 export type ToastTone = "neutral" | "info" | "success" | "warning" | "danger";
@@ -6,8 +6,8 @@ export type ToastVariant = "status" | "progress" | "warning" | "recovery" | "und
 export type ToastState = "default" | "visible" | "action" | "stacked" | "exiting";
 export type ToastDensity = "sm" | "md" | "lg";
 
-export interface ToastProps extends HTMLAttributes<HTMLElement> {
-  label?: string;
+export interface ToastProps extends Omit<HTMLAttributes<HTMLElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+  label: string;
   description?: string;
   tone?: ToastTone;
   variant?: ToastVariant;
@@ -16,8 +16,11 @@ export interface ToastProps extends HTMLAttributes<HTMLElement> {
   icon?: string;
   actionLabel?: string;
   dismissible?: boolean;
-  onAction?: () => void;
-  onDismiss?: () => void;
+  dismissLabel?: string;
+  dismissed?: boolean;
+  onAction?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onDismiss?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onDismissChange?: (dismissed: boolean, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface ToastComponent extends ForwardRefExoticComponent<ToastProps & RefAttributes<HTMLElement>> {

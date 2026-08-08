@@ -1,6 +1,7 @@
 import React, { forwardRef, useId, useMemo, useState } from "react";
 import { cardExpiryInputPlatformContract } from "../components/platforms/index.js?v=1";
 import { Spinner } from "./Spinner.js";
+import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 function normalizeCardExpiry(value) {
   return String(value ?? "").replace(/\D/g, "").slice(0, 4);
@@ -42,7 +43,7 @@ function resolveCardExpiryState({ disabled = false, loading = false, error = "",
 
 export const CardExpiryInput = forwardRef(function CardExpiryInput({
   label,
-  value = "",
+  value,
   helper = "",
   error = "",
   disabled = false,
@@ -51,9 +52,9 @@ export const CardExpiryInput = forwardRef(function CardExpiryInput({
   density,
   state,
   name = "",
-  placeholder = "MM/YY",
-  validationMessage = "Check the expiry date.",
-  expiredMessage = "Use a card that has not expired.",
+  placeholder = "",
+  validationMessage,
+  expiredMessage,
   onValueChange,
   className = "",
   id,
@@ -61,12 +62,14 @@ export const CardExpiryInput = forwardRef(function CardExpiryInput({
 }, ref) {
   const generatedId = useId();
   const inputId = id ?? `card-expiry-input-${generatedId}`;
-  const [currentValue, setCurrentValue] = useState(value);
+  const isValueControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState(value ?? "");
+  const currentValue = isValueControlled ? value ?? "" : internalValue;
   const digits = normalizeCardExpiry(currentValue);
   const formattedValue = formatCardExpiry(digits);
   const validity = cardExpiryValidity(digits);
   const { month, year } = parseCardExpiry(digits);
-  const localError = validity === "invalid" ? validationMessage : validity === "expired" ? expiredMessage : "";
+  const localError = validity === "invalid" ? validationMessage : validity === "expired" ? expiredMessage : undefined;
   const resolvedError = error || localError;
   const resolvedHelper = resolvedError || helper;
   const resolvedState = resolveCardExpiryState({ disabled, loading, error: resolvedError, state, value: digits, validity });
@@ -79,12 +82,14 @@ export const CardExpiryInput = forwardRef(function CardExpiryInput({
     expired: validity === "expired",
   }), [digits, month, validity, year]);
 
+  if (!label) return null;
+
   return React.createElement(
     "label",
     {
       className: ["field card-expiry-input", className].filter(Boolean).join(" "),
-      "data-state": resolvedState,
-      "data-density": density || undefined,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
       "data-mono": "true",
       "data-validity": validity,
       "data-month": month,
@@ -92,13 +97,13 @@ export const CardExpiryInput = forwardRef(function CardExpiryInput({
       "data-validation-message": validationMessage,
       "data-expired-message": expiredMessage,
     },
-    React.createElement("span", { className: "field__label card-expiry-input__label", id: `${inputId}-label` }, label ?? "Expiry date"),
+    React.createElement("span", { className: "field__label card-expiry-input__label", id: `${inputId}-label` }, label),
     React.createElement(
       "span",
       { className: "field__control card-expiry-input__control" },
       React.createElement("span", { className: "field__icon card-expiry-input__icon", "aria-hidden": "true" }, "calendar_month"),
       React.createElement("input", {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
         id: inputId,
         name,
@@ -123,17 +128,17 @@ export const CardExpiryInput = forwardRef(function CardExpiryInput({
           const nextFormatted = formatCardExpiry(nextDigits);
           const nextValidity = cardExpiryValidity(nextDigits);
           const parsed = parseCardExpiry(nextDigits);
-          setCurrentValue(nextDigits);
+          if (!isValueControlled) setInternalValue(nextDigits);
           onValueChange?.(nextFormatted, {
             digits: nextDigits,
             month: parsed.month,
             year: parsed.year,
             validity: nextValidity,
             expired: nextValidity === "expired",
-          });
+          }, event);
         },
       }),
-      loading ? React.createElement(Spinner, { label: `${label ?? "Expiry date"} loading`, density: "sm", decorative: true, className: "field__icon field__icon--loading" }) : null,
+      loading ? React.createElement(Spinner, { density, decorative: true, className: "field__icon field__icon--loading" }) : null,
     ),
     resolvedHelper
       ? React.createElement(

@@ -1,5 +1,6 @@
 import React, { forwardRef, useState } from "react";
 import { switchPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 function normalizeState({ checked, disabled, state, error }) {
   if (disabled) return "disabled";
@@ -11,11 +12,11 @@ function normalizeState({ checked, disabled, state, error }) {
 
 export const Switch = forwardRef(function Switch({
   label,
-  description = "",
-  error = "",
+  description,
+  error,
   state = "off",
   density,
-  checked = false,
+  checked,
   disabled = false,
   name = "",
   required = false,
@@ -23,28 +24,31 @@ export const Switch = forwardRef(function Switch({
   className = "",
   ...rest
 }, ref) {
-  const [currentChecked, setCurrentChecked] = useState(Boolean(checked));
+  const isCheckedControlled = checked !== undefined;
+  const [internalChecked, setInternalChecked] = useState(Boolean(checked));
+  const currentChecked = isCheckedControlled ? Boolean(checked) : internalChecked;
   const normalizedState = normalizeState({ checked: currentChecked, disabled, state, error });
   const isInvalid = normalizedState === "error" || Boolean(error);
+  if (!label) return null;
 
   const handleChange = (event) => {
     if (disabled) return;
     const nextChecked = event.currentTarget.checked;
-    setCurrentChecked(nextChecked);
-    onCheckedChange?.(nextChecked, { name });
+    if (!isCheckedControlled) setInternalChecked(nextChecked);
+    onCheckedChange?.(nextChecked, { name }, event);
   };
 
   return React.createElement(
     "label",
     {
       className: ["switch", className].filter(Boolean).join(" "),
-      "data-state": normalizedState,
-      "data-density": density || undefined,
+      ...flowStateProps(normalizedState),
+      ...flowDensityProps(density),
       "data-checked": String(currentChecked),
       "data-invalid": isInvalid ? "true" : undefined,
     },
     React.createElement("input", {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       type: "checkbox",
       className: "switch__input",
@@ -65,7 +69,7 @@ export const Switch = forwardRef(function Switch({
     React.createElement(
       "span",
       { className: "switch__text" },
-      React.createElement("span", { className: "switch__label" }, label ?? "Switch"),
+      React.createElement("span", { className: "switch__label" }, label),
       description ? React.createElement("span", { className: "switch__description" }, description) : null,
       error ? React.createElement("span", { className: "switch__error" }, error) : null,
     ),

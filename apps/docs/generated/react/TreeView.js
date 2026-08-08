@@ -1,29 +1,24 @@
 import React, { forwardRef, useMemo, useRef, useState } from "react";
 import { treeViewPlatformContract } from "../components/platforms/index.js?v=1";
 import { Button } from "./Button.js";
+import { flowStateProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
-const validDensities = new Set(["sm", "md", "lg"]);
 const validStates = new Set(["default", "hover", "focus", "expanded", "selected", "disabled"]);
 
-function normalize(value, valid, fallback) {
-  return valid.has(value) ? value : fallback;
-}
-
-function nodeKey(node, index) {
-  return String(node?.key ?? node?.id ?? node?.label ?? `tree-item-${index}`);
+function nodeKey(node) {
+  return String(node?.key ?? node?.id);
 }
 
 function normalizeNodes(nodes) {
-  const source = Array.isArray(nodes) && nodes.length ? nodes : [
-    { key: "root", label: "Fleet", level: 1, expanded: true, icon: "account_tree" },
-    { key: "cards", label: "Cards", level: 2, selected: true },
-    { key: "ending-4821", label: "Cards ending 4821", level: 3 },
-  ];
-  return source.map((node, index) => ({
+  const source = Array.isArray(nodes) ? nodes : [];
+  return source.filter((node) => {
+    const stableKey = node?.key ?? node?.id;
+    return node?.label && stableKey !== undefined && stableKey !== null && stableKey !== "";
+  }).map((node) => ({
     ...node,
-    key: nodeKey(node, index),
-    label: node?.label ?? `Tree item ${index + 1}`,
-    level: Math.max(1, Math.min(5, Number(node?.level ?? 1))),
+    key: nodeKey(node),
+    label: node.label,
+    level: Math.max(1, Number(node?.level ?? 1)),
     expandable: node?.expanded != null,
     expanded: Boolean(node?.expanded),
     selected: Boolean(node?.selected),
@@ -41,40 +36,45 @@ function visibleKeys(nodes, expandedKeys) {
 }
 
 export const TreeView = forwardRef(function TreeView({
-  label = "Tree view",
-  nodes = [],
+  label,
+  nodes,
   state = "expanded",
-  density = "md",
-  selectedKey = "",
+  density,
+  selectedKey,
+  expandedKeys,
   onSelect,
   onExpandedChange,
   className = "",
   ...rest
 }, ref) {
   const normalizedNodes = useMemo(() => normalizeNodes(nodes), [nodes]);
-  const [selected, setSelected] = useState(() => selectedKey || normalizedNodes.find((node) => node.selected)?.key || "");
-  const [expanded, setExpanded] = useState(() => normalizedNodes.filter((node) => node.expanded).map((node) => node.key));
+  const isSelectedKeyControlled = selectedKey !== undefined;
+  const isExpandedKeysControlled = expandedKeys !== undefined;
+  const [internalSelected, setInternalSelected] = useState(() => String(selectedKey ?? normalizedNodes.find((node) => node.selected)?.key ?? ""));
+  const [internalExpanded, setInternalExpanded] = useState(() => normalizedNodes.filter((node) => node.expanded).map((node) => node.key));
+  const selected = isSelectedKeyControlled ? String(selectedKey ?? "") : internalSelected;
+  const expanded = isExpandedKeysControlled ? (Array.isArray(expandedKeys) ? expandedKeys.map(String) : []) : internalExpanded;
   const controlRefs = useRef(new Map());
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const resolvedState = normalize(state, validStates, "expanded");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const resolvedState = normalizeFlowValue(state, validStates, "expanded");
   const visible = visibleKeys(normalizedNodes, expanded);
 
+  if (!normalizedNodes.length) return null;
+
   const focusKey = (key) => requestAnimationFrame(() => controlRefs.current.get(key)?.focus());
-  const commitSelected = (node) => {
+  const commitSelected = (node, event) => {
     if (!node || node.disabled) return;
-    setSelected(node.key);
-    onSelect?.(node.key);
+    if (!isSelectedKeyControlled) setInternalSelected(node.key);
+    onSelect?.(node.key, event);
     focusKey(node.key);
   };
-  const commitExpanded = (node, nextExpanded) => {
+  const commitExpanded = (node, nextExpanded, event) => {
     if (!node?.expandable || node.disabled) return;
-    setExpanded((current) => {
-      const next = nextExpanded
-        ? [...new Set([...current, node.key])]
-        : current.filter((key) => key !== node.key);
-      onExpandedChange?.(next);
-      return next;
-    });
+    const next = nextExpanded
+      ? [...new Set([...expanded, node.key])]
+      : expanded.filter((key) => key !== node.key);
+    if (!isExpandedKeysControlled) setInternalExpanded(next);
+    onExpandedChange?.(next, event);
   };
   const move = (node, direction) => {
     const enabled = visible
@@ -93,18 +93,19 @@ export const TreeView = forwardRef(function TreeView({
   return React.createElement(
     "ul",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["tree-view", className].filter(Boolean).join(" "),
       role: "tree",
       "aria-label": label,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
     },
     normalizedNodes.map((node) => {
       const isExpanded = expanded.includes(node.key);
       const isSelected = selected === node.key;
       const isVisible = visible.includes(node.key);
+      const { key, id, label: nodeLabel, level, expanded: nodeExpanded, expandable, selected: nodeSelected, disabled, icon, children, onClick, onKeyDown, ...nodeRest } = node;
       return React.createElement(
         "li",
         {
@@ -113,19 +114,22 @@ export const TreeView = forwardRef(function TreeView({
           "data-tree-item": "",
           "data-key": node.key,
           "data-level": String(node.level),
+          style: { "--comp-tree-view-level": String(node.level) },
+          "data-expanded": node.expandable ? String(isExpanded) : undefined,
+          "data-selected": String(isSelected),
           role: "none",
           hidden: !isVisible,
-          style: { "--tree-view-depth-offset": String(node.level - 1) },
         },
         React.createElement(Button, {
+          ...nodeRest,
           ref: (control) => {
             if (control) controlRefs.current.set(node.key, control);
             else controlRefs.current.delete(node.key);
           },
-          label: node.label,
+          label: nodeLabel,
           variant: "secondary",
-          disabled: Boolean(node.disabled),
-          icon: node.expandable ? node.icon ?? "folder" : node.icon ?? "",
+          disabled: Boolean(disabled),
+          icon: node.expandable ? icon ?? "folder" : icon ?? "",
           trailingIcon: node.expandable ? "expand_more" : "",
           density: resolvedDensity,
           className: "tree-view__control",
@@ -135,11 +139,15 @@ export const TreeView = forwardRef(function TreeView({
           "aria-expanded": node.expandable ? String(isExpanded) : undefined,
           "aria-selected": String(isSelected),
           tabIndex: isSelected || (!selected && visible[0] === node.key) ? 0 : -1,
-          onClick: () => {
-            commitSelected(node);
-            if (node.expandable) commitExpanded(node, !isExpanded);
+          onClick: (event) => {
+            onClick?.(event);
+            if (event.defaultPrevented) return;
+            commitSelected(node, event);
+            if (node.expandable) commitExpanded(node, !isExpanded, event);
           },
           onKeyDown: (event) => {
+            onKeyDown?.(event);
+            if (event.defaultPrevented) return;
             if (event.key === "ArrowDown") {
               event.preventDefault();
               move(node, 1);
@@ -154,10 +162,10 @@ export const TreeView = forwardRef(function TreeView({
               edge("last");
             } else if (event.key === "ArrowRight") {
               event.preventDefault();
-              commitExpanded(node, true);
+              commitExpanded(node, true, event);
             } else if (event.key === "ArrowLeft") {
               event.preventDefault();
-              commitExpanded(node, false);
+              commitExpanded(node, false, event);
             }
           },
         }),

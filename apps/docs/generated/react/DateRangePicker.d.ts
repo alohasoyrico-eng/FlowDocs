@@ -1,12 +1,17 @@
-import type { ButtonHTMLAttributes, ForwardRefExoticComponent, RefAttributes } from "react";
+import type { ButtonHTMLAttributes, ChangeEvent, ForwardRefExoticComponent, KeyboardEvent, MouseEvent, RefAttributes } from "react";
 import { dateRangePickerPlatformContract } from "../components/platforms/index.js";
 
 export type DateRangePickerDensity = "sm" | "md" | "lg";
 export type DateRangePickerState = "default" | "hover" | "focus" | "selected" | "warning" | "error" | "disabled";
 export type DateRangePickerValue = { from?: string; to?: string };
-export type DateRangePickerPreset = { label: string; days: number };
+export type DateRangePickerPreset = { key: string; label: string; days: number };
+export type DateRangePickerValueChangeEvent =
+  | MouseEvent<HTMLButtonElement>
+  | KeyboardEvent<HTMLButtonElement>
+  | ChangeEvent<HTMLInputElement>;
+export type DateRangePickerOpenChangeEvent = DateRangePickerValueChangeEvent | globalThis.MouseEvent;
 
-export interface DateRangePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
+export interface DateRangePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "value" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   value?: DateRangePickerValue;
   from?: string;
@@ -18,10 +23,16 @@ export interface DateRangePickerProps extends Omit<ButtonHTMLAttributes<HTMLButt
   density?: DateRangePickerDensity;
   state?: DateRangePickerState;
   invalid?: boolean;
+  locale?: string | string[];
+  weekdays?: string[];
+  calendarLabel?: string;
+  previousMonthLabel?: string;
+  nextMonthLabel?: string;
   presets?: boolean;
   presetItems?: DateRangePickerPreset[];
-  onValueChange?: (value: DateRangePickerValue) => void;
-  onOpenChange?: (open: boolean) => void;
+  open?: boolean;
+  onValueChange?: (value: DateRangePickerValue, event: DateRangePickerValueChangeEvent) => void;
+  onOpenChange?: (open: boolean, event?: DateRangePickerOpenChangeEvent) => void;
 }
 
 export interface DateRangePickerComponent extends ForwardRefExoticComponent<DateRangePickerProps & RefAttributes<HTMLButtonElement>> {

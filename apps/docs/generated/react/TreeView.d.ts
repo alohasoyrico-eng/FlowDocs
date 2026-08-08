@@ -1,10 +1,11 @@
-import type { ForwardRefExoticComponent, HTMLAttributes, RefAttributes } from "react";
+import type { ButtonHTMLAttributes, ForwardRefExoticComponent, HTMLAttributes, KeyboardEvent, MouseEvent, RefAttributes } from "react";
 import type { treeViewPlatformContract } from "../components/platforms/index.js";
 
 export type TreeViewDensity = "sm" | "md" | "lg";
 export type TreeViewState = "default" | "hover" | "focus" | "expanded" | "selected" | "disabled";
+export type TreeViewExpandedChangeEvent = MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>;
 
-export interface TreeViewNode {
+export interface TreeViewNode extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "type" | "children" | "role" | "aria-expanded" | "aria-selected" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   key?: string;
   id?: string;
   label: string;
@@ -15,14 +16,15 @@ export interface TreeViewNode {
   icon?: string;
 }
 
-export interface TreeViewProps extends Omit<HTMLAttributes<HTMLUListElement>, "onSelect"> {
+export interface TreeViewProps extends Omit<HTMLAttributes<HTMLUListElement>, "style" | "onSelect" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label?: string;
   nodes: TreeViewNode[];
   state?: TreeViewState;
   density?: TreeViewDensity;
   selectedKey?: string;
-  onSelect?: (key: string) => void;
-  onExpandedChange?: (expandedKeys: string[]) => void;
+  expandedKeys?: string[];
+  onSelect?: (key: string, event: MouseEvent<HTMLButtonElement>) => void;
+  onExpandedChange?: (expandedKeys: string[], event: TreeViewExpandedChangeEvent) => void;
 }
 
 export interface TreeViewComponent extends ForwardRefExoticComponent<TreeViewProps & RefAttributes<HTMLUListElement>> {

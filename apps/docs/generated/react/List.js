@@ -1,78 +1,93 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useState } from "react";
 import { listPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowToneProps, flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["standard", "compact", "action", "status", "media"]);
 const validStates = new Set(["default", "hover", "selected", "loading", "error", "disabled"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, allowed, fallback) {
-  return allowed.has(value) ? value : fallback;
-}
+const validItemTones = new Set(["danger"]);
 
 export const List = forwardRef(function List({
-  items = [],
+  items,
   interactive = false,
-  label = "",
+  label,
   variant = "standard",
   state = "default",
-  density = "md",
+  selectedKey,
+  density,
   onSelect,
   className = "",
   ...rest
 }, ref) {
-  const resolvedVariant = normalize(variant, validVariants, "standard");
-  const resolvedState = normalize(state, validStates, "default");
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const isInteractive = Boolean(interactive || resolvedVariant === "action" || typeof onSelect === "function");
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "standard");
+  const resolvedState = normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const requestedInteraction = Boolean(interactive || resolvedVariant === "action" || typeof onSelect === "function");
+  const isInteractive = requestedInteraction && typeof onSelect === "function";
+  const sourceItems = Array.isArray(items) ? items : [];
+  const resolvedItems = sourceItems.filter((item) => item?.key !== undefined && item?.key !== null && item?.key !== "" && item?.label);
+  const initialSelectedKey = selectedKey ?? resolvedItems.find((item) => item.state === "selected")?.key ?? "";
+  const isSelectedKeyControlled = selectedKey !== undefined;
+  const [internalSelectedKey, setInternalSelectedKey] = useState(String(initialSelectedKey));
+  const currentSelectedKey = isSelectedKeyControlled ? String(selectedKey ?? "") : internalSelectedKey;
+
+  if (!resolvedItems.length) return null;
 
   return React.createElement(
     "ul",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["list", className].filter(Boolean).join(" "),
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-interactive": String(isInteractive),
       role: "list",
-      "aria-label": label || undefined,
+      "aria-label": label,
       "aria-busy": resolvedState === "loading" ? "true" : undefined,
     },
-    items.map((item, index) => {
-      const key = String(item.key ?? item.label ?? index);
-      const rowState = normalize(item.state ?? resolvedState, validStates, resolvedState);
-      const rowTone = item.tone ?? (rowState === "error" ? "danger" : "");
+    resolvedItems.map((item) => {
+      const key = String(item.key);
+      const isSelected = currentSelectedKey === key;
+      const rowState = normalizeFlowValue(isSelected ? "selected" : item.state ?? resolvedState, validStates, resolvedState);
+      const rowTone = normalizeFlowValue(item.tone ?? (rowState === "error" ? "danger" : ""), validItemTones, "");
       const disabled = Boolean(item.disabled) || rowState === "disabled" || resolvedState === "disabled";
-      const Control = isInteractive ? "button" : "span";
+      const itemCanInteract = isInteractive;
+      const Control = itemCanInteract ? "button" : "span";
+      const { key: itemKey, label: itemLabel, meta, value, icon, state: itemState, tone, disabled: itemDisabled, onClick, ...itemRest } = item;
       return React.createElement(
         "li",
         { className: "list__row", key },
         React.createElement(
           Control,
           {
+            ...(itemCanInteract ? flowRestProps(itemRest) : {}),
             className: "list__item",
-            type: isInteractive ? "button" : undefined,
-            disabled: isInteractive ? disabled : undefined,
-            "data-state": rowState,
-            "data-tone": rowTone || undefined,
-            "data-key": isInteractive ? key : undefined,
+            type: itemCanInteract ? "button" : undefined,
+            disabled: itemCanInteract ? disabled : undefined,
+            ...flowStateProps(rowState),
+            ...flowToneProps(rowTone || undefined),
+            "data-key": itemCanInteract ? key : undefined,
             "aria-current": rowState === "selected" ? "true" : undefined,
             "aria-busy": rowState === "loading" ? "true" : undefined,
-            onClick: isInteractive ? () => {
-              if (!disabled) onSelect?.(key);
+            onClick: itemCanInteract ? (event) => {
+              if (disabled) return;
+              onClick?.(event);
+              if (event.defaultPrevented) return;
+              if (!isSelectedKeyControlled) setInternalSelectedKey(key);
+              onSelect?.(key, event);
             } : undefined,
           },
-          item.icon
-            ? React.createElement("span", { className: "list__icon material-symbol", "aria-hidden": "true" }, item.icon)
+          icon
+            ? React.createElement("span", { className: "list__icon material-symbol", "aria-hidden": "true" }, icon)
             : null,
           React.createElement(
             "span",
             { className: "list__content" },
-            React.createElement("strong", null, rowState === "loading" ? "Loading item" : item.label ?? "List item"),
-            item.meta ? React.createElement("small", null, item.meta) : null,
+            React.createElement("strong", null, itemLabel),
+            meta ? React.createElement("small", null, meta) : null,
           ),
-          item.value ? React.createElement("span", { className: "list__value" }, item.value) : null,
+          value ? React.createElement("span", { className: "list__value" }, value) : null,
         ),
       );
     }),

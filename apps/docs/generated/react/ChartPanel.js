@@ -1,26 +1,56 @@
 import React, { forwardRef } from "react";
 import { chartPanelPlatformContract } from "../components/platforms/index.js?v=1";
 import { createChartsPrimitive } from "../components/index.js?v=1";
+import { flowVariantProps, flowToneProps, flowStateProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["sparkline", "bars", "line", "area", "donut", "pareto", "bullet", "comparison", "compact"]);
 const validStates = new Set(["default", "focus", "hover", "warning", "error", "disabled"]);
 const validTones = new Set(["neutral", "info", "warning", "danger"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, allowed, fallback) {
-  return allowed.has(value) ? value : fallback;
-}
 
 function normalizeVariant(variant) {
-  return variant === "bar" ? "bars" : normalize(variant, validVariants, "sparkline");
+  return variant === "bar" ? "bars" : normalizeFlowValue(variant, validVariants, "sparkline");
 }
 
 function normalizeValues(values = []) {
   return (Array.isArray(values) ? values : []).map((value) => Number(value)).map((value) => (Number.isFinite(value) ? Math.max(0, value) : 0));
 }
 
+function normalizePoints(values = [], labels = []) {
+  const safeValues = normalizeValues(values);
+  const seenLabels = new Set();
+  const points = [];
+  safeValues.forEach((value, index) => {
+    const label = labels[index];
+    if (!label || seenLabels.has(label)) return;
+    seenLabels.add(label);
+    points.push({ key: String(label), label, value, index });
+  });
+  return points;
+}
+
+function hasStableSeriesId(item) {
+  return item?.id !== undefined && item?.id !== null && item?.id !== "";
+}
+
+function hasStableSegmentId(item) {
+  return item?.id !== undefined && item?.id !== null && item?.id !== "";
+}
+
+function normalizeSeries(series = []) {
+  return (Array.isArray(series) ? series : [])
+    .filter((item) => hasStableSeriesId(item) && Array.isArray(item.values))
+    .map((item) => ({ ...item, id: String(item.id), values: normalizeValues(item.values) }));
+}
+
+function normalizeSegments(segments = []) {
+  return (Array.isArray(segments) ? segments : [])
+    .filter((item) => hasStableSegmentId(item) && item?.label && Number.isFinite(Number(item.value)))
+    .map((item) => ({ ...item, id: String(item.id), value: Math.max(0, Number(item.value)) }));
+}
+
 function pointsFor(values = []) {
-  const safeValues = normalizeValues(values.length ? values : [32, 54, 48, 70, 62, 84]);
+  const safeValues = normalizeValues(values);
+  if (!safeValues.length) return "";
   const max = Math.max(...safeValues, 1);
   const width = 160;
   const height = 72;
@@ -31,48 +61,64 @@ function pointsFor(values = []) {
   }).join(" ");
 }
 
-function renderLinePlot(values, variant, series = []) {
-  const resolvedSeries = Array.isArray(series) && series.length ? series.slice(0, 3) : [{ label: "Series 1", values }];
+function chartSeriesColor(index, role = "series") {
+  if (role === "comparison" && index === 0) return "var(--comp-chart-panel-comparison-reference-fill)";
+  return `var(--comp-chart-panel-series-${(index % 5) + 1})`;
+}
+
+function chartStaggerDelay(index, compact = false) {
+  if (index <= 0) return "0ms";
+  return `calc(var(--sys-momentum-stagger-chart${compact ? "-compact" : ""}) * ${index})`;
+}
+
+function renderLinePlot(values, labels, variant, series = []) {
+  const resolvedSeries = series.length ? series : values.length ? [{ id: "primary", values }] : [];
+  const labeledPoints = normalizePoints(values, labels);
   return React.createElement(
     "svg",
     { className: "chart-panel__svg", viewBox: "0 0 160 72", role: "img", "aria-hidden": "true" },
     variant === "area" ? React.createElement("polygon", { className: "chart-panel__area", points: `0,72 ${pointsFor(values)} 160,72` }) : null,
     resolvedSeries.map((item, index) => React.createElement("polyline", {
-      key: item.id ?? item.label ?? index,
+      key: item.id,
       className: "chart-panel__line",
       points: pointsFor(item.values ?? values),
+      style: { "--comp-chart-panel-current-series": chartSeriesColor(index) },
+      "data-series": String(index + 1),
     })),
-    normalizeValues(values).map((value, index) => React.createElement("circle", {
-      key: `dot-${index}`,
+    labeledPoints.map((point, index) => React.createElement("circle", {
+      key: point.key,
       className: "chart-panel__hit-dot",
-      cx: normalizeValues(values).length === 1 ? 160 : (index / (normalizeValues(values).length - 1)) * 160,
-      cy: 72 - (value / Math.max(...normalizeValues(values), 1)) * 64 - 4,
+      cx: normalizeValues(values).length === 1 ? 160 : (point.index / (normalizeValues(values).length - 1)) * 160,
+      cy: 72 - (point.value / Math.max(...normalizeValues(values), 1)) * 64 - 4,
       r: "5",
-      "data-value": String(value),
+      "data-value": String(point.value),
     })),
   );
 }
 
 function renderBars(values, labels) {
-  const safeValues = normalizeValues(values);
-  const max = Math.max(...safeValues, 1);
-  return safeValues.map((value, index) => {
-    const text = `${labels[index] ?? `Value ${index + 1}`}: ${value}`;
+  const points = normalizePoints(values, labels);
+  const max = Math.max(...points.map((point) => point.value), 1);
+  return points.map((point, index) => {
+    const value = point.value;
+    const pointLabel = point.label;
+    const text = pointLabel ? `${pointLabel}: ${value}` : undefined;
+    const percent = Math.max(8, Math.round((value / max) * 100));
     return React.createElement(
       "span",
       {
-        key: index,
+        key: point.key,
         className: "chart-panel__bar-group",
-        role: "listitem",
-        tabIndex: 0,
+        role: pointLabel ? "listitem" : undefined,
+        tabIndex: pointLabel ? 0 : undefined,
         "data-tooltip": text,
       },
-      React.createElement("span", {
-        className: "chart-panel__bar",
-        style: { "--chart-value": `${Math.max(8, Math.round((value / max) * 100))}%`, "--chart-index": String(index) },
-        "data-max": value === max ? "true" : undefined,
-      }),
-      React.createElement("small", null, labels[index] ?? `Value ${index + 1}`),
+      React.createElement(
+        "svg",
+        { className: "chart-panel__bar-svg", viewBox: "0 0 12 100", preserveAspectRatio: "none", "aria-hidden": "true", style: { "--comp-chart-panel-stagger-delay": chartStaggerDelay(index) } },
+        React.createElement("rect", { className: "chart-panel__bar", x: "0", y: String(100 - percent), width: "12", height: String(percent), "data-max": value === max ? "true" : undefined }),
+      ),
+      pointLabel ? React.createElement("small", null, pointLabel) : null,
     );
   });
 }
@@ -87,97 +133,122 @@ function renderDonut(values) {
 }
 
 function renderBullet(values, labels) {
-  const safeValues = normalizeValues(values);
-  const max = Math.max(...safeValues, 1);
-  return safeValues.map((value, index) => React.createElement(
-    "span",
-    { key: index, className: "chart-panel__bullet", role: "listitem", tabIndex: 0, "data-tooltip": `${labels[index] ?? `Value ${index + 1}`}: ${value}` },
-    React.createElement("b", null, labels[index] ?? `Value ${index + 1}`),
-    React.createElement("i", { style: { "--chart-value": `${Math.round((value / max) * 100)}%`, "--chart-target": "80%" } }),
-    React.createElement("em", null, String(value)),
-  ));
+  const points = normalizePoints(values, labels);
+  const max = Math.max(...points.map((point) => point.value), 1);
+  return points.map((point) => {
+    const value = point.value;
+    const pointLabel = point.label;
+    return React.createElement(
+      "span",
+      { key: point.key, className: "chart-panel__bullet", role: pointLabel ? "listitem" : undefined, tabIndex: pointLabel ? 0 : undefined, "data-tooltip": pointLabel ? `${pointLabel}: ${value}` : undefined },
+      pointLabel ? React.createElement("b", null, pointLabel) : null,
+      React.createElement("progress", { className: "chart-panel__bullet-meter", max, value, tabIndex: -1, "aria-hidden": "true" }),
+      React.createElement("em", null, String(value)),
+    );
+  });
 }
 
 function renderComparison(comparisons, values, labels) {
-  const source = Array.isArray(comparisons) && comparisons.length ? comparisons.slice(0, 3) : [{ label: "Current", values }, { label: "Previous", values: normalizeValues(values).map((item) => Math.max(0, item - 8)) }];
+  const source = comparisons.length ? comparisons : values.length ? [{ id: "primary", values }] : [];
+  const points = normalizePoints(values, labels);
   const max = Math.max(...source.flatMap((item) => normalizeValues(item.values)), 1);
-  return labels.map((label, index) => React.createElement(
+  return points.map((point) => React.createElement(
     "span",
-    { key: label, className: "chart-panel__comparison-group", role: "listitem", tabIndex: 0, "data-tooltip": label },
-    source.map((item, seriesIndex) => {
-      const value = normalizeValues(item.values)[index] ?? 0;
-      return React.createElement("span", {
-        key: item.id ?? item.label,
-        className: "chart-panel__comparison-bar",
-        title: `${item.label}: ${value}`,
-        "data-series": String(seriesIndex + 1),
-        style: { "--chart-value": `${Math.round((value / max) * 100)}%`, "--chart-index": String(index) },
-      });
-    }),
+    { key: point.key, className: "chart-panel__comparison-group", role: "listitem", tabIndex: 0, "data-tooltip": point.label },
+    React.createElement(
+      "svg",
+      { className: "chart-panel__comparison-bars", viewBox: "0 0 24 100", preserveAspectRatio: "none", "aria-hidden": "true" },
+      source.map((item, seriesIndex) => {
+        const value = normalizeValues(item.values)[point.index] ?? 0;
+        const percent = Math.round((value / max) * 100);
+        return React.createElement("rect", {
+          key: item.id,
+          className: "chart-panel__comparison-bar",
+          x: String(seriesIndex * 10),
+          y: String(100 - percent),
+          width: "8",
+          height: String(percent),
+          style: {
+            "--comp-chart-panel-current-series": chartSeriesColor(seriesIndex, "comparison"),
+            "--comp-chart-panel-stagger-delay": chartStaggerDelay(seriesIndex, true),
+          },
+          "data-series": String(seriesIndex + 1),
+        });
+      }),
+    ),
   ));
 }
 
 function renderPareto(values, labels) {
-  const sorted = normalizeValues(values).map((value, index) => ({ value, label: labels[index] ?? `Value ${index + 1}` })).sort((a, b) => b.value - a.value);
+  const sorted = normalizePoints(values, labels).sort((a, b) => b.value - a.value);
   const max = Math.max(...sorted.map((item) => item.value), 1);
   return React.createElement(
     "svg",
     { className: "chart-panel__svg chart-panel__pareto-svg", viewBox: "0 0 160 72", role: "img", "aria-hidden": "true" },
     sorted.map((item, index) => React.createElement("rect", {
-      key: item.label,
+      key: item.key,
       className: "chart-panel__pareto-bar",
       x: 8 + index * 46,
       y: 72 - (item.value / max) * 60,
       width: 26,
       height: (item.value / max) * 60,
+      style: { "--comp-chart-panel-stagger-delay": chartStaggerDelay(index) },
     })),
     React.createElement("polyline", { className: "chart-panel__pareto-line", points: pointsFor(sorted.map((item) => item.value)) }),
   );
 }
 
-function renderPlot(type, values, labels, series, comparisons) {
+function renderPlot(type, values, labels, series, comparisons, segments) {
   if (type === "bars") return renderBars(values, labels);
-  if (type === "donut") return renderDonut(values);
+  if (type === "donut") return renderDonut(segments.length ? segments.map((segment) => segment.value) : values);
   if (type === "bullet") return renderBullet(values, labels);
   if (type === "comparison") return renderComparison(comparisons, values, labels);
   if (type === "pareto") return renderPareto(values, labels);
-  return renderLinePlot(values, type, series);
+  return renderLinePlot(values, labels, type, series);
 }
 
 export const ChartPanel = forwardRef(function ChartPanel({
   label,
   value = "",
   caption = "",
-  values = [],
-  valueLabels = [],
-  labels = [],
-  segments = [],
-  series = [],
-  comparisons = [],
+  values,
+  valueLabels,
+  labels,
+  segments,
+  series,
+  comparisons,
   variant = "sparkline",
   state = "default",
   tone = "neutral",
-  density = "md",
+  density,
   fullWidth = false,
   className = "",
   ...rest
 }, ref) {
   const resolvedVariant = normalizeVariant(variant);
-  const resolvedState = normalize(state, validStates, "default");
-  const resolvedTone = normalize(tone, validTones, "neutral");
-  const resolvedDensity = normalize(density, validDensities, "md");
+  const resolvedState = normalizeFlowValue(state, validStates, "default");
+  const resolvedTone = normalizeFlowValue(tone, validTones, "neutral");
+  const resolvedDensity = normalizeFlowDensity(density);
   const resolvedValues = normalizeValues(values);
-  const resolvedLabels = labels.length ? labels : valueLabels.length ? valueLabels : resolvedValues.map((_, index) => `Value ${index + 1}`);
+  const safeLabels = Array.isArray(labels) ? labels : [];
+  const safeValueLabels = Array.isArray(valueLabels) ? valueLabels : [];
+  const resolvedLabels = safeLabels.length ? safeLabels : safeValueLabels.length ? safeValueLabels : [];
+  const resolvedSeries = normalizeSeries(series);
+  const resolvedComparisons = normalizeSeries(comparisons);
+  const resolvedSegments = normalizeSegments(segments);
+  const hasChartData = Boolean(resolvedValues.length || resolvedSeries.length || resolvedComparisons.length || resolvedSegments.length);
+  if (!label || !hasChartData) return null;
+
   const chartPrimitive = createChartsPrimitive({
     type: resolvedVariant,
-    label: label ?? "Chart",
+    label,
     value,
     caption,
     values: resolvedValues,
     labels: resolvedLabels,
-    segments,
-    series,
-    comparisons,
+    segments: resolvedSegments,
+    series: resolvedSeries,
+    comparisons: resolvedComparisons,
   });
   const optionModel = {
     engine: "apache-echarts",
@@ -189,15 +260,15 @@ export const ChartPanel = forwardRef(function ChartPanel({
   return React.createElement(
     "article",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["chart-panel", className].filter(Boolean).join(" "),
       "data-chart-primitive": "charts",
       "data-chart-engine": "echarts-option",
-      "data-variant": chartPrimitive.type,
-      "data-state": resolvedState,
-      "data-tone": resolvedTone,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(chartPrimitive.type),
+      ...flowStateProps(resolvedState),
+      ...flowToneProps(resolvedTone),
+      ...flowDensityProps(resolvedDensity),
       "data-full-width": String(Boolean(fullWidth)),
     },
     React.createElement(
@@ -206,7 +277,7 @@ export const ChartPanel = forwardRef(function ChartPanel({
       React.createElement(
         "div",
         null,
-        React.createElement("strong", null, label ?? "Chart"),
+        label ? React.createElement("strong", null, label) : null,
         caption ? React.createElement("p", null, caption) : null,
       ),
       value ? React.createElement("output", null, value) : null,
@@ -214,7 +285,7 @@ export const ChartPanel = forwardRef(function ChartPanel({
     React.createElement(
       "figure",
       { role: "group", "aria-label": chartPrimitive.textSummary },
-      React.createElement("div", { className: "chart-panel__plot", role: "list" }, renderPlot(chartPrimitive.type, resolvedValues, resolvedLabels, series, comparisons)),
+      React.createElement("div", { className: "chart-panel__plot", role: "list" }, renderPlot(chartPrimitive.type, resolvedValues, resolvedLabels, resolvedSeries, resolvedComparisons, resolvedSegments)),
       React.createElement("span", { className: "chart-panel__tooltip", role: "status", "aria-live": "polite", "data-visible": "false" }),
       React.createElement("div", { className: "chart-panel__echarts", "aria-hidden": "true" }),
       React.createElement("script", { type: "application/json", className: "chart-panel__option" }, JSON.stringify(optionModel)),

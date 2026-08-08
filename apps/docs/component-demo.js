@@ -1,37 +1,4 @@
-import { componentDemoProps, hydrateChartPanel } from "#design-system/components";
-
-const chartLibrary = typeof window === "undefined" ? Promise.resolve(null) : import("./generated/vendor/echarts.esm.min.js?v=1").catch(() => null);
-
-let chartHydrationQueued = false;
-
-async function hydrateChartDemos(root = document) {
-  const echarts = await chartLibrary;
-  if (!echarts) return;
-  const charts = Array.from(root.querySelectorAll?.('.chart-panel[data-chart-engine="echarts-option"]:not([data-hydrated="true"])') ?? []);
-  for (const chart of charts) {
-    hydrateChartPanel(chart, { echarts });
-  }
-}
-function queueChartHydration() {
-  if (chartHydrationQueued || typeof document === "undefined" || typeof window === "undefined") return;
-  chartHydrationQueued = true;
-  const schedule = globalThis.requestAnimationFrame ?? ((callback) => globalThis.setTimeout?.(callback, 0));
-  schedule(() => {
-    chartHydrationQueued = false;
-    hydrateChartDemos(document);
-  });
-}
-
-if (typeof window !== "undefined" && typeof MutationObserver !== "undefined") {
-  const observer = new MutationObserver(queueChartHydration);
-  const startObserver = () => {
-    if (!document.body) return;
-    observer.observe(document.body, { childList: true, subtree: true });
-    queueChartHydration();
-  };
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", startObserver, { once: true });
-  else startObserver();
-}
+import { componentDemoProps } from "#design-system/components";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -54,7 +21,6 @@ function reactCardDemo(demo = {}) {
 }
 function reactChartPanelDemo(demo = {}) {
   const props = componentDemoProps("chart-panel", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "sparkline";
-  queueChartHydration();
   return reactIsland("chart-panel", props, state, variant, props.fullWidth);
 }
 function reactAccordionDemo(demo = {}) {

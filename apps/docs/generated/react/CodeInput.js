@@ -1,5 +1,9 @@
-import React, { forwardRef, useEffect, useId, useState } from "react";
+import React, { forwardRef, useId, useState } from "react";
 import { codeInputPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
+
+const validVariants = new Set(["sms", "otp", "approval", "masked", "compact"]);
+const validStates = new Set(["default", "hover", "focus", "complete", "warning", "error", "disabled"]);
 
 function normalizeCodeValue(value, length = 6) {
   return String(value ?? "").replace(/\D/g, "").slice(0, Number(length));
@@ -8,7 +12,7 @@ function normalizeCodeValue(value, length = 6) {
 function resolveCodeInputState({ disabled = false, error = "", state, value = "", length = 6 } = {}) {
   if (disabled) return "disabled";
   if (error) return "error";
-  if (state && state !== "default") return state;
+  if (state && state !== "default") return normalizeFlowValue(state, validStates, "default");
   return value.length === Number(length) && value ? "complete" : "default";
 }
 
@@ -22,7 +26,7 @@ function codeMeta(value, length) {
 
 export const CodeInput = forwardRef(function CodeInput({
   label,
-  value = "",
+  value,
   length = 6,
   variant = "sms",
   masked = false,
@@ -39,37 +43,38 @@ export const CodeInput = forwardRef(function CodeInput({
 }, ref) {
   const generatedId = useId();
   const inputId = id ?? `code-input-${generatedId}`;
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "sms");
   const resolvedLength = Math.max(1, Number(length) || 6);
+  const isValueControlled = value !== undefined;
   const [focused, setFocused] = useState(state === "focus");
-  const [currentValue, setCurrentValue] = useState(normalizeCodeValue(value, resolvedLength));
+  const [internalValue, setInternalValue] = useState(normalizeCodeValue(value ?? "", resolvedLength));
+  const currentValue = isValueControlled ? normalizeCodeValue(value ?? "", resolvedLength) : internalValue;
   const digits = normalizeCodeValue(currentValue, resolvedLength);
   const resolvedState = resolveCodeInputState({ disabled, error, state, value: digits, length: resolvedLength });
   const resolvedHelper = error || helper;
   const describedBy = resolvedHelper ? `${inputId}-helper` : undefined;
-  const isMasked = Boolean(masked) || variant === "masked";
+  const isMasked = Boolean(masked) || resolvedVariant === "masked";
   const activeIndex = Math.min(digits.length, Math.max(resolvedLength - 1, 0));
 
-  useEffect(() => {
-    setCurrentValue(normalizeCodeValue(value, resolvedLength));
-  }, [resolvedLength, value]);
+  if (!label) return null;
 
   return React.createElement(
     "label",
     {
       className: ["field code-input", className].filter(Boolean).join(" "),
-      "data-state": resolvedState,
-      "data-density": density || undefined,
-      "data-variant": variant,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
+      ...flowVariantProps(resolvedVariant),
       "data-masked": isMasked ? "true" : undefined,
       "data-focused": focused ? "true" : "false",
       "data-length": String(resolvedLength),
     },
-    React.createElement("span", { className: "field__label", id: `${inputId}-label` }, label ?? "Security code"),
+    React.createElement("span", { className: "field__label", id: `${inputId}-label` }, label),
     React.createElement(
       "span",
       { className: "code-input__control" },
       React.createElement("input", {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
         id: inputId,
         className: "code-input__input",
@@ -81,23 +86,25 @@ export const CodeInput = forwardRef(function CodeInput({
         value: digits,
         disabled: Boolean(disabled),
         "data-code-input": "",
-        "aria-label": `${label ?? "Security code"} (${resolvedLength} digits)`,
+        "aria-labelledby": `${inputId}-label`,
         "aria-describedby": describedBy,
         "aria-invalid": error ? "true" : undefined,
         onFocus: (event) => {
-          setFocused(true);
           rest.onFocus?.(event);
+          if (event.defaultPrevented) return;
+          setFocused(true);
         },
         onBlur: (event) => {
-          setFocused(false);
           rest.onBlur?.(event);
+          if (event.defaultPrevented) return;
+          setFocused(false);
         },
         onChange: (event) => {
           const nextValue = normalizeCodeValue(event.target.value, resolvedLength);
-          setCurrentValue(nextValue);
+          if (!isValueControlled) setInternalValue(nextValue);
           const nextMeta = codeMeta(nextValue, resolvedLength);
-          onValueChange?.(nextValue);
-          if (nextMeta.complete) onComplete?.(nextValue);
+          onValueChange?.(nextValue, nextMeta, event);
+          if (nextMeta.complete) onComplete?.(nextValue, nextMeta, event);
         },
       }),
       React.createElement(

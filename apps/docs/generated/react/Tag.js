@@ -1,9 +1,11 @@
 import React, { forwardRef } from "react";
 import { tagPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowToneProps, flowStateProps, flowVariantProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["metadata", "status", "platform", "link"]);
 const validTones = new Set(["neutral", "info", "success", "warning", "danger"]);
 const validStates = new Set(["default", "hover", "pressed", "focus", "disabled"]);
+const validTypes = new Set(["button", "submit", "reset"]);
 
 function normalizeVariant(variant) {
   return validVariants.has(variant) ? variant : "metadata";
@@ -33,25 +35,29 @@ export const Tag = forwardRef(function Tag({
   const resolvedVariant = normalizeVariant(variant);
   const resolvedTone = normalizeTone(tone);
   const resolvedState = normalizeState({ disabled, state });
-  const isInteractive = Boolean(interactive) || resolvedVariant === "link";
+  const resolvedType = validTypes.has(type) ? type : "button";
+  const canInteract = Boolean(rest.onClick || resolvedType === "submit" || resolvedType === "reset");
+  const isInteractive = (Boolean(interactive) || resolvedVariant === "link") && canInteract;
   const element = isInteractive ? "button" : "span";
+
+  if (!label) return null;
 
   return React.createElement(
     element,
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["tag", className].filter(Boolean).join(" "),
-      type: isInteractive ? type : undefined,
+      type: isInteractive ? resolvedType : undefined,
       disabled: isInteractive ? resolvedState === "disabled" : undefined,
       "aria-disabled": !isInteractive && resolvedState === "disabled" ? "true" : undefined,
-      "data-variant": resolvedVariant,
-      "data-tone": resolvedTone,
-      "data-state": resolvedState,
+      ...flowVariantProps(resolvedVariant),
+      ...flowToneProps(resolvedTone),
+      ...flowStateProps(resolvedState),
       "data-interactive": isInteractive ? "true" : undefined,
     },
     icon ? React.createElement("span", { className: "tag__icon", "aria-hidden": "true" }, icon) : null,
-    React.createElement("span", { className: "tag__label" }, label ?? "Tag"),
+    React.createElement("span", { className: "tag__label" }, label),
   );
 });
 

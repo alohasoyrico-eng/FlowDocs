@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import { badgePlatformContract } from "../components/platforms/index.js?v=1";
+import { flowToneProps, flowStateProps, flowVariantProps, flowRestProps } from "./internal/props.js";
 
 const validTones = new Set(["neutral", "info", "success", "warning", "danger", "accent"]);
 const validVariants = new Set(["count", "dot", "status", "icon"]);
@@ -26,36 +27,40 @@ export const Badge = forwardRef(function Badge({
   hidden = false,
   live = false,
   icon = "",
-  ariaLabel = "",
+  ariaLabel,
   className = "",
   ...rest
 }, ref) {
   const resolvedTone = normalizeTone(tone);
   const resolvedVariant = normalizeVariant(variant);
   const resolvedState = normalizeState({ hidden, state });
-  const text = resolvedVariant === "dot" ? "" : label ?? "Badge";
+  const text = resolvedVariant === "dot" ? "" : label;
+  const accessibleLabel = ["dot", "count"].includes(resolvedVariant) ? ariaLabel : undefined;
+
+  if (resolvedVariant === "dot" && !accessibleLabel) return null;
+  if (resolvedVariant !== "dot" && !label) return null;
 
   return React.createElement(
     "span",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["badge", className].filter(Boolean).join(" "),
       hidden: resolvedState === "hidden",
       role: live ? "status" : rest.role,
       "aria-live": live ? "polite" : rest["aria-live"],
-      "aria-label": ariaLabel || rest["aria-label"],
+      "aria-label": accessibleLabel,
       "aria-disabled": resolvedState === "disabled" ? "true" : undefined,
-      "data-tone": resolvedTone,
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
+      ...flowToneProps(resolvedTone),
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
       "data-live": live ? "true" : undefined,
     },
     live ? React.createElement("span", { className: "badge__live", "aria-hidden": "true" }) : null,
     resolvedVariant === "icon" && icon
       ? React.createElement("span", { className: "badge__icon", "aria-hidden": "true" }, icon)
       : null,
-    React.createElement("span", { className: "badge__label" }, text),
+    text ? React.createElement("span", { className: "badge__label" }, text) : null,
   );
 });
 

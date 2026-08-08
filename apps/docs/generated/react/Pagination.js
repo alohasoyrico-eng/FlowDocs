@@ -1,5 +1,6 @@
-import React, { forwardRef, useEffect, useMemo, useState } from "react";
+import React, { forwardRef, useMemo, useState } from "react";
 import { paginationPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowVariantProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const allowedStates = new Set(["default", "hover", "focus", "selected", "disabled"]);
 
@@ -21,30 +22,34 @@ function resolvePaginationItems(page, pages) {
   return items;
 }
 
-function PaginationButton({ label, icon, kind, page, current = false, disabled = false, onClick }) {
+function PaginationButton({ label, children, icon, kind, page, current = false, disabled = false, onClick }) {
+  if (!label) return null;
   return React.createElement(
     "button",
     {
       className: "pagination__button",
       type: "button",
       "data-kind": kind,
-      "data-state": current ? "selected" : "default",
+      ...flowStateProps(current ? "selected" : "default"),
       "data-page": page ? String(page) : undefined,
       disabled,
       "aria-current": current ? "page" : undefined,
-      "aria-label": kind === "page" ? `Page ${label}` : label,
+      "aria-label": label,
       onClick,
     },
     icon
       ? React.createElement("span", { className: "pagination__icon", "aria-hidden": "true" }, icon)
-      : label,
+      : children ?? label,
   );
 }
 
 export const Pagination = forwardRef(function Pagination({
-  page = 1,
-  pageCount = 1,
-  label = "Pagination",
+  page,
+  pageCount,
+  label,
+  previousLabel,
+  nextLabel,
+  getPageLabel,
   variant = "numbered",
   state = "default",
   density,
@@ -54,50 +59,52 @@ export const Pagination = forwardRef(function Pagination({
   className = "",
   ...rest
 }, ref) {
-  const normalized = useMemo(() => normalizePage(page, pageCount), [page, pageCount]);
-  const [currentPage, setCurrentPage] = useState(normalized.currentPage);
+  const isPageControlled = page !== undefined;
+  const normalized = useMemo(() => normalizePage(page ?? 1, pageCount), [page, pageCount]);
+  const [internalPage, setInternalPage] = useState(normalized.currentPage);
+  const currentPage = isPageControlled ? normalized.currentPage : internalPage;
   const resolvedState = disabled ? "disabled" : allowedStates.has(state) ? state : "default";
   const resolvedVariant = "numbered";
   const totalPages = normalized.totalPages;
-
-  useEffect(() => {
-    setCurrentPage(normalized.currentPage);
-  }, [normalized.currentPage]);
 
   const visibleItems = useMemo(
     () => resolvePaginationItems(currentPage, totalPages),
     [currentPage, totalPages],
   );
+  const hasLabels = Boolean(label && previousLabel && nextLabel && typeof getPageLabel === "function");
+  const hasPages = Number(pageCount) >= 1;
 
-  const requestPage = (nextPage) => {
+  if (!hasLabels || !hasPages) return null;
+
+  const requestPage = (nextPage, event) => {
     if (disabled) return;
     const next = normalizePage(nextPage, totalPages).currentPage;
     if (next === currentPage) return;
-    setCurrentPage(next);
-    if (typeof onPageChange === "function") onPageChange(next);
+    if (!isPageControlled) setInternalPage(next);
+    if (typeof onPageChange === "function") onPageChange(next, event);
   };
 
   return React.createElement(
     "nav",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["pagination", className].filter(Boolean).join(" "),
       "aria-label": label,
       "aria-disabled": disabled ? "true" : undefined,
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": density || undefined,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
       "data-page": String(currentPage),
       "data-page-count": String(totalPages),
       "data-full-width": fullWidth ? "true" : undefined,
     },
     React.createElement(PaginationButton, {
       icon: "chevron_left",
-      label: "Previous page",
+      label: previousLabel,
       kind: "prev",
       disabled: disabled || currentPage <= 1,
-      onClick: () => requestPage(currentPage - 1),
+      onClick: (event) => requestPage(currentPage - 1, event),
     }),
     visibleItems.map((item, index) => item === "..."
       ? React.createElement(
@@ -111,19 +118,20 @@ export const Pagination = forwardRef(function Pagination({
         )
       : React.createElement(PaginationButton, {
           key: item,
-          label: String(item),
+          label: getPageLabel(item),
+          children: String(item),
           kind: "page",
           page: item,
           current: item === currentPage,
           disabled,
-          onClick: () => requestPage(item),
+          onClick: (event) => requestPage(item, event),
         })),
     React.createElement(PaginationButton, {
       icon: "chevron_right",
-      label: "Next page",
+      label: nextLabel,
       kind: "next",
       disabled: disabled || currentPage >= totalPages,
-      onClick: () => requestPage(currentPage + 1),
+      onClick: (event) => requestPage(currentPage + 1, event),
     }),
   );
 });

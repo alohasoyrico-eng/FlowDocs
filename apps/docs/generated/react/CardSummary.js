@@ -1,14 +1,10 @@
 import React, { forwardRef } from "react";
 import { cardSummaryPlatformContract } from "../components/platforms/index.js?v=1";
 import { Badge } from "./Badge.js";
+import { flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["physical", "virtual", "compact", "limit"]);
 const validStates = new Set(["default", "hover", "focus", "active", "warning", "frozen", "disabled"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, allowed, fallback) {
-  return allowed.has(value) ? value : fallback;
-}
 
 function statusToneFor(state) {
   if (state === "warning") return "warning";
@@ -19,49 +15,53 @@ function statusToneFor(state) {
 
 export const CardSummary = forwardRef(function CardSummary({
   label,
-  meta = "",
-  number = "",
-  status = "",
-  metrics = [],
-  expires = "",
+  meta,
+  number,
+  status,
+  metrics,
+  expires,
   variant = "physical",
   state = "default",
-  density = "md",
+  density,
   icon = "",
   fullWidth = false,
   disabled = false,
   className = "",
   ...rest
 }, ref) {
-  const resolvedVariant = normalize(variant, validVariants, "physical");
-  const resolvedState = disabled ? "disabled" : normalize(state, validStates, "default");
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const statusLabel = status || (resolvedState === "frozen" ? "Frozen" : resolvedState === "warning" ? "Review" : "Active");
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "physical");
+  const resolvedState = disabled ? "disabled" : normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
+  if (!label) return null;
+  const statusLabel = status;
   const resolvedIcon = icon || (resolvedVariant === "virtual" ? "smartphone" : resolvedState === "frozen" ? "ac_unit" : "contactless");
+  const sourceMetrics = Array.isArray(metrics) ? metrics : [];
+  const visibleMetrics = sourceMetrics.filter((metric) => metric?.key && metric?.label && metric?.value);
 
   return React.createElement(
     "article",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["card-summary", className].filter(Boolean).join(" "),
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-full-width": String(Boolean(fullWidth)),
       "aria-disabled": resolvedState === "disabled" ? "true" : undefined,
-      tabIndex: ["hover", "focus", "active"].includes(resolvedState) ? 0 : rest.tabIndex,
+      tabIndex: rest.tabIndex,
     },
     React.createElement(
       "header",
       null,
-      React.createElement("strong", { className: "card-summary__brand" }, label ?? "Card"),
-      React.createElement(Badge, {
-        label: statusLabel,
-        tone: statusToneFor(resolvedState),
-        variant: "status",
-        state: resolvedState === "disabled" ? "disabled" : "default",
-      }),
+      React.createElement("strong", { className: "card-summary__brand" }, label),
+      statusLabel ? React.createElement(Badge, {
+          label: statusLabel,
+          tone: statusToneFor(resolvedState),
+          variant: "status",
+          state: resolvedState === "disabled" ? "disabled" : "default",
+          density: resolvedDensity || undefined,
+        }) : null,
     ),
     React.createElement(
       "div",
@@ -78,19 +78,19 @@ export const CardSummary = forwardRef(function CardSummary({
         )
       : null,
     meta ? React.createElement("small", { className: "card-summary__holder" }, meta) : null,
-    metrics.length && resolvedVariant === "limit"
+    visibleMetrics.length && resolvedVariant === "limit"
       ? React.createElement(
           "div",
           { className: "card-summary__metrics" },
-          metrics.map((metric, index) => React.createElement(
+          visibleMetrics.map((metric) => React.createElement(
             "span",
-            { key: metric?.key ?? `${metric?.label ?? "metric"}-${index}` },
-            React.createElement("small", null, metric?.label ?? ""),
-            React.createElement("strong", null, metric?.value ?? ""),
+            { key: metric.key },
+            React.createElement("small", null, metric.label),
+            React.createElement("strong", null, metric.value),
           )),
         )
       : null,
-    resolvedState === "frozen"
+    resolvedState === "frozen" && statusLabel
       ? React.createElement(
           "span",
           { className: "card-summary__frost", "aria-hidden": "true" },

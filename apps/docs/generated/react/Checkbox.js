@@ -1,5 +1,8 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { checkboxPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
+
+const validVariants = new Set(["default", "descriptive", "select-all", "compact"]);
 
 function normalizeState({ checked, indeterminate, disabled, state, error }) {
   if (disabled) return "disabled";
@@ -12,12 +15,12 @@ function normalizeState({ checked, indeterminate, disabled, state, error }) {
 
 export const Checkbox = forwardRef(function Checkbox({
   label,
-  description = "",
-  error = "",
+  description,
+  error,
   variant = "default",
   state = "unchecked",
   density,
-  checked = false,
+  checked,
   indeterminate = false,
   disabled = false,
   name = "",
@@ -27,8 +30,10 @@ export const Checkbox = forwardRef(function Checkbox({
   className = "",
   ...rest
 }, ref) {
-  const [currentChecked, setCurrentChecked] = useState(Boolean(checked));
+  const isCheckedControlled = checked !== undefined;
+  const [internalChecked, setInternalChecked] = useState(Boolean(checked));
   const [currentIndeterminate, setCurrentIndeterminate] = useState(Boolean(indeterminate));
+  const currentChecked = isCheckedControlled ? Boolean(checked) : internalChecked;
   const inputRef = useRef(null);
   const normalizedState = normalizeState({
     checked: currentChecked,
@@ -38,6 +43,8 @@ export const Checkbox = forwardRef(function Checkbox({
     error,
   });
   const isInvalid = normalizedState === "error" || Boolean(error);
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "default");
+  if (!label) return null;
 
   useEffect(() => {
     if (inputRef.current) inputRef.current.indeterminate = currentIndeterminate;
@@ -53,8 +60,8 @@ export const Checkbox = forwardRef(function Checkbox({
     if (disabled) return;
     const nextChecked = event.currentTarget.checked;
     setCurrentIndeterminate(false);
-    setCurrentChecked(nextChecked);
-    onCheckedChange?.(nextChecked, { indeterminate: false, value });
+    if (!isCheckedControlled) setInternalChecked(nextChecked);
+    onCheckedChange?.(nextChecked, { indeterminate: false, value }, event);
   };
 
   return React.createElement(
@@ -63,13 +70,13 @@ export const Checkbox = forwardRef(function Checkbox({
       className: ["choice checkbox", className].filter(Boolean).join(" "),
       "data-checked": String(currentChecked),
       "data-indeterminate": String(currentIndeterminate),
-      "data-variant": variant,
-      "data-state": normalizedState,
-      "data-density": density || undefined,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(normalizedState),
+      ...flowDensityProps(density),
       "data-invalid": isInvalid ? "true" : undefined,
     },
     React.createElement("input", {
-      ...rest,
+      ...flowRestProps(rest),
       ref: assignRef,
       type: "checkbox",
       className: "choice__input",
@@ -94,7 +101,7 @@ export const Checkbox = forwardRef(function Checkbox({
     React.createElement(
       "span",
       { className: "choice__text" },
-      React.createElement("span", { className: "choice__label" }, label ?? "Checkbox"),
+      React.createElement("span", { className: "choice__label" }, label),
       description ? React.createElement("span", { className: "choice__description" }, description) : null,
       error ? React.createElement("span", { className: "choice__error" }, error) : null,
     ),

@@ -1,5 +1,6 @@
-import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import React, { forwardRef, useMemo, useRef, useState } from "react";
 import { sliderPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowVariantProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const allowedVariants = new Set(["continuous", "stepped", "bounded", "threshold", "paired-value"]);
 const allowedStates = new Set(["default", "focus", "dragging", "disabled", "error", "complete"]);
@@ -25,30 +26,32 @@ function normalizeState({ disabled, state, dragging }) {
 function formatSliderValue({ value, initialValue, valueLabel, unit, formatValue }) {
   if (typeof formatValue === "function") return formatValue(Number(value));
   if (valueLabel && String(value) === String(initialValue)) return valueLabel;
-  return `${value}${unit}`;
+  return unit ? `${value}${unit}` : String(value);
 }
 
 export const Slider = forwardRef(function Slider({
   label,
-  value = 0,
+  value,
   min = 0,
   max = 100,
   step = 1,
   variant = "continuous",
   state = "default",
   density,
-  unit = "",
+  unit,
   disabled = false,
   name = "",
-  valueLabel = "",
+  valueLabel,
   formatValue,
   onValueChange,
   className = "",
   ...rest
 }, ref) {
-  const initialValueRef = useRef(value);
-  const [currentValue, setCurrentValue] = useState(clampValue(value, min, max));
+  const isValueControlled = value !== undefined;
+  const initialValueRef = useRef(value ?? min);
+  const [internalValue, setInternalValue] = useState(clampValue(value ?? min, min, max));
   const [dragging, setDragging] = useState(false);
+  const currentValue = isValueControlled ? clampValue(value ?? min, min, max) : internalValue;
   const normalizedVariant = allowedVariants.has(variant) ? variant : "continuous";
   const normalizedState = normalizeState({ disabled, state, dragging });
   const pct = percentFor(currentValue, min, max);
@@ -57,15 +60,13 @@ export const Slider = forwardRef(function Slider({
     [currentValue, formatValue, unit, valueLabel],
   );
 
-  useEffect(() => {
-    setCurrentValue(clampValue(value, min, max));
-  }, [max, min, value]);
+  if (!label) return null;
 
   const handleChange = (event) => {
     if (disabled) return;
     const nextValue = clampValue(event.currentTarget.value, min, max);
-    setCurrentValue(nextValue);
-    onValueChange?.(nextValue, { name, min: Number(min), max: Number(max), step: Number(step), unit });
+    if (!isValueControlled) setInternalValue(nextValue);
+    onValueChange?.(nextValue, { name, min: Number(min), max: Number(max), step: Number(step), unit }, event);
   };
 
   const handlePointerDown = () => {
@@ -84,30 +85,30 @@ export const Slider = forwardRef(function Slider({
     "label",
     {
       className: ["slider", className].filter(Boolean).join(" "),
-      "data-variant": normalizedVariant,
-      "data-state": normalizedState,
-      "data-density": density || undefined,
+      ...flowVariantProps(normalizedVariant),
+      ...flowStateProps(normalizedState),
+      ...flowDensityProps(density),
+      style: { "--comp-slider-percent": `${pct}%` },
       "data-value": String(currentValue),
       "data-unit": unit,
-      "data-pct": String(pct),
       "data-dragging": dragging ? "true" : undefined,
     },
     React.createElement(
       "span",
       { className: "slider__meta" },
-      React.createElement("span", { className: "slider__label" }, label ?? "Slider"),
+      React.createElement("span", { className: "slider__label" }, label),
       React.createElement("output", { className: "slider__value", "data-slider-output": "" }, formattedValue),
     ),
     React.createElement(
       "span",
       { className: "slider__control" },
       React.createElement("input", {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
         type: "range",
         className: "slider__input",
         "data-slider-input": "",
-        "aria-label": label ?? "Slider",
+        "aria-label": label,
         "aria-valuetext": formattedValue,
         "aria-invalid": normalizedState === "error" ? "true" : undefined,
         name,
@@ -117,7 +118,6 @@ export const Slider = forwardRef(function Slider({
         step,
         disabled: disabled || normalizedState === "disabled",
         onChange: handleChange,
-        onInput: handleChange,
         onPointerDown: handlePointerDown,
         onPointerUp: handlePointerUp,
         onPointerCancel: handlePointerUp,

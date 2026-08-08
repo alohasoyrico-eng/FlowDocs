@@ -1,21 +1,18 @@
 import React, { forwardRef } from "react";
 import { floatingActionButtonPlatformContract } from "../components/platforms/index.js?v=1";
 import { Spinner } from "./Spinner.js";
+import { flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["primary", "accent", "extended", "mini"]);
 const validStates = new Set(["default", "hover", "focus", "pressed", "loading", "disabled"]);
 const validTypes = new Set(["button", "submit", "reset"]);
-
-function normalize(value, valid, fallback) {
-  return valid.has(value) ? value : fallback;
-}
 
 export const FloatingActionButton = forwardRef(function FloatingActionButton({
   label,
   icon = "add",
   variant = "primary",
   state = "default",
-  density = "md",
+  density,
   extended = false,
   loading = false,
   disabled = false,
@@ -23,30 +20,34 @@ export const FloatingActionButton = forwardRef(function FloatingActionButton({
   className = "",
   ...rest
 }, ref) {
-  const resolvedVariant = normalize(variant, validVariants, "primary");
-  const resolvedState = loading || state === "loading" ? "loading" : disabled || state === "disabled" ? "disabled" : normalize(state, validStates, "default");
-  const resolvedLabel = label ?? "Create";
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "primary");
+  const resolvedState = loading || state === "loading" ? "loading" : disabled || state === "disabled" ? "disabled" : normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const resolvedLabel = label;
+  const resolvedType = validTypes.has(type) ? type : "button";
+  const canInteract = Boolean(rest.onClick || resolvedType === "submit" || resolvedType === "reset");
   const isExtended = Boolean(extended) || resolvedVariant === "extended";
+  if (!resolvedLabel) return null;
 
   return React.createElement(
     "button",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
-      type: validTypes.has(type) ? type : "button",
+      type: resolvedType,
       className: ["fab", className].filter(Boolean).join(" "),
-      disabled: resolvedState === "disabled" || resolvedState === "loading",
+      disabled: resolvedState === "disabled" || resolvedState === "loading" || !canInteract,
       "aria-label": resolvedLabel,
       "aria-busy": resolvedState === "loading" ? "true" : undefined,
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": density,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-extended": String(isExtended),
     },
     resolvedState === "loading"
-      ? React.createElement(Spinner, { label: `${resolvedLabel} loading`, density: "sm", decorative: true })
+      ? React.createElement(Spinner, { density: resolvedDensity || undefined, decorative: true })
       : React.createElement("span", { className: "fab__icon", "aria-hidden": "true" }, icon),
-    isExtended ? React.createElement("span", { className: "fab__label" }, resolvedLabel) : null,
+    isExtended && resolvedLabel ? React.createElement("span", { className: "fab__label" }, resolvedLabel) : null,
   );
 });
 

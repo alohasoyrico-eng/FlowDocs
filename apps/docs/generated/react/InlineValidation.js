@@ -1,6 +1,7 @@
 import React, { forwardRef, useId } from "react";
 import { inlineValidationPlatformContract } from "../components/platforms/index.js?v=1";
 import { Input } from "./Input.js";
+import { flowStateProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validStates = new Set(["default", "info", "success", "warning", "error", "disabled"]);
 
@@ -15,9 +16,9 @@ function slug(value) {
 export const InlineValidation = forwardRef(function InlineValidation({
   label,
   value = "",
-  message = "",
+  message,
   state = "default",
-  id = "",
+  id,
   density,
   fullWidth = false,
   field,
@@ -27,7 +28,9 @@ export const InlineValidation = forwardRef(function InlineValidation({
 }, ref) {
   const generatedId = useId();
   const resolvedState = normalizeState(state);
-  const showField = field ?? value !== "";
+  const resolvedDensity = normalizeFlowDensity(density);
+  const requestedField = field ?? value !== "";
+  const showField = Boolean(label && requestedField);
   const fieldId = id || `inline-validation-${slug(label)}-${generatedId}`;
   const messageId = `${fieldId}-message`;
   const messageRole = live && resolvedState === "error"
@@ -39,22 +42,22 @@ export const InlineValidation = forwardRef(function InlineValidation({
   return React.createElement(
     "div",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["inline-validation", className].filter(Boolean).join(" "),
       "aria-label": !showField && label ? label : rest["aria-label"],
-      "data-state": resolvedState,
-      "data-density": density,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-full-width": String(Boolean(fullWidth)),
       "data-field": String(Boolean(showField)),
     },
     showField
       ? React.createElement(Input, {
-          label: label ?? "Input",
+          label,
           value,
           state: resolvedState === "error" ? "error" : resolvedState === "disabled" ? "disabled" : value ? "filled" : "default",
           disabled: resolvedState === "disabled",
-          density,
+          density: resolvedDensity,
           id: fieldId,
           "aria-describedby": message ? messageId : undefined,
           "aria-invalid": resolvedState === "error" ? "true" : undefined,

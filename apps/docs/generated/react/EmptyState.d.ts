@@ -1,18 +1,26 @@
-import type { ForwardRefExoticComponent, HTMLAttributes, RefAttributes } from "react";
+import type { ForwardRefExoticComponent, HTMLAttributes, MouseEvent, RefAttributes } from "react";
 import { emptyStatePlatformContract } from "../components/platforms/index.js";
-import type { ButtonProps } from "./Button.js";
 
 export type EmptyStateVariant = "first-use" | "search-empty" | "permission" | "error" | "maintenance";
 export type EmptyStateState = "default" | "action" | "search-empty" | "permission" | "loading" | "error";
 export type EmptyStateDensity = "sm" | "md" | "lg";
 
-export interface EmptyStateAction extends ButtonProps {
+export interface EmptyStateAction {
   key?: string;
+  label: string;
+  variant?: "primary" | "secondary" | "tertiary" | "ghost" | "danger";
+  intent?: "default" | "danger";
+  density?: EmptyStateDensity;
+  disabled?: boolean;
+  loading?: boolean;
+  icon?: string;
+  trailingIcon?: string;
+  type?: "button" | "submit" | "reset";
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-export interface EmptyStateProps extends HTMLAttributes<HTMLElement> {
-  title?: string;
-  label?: string;
+export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+  title: string;
   description?: string;
   icon?: string;
   action?: EmptyStateAction;
@@ -20,7 +28,7 @@ export interface EmptyStateProps extends HTMLAttributes<HTMLElement> {
   state?: EmptyStateState;
   density?: EmptyStateDensity;
   fullWidth?: boolean;
-  onAction?: (key: string) => void;
+  onAction?: (key: string, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface EmptyStateComponent extends ForwardRefExoticComponent<EmptyStateProps & RefAttributes<HTMLElement>> {

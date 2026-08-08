@@ -5,15 +5,15 @@ export type StepperOrientation = "horizontal" | "vertical";
 export type StepperDensity = "sm" | "md" | "lg";
 
 export interface StepperStep {
-  id?: string;
+  id: string;
   label: string;
   description?: string;
 }
 
-export interface StepperProps extends HTMLAttributes<HTMLOListElement> {
+export interface StepperProps extends Omit<HTMLAttributes<HTMLOListElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   steps: StepperStep[];
   current?: number;
-  label?: string;
+  label: string;
   orientation?: StepperOrientation;
   density?: StepperDensity;
 }

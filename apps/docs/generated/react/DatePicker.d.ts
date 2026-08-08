@@ -1,10 +1,15 @@
-import type { ButtonHTMLAttributes, ForwardRefExoticComponent, RefAttributes } from "react";
+import type { ButtonHTMLAttributes, ChangeEvent, ForwardRefExoticComponent, KeyboardEvent, MouseEvent, RefAttributes } from "react";
 import { datePickerPlatformContract } from "../components/platforms/index.js";
 
 export type DatePickerDensity = "sm" | "md" | "lg";
 export type DatePickerState = "default" | "hover" | "focus" | "selected" | "warning" | "error" | "disabled";
+export type DatePickerValueChangeEvent =
+  | MouseEvent<HTMLButtonElement>
+  | KeyboardEvent<HTMLButtonElement>
+  | ChangeEvent<HTMLInputElement>;
+export type DatePickerOpenChangeEvent = DatePickerValueChangeEvent | globalThis.MouseEvent;
 
-export interface DatePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value" | "onChange"> {
+export interface DatePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "value" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   value?: string;
   placeholder?: string;
@@ -16,8 +21,14 @@ export interface DatePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   density?: DatePickerDensity;
   state?: DatePickerState;
   invalid?: boolean;
-  onValueChange?: (value: string) => void;
-  onOpenChange?: (open: boolean) => void;
+  locale?: string | string[];
+  weekdays?: string[];
+  calendarLabel?: string;
+  previousMonthLabel?: string;
+  nextMonthLabel?: string;
+  open?: boolean;
+  onValueChange?: (value: string, event: DatePickerValueChangeEvent) => void;
+  onOpenChange?: (open: boolean, event?: DatePickerOpenChangeEvent) => void;
 }
 
 export interface DatePickerComponent extends ForwardRefExoticComponent<DatePickerProps & RefAttributes<HTMLButtonElement>> {

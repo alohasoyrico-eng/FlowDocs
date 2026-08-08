@@ -1,6 +1,7 @@
 import type {
-  ButtonHTMLAttributes,
   ForwardRefExoticComponent,
+  HTMLAttributes,
+  MouseEvent,
   RefAttributes,
 } from "react";
 import type { movementRowPlatformContract } from "../components/platforms/index.js";
@@ -12,15 +13,15 @@ export type MovementRowCategory = "fuel" | "charge" | "toll" | "food" | "transfe
 
 export interface MovementRowMeta {
   label: string;
-  meta: string;
-  amount: string;
-  status: string;
+  meta?: string;
+  amount?: string;
+  status?: string;
   category: MovementRowCategory;
   variant: MovementRowVariant;
   state: MovementRowState;
 }
 
-export interface MovementRowProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface MovementRowProps extends Omit<HTMLAttributes<HTMLElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   meta?: string;
   amount?: string;
@@ -31,10 +32,11 @@ export interface MovementRowProps extends ButtonHTMLAttributes<HTMLButtonElement
   density?: MovementRowDensity;
   fullWidth?: boolean;
   disabled?: boolean;
-  onSelect?: (meta: MovementRowMeta) => void;
+  type?: "button" | "submit" | "reset";
+  onSelect?: (meta: MovementRowMeta, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-export interface MovementRowComponent extends ForwardRefExoticComponent<MovementRowProps & RefAttributes<HTMLButtonElement>> {
+export interface MovementRowComponent extends ForwardRefExoticComponent<MovementRowProps & RefAttributes<HTMLElement>> {
   displayName: "MovementRow";
   platformContract: typeof movementRowPlatformContract;
 }

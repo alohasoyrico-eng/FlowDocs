@@ -1,21 +1,19 @@
 import React, { forwardRef, useMemo, useState } from "react";
 import { tablePlatformContract } from "../components/platforms/index.js?v=1";
 import { Badge } from "./Badge.js";
+import { flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["standard", "dense", "sortable", "selectable", "expandable"]);
 const validStates = new Set(["default", "hover", "focus", "selected", "sorted", "expanded"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, valid, fallback) {
-  return valid.has(value) ? value : fallback;
-}
+const validColumnAlignments = new Set(["right"]);
+const validColumnPriorities = new Set(["primary", "secondary", "tertiary"]);
 
 function sortValue(row, column) {
   if (typeof column.sortValue === "function") return column.sortValue(row);
   return row[column.key];
 }
 
-function renderCell(value) {
+function renderCell(value, density) {
   if (React.isValidElement(value)) return value;
   if (value && typeof value === "object" && "label" in value) {
     return React.createElement(Badge, {
@@ -23,24 +21,26 @@ function renderCell(value) {
       tone: value.tone ?? "neutral",
       variant: value.variant ?? "status",
       icon: value.icon ?? "",
+      density,
     });
   }
   return value ?? "";
 }
 
 export const Table = forwardRef(function Table({
-  columns = [],
-  rows = [],
+  columns,
+  rows,
   rowKey = "id",
-  label = "Table",
+  label,
+  getExpandLabel,
   variant = "standard",
   state = "default",
-  density = "md",
+  density,
   dense = false,
-  sortKey = "",
+  sortKey,
   sortDir = "ascending",
-  selectedKey = "",
-  expandedKey = "",
+  selectedKey,
+  expandedKey,
   renderDetail,
   onSortChange,
   onRowSelect,
@@ -48,22 +48,34 @@ export const Table = forwardRef(function Table({
   className = "",
   ...rest
 }, ref) {
-  const resolvedVariant = normalize(variant, validVariants, "standard");
-  const initialState = normalize(state, validStates, "default");
-  const resolvedDensity = dense || resolvedVariant === "dense" ? "sm" : normalize(density, validDensities, "md");
-  const sortable = resolvedVariant === "sortable" || columns.some((column) => column.sortable);
+  const resolvedVariant = dense ? "dense" : normalizeFlowValue(variant, validVariants, "standard");
+  const initialState = normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const resolvedColumns = useMemo(() => (Array.isArray(columns) ? columns : []).filter((column) => column?.key && column?.label), [columns]);
+  const resolvedRows = useMemo(() => (Array.isArray(rows) ? rows : []).filter((row) => {
+    const key = row?.[rowKey];
+    return key !== undefined && key !== null && key !== "";
+  }), [rowKey, rows]);
+  const sortable = resolvedVariant === "sortable" || resolvedColumns.some((column) => column.sortable);
   const selectable = resolvedVariant === "selectable" || Boolean(onRowSelect || selectedKey);
   const expandable = resolvedVariant === "expandable" || Boolean(renderDetail || expandedKey);
-  const [currentSort, setCurrentSort] = useState({ key: sortKey, direction: sortDir });
-  const [currentSelected, setCurrentSelected] = useState(String(selectedKey || ""));
-  const [currentExpanded, setCurrentExpanded] = useState(String(expandedKey || (initialState === "expanded" ? rows[0]?.[rowKey] ?? "" : "")));
+  const canRenderExpanders = expandable && typeof getExpandLabel === "function";
+  const isSelectedKeyControlled = selectedKey !== undefined;
+  const isSortControlled = sortKey !== undefined;
+  const isExpandedKeyControlled = expandedKey !== undefined;
+  const [internalSort, setInternalSort] = useState({ key: sortKey ?? "", direction: sortDir });
+  const [internalSelected, setInternalSelected] = useState(String(selectedKey ?? ""));
+  const [internalExpanded, setInternalExpanded] = useState(String(expandedKey ?? ""));
+  const currentSort = isSortControlled ? { key: sortKey ?? "", direction: sortDir } : internalSort;
+  const currentSelected = isSelectedKeyControlled ? String(selectedKey ?? "") : internalSelected;
+  const currentExpanded = isExpandedKeyControlled ? String(expandedKey ?? "") : internalExpanded;
 
   const sortedRows = useMemo(() => {
-    if (!currentSort.key) return [...rows];
-    const column = columns.find((item) => item.key === currentSort.key);
-    if (!column) return [...rows];
+    if (!currentSort.key) return [...resolvedRows];
+    const column = resolvedColumns.find((item) => item.key === currentSort.key);
+    if (!column) return [...resolvedRows];
     const direction = currentSort.direction === "descending" ? -1 : 1;
-    return [...rows].sort((a, b) => {
+    return [...resolvedRows].sort((a, b) => {
       const aValue = sortValue(a, column);
       const bValue = sortValue(b, column);
       if (aValue == null) return 1;
@@ -71,33 +83,35 @@ export const Table = forwardRef(function Table({
       if (typeof aValue === "number" && typeof bValue === "number") return (aValue - bValue) * direction;
       return String(aValue).localeCompare(String(bValue), "en") * direction;
     });
-  }, [columns, currentSort.direction, currentSort.key, rows]);
+  }, [currentSort.direction, currentSort.key, resolvedColumns, resolvedRows]);
 
   const interactionState = currentExpanded ? "expanded" : currentSort.key ? "sorted" : currentSelected ? "selected" : initialState;
-  const changeSort = (key) => {
+  if (!label || !resolvedColumns.length || !resolvedRows.length) return null;
+
+  const changeSort = (key, event) => {
     const direction = currentSort.key === key && currentSort.direction !== "descending" ? "descending" : "ascending";
-    setCurrentSort({ key, direction });
-    onSortChange?.({ key, direction });
+    if (!isSortControlled) setInternalSort({ key, direction });
+    onSortChange?.({ key, direction }, event);
   };
-  const selectRow = (key) => {
-    setCurrentSelected(String(key));
-    onRowSelect?.(String(key));
+  const selectRow = (key, event) => {
+    if (!isSelectedKeyControlled) setInternalSelected(String(key));
+    onRowSelect?.(String(key), event);
   };
-  const toggleExpanded = (key) => {
+  const toggleExpanded = (key, event) => {
     const next = currentExpanded === String(key) ? "" : String(key);
-    setCurrentExpanded(next);
-    onExpandedChange?.(next);
+    if (!isExpandedKeyControlled) setInternalExpanded(next);
+    onExpandedChange?.(next, event);
   };
 
   return React.createElement(
     "div",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["table", className].filter(Boolean).join(" "),
-      "data-variant": resolvedVariant,
-      "data-state": interactionState,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(interactionState),
+      ...flowDensityProps(resolvedDensity),
     },
     React.createElement(
       "table",
@@ -108,8 +122,8 @@ export const Table = forwardRef(function Table({
         React.createElement(
           "tr",
           null,
-          expandable ? React.createElement("th", { className: "table__expander-head", scope: "col" }) : null,
-          columns.map((column) => {
+          canRenderExpanders ? React.createElement("th", { className: "table__expander-head", scope: "col" }) : null,
+          resolvedColumns.map((column) => {
             const active = currentSort.key === column.key;
             const canSort = column.sortable || sortable;
             return React.createElement(
@@ -117,8 +131,8 @@ export const Table = forwardRef(function Table({
               {
                 key: column.key,
                 scope: "col",
-                "data-align": column.align || undefined,
-                "data-priority": column.priority || undefined,
+                "data-align": normalizeFlowValue(column.align, validColumnAlignments, undefined),
+                "data-priority": normalizeFlowValue(column.priority, validColumnPriorities, undefined),
                 "aria-sort": canSort ? (active ? currentSort.direction : "none") : undefined,
               },
               canSort
@@ -130,11 +144,11 @@ export const Table = forwardRef(function Table({
                     "data-table-sort": "",
                     "data-active": String(active),
                     "data-dir": active && currentSort.direction === "descending" ? "desc" : "asc",
-                    onClick: () => changeSort(column.key),
+                    onClick: (event) => changeSort(column.key, event),
                   },
-                  React.createElement("span", null, column.label ?? column.key),
+                  React.createElement("span", null, column.label),
                 )
-                : column.label ?? column.key,
+                : column.label,
             );
           }),
         ),
@@ -144,9 +158,12 @@ export const Table = forwardRef(function Table({
         null,
         sortedRows.flatMap((row, index) => {
           const key = String(row[rowKey]);
-          const selected = currentSelected ? currentSelected === key : initialState === "selected" && index === 1;
+          const selected = currentSelected === key;
           const expanded = currentExpanded === key;
-          const interactive = selectable || expandable;
+          const expandLabel = typeof getExpandLabel === "function" ? getExpandLabel(row, { expanded, key }) : undefined;
+          const detail = typeof renderDetail === "function" ? renderDetail(row) : row.detail;
+          const rowCanExpand = canRenderExpanders && Boolean(expandLabel) && detail !== undefined && detail !== null && detail !== "";
+          const interactive = selectable || rowCanExpand;
           const rowNode = React.createElement(
             "tr",
             {
@@ -154,18 +171,18 @@ export const Table = forwardRef(function Table({
               "data-key": key,
               "data-label": row.label ?? row.plate ?? key,
               "data-selected": String(selected),
-              "data-state": initialState === "hover" && index === 0 ? "hover" : initialState === "focus" && index === 0 ? "focus" : undefined,
+              ...flowStateProps(initialState === "hover" && index === 0 ? "hover" : initialState === "focus" && index === 0 ? "focus" : undefined),
               tabIndex: interactive ? 0 : undefined,
-              "aria-expanded": expandable ? String(expanded) : undefined,
-              onClick: selectable ? () => selectRow(key) : undefined,
+              "aria-expanded": rowCanExpand ? String(expanded) : undefined,
+              onClick: selectable ? (event) => selectRow(key, event) : undefined,
               onKeyDown: interactive ? (event) => {
                 if (event.key !== "Enter" && event.key !== " ") return;
                 event.preventDefault();
-                if (expandable) toggleExpanded(key);
-                else selectRow(key);
+                if (rowCanExpand) toggleExpanded(key, event);
+                else selectRow(key, event);
               } : undefined,
             },
-            expandable ? React.createElement(
+            rowCanExpand ? React.createElement(
               "td",
               { className: "table__expander-cell" },
               React.createElement(
@@ -174,35 +191,34 @@ export const Table = forwardRef(function Table({
                   type: "button",
                   className: "table__expander",
                   "data-table-expand": "",
-                  "aria-label": `${expanded ? "Collapse" : "Expand"} ${row.label ?? row.plate ?? key}`,
+                  "aria-label": expandLabel,
                   "aria-expanded": String(expanded),
                   onClick: (event) => {
                     event.stopPropagation();
-                    toggleExpanded(key);
+                    toggleExpanded(key, event);
                   },
                 },
                 "chevron_right",
               ),
             ) : null,
-            columns.map((column) => React.createElement(
+            resolvedColumns.map((column) => React.createElement(
               "td",
               {
                 key: column.key,
-                "data-align": column.align || undefined,
+                "data-align": normalizeFlowValue(column.align, validColumnAlignments, undefined),
                 "data-mono": column.mono ? "true" : undefined,
-                "data-priority": column.priority || undefined,
+                "data-priority": normalizeFlowValue(column.priority, validColumnPriorities, undefined),
               },
-              renderCell(typeof column.render === "function" ? column.render(row) : row[column.key]),
+              renderCell(typeof column.render === "function" ? column.render(row) : row[column.key], resolvedDensity || undefined),
             )),
           );
-          if (!expandable) return [rowNode];
-          const detail = typeof renderDetail === "function" ? renderDetail(row) : row.detail ?? "Recent activity and supporting row detail.";
+          if (!rowCanExpand) return [rowNode];
           return [
             rowNode,
             React.createElement(
               "tr",
               { key: `${key}-detail`, className: "table__detail-row", hidden: !expanded },
-              React.createElement("td", { className: "table__detail", colSpan: columns.length + 1 }, detail),
+              React.createElement("td", { className: "table__detail", colSpan: resolvedColumns.length + 1 }, detail),
             ),
           ];
         }),

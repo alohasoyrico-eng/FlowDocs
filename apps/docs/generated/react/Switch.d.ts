@@ -1,4 +1,4 @@
-import type { ForwardRefExoticComponent, InputHTMLAttributes, RefAttributes } from "react";
+import type { ChangeEvent, ForwardRefExoticComponent, InputHTMLAttributes, RefAttributes } from "react";
 import { switchPlatformContract } from "../components/platforms/index.js";
 
 export type SwitchState = "off" | "on" | "focus" | "pressed" | "error" | "disabled";
@@ -8,7 +8,7 @@ export interface SwitchValueMeta {
   name: string;
 }
 
-export interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "checked" | "value" | "onChange"> {
+export interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "style" | "type" | "checked" | "value" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   description?: string;
   error?: string;
@@ -18,7 +18,7 @@ export interface SwitchProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   disabled?: boolean;
   name?: string;
   required?: boolean;
-  onCheckedChange?: (checked: boolean, meta: SwitchValueMeta) => void;
+  onCheckedChange?: (checked: boolean, meta: SwitchValueMeta, event: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
 

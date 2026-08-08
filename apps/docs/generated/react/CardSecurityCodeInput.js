@@ -1,6 +1,9 @@
 import React, { forwardRef, useId, useMemo, useState } from "react";
 import { cardSecurityCodeInputPlatformContract } from "../components/platforms/index.js?v=1";
 import { Spinner } from "./Spinner.js";
+import { flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
+
+const validStates = new Set(["default", "filled", "valid", "loading", "error", "disabled"]);
 
 function normalizeCardSecurityCode(value, expectedLength = 3) {
   const length = Number(expectedLength) === 4 ? 4 : 3;
@@ -19,14 +22,14 @@ function resolveCardSecurityCodeState({ disabled = false, loading = false, error
   if (disabled) return "disabled";
   if (loading) return "loading";
   if (error) return "error";
-  if (state && state !== "default") return state;
+  if (state && state !== "default") return normalizeFlowValue(state, validStates, "default");
   if (validity === "valid") return "valid";
   return value ? "filled" : "default";
 }
 
 export const CardSecurityCodeInput = forwardRef(function CardSecurityCodeInput({
   label,
-  value = "",
+  value,
   helper = "",
   error = "",
   disabled = false,
@@ -35,12 +38,14 @@ export const CardSecurityCodeInput = forwardRef(function CardSecurityCodeInput({
   density,
   state,
   name = "",
-  placeholder = "CVC",
+  placeholder = "",
   expectedLength = 3,
-  validationMessage = "Enter the security code.",
   revealable = true,
-  revealed = false,
+  revealLabel,
+  hideLabel,
+  revealed,
   onValueChange,
+  onRevealChange,
   className = "",
   id,
   ...rest
@@ -48,14 +53,18 @@ export const CardSecurityCodeInput = forwardRef(function CardSecurityCodeInput({
   const generatedId = useId();
   const inputId = id ?? `card-security-code-input-${generatedId}`;
   const resolvedLength = Number(expectedLength) === 4 ? 4 : 3;
-  const [currentValue, setCurrentValue] = useState(value);
-  const [isRevealed, setIsRevealed] = useState(Boolean(revealed));
+  const isValueControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState(value ?? "");
+  const currentValue = isValueControlled ? value ?? "" : internalValue;
+  const [internalRevealed, setInternalRevealed] = useState(Boolean(revealed));
+  const isRevealedControlled = revealed !== undefined;
+  const isRevealed = isRevealedControlled ? Boolean(revealed) : internalRevealed;
   const digits = normalizeCardSecurityCode(currentValue, resolvedLength);
   const validity = cardSecurityCodeValidity(digits, resolvedLength);
-  const localError = validity === "invalid" ? validationMessage : "";
-  const resolvedError = error || localError;
+  const resolvedError = error;
   const resolvedHelper = resolvedError || helper;
   const isDisabled = Boolean(disabled || loading);
+  const canReveal = Boolean(revealable && revealLabel && hideLabel);
   const resolvedState = resolveCardSecurityCodeState({ disabled, loading, error: resolvedError, state, value: digits, validity });
   const describedBy = resolvedHelper ? `${inputId}-helper` : undefined;
   const meta = useMemo(() => ({
@@ -64,25 +73,32 @@ export const CardSecurityCodeInput = forwardRef(function CardSecurityCodeInput({
     complete: validity === "valid",
   }), [resolvedLength, validity]);
 
+  if (!label) return null;
+
+  const toggleReveal = (event) => {
+    const nextRevealed = !isRevealed;
+    if (!isRevealedControlled) setInternalRevealed(nextRevealed);
+    onRevealChange?.(nextRevealed, event);
+  };
+
   return React.createElement(
     "label",
     {
       className: ["field card-security-code-input", className].filter(Boolean).join(" "),
-      "data-state": resolvedState,
-      "data-density": density || undefined,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
       "data-mono": "true",
       "data-validity": validity,
       "data-length": String(digits.length),
       "data-expected-length": String(resolvedLength),
-      "data-validation-message": validationMessage,
     },
-    React.createElement("span", { className: "field__label card-security-code-input__label", id: `${inputId}-label` }, label ?? "Security code"),
+    React.createElement("span", { className: "field__label card-security-code-input__label", id: `${inputId}-label` }, label),
     React.createElement(
       "span",
       { className: "field__control card-security-code-input__control" },
       React.createElement("span", { className: "field__icon card-security-code-input__icon", "aria-hidden": "true" }, "pin"),
       React.createElement("input", {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
         id: inputId,
         name,
@@ -105,15 +121,15 @@ export const CardSecurityCodeInput = forwardRef(function CardSecurityCodeInput({
         onChange: (event) => {
           const nextDigits = normalizeCardSecurityCode(event.target.value, resolvedLength);
           const nextValidity = cardSecurityCodeValidity(nextDigits, resolvedLength);
-          setCurrentValue(nextDigits);
+          if (!isValueControlled) setInternalValue(nextDigits);
           onValueChange?.(nextDigits, {
             validity: nextValidity,
             expectedLength: resolvedLength,
             complete: nextValidity === "valid",
-          });
+          }, event);
         },
       }),
-      revealable
+      canReveal
         ? React.createElement(
           "button",
           {
@@ -122,14 +138,14 @@ export const CardSecurityCodeInput = forwardRef(function CardSecurityCodeInput({
             disabled: isDisabled,
             "data-field-action": "reveal",
             "data-card-security-code-reveal": "",
-            "aria-label": isRevealed ? "Hide security code" : "Show security code",
+            "aria-label": isRevealed ? hideLabel : revealLabel,
             "aria-pressed": String(isRevealed),
-            onClick: () => setIsRevealed((next) => !next),
+            onClick: toggleReveal,
           },
           React.createElement("span", { className: "field-action__icon field__icon card-security-code-input__action-icon", "aria-hidden": "true" }, isRevealed ? "visibility_off" : "visibility"),
         )
         : null,
-      loading ? React.createElement(Spinner, { label: `${label ?? "Security code"} loading`, density: "sm", decorative: true, className: "field__icon field__icon--loading" }) : null,
+      loading ? React.createElement(Spinner, { density, decorative: true, className: "field__icon field__icon--loading" }) : null,
     ),
     resolvedHelper
       ? React.createElement(

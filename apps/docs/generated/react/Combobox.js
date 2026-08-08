@@ -1,16 +1,23 @@
 import React, { forwardRef, useId, useMemo, useState } from "react";
 import { comboboxPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 function optionValue(option) {
-  return option.value ?? option.label ?? "";
+  return option.value ?? "";
 }
 
 function optionLabel(option) {
-  return option.label ?? option.value ?? "";
+  return option.label ?? "";
 }
 
 function selectedOptionFor(options, value) {
   return options.find((option) => optionValue(option) === value) ?? null;
+}
+
+function normalizeOptions(options) {
+  return (Array.isArray(options) ? options : []).filter((option) => (
+    option?.label && option.value !== undefined && option.value !== null && option.value !== ""
+  ));
 }
 
 function normalizedState({ disabled, state, currentValue, visibleCount }) {
@@ -25,87 +32,135 @@ export const Combobox = forwardRef(function Combobox({
   label,
   helper = "",
   icon = "search",
-  options = [],
-  value = "",
+  options,
+  optionsLabel,
+  clearSelectionLabel,
+  value,
   name = "",
-  placeholder = "Search or select",
-  emptyText = "No results",
+  placeholder = "",
+  emptyText,
   disabled = false,
   density,
   state,
+  open: openProp,
   onValueChange,
+  onOpenChange,
   className = "",
   id,
   ...rest
 }, ref) {
   const generatedId = useId();
   const comboboxId = id ?? `combobox-${generatedId}`;
-  const initialOption = selectedOptionFor(options, value);
-  const [currentValue, setCurrentValue] = useState(value);
-  const [inputValue, setInputValue] = useState(initialOption ? optionLabel(initialOption) : value);
-  const [open, setOpen] = useState(state === "open");
+  const normalizedOptions = useMemo(() => normalizeOptions(options), [options]);
+  const isValueControlled = value !== undefined;
+  const initialValue = value ?? "";
+  const initialOption = selectedOptionFor(normalizedOptions, initialValue);
+  const [internalValue, setInternalValue] = useState(initialValue);
+  const [inputValue, setInputValue] = useState(initialOption ? optionLabel(initialOption) : initialValue);
+  const isOpenControlled = openProp !== undefined;
+  const [internalOpen, setInternalOpen] = useState(state === "open");
+  const open = isOpenControlled ? Boolean(openProp) : internalOpen;
   const [activeIndex, setActiveIndex] = useState(0);
-  const query = inputValue.trim().toLowerCase();
+  const currentValue = isValueControlled ? value ?? "" : internalValue;
+  const selectedOption = selectedOptionFor(normalizedOptions, currentValue);
+  const selectedValue = selectedOption ? optionValue(selectedOption) : currentValue;
+  const isOpen = Boolean(open) && !disabled;
+  const controlledSelectionLabel = selectedOption ? optionLabel(selectedOption) : currentValue;
+  const displayInputValue = isValueControlled && (!isOpen || (selectedOption && inputValue === "")) ? controlledSelectionLabel : inputValue;
+  const query = displayInputValue.trim().toLowerCase();
   const filteredOptions = useMemo(
-    () => options.filter((option) => {
+    () => normalizedOptions.filter((option) => {
       const haystack = `${optionLabel(option)} ${option.meta ?? ""}`.toLowerCase();
       return !query || haystack.includes(query);
     }),
-    [options, query],
+    [normalizedOptions, query],
   );
   const enabledOptions = filteredOptions.filter((option) => !option.disabled);
   const activeOption = enabledOptions[activeIndex] ?? enabledOptions[0] ?? null;
-  const resolvedState = normalizedState({ disabled, state, currentValue: inputValue, visibleCount: filteredOptions.length });
-  const isOpen = Boolean(open) && !disabled;
-  const selectedOption = selectedOptionFor(options, currentValue);
-  const selectedValue = selectedOption ? optionValue(selectedOption) : currentValue;
+  const resolvedState = normalizedState({ disabled, state, currentValue: displayInputValue, visibleCount: filteredOptions.length });
 
-  const commitOption = (option) => {
+  if (!label || !normalizedOptions.length) return null;
+
+  const setOpen = (nextOpen, event) => {
+    if (disabled) return;
+    const normalizedOpen = Boolean(nextOpen);
+    if (!isOpenControlled) setInternalOpen(normalizedOpen);
+    onOpenChange?.(normalizedOpen, event);
+  };
+
+  const commitOption = (option, event) => {
     if (!option || option.disabled) return;
     const nextValue = optionValue(option);
     const nextLabel = optionLabel(option);
-    setCurrentValue(nextValue);
+    if (!isValueControlled) setInternalValue(nextValue);
     setInputValue(nextLabel);
-    setOpen(false);
+    setOpen(false, event);
     setActiveIndex(0);
-    onValueChange?.(nextValue, { label: nextLabel, meta: option.meta ?? "", inputValue: nextLabel });
+    onValueChange?.(nextValue, { label: nextLabel, meta: option.meta ?? "", inputValue: nextLabel }, event);
   };
 
-  const clearValue = () => {
-    setCurrentValue("");
+  const clearValue = (event) => {
+    if (!isValueControlled) setInternalValue("");
     setInputValue("");
-    setOpen(true);
+    setOpen(true, event);
     setActiveIndex(0);
-    onValueChange?.("", { label: "", meta: "", inputValue: "", cleared: true });
+    onValueChange?.("", { label: "", meta: "", inputValue: "", cleared: true }, event);
+  };
+  const handleInputFocus = (event) => {
+    rest.onFocus?.(event);
+    if (event.defaultPrevented || disabled) return;
+    setOpen(true, event);
+  };
+  const handleInputKeyDown = (event) => {
+    rest.onKeyDown?.(event);
+    if (event.defaultPrevented) return;
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setOpen(true, event);
+      setActiveIndex((index) => Math.min(enabledOptions.length - 1, index + 1));
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      setOpen(true, event);
+      setActiveIndex((index) => Math.max(0, index - 1));
+    }
+    if (event.key === "Enter") {
+      event.preventDefault();
+      commitOption(activeOption, event);
+    }
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setOpen(false, event);
+    }
   };
 
   return React.createElement(
     "label",
     {
       className: ["field", className].filter(Boolean).join(" "),
-      "data-state": resolvedState,
-      "data-density": density || undefined,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
     },
-    React.createElement("span", { className: "field__label", id: `${comboboxId}-label` }, label ?? "Combobox"),
+    React.createElement("span", { className: "field__label", id: `${comboboxId}-label` }, label),
     React.createElement(
       "span",
       {
         className: "combobox",
         "data-open": String(isOpen),
-        "data-state": resolvedState,
-        "data-density": density || undefined,
+        ...flowStateProps(resolvedState),
+        ...flowDensityProps(density),
         "data-value": selectedValue,
         "data-combobox-control": "",
       },
       icon ? React.createElement("span", { className: "field__icon combobox__icon", "aria-hidden": "true" }, icon) : null,
       React.createElement("input", {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
         id: comboboxId,
         className: "input combobox__input",
         name,
         type: "text",
-        value: inputValue,
+        value: displayInputValue,
         placeholder,
         disabled,
         autoComplete: "off",
@@ -117,50 +172,31 @@ export const Combobox = forwardRef(function Combobox({
         "aria-controls": `${comboboxId}-listbox`,
         "aria-labelledby": `${comboboxId}-label`,
         "aria-invalid": resolvedState === "error" ? "true" : undefined,
-        "aria-activedescendant": isOpen && activeOption ? `${comboboxId}-option-${options.indexOf(activeOption)}` : undefined,
-        onFocus: () => setOpen(true),
+        "aria-activedescendant": isOpen && activeOption ? `${comboboxId}-option-${normalizedOptions.indexOf(activeOption)}` : undefined,
+        onFocus: handleInputFocus,
         onChange: (event) => {
           const nextValue = event.target.value;
           setInputValue(nextValue);
-          setCurrentValue(nextValue);
-          setOpen(true);
+          if (!isValueControlled) setInternalValue(nextValue);
+          setOpen(true, event);
           setActiveIndex(0);
-          onValueChange?.(nextValue, { label: nextValue, meta: "", inputValue: nextValue });
+          onValueChange?.(nextValue, { label: nextValue, meta: "", inputValue: nextValue }, event);
         },
-        onKeyDown: (event) => {
-          if (event.key === "ArrowDown") {
-            event.preventDefault();
-            setOpen(true);
-            setActiveIndex((index) => Math.min(enabledOptions.length - 1, index + 1));
-          }
-          if (event.key === "ArrowUp") {
-            event.preventDefault();
-            setOpen(true);
-            setActiveIndex((index) => Math.max(0, index - 1));
-          }
-          if (event.key === "Enter") {
-            event.preventDefault();
-            commitOption(activeOption);
-          }
-          if (event.key === "Escape") {
-            event.preventDefault();
-            setOpen(false);
-          }
-        },
+        onKeyDown: handleInputKeyDown,
       }),
-      React.createElement(
+      clearSelectionLabel ? React.createElement(
         "button",
         {
           className: "field-action field__action combobox__clear",
           type: "button",
-          disabled: disabled || !inputValue,
-          "aria-label": "Clear selection",
+          disabled: disabled || !displayInputValue,
+          "aria-label": clearSelectionLabel,
           "data-field-action": "clear",
           "data-combobox-clear": "",
           onClick: clearValue,
         },
         React.createElement("span", { className: "field-action__icon", "aria-hidden": "true" }, "close"),
-      ),
+      ) : null,
       React.createElement("span", { className: "select-control__chevron combobox__chevron", "aria-hidden": "true" }, "expand_more"),
       React.createElement(
         "span",
@@ -169,16 +205,17 @@ export const Combobox = forwardRef(function Combobox({
           className: "select-control__listbox combobox__listbox",
           role: "listbox",
           "data-combobox-listbox": "",
-          "aria-label": `${label ?? "Combobox"} options`,
+          "aria-label": optionsLabel,
+          "aria-labelledby": optionsLabel ? undefined : `${comboboxId}-label`,
         },
         filteredOptions.map((option) => {
           const valueKey = optionValue(option);
           const isSelected = valueKey === selectedValue;
-          const index = options.indexOf(option);
+          const index = normalizedOptions.indexOf(option);
           return React.createElement(
             "span",
             {
-              key: valueKey || index,
+              key: valueKey,
               id: `${comboboxId}-option-${index}`,
               className: "select-control__option combobox__option",
               role: "option",
@@ -192,13 +229,13 @@ export const Combobox = forwardRef(function Combobox({
               "data-meta": option.meta || undefined,
               "data-disabled": option.disabled ? "true" : undefined,
               onMouseDown: (event) => event.preventDefault(),
-              onClick: option.disabled ? undefined : () => commitOption(option),
+              onClick: option.disabled ? undefined : (event) => commitOption(option, event),
             },
             React.createElement("span", { className: "select-control__option-label combobox__option-label" }, optionLabel(option)),
             option.meta ? React.createElement("span", { className: "select-control__option-code combobox__option-meta" }, option.meta) : null,
           );
         }),
-        React.createElement("span", { className: "combobox__empty", "data-combobox-empty": "", role: "status", hidden: filteredOptions.length > 0 }, emptyText),
+        emptyText ? React.createElement("span", { className: "combobox__empty", "data-combobox-empty": "", role: "status", hidden: filteredOptions.length > 0 }, emptyText) : null,
       ),
     ),
     helper ? React.createElement("span", { className: "field__helper", id: `${comboboxId}-helper` }, helper) : null,

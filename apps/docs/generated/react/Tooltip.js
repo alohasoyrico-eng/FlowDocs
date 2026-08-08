@@ -1,9 +1,9 @@
 import React, { forwardRef, useId, useState } from "react";
 import { tooltipPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowVariantProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validPlacements = new Set(["top", "right", "bottom", "left"]);
 const validVariants = new Set(["default", "icon-help", "metric", "disabled-help"]);
-const validDensities = new Set(["sm", "md", "lg"]);
 const validStates = new Set(["default", "hover", "focus", "open", "disabled", "dismissed"]);
 
 function normalizeState({ disabled, state }) {
@@ -17,9 +17,10 @@ export const Tooltip = forwardRef(function Tooltip({
   id,
   placement = "top",
   variant = "default",
-  density = "md",
+  density,
   state = "default",
   disabled = false,
+  open: openProp,
   onOpenChange,
   className = "",
   ...rest
@@ -28,33 +29,36 @@ export const Tooltip = forwardRef(function Tooltip({
   const tooltipId = id || `tooltip-${reactId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const resolvedPlacement = validPlacements.has(placement) ? placement : "top";
   const resolvedVariant = validVariants.has(variant) ? variant : "default";
-  const resolvedDensity = validDensities.has(density) ? density : "md";
+  const resolvedDensity = normalizeFlowDensity(density);
   const resolvedState = normalizeState({ disabled, state });
   const initiallyOpen = ["hover", "focus", "open", "disabled"].includes(resolvedState);
-  const [open, setOpenState] = useState(initiallyOpen);
+  const isOpenControlled = openProp !== undefined;
+  const [internalOpen, setInternalOpen] = useState(initiallyOpen);
   const [interactionState, setInteractionState] = useState(resolvedState);
   const isDisabled = resolvedState === "disabled" || interactionState === "disabled";
-  const isDismissed = interactionState === "dismissed";
-  const isOpen = Boolean(open) && !isDismissed;
+  const isDismissed = !isOpenControlled && interactionState === "dismissed";
+  const openValue = isOpenControlled ? Boolean(openProp) : internalOpen;
+  const isOpen = Boolean(openValue) && !isDismissed;
+  if (!triggerLabel || !content) return null;
 
-  const setOpen = (nextOpen, nextState) => {
+  const setOpen = (nextOpen, nextState, event) => {
     if (isDisabled) return;
     const normalizedNextOpen = Boolean(nextOpen);
-    setOpenState(normalizedNextOpen);
+    if (!isOpenControlled) setInternalOpen(normalizedNextOpen);
     if (nextState) setInteractionState(nextState);
-    onOpenChange?.(normalizedNextOpen);
+    onOpenChange?.(normalizedNextOpen, event);
   };
 
   return React.createElement(
     "span",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["tooltip", className].filter(Boolean).join(" "),
       "data-placement": resolvedPlacement,
-      "data-variant": resolvedVariant,
-      "data-density": resolvedDensity,
-      "data-state": interactionState,
+      ...flowVariantProps(resolvedVariant),
+      ...flowDensityProps(resolvedDensity),
+      ...flowStateProps(interactionState),
       "data-open": String(isOpen),
     },
     React.createElement(
@@ -66,19 +70,21 @@ export const Tooltip = forwardRef(function Tooltip({
         disabled: isDisabled,
         "aria-disabled": isDisabled ? "true" : undefined,
         "aria-describedby": isOpen ? tooltipId : undefined,
-        onMouseEnter: () => setOpen(true, "hover"),
-        onMouseLeave: () => setOpen(false, "default"),
-        onFocus: () => setOpen(true, "focus"),
-        onBlur: () => setOpen(false, "default"),
+        onMouseEnter: (event) => setOpen(true, "hover", event),
+        onMouseLeave: (event) => setOpen(false, "default", event),
+        onFocus: (event) => setOpen(true, "focus", event),
+        onBlur: (event) => setOpen(false, "default", event),
         onKeyDown: (event) => {
           if (event.key !== "Escape") return;
           event.preventDefault();
-          setInteractionState("dismissed");
-          setOpenState(false);
-          onOpenChange?.(false);
+          if (!isOpenControlled) {
+            setInteractionState("dismissed");
+            setInternalOpen(false);
+          }
+          onOpenChange?.(false, event);
         },
       },
-      triggerLabel ?? "Info",
+      triggerLabel,
     ),
     React.createElement(
       "span",
@@ -90,7 +96,7 @@ export const Tooltip = forwardRef(function Tooltip({
         hidden: !isOpen,
         "aria-hidden": String(!isOpen),
       },
-      content ?? "Tooltip",
+      content,
     ),
   );
 });

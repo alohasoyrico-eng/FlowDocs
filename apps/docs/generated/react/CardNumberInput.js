@@ -1,6 +1,7 @@
 import React, { forwardRef, useId, useMemo, useState } from "react";
 import { cardNumberInputPlatformContract } from "../components/platforms/index.js?v=1";
 import { Spinner } from "./Spinner.js";
+import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 function normalizeCardNumber(value) {
   return String(value ?? "").replace(/\D/g, "").slice(0, 19);
@@ -53,7 +54,7 @@ function resolveCardNumberState({ disabled = false, loading = false, error = "",
 
 export const CardNumberInput = forwardRef(function CardNumberInput({
   label,
-  value = "",
+  value,
   helper = "",
   error = "",
   disabled = false,
@@ -62,8 +63,8 @@ export const CardNumberInput = forwardRef(function CardNumberInput({
   density,
   state,
   name = "",
-  placeholder = "5231 0000 0000 0000",
-  validationMessage = "Check the card number.",
+  placeholder = "",
+  validationMessage,
   onValueChange,
   className = "",
   id,
@@ -71,12 +72,14 @@ export const CardNumberInput = forwardRef(function CardNumberInput({
 }, ref) {
   const generatedId = useId();
   const inputId = id ?? `card-number-input-${generatedId}`;
-  const [currentValue, setCurrentValue] = useState(value);
+  const isValueControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState(value ?? "");
+  const currentValue = isValueControlled ? value ?? "" : internalValue;
   const digits = normalizeCardNumber(currentValue);
   const formattedValue = formatCardNumber(digits);
   const validity = cardNumberValidity(digits);
   const brand = cardNumberBrand(digits);
-  const resolvedError = error || (validity === "invalid" ? validationMessage : "");
+  const resolvedError = error || (validity === "invalid" ? validationMessage : undefined);
   const resolvedHelper = resolvedError || helper;
   const resolvedState = resolveCardNumberState({ disabled, loading, error: resolvedError, state, value: digits, validity });
   const describedBy = resolvedHelper ? `${inputId}-helper` : undefined;
@@ -87,24 +90,26 @@ export const CardNumberInput = forwardRef(function CardNumberInput({
     luhnValid: validity === "valid",
   }), [brand, formattedValue, validity]);
 
+  if (!label) return null;
+
   return React.createElement(
     "label",
     {
       className: ["field card-number-input", className].filter(Boolean).join(" "),
-      "data-state": resolvedState,
-      "data-density": density || undefined,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
       "data-mono": "true",
       "data-validity": validity,
       "data-brand": brand,
       "data-validation-message": validationMessage,
     },
-    React.createElement("span", { className: "field__label card-number-input__label", id: `${inputId}-label` }, label ?? "Card number"),
+    React.createElement("span", { className: "field__label card-number-input__label", id: `${inputId}-label` }, label),
     React.createElement(
       "span",
       { className: "field__control card-number-input__control" },
       React.createElement("span", { className: "field__icon card-number-input__icon", "aria-hidden": "true" }, "credit_card"),
       React.createElement("input", {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
         id: inputId,
         name,
@@ -128,13 +133,13 @@ export const CardNumberInput = forwardRef(function CardNumberInput({
           const nextFormatted = formatCardNumber(nextDigits);
           const nextValidity = cardNumberValidity(nextDigits);
           const nextBrand = cardNumberBrand(nextDigits);
-          setCurrentValue(nextDigits);
+          if (!isValueControlled) setInternalValue(nextDigits);
           onValueChange?.(nextDigits, {
             formatted: nextFormatted,
             validity: nextValidity,
             brand: nextBrand,
             luhnValid: nextValidity === "valid",
-          });
+          }, event);
         },
       }),
       React.createElement(
@@ -147,7 +152,7 @@ export const CardNumberInput = forwardRef(function CardNumberInput({
         },
         brand,
       ),
-      loading ? React.createElement(Spinner, { label: `${label ?? "Card number"} loading`, density: "sm", decorative: true, className: "field__icon field__icon--loading" }) : null,
+      loading ? React.createElement(Spinner, { density, decorative: true, className: "field__icon field__icon--loading" }) : null,
     ),
     resolvedHelper
       ? React.createElement(

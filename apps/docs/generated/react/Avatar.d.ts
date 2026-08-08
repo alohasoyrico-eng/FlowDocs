@@ -5,14 +5,13 @@ export type AvatarSize = "sm" | "md" | "lg" | "xl";
 export type AvatarStatus = "none" | "online" | "busy" | "offline";
 export type AvatarState = "default" | "online" | "busy" | "offline" | "disabled" | "unknown";
 
-export interface AvatarProps extends HTMLAttributes<HTMLSpanElement> {
+export interface AvatarProps extends Omit<HTMLAttributes<HTMLSpanElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   name: string;
   src?: string;
   size?: AvatarSize;
-  density?: AvatarSize;
+  density?: "sm" | "md" | "lg";
   status?: AvatarStatus;
   state?: AvatarState;
-  ariaLabel?: string;
 }
 
 export interface AvatarComponent extends ForwardRefExoticComponent<AvatarProps & RefAttributes<HTMLSpanElement>> {

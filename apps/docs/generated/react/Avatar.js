@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import { avatarPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validSizes = new Set(["sm", "md", "lg", "xl"]);
 const validStatuses = new Set(["none", "online", "busy", "offline"]);
@@ -19,35 +20,54 @@ function colorIndexFromName(name) {
   const sourceName = String(name ?? "");
   let hash = 0;
   for (let index = 0; index < sourceName.length; index += 1) hash = (hash * 31 + sourceName.charCodeAt(index)) | 0;
-  return String(Math.abs(hash) % 6);
+  return Math.abs(hash) % 6;
+}
+
+function identityColorFromName(name) {
+  const palettes = [
+    { bg: "var(--comp-avatar-identity-danger-bg)", fg: "var(--comp-avatar-identity-default-fg)" },
+    { bg: "var(--comp-avatar-identity-success-bg)", fg: "var(--comp-avatar-identity-default-fg)" },
+    { bg: "var(--comp-avatar-identity-action-bg)", fg: "var(--comp-avatar-identity-default-fg)" },
+    { bg: "var(--comp-avatar-identity-warning-bg)", fg: "var(--comp-avatar-identity-warning-fg)" },
+    { bg: "var(--comp-avatar-identity-purple-bg)", fg: "var(--comp-avatar-identity-default-fg)" },
+    { bg: "var(--comp-avatar-identity-teal-bg)", fg: "var(--comp-avatar-identity-default-fg)" },
+  ];
+  return palettes[colorIndexFromName(name)] ?? palettes[0];
 }
 
 export const Avatar = forwardRef(function Avatar({
   name,
   src = "",
-  size = "md",
+  size,
   density,
   status = "none",
   state = "default",
-  ariaLabel = "",
   className = "",
   ...rest
 }, ref) {
-  const resolvedSize = validSizes.has(density ?? size) ? density ?? size : "md";
+  const resolvedSize = validSizes.has(size) ? size : "";
+  const resolvedDensity = normalizeFlowDensity(density);
   const resolvedStatus = validStatuses.has(status) ? status : "none";
   const resolvedState = state === "disabled" ? "disabled" : resolvedStatus !== "none" ? resolvedStatus : validStates.has(state) ? state : "default";
   const sourceName = String(name ?? "");
 
+  if (!sourceName) return null;
+  const identityColor = identityColorFromName(sourceName);
+
   return React.createElement(
     "span",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
-      className: ["avatar", `avatar--${resolvedSize}`, className].filter(Boolean).join(" "),
-      "aria-label": ariaLabel || sourceName || "Unknown avatar",
+      className: ["avatar", resolvedSize ? `avatar--${resolvedSize}` : "", className].filter(Boolean).join(" "),
+      "aria-label": sourceName,
+      ...flowDensityProps(resolvedDensity),
       "data-status": resolvedStatus,
-      "data-state": resolvedState,
-      "data-color-index": colorIndexFromName(sourceName),
+      ...flowStateProps(resolvedState),
+      style: {
+        "--comp-avatar-identity-bg": identityColor.bg,
+        "--comp-avatar-identity-fg": identityColor.fg,
+      },
     },
     src
       ? React.createElement("img", { src, alt: sourceName })

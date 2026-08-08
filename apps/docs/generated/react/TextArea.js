@@ -1,5 +1,6 @@
 import React, { forwardRef, useId, useState } from "react";
 import { textAreaPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 function resolveState({ disabled = false, loading = false, error = "", state, value = "" } = {}) {
   if (disabled) return "disabled";
@@ -13,7 +14,7 @@ export const TextArea = forwardRef(function TextArea({
   helper = "",
   helperText,
   error = "",
-  value = "",
+  value,
   name = "",
   placeholder = "",
   disabled = false,
@@ -24,13 +25,16 @@ export const TextArea = forwardRef(function TextArea({
   density,
   state,
   onChange,
+  onValueChange,
   className = "",
   id,
   ...rest
 }, ref) {
   const generatedId = useId();
   const textAreaId = id ?? `text-area-${generatedId}`;
-  const [currentValue, setCurrentValue] = useState(value ?? "");
+  const isValueControlled = value !== undefined;
+  const [internalValue, setInternalValue] = useState(value ?? "");
+  const currentValue = isValueControlled ? value ?? "" : internalValue;
   const resolvedHelper = error || helperText || helper;
   const resolvedState = resolveState({ disabled, loading, error, state, value: currentValue });
   const isDisabled = Boolean(disabled) || Boolean(loading);
@@ -39,25 +43,30 @@ export const TextArea = forwardRef(function TextArea({
   const describedBy = [helperId, counterId].filter(Boolean).join(" ") || undefined;
   const counterText = maxLength != null ? `${String(currentValue ?? "").length}/${Number(maxLength)}` : "";
 
+  if (!label) return null;
+
   const handleChange = (event) => {
+    if (isDisabled) return;
     const nextValue = event.target.value;
-    setCurrentValue(nextValue);
-    onChange?.(nextValue, { maxLength: maxLength == null ? undefined : Number(maxLength), length: String(nextValue).length });
+    const meta = { maxLength: maxLength == null ? undefined : Number(maxLength), length: String(nextValue).length };
+    if (!isValueControlled) setInternalValue(nextValue);
+    onValueChange?.(nextValue, meta, event);
+    onChange?.(nextValue, meta, event);
   };
 
   return React.createElement(
     "label",
     {
       className: ["field", className].filter(Boolean).join(" "),
-      "data-state": resolvedState,
-      "data-density": density || undefined,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
     },
-    React.createElement("span", { className: "field__label", id: `${textAreaId}-label` }, label ?? "Text area"),
+    React.createElement("span", { className: "field__label", id: `${textAreaId}-label` }, label),
     React.createElement(
       "span",
       { className: "text-area__surface", "data-has-counter": maxLength != null ? "true" : undefined },
       React.createElement("textarea", {
-        ...rest,
+        ...flowRestProps(rest),
         ref,
         id: textAreaId,
         className: "text-area",

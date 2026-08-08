@@ -12,7 +12,7 @@ export interface StationPinMeta {
   state?: StationPinState;
 }
 
-export interface StationPinProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface StationPinProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   value?: string;
   meta?: string;
@@ -24,7 +24,7 @@ export interface StationPinProps extends ButtonHTMLAttributes<HTMLButtonElement>
   selected?: boolean;
   unavailable?: boolean;
   disabled?: boolean;
-  onSelect?: (meta: StationPinMeta) => void;
+  onSelect?: (meta: StationPinMeta, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface StationPinComponent extends ForwardRefExoticComponent<StationPinProps & RefAttributes<HTMLButtonElement>> {

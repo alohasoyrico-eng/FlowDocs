@@ -1,10 +1,11 @@
 import React, { forwardRef, useMemo } from "react";
 import { breadcrumbsPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowVariantProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const allowedVariants = new Set(["standard", "compact", "overflow", "mobile"]);
 const allowedStates = new Set(["default", "hover", "focus", "collapsed", "current", "disabled"]);
 
-function resolveBreadcrumbItems(items, { variant, maxItems } = {}) {
+function resolveBreadcrumbItems(items, { variant, maxItems, collapsedLabel } = {}) {
   if (variant === "mobile" && items.length > 2) {
     return [
       { ...items[items.length - 2], current: false },
@@ -13,28 +14,34 @@ function resolveBreadcrumbItems(items, { variant, maxItems } = {}) {
   }
   const limit = Number(maxItems ?? (variant === "overflow" ? 4 : items.length));
   if (!Number.isFinite(limit) || limit < 3 || items.length <= limit) return items;
+  if (!collapsedLabel) return items;
   const head = items[0];
   const tailCount = Math.max(1, limit - 2);
   const tail = items.slice(-tailCount);
   return [
     { ...head, current: false },
-    { label: "Collapsed breadcrumb items", collapsed: true, current: false },
+    { id: "__collapsed", label: collapsedLabel, collapsed: true, current: false },
     ...tail.map((item, index) => ({ ...item, current: index === tail.length - 1 })),
   ];
 }
 
 function normalizeItems(items) {
-  const sourceItems = Array.isArray(items) && items.length ? items : [{ label: "Home", href: "#" }];
-  return sourceItems.map((item, index) => ({
+  const sourceItems = Array.isArray(items) ? items : [];
+  const labeledItems = sourceItems.filter((item) => {
+    const stableKey = item?.id ?? item?.href;
+    return item?.label && stableKey !== undefined && stableKey !== null && stableKey !== "";
+  });
+  return labeledItems.map((item, index) => ({
     ...item,
-    label: item.label ?? "",
-    current: Boolean(item.current) || index === sourceItems.length - 1,
+    label: item.label,
+    current: Boolean(item.current) || index === labeledItems.length - 1,
   }));
 }
 
 export const Breadcrumbs = forwardRef(function Breadcrumbs({
-  items = [],
-  label = "Breadcrumbs",
+  items,
+  label,
+  collapsedLabel,
   variant = "standard",
   state = "default",
   density,
@@ -48,60 +55,73 @@ export const Breadcrumbs = forwardRef(function Breadcrumbs({
   const resolvedVariant = allowedVariants.has(variant) ? variant : "standard";
   const resolvedState = disabled ? "disabled" : allowedStates.has(state) ? state : "default";
   const visibleItems = useMemo(
-    () => resolveBreadcrumbItems(normalizeItems(items), { variant: resolvedVariant, maxItems }),
-    [items, maxItems, resolvedVariant],
+    () => resolveBreadcrumbItems(normalizeItems(items), { variant: resolvedVariant, maxItems, collapsedLabel }),
+    [items, maxItems, resolvedVariant, collapsedLabel],
   );
+
+  if (!visibleItems.length) return null;
 
   return React.createElement(
     "nav",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["breadcrumbs", className].filter(Boolean).join(" "),
       "aria-label": label,
       "aria-disabled": disabled ? "true" : undefined,
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": density || undefined,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
       "data-full-width": fullWidth ? "true" : undefined,
     },
     React.createElement(
       "ol",
       null,
       visibleItems.map((item, index) => {
-        const key = item.id ?? item.href ?? `${item.label}-${index}`;
+        const key = item.id ?? item.href;
         const isLast = index === visibleItems.length - 1;
+        const hasAction = typeof item.onClick === "function";
         const target = item.collapsed
           ? React.createElement(
               "span",
               {
                 className: "breadcrumbs__target breadcrumbs__target--collapsed",
-                "aria-label": item.label ?? "Collapsed breadcrumb items",
+                "aria-label": item.label,
               },
               "...",
-            )
-          : item.current || disabled
+              )
+            : item.current || disabled || (!item.href && !hasAction)
             ? React.createElement(
                 "span",
                 {
                   className: "breadcrumbs__target",
                   "aria-current": item.current ? "page" : undefined,
                 },
-                item.label ?? "",
+                item.label,
+              )
+            : !item.href && hasAction
+            ? React.createElement(
+                "button",
+                {
+                  type: "button",
+                  className: "breadcrumbs__target",
+                  onClick: (event) => item.onClick(item, event),
+                },
+                item.label,
               )
             : React.createElement(
                 "a",
                 {
                   className: "breadcrumbs__target",
-                  href: item.href ?? "#",
-                  onClick: typeof item.onClick === "function"
+                  href: item.href,
+                  onClick: hasAction
                     ? (event) => {
                         event.preventDefault();
-                        item.onClick(item);
+                        item.onClick(item, event);
                       }
                     : undefined,
                 },
-                item.label ?? "",
+                item.label,
               );
         return React.createElement(
           "li",

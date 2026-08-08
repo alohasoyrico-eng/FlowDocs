@@ -1,5 +1,6 @@
 import React, { forwardRef, useEffect, useId, useMemo, useRef, useState } from "react";
 import { dateRangePickerPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 function parseDate(value) {
   if (!value) return null;
@@ -13,22 +14,22 @@ function dateIso(date) {
   return `${date.getFullYear()}-${month}-${day}`;
 }
 
-function formatDateLabel(value) {
+function formatDateLabel(value, locale) {
   const date = parseDate(value);
   if (!date) return "";
-  return new Intl.DateTimeFormat("es-MX", { day: "2-digit", month: "short", year: "numeric" })
+  return new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short", year: "numeric" })
     .format(date)
     .replace(".", "");
 }
 
-function formatDateLongLabel(value) {
+function formatDateLongLabel(value, locale) {
   const date = parseDate(value);
   if (!date) return "";
-  return new Intl.DateTimeFormat("es-MX", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(date);
+  return new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(date);
 }
 
-function formatMonthLabel(date) {
-  const label = new Intl.DateTimeFormat("es-MX", { month: "long", year: "numeric" }).format(date);
+function formatMonthLabel(date, locale) {
+  const label = new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(date);
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
@@ -55,31 +56,31 @@ function clampViewDate(value) {
   return parseDate(value) ?? new Date();
 }
 
-function rangeLabel({ from, to, placeholder }) {
+function rangeLabel({ from, to, placeholder, locale }) {
   if (!from) return placeholder;
-  return `${formatDateLabel(from)} - ${to ? formatDateLabel(to) : "..."}`;
+  return `${formatDateLabel(from, locale)} - ${to ? formatDateLabel(to, locale) : "..."}`;
 }
-
-const defaultPresets = Object.freeze([
-  { label: "7 dias", days: 7 },
-  { label: "30 dias", days: 30 },
-  { label: "90 dias", days: 90 },
-]);
 
 export const DateRangePicker = forwardRef(function DateRangePicker({
   label,
-  value = {},
+  value,
   from,
   to,
-  placeholder = "Rango de fechas",
+  placeholder = "",
   helper = "",
   error = "",
   disabled = false,
   density,
   state,
   invalid = false,
-  presets = true,
+  locale,
+  weekdays,
+  calendarLabel,
+  previousMonthLabel,
+  nextMonthLabel,
+  presets,
   presetItems,
+  open: openProp,
   onValueChange,
   onOpenChange,
   className = "",
@@ -92,68 +93,96 @@ export const DateRangePicker = forwardRef(function DateRangePicker({
   const monthId = `${controlId}-month`;
   const rootRef = useRef(null);
   const controlRef = useRef(null);
+  const isValueControlled = value !== undefined || from !== undefined || to !== undefined;
   const initialFrom = from ?? value?.from ?? "";
   const initialTo = to ?? value?.to ?? "";
-  const [range, setRange] = useState({ from: initialFrom, to: initialTo });
-  const [open, setOpenState] = useState(false);
+  const [internalRange, setInternalRange] = useState({ from: initialFrom, to: initialTo });
+  const range = isValueControlled ? { from: from ?? value?.from ?? "", to: to ?? value?.to ?? "" } : internalRange;
+  const isOpenControlled = openProp !== undefined;
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = isOpenControlled ? Boolean(openProp) : internalOpen;
   const [viewDate, setViewDate] = useState(() => clampViewDate(initialFrom || initialTo));
   const helperText = error || helper;
   const resolvedState = resolveDateRangePickerState({ disabled, error, invalid, state, from: range.from, to: range.to });
   const todayValue = useMemo(() => dateIso(new Date()), []);
   const cells = useMemo(() => dateCells(viewDate), [viewDate]);
-  const presetOptions = presetItems ?? defaultPresets;
+  const sourceWeekdays = Array.isArray(weekdays) ? weekdays : [];
+  const presetOptions = Array.isArray(presetItems)
+    ? presetItems.filter((preset) => preset?.key !== undefined && preset.key !== null && preset.key !== "" && preset?.label && Number.isFinite(Number(preset.days)))
+    : [];
+  const showPresets = presets ?? presetOptions.length > 0;
+  const visibleValue = rangeLabel({ ...range, placeholder, locale });
 
   useEffect(() => {
     const nextFrom = from ?? value?.from ?? "";
     const nextTo = to ?? value?.to ?? "";
-    setRange({ from: nextFrom, to: nextTo });
-    if (nextFrom || nextTo) setViewDate(clampViewDate(nextFrom || nextTo));
-  }, [from, to, value?.from, value?.to]);
+    if (isValueControlled && (nextFrom || nextTo)) setViewDate(clampViewDate(nextFrom || nextTo));
+  }, [from, isValueControlled, to, value?.from, value?.to]);
 
   useEffect(() => {
     if (!open) return undefined;
     const onPointerDown = (event) => {
       if (rootRef.current?.contains(event.target)) return;
-      setOpen(false);
+      setOpen(false, false, event);
     };
     document.addEventListener("mousedown", onPointerDown);
     return () => document.removeEventListener("mousedown", onPointerDown);
   }, [open]);
 
-  const setOpen = (nextOpen, restoreFocus = false) => {
-    setOpenState(Boolean(nextOpen));
-    onOpenChange?.(Boolean(nextOpen));
+  if (!label) return null;
+
+  const setOpen = (nextOpen, restoreFocus = false, event) => {
+    const normalizedOpen = Boolean(nextOpen);
+    if (!isOpenControlled) setInternalOpen(normalizedOpen);
+    onOpenChange?.(normalizedOpen, event);
     if (restoreFocus) requestAnimationFrame(() => controlRef.current?.focus());
   };
 
-  const commitRange = (nextRange, close = false) => {
-    setRange(nextRange);
+  const commitRange = (nextRange, close = false, event) => {
+    if (!isValueControlled) setInternalRange(nextRange);
     if (nextRange.from || nextRange.to) setViewDate(clampViewDate(nextRange.from || nextRange.to));
-    onValueChange?.(nextRange);
-    if (close) setOpen(false, true);
+    onValueChange?.(nextRange, event);
+    if (close) setOpen(false, true, event);
   };
 
-  const selectDate = (nextValue) => {
+  const selectDate = (nextValue, event) => {
     if (!range.from || range.to) {
-      commitRange({ from: nextValue, to: "" });
+      commitRange({ from: nextValue, to: "" }, false, event);
       return;
     }
     if (nextValue < range.from) {
-      commitRange({ from: nextValue, to: range.from }, true);
+      commitRange({ from: nextValue, to: range.from }, true, event);
       return;
     }
-    commitRange({ from: range.from, to: nextValue }, true);
+    commitRange({ from: range.from, to: nextValue }, true, event);
   };
 
-  const applyPreset = (preset) => {
+  const applyPreset = (preset, event) => {
     const end = new Date();
     const start = new Date(end);
     start.setDate(end.getDate() - Number(preset.days ?? 1) + 1);
-    commitRange({ from: dateIso(start), to: dateIso(end) }, true);
+    commitRange({ from: dateIso(start), to: dateIso(end) }, true, event);
   };
 
   const moveMonth = (delta) => {
     setViewDate((current) => new Date(current.getFullYear(), current.getMonth() + delta, 1));
+  };
+  const handleTriggerClick = (event) => {
+    rest.onClick?.(event);
+    if (event.defaultPrevented || disabled) return;
+    setOpen(!open, false, event);
+  };
+  const handleTriggerKeyDown = (event) => {
+    rest.onKeyDown?.(event);
+    if (event.defaultPrevented) return;
+    if (event.key === "Escape") {
+      event.preventDefault();
+      setOpen(false, true, event);
+    }
+    if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      setOpen(true, false, event);
+    }
   };
 
   const dayButtons = cells.map((cell, index) => {
@@ -179,19 +208,19 @@ export const DateRangePicker = forwardRef(function DateRangePicker({
       "data-range-edge": isFrom ? "start" : isTo ? "end" : undefined,
       "data-in-range": inRange ? "true" : undefined,
       "aria-current": isoValue === todayValue ? "date" : undefined,
-      "aria-label": formatDateLongLabel(isoValue),
+      "aria-label": formatDateLongLabel(isoValue, locale),
       "aria-pressed": String(isFrom || isTo),
-      onClick: () => selectDate(isoValue),
+      onClick: (event) => selectDate(isoValue, event),
       onKeyDown: (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          selectDate(isoValue);
+          selectDate(isoValue, event);
         } else if (event.key === "PageUp" || event.key === "PageDown") {
           event.preventDefault();
           moveMonth(event.key === "PageUp" ? -1 : 1);
         } else if (event.key === "Escape") {
           event.preventDefault();
-          setOpen(false, true);
+          setOpen(false, true, event);
         }
       },
     }, String(cell.getDate()));
@@ -204,17 +233,17 @@ export const DateRangePicker = forwardRef(function DateRangePicker({
     {
       className: ["field date-picker date-range-picker", className].filter(Boolean).join(" "),
       ref: rootRef,
-      "data-state": resolvedState,
-      "data-density": density || undefined,
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(density),
       "data-open": String(open),
       "data-from": range.from,
       "data-to": range.to,
     },
-    React.createElement("span", { className: "field__label date-picker__label date-range-picker__label", id: `${controlId}-label` }, label ?? "Date range"),
+    React.createElement("span", { className: "field__label date-picker__label date-range-picker__label", id: `${controlId}-label` }, label),
     React.createElement(
       "button",
       {
-        ...rest,
+        ...flowRestProps(rest),
         ref: (node) => {
           controlRef.current = node;
           if (typeof ref === "function") ref(node);
@@ -231,22 +260,11 @@ export const DateRangePicker = forwardRef(function DateRangePicker({
         "aria-labelledby": `${controlId}-label`,
         "aria-describedby": describedBy,
         "aria-invalid": invalid || error || state === "error" ? "true" : undefined,
-        onClick: () => {
-          if (!disabled) setOpen(!open);
-        },
-        onKeyDown: (event) => {
-          if (event.key === "Escape") {
-            event.preventDefault();
-            setOpen(false, true);
-          }
-          if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            setOpen(true);
-          }
-        },
+        onClick: handleTriggerClick,
+        onKeyDown: handleTriggerKeyDown,
       },
       React.createElement("span", { className: "field__icon date-picker__icon date-range-picker__icon", "aria-hidden": "true" }, "date_range"),
-      React.createElement("span", { className: "date-picker__value date-range-picker__value", "data-date-range-picker-value": "" }, rangeLabel({ ...range, placeholder })),
+      visibleValue ? React.createElement("span", { className: "date-picker__value date-range-picker__value", "data-date-range-picker-value": "" }, visibleValue) : null,
     ),
     React.createElement("input", {
       type: "date",
@@ -255,8 +273,8 @@ export const DateRangePicker = forwardRef(function DateRangePicker({
       disabled,
       tabIndex: -1,
       "data-date-range-picker-from": "",
-      "aria-label": `${label ?? "Date range"} start date`,
-      onChange: (event) => commitRange({ from: event.target.value, to: range.to }),
+      "aria-hidden": "true",
+      onChange: (event) => commitRange({ from: event.target.value, to: range.to }, false, event),
     }),
     React.createElement("input", {
       type: "date",
@@ -265,8 +283,8 @@ export const DateRangePicker = forwardRef(function DateRangePicker({
       disabled,
       tabIndex: -1,
       "data-date-range-picker-to": "",
-      "aria-label": `${label ?? "Date range"} end date`,
-      onChange: (event) => commitRange({ from: range.from, to: event.target.value }),
+      "aria-hidden": "true",
+      onChange: (event) => commitRange({ from: range.from, to: event.target.value }, false, event),
     }),
     React.createElement(
       "div",
@@ -277,37 +295,39 @@ export const DateRangePicker = forwardRef(function DateRangePicker({
         "data-date-range-picker-panel": "",
         role: "dialog",
         "aria-modal": "false",
-        "aria-label": `${label ?? "Date range"} calendar`,
+        "aria-label": calendarLabel || undefined,
+        "aria-labelledby": calendarLabel ? undefined : label ? `${controlId}-label` : undefined,
         onKeyDown: (event) => {
           if (event.key !== "Escape") return;
           event.preventDefault();
-          setOpen(false, true);
+          setOpen(false, true, event);
         },
       },
-      presets
+      showPresets
         ? React.createElement("div", { className: "date-range-picker__presets" }, presetOptions.map((preset) => React.createElement("button", {
-          key: `${preset.label}-${preset.days}`,
+          key: preset.key,
           type: "button",
           className: "date-range-picker__preset",
-          onClick: () => applyPreset(preset),
+          "data-key": preset.key,
+          onClick: (event) => applyPreset(preset, event),
         }, preset.label)))
         : null,
       React.createElement(
         "div",
         { className: "date-picker__header date-range-picker__header" },
-        React.createElement("button", {
+        previousMonthLabel ? React.createElement("button", {
           type: "button",
           className: "date-picker__nav",
-          "aria-label": "Mes anterior",
+          "aria-label": previousMonthLabel,
           onClick: () => moveMonth(-1),
-        }, React.createElement("span", { className: "field__icon date-picker__icon", "aria-hidden": "true" }, "chevron_left")),
-        React.createElement("strong", { id: monthId, "data-date-range-picker-month": "" }, formatMonthLabel(viewDate)),
-        React.createElement("button", {
+        }, React.createElement("span", { className: "field__icon date-picker__icon", "aria-hidden": "true" }, "chevron_left")) : null,
+        React.createElement("strong", { id: monthId, "data-date-range-picker-month": "" }, formatMonthLabel(viewDate, locale)),
+        nextMonthLabel ? React.createElement("button", {
           type: "button",
           className: "date-picker__nav",
-          "aria-label": "Mes siguiente",
+          "aria-label": nextMonthLabel,
           onClick: () => moveMonth(1),
-        }, React.createElement("span", { className: "field__icon date-picker__icon", "aria-hidden": "true" }, "chevron_right")),
+        }, React.createElement("span", { className: "field__icon date-picker__icon", "aria-hidden": "true" }, "chevron_right")) : null,
       ),
       React.createElement(
         "div",
@@ -317,7 +337,7 @@ export const DateRangePicker = forwardRef(function DateRangePicker({
           role: "grid",
           "aria-labelledby": monthId,
         },
-        ["L", "M", "X", "J", "V", "S", "D"].map((day) => React.createElement("span", { key: day, className: "date-picker__weekday", role: "columnheader" }, day)),
+        sourceWeekdays.map((day, index) => React.createElement("span", { key: `${day}-${index}`, className: "date-picker__weekday", role: "columnheader" }, day)),
         dayButtons,
       ),
     ),

@@ -1,4 +1,4 @@
-import type { ForwardRefExoticComponent, InputHTMLAttributes, RefAttributes } from "react";
+import type { ChangeEvent, ForwardRefExoticComponent, InputHTMLAttributes, MouseEvent, RefAttributes } from "react";
 import { cardSecurityCodeInputPlatformContract } from "../components/platforms/index.js";
 
 export type CardSecurityCodeInputDensity = "sm" | "md" | "lg";
@@ -9,7 +9,7 @@ export type CardSecurityCodeMeta = {
   complete: boolean;
 };
 
-export interface CardSecurityCodeInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix" | "onChange"> {
+export interface CardSecurityCodeInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "style" | "size" | "prefix" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   helper?: string;
   error?: string;
@@ -18,10 +18,12 @@ export interface CardSecurityCodeInputProps extends Omit<InputHTMLAttributes<HTM
   state?: CardSecurityCodeInputState;
   loading?: boolean;
   expectedLength?: 3 | 4;
-  validationMessage?: string;
   revealable?: boolean;
+  revealLabel?: string;
+  hideLabel?: string;
   revealed?: boolean;
-  onValueChange?: (digits: string, meta: CardSecurityCodeMeta) => void;
+  onValueChange?: (digits: string, meta: CardSecurityCodeMeta, event: ChangeEvent<HTMLInputElement>) => void;
+  onRevealChange?: (revealed: boolean, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface CardSecurityCodeInputComponent extends ForwardRefExoticComponent<CardSecurityCodeInputProps & RefAttributes<HTMLInputElement>> {

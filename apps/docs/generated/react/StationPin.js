@@ -1,24 +1,20 @@
 import React, { forwardRef } from "react";
 import { createMapsPrimitive } from "../components/index.js?v=1";
 import { stationPinPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["fuel", "ev", "service", "cluster"]);
 const validStates = new Set(["default", "hover", "focus", "selected", "unavailable", "disabled"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, allowed, fallback) {
-  return allowed.has(value) ? value : fallback;
-}
 
 export const StationPin = forwardRef(function StationPin({
   label,
   value = "",
-  meta = "",
+  meta,
   icon = "local_gas_station",
   count,
   variant = "fuel",
   state = "default",
-  density = "md",
+  density,
   selected = false,
   unavailable = false,
   disabled = false,
@@ -27,17 +23,18 @@ export const StationPin = forwardRef(function StationPin({
   onClick,
   ...rest
 }, ref) {
-  const resolvedVariant = normalize(variant, validVariants, "fuel");
-  const resolvedState = disabled ? "disabled" : unavailable ? "unavailable" : selected ? "selected" : normalize(state, validStates, "default");
-  const resolvedDensity = normalize(density, validDensities, "md");
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "fuel");
+  const resolvedState = disabled ? "disabled" : unavailable ? "unavailable" : selected ? "selected" : normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
   const markerCount = count != null || resolvedVariant === "cluster" ? count ?? 6 : null;
-  const visibleValue = markerCount != null ? String(markerCount) : value || label || "Station";
+  if (!label) return null;
+  const visibleValue = markerCount != null ? String(markerCount) : value || label;
   const blocked = resolvedState === "disabled" || resolvedState === "unavailable";
   const mapPrimitive = createMapsPrimitive({
     permission: "granted",
     pins: [{
-      label: label ?? visibleValue,
-      value: value && value !== label ? value : "",
+      label,
+      value: value && value !== label ? value : undefined,
       meta,
       variant: resolvedVariant,
       state: resolvedState,
@@ -45,24 +42,26 @@ export const StationPin = forwardRef(function StationPin({
       unavailable: resolvedState === "unavailable",
     }],
   });
-  const accessibleLabel = mapPrimitive.mapLayerModel.pins[0]?.accessibleLabel ?? String(label ?? visibleValue);
+  const accessibleLabel = mapPrimitive.mapLayerModel.pins[0]?.accessibleLabel ?? String(label);
+  if (!accessibleLabel) return null;
 
   function handleClick(event) {
     if (blocked) return;
-    onSelect?.({ label, value: visibleValue, variant: resolvedVariant, state: resolvedState });
     onClick?.(event);
+    if (event.defaultPrevented) return;
+    onSelect?.({ label, value: visibleValue, variant: resolvedVariant, state: resolvedState }, event);
   }
 
   return React.createElement(
     "button",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       type: rest.type ?? "button",
       className: ["station-pin", className].filter(Boolean).join(" "),
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-map-primitive": "maps",
       disabled: blocked,
       "aria-pressed": resolvedState === "selected" ? "true" : undefined,
@@ -78,7 +77,7 @@ export const StationPin = forwardRef(function StationPin({
       },
       markerCount != null ? String(markerCount) : icon,
     ),
-    markerCount == null ? React.createElement("span", { className: "station-pin__value" }, visibleValue) : null,
+    markerCount == null && visibleValue ? React.createElement("span", { className: "station-pin__value" }, visibleValue) : null,
   );
 });
 

@@ -1,69 +1,85 @@
 import React, { forwardRef, useId, useMemo, useState } from "react";
 import { accordionPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowVariantProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
-const validDensities = new Set(["sm", "md", "lg"]);
+const validVariants = new Set(["single", "multiple"]);
 
-function normalizeDensity(density) {
-  return validDensities.has(density) ? density : "md";
+function hasStableItemId(item) {
+  return item?.id !== undefined && item?.id !== null && item?.id !== "";
 }
 
 function normalizeItems(items) {
-  const sourceItems = Array.isArray(items) && items.length ? items : [{ title: "Section 1", content: "" }];
-  return sourceItems.map((item, index) => ({
+  const sourceItems = Array.isArray(items) ? items : [];
+  return sourceItems.filter((item) => item?.title && item?.content !== undefined && item?.content !== null && hasStableItemId(item)).map((item) => ({
     ...item,
-    id: item.id || `accordion-panel-${index}`,
-    title: item.title ?? item.label ?? `Section ${index + 1}`,
-    content: item.content ?? item.description ?? "",
+    id: String(item.id),
+    title: item.title,
+    content: item.content,
     open: Boolean(item.open),
   }));
 }
 
 function renderContent(content) {
+  if (content === undefined || content === null) return null;
   if (React.isValidElement(content)) return content;
   if (Array.isArray(content)) return content;
-  return String(content ?? "");
+  return String(content);
 }
 
 export const Accordion = forwardRef(function Accordion({
-  items = [],
+  items,
+  variant,
   multiple = false,
-  density = "md",
+  expandedIds,
+  density,
   onExpandedChange,
   className = "",
   ...rest
 }, ref) {
   const reactId = useId();
-  const resolvedDensity = normalizeDensity(density);
+  const resolvedDensity = normalizeFlowDensity(density);
+  const resolvedVariant = validVariants.has(variant) ? variant : multiple ? "multiple" : "single";
+  const allowsMultiple = resolvedVariant === "multiple";
   const normalizedItems = useMemo(() => normalizeItems(items), [items]);
+  const isExpandedIdsControlled = expandedIds !== undefined;
   const initialOpenIds = normalizedItems.filter((item) => item.open).map((item) => item.id);
-  const [openIds, setOpenIds] = useState(() => multiple ? initialOpenIds : initialOpenIds.slice(0, 1));
+  const [internalOpenIds, setInternalOpenIds] = useState(() => {
+    const initialIds = expandedIds ?? initialOpenIds;
+    return allowsMultiple ? initialIds : initialIds.slice(0, 1);
+  });
+  const controlledOpenIds = Array.isArray(expandedIds) ? expandedIds.map(String) : [];
+  const openIds = isExpandedIdsControlled
+    ? allowsMultiple ? controlledOpenIds : controlledOpenIds.slice(0, 1)
+    : internalOpenIds;
 
-  const setItemOpen = (item, open) => {
+  const setItemOpen = (item, open, event) => {
     if (item.disabled) return;
-    setOpenIds((current) => {
-      const next = open
-        ? multiple
-          ? [...new Set([...current, item.id])]
-          : [item.id]
-        : current.filter((id) => id !== item.id);
-      onExpandedChange?.(next);
-      return next;
-    });
+    const next = open
+      ? allowsMultiple
+        ? [...new Set([...openIds, item.id])]
+        : [item.id]
+      : openIds.filter((id) => id !== item.id);
+    if (!isExpandedIdsControlled) setInternalOpenIds(next);
+    onExpandedChange?.(next, event);
   };
+
+  if (!normalizedItems.length) return null;
 
   return React.createElement(
     "div",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["accordion", className].filter(Boolean).join(" "),
-      "data-multiple": String(Boolean(multiple)),
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      "data-multiple": String(allowsMultiple),
+      ...flowDensityProps(resolvedDensity),
     },
     normalizedItems.map((item, index) => {
       const open = openIds.includes(item.id);
       const panelId = `${reactId}-${item.id}`;
       const triggerId = `${panelId}-trigger`;
+      const { id, title, content, open: itemOpen, disabled, icon, meta, onClick, ...itemRest } = item;
       return React.createElement(
         "section",
         {
@@ -75,20 +91,25 @@ export const Accordion = forwardRef(function Accordion({
         React.createElement(
           "button",
           {
+            ...itemRest,
             type: "button",
             className: "accordion__trigger",
             id: triggerId,
-            disabled: Boolean(item.disabled),
+            disabled: Boolean(disabled),
             "data-accordion-trigger": "",
             "aria-expanded": String(open),
             "aria-controls": panelId,
-            onClick: () => setItemOpen(item, !open),
+            onClick: (event) => {
+              onClick?.(event);
+              if (event.defaultPrevented) return;
+              setItemOpen(item, !open, event);
+            },
           },
-          item.icon
-            ? React.createElement("span", { className: "accordion__icon", "aria-hidden": "true" }, item.icon)
+          icon
+            ? React.createElement("span", { className: "accordion__icon", "aria-hidden": "true" }, icon)
             : null,
-          React.createElement("span", { className: "accordion__title" }, item.title),
-          item.meta ? React.createElement("span", { className: "accordion__meta" }, item.meta) : null,
+          title ? React.createElement("span", { className: "accordion__title" }, title) : null,
+          meta ? React.createElement("span", { className: "accordion__meta" }, meta) : null,
           React.createElement("span", { className: "accordion__chevron", "aria-hidden": "true" }, "expand_more"),
         ),
         React.createElement(
@@ -104,7 +125,7 @@ export const Accordion = forwardRef(function Accordion({
           React.createElement(
             "div",
             { className: "accordion__panel-clip" },
-            React.createElement("div", { className: "accordion__panel-body" }, renderContent(item.content)),
+            React.createElement("div", { className: "accordion__panel-body" }, renderContent(content)),
           ),
         ),
       );

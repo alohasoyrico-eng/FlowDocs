@@ -1,5 +1,6 @@
 import React, { forwardRef } from "react";
 import { iconButtonPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const allowedTypes = new Set(["button", "submit", "reset"]);
 
@@ -20,19 +21,20 @@ export const IconButton = forwardRef(function IconButton({
   className = "",
   ...rest
 }, ref) {
-  const resolvedLabel = ariaLabel ?? label ?? icon ?? "Action";
+  const resolvedLabel = ariaLabel ?? label;
+  if (!resolvedLabel) return null;
 
   return React.createElement(
     "button",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       type: allowedTypes.has(type) ? type : "button",
       className: iconButtonClassName({ variant, className }),
       disabled,
       "aria-label": resolvedLabel,
       "aria-pressed": selected ? "true" : undefined,
-      "data-density": density || undefined,
+      ...flowDensityProps(density),
     },
     React.createElement("span", { className: "icon-button__icon", "aria-hidden": "true" }, icon),
     badge ? React.createElement("span", { className: "icon-button__badge", "aria-hidden": "true" }) : null,

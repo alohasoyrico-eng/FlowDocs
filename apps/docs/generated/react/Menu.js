@@ -3,14 +3,11 @@ import { menuPlatformContract } from "../components/platforms/index.js?v=1";
 import { Avatar } from "./Avatar.js";
 import { Button } from "./Button.js";
 import { IconButton } from "./IconButton.js";
+import { flowToneProps, flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["actions", "grouped", "selection", "danger", "icon-trigger", "avatar-trigger"]);
 const validStates = new Set(["default", "closed", "open", "focus", "disabled"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, valid, fallback) {
-  return valid.has(value) ? value : fallback;
-}
+const validItemTones = new Set(["danger"]);
 
 function slug(value) {
   return String(value ?? "menu").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -20,16 +17,20 @@ function enabledItems(panel) {
   return [...(panel?.querySelectorAll?.('[role="menuitem"]:not(:disabled)') ?? [])];
 }
 
+function hasStableItemKey(item) {
+  return item?.key !== undefined && item?.key !== null && item?.key !== "";
+}
+
 export const Menu = forwardRef(function Menu({
-  triggerLabel = "Actions",
-  items = [],
-  open = false,
-  label = "Menu",
+  triggerLabel,
+  items,
+  open: openProp,
+  label,
   variant = "actions",
   avatarName = "",
   avatarStatus = "none",
   avatarSize = "md",
-  density = "md",
+  density,
   state = "default",
   align = "start",
   disabled = false,
@@ -41,28 +42,29 @@ export const Menu = forwardRef(function Menu({
   const reactId = useId();
   const triggerRef = useRef(null);
   const panelRef = useRef(null);
-  const resolvedVariant = normalize(variant, validVariants, "actions");
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const initialState = disabled ? "disabled" : normalize(state, validStates, "default");
-  const initiallyOpen = Boolean(open) || initialState === "open" || initialState === "focus";
-  const [isOpen, setIsOpen] = useState(initiallyOpen);
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "actions");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const initialState = disabled ? "disabled" : normalizeFlowValue(state, validStates, "default");
+  const isOpenControlled = openProp !== undefined;
+  const initiallyOpen = Boolean(openProp) || initialState === "open" || initialState === "focus";
+  const [internalOpen, setInternalOpen] = useState(initiallyOpen);
+  const isOpen = isOpenControlled ? Boolean(openProp) : internalOpen;
   const [interactionState, setInteractionState] = useState(initiallyOpen ? "open" : initialState);
+  const resolvedInteractionState = isOpenControlled ? (isOpen ? "open" : initialState) : interactionState;
   const menuId = `menu-${slug(label || triggerLabel)}-${reactId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
-  const isDisabled = disabled || interactionState === "disabled";
+  const isDisabled = disabled || resolvedInteractionState === "disabled";
   const resolvedAlign = align === "end" || align === "right" ? "end" : "start";
-  const resolvedItems = items.length ? items : [
-    { label: "Edit", icon: "edit", key: "edit" },
-    { label: "Duplicate", icon: "content_copy", key: "duplicate" },
-    { separator: true },
-    { label: resolvedVariant === "danger" ? "Delete" : "Archive", icon: resolvedVariant === "danger" ? "delete" : "archive", tone: resolvedVariant === "danger" ? "danger" : undefined, key: resolvedVariant === "danger" ? "delete" : "archive" },
-  ];
+  const resolvedItems = Array.isArray(items) ? items.filter((item) => item === "divider" || item?.separator || (item?.label && hasStableItemKey(item))) : [];
+  const hasVisibleItems = resolvedItems.some((item) => item !== "divider" && !item?.separator);
 
-  const setOpen = (nextOpen, { restoreFocus = false, focusFirst = false } = {}) => {
+  if (!triggerLabel || !hasVisibleItems) return null;
+
+  const setOpen = (nextOpen, { restoreFocus = false, focusFirst = false, event } = {}) => {
     if (isDisabled) return;
     const normalizedOpen = Boolean(nextOpen);
-    setIsOpen(normalizedOpen);
-    setInteractionState(normalizedOpen ? "open" : "closed");
-    onOpenChange?.(normalizedOpen);
+    if (!isOpenControlled) setInternalOpen(normalizedOpen);
+    if (!isOpenControlled) setInteractionState(normalizedOpen ? "open" : "closed");
+    onOpenChange?.(normalizedOpen, event);
     if (restoreFocus) requestAnimationFrame(() => triggerRef.current?.focus());
     if (focusFirst) requestAnimationFrame(() => enabledItems(panelRef.current)[0]?.focus());
   };
@@ -78,7 +80,7 @@ export const Menu = forwardRef(function Menu({
     else if (event.key === "ArrowUp") moveItem(event, -1);
     else if (event.key === "Home") { event.preventDefault(); enabledItems(panelRef.current)[0]?.focus(); }
     else if (event.key === "End") { event.preventDefault(); enabledItems(panelRef.current).at(-1)?.focus(); }
-    else if (event.key === "Escape") { event.preventDefault(); setOpen(false, { restoreFocus: true }); }
+    else if (event.key === "Escape") { event.preventDefault(); setOpen(false, { restoreFocus: true, event }); }
   };
   const triggerProps = {
     ref: triggerRef,
@@ -88,30 +90,36 @@ export const Menu = forwardRef(function Menu({
     "aria-haspopup": "menu",
     "aria-expanded": String(Boolean(isOpen)),
     "aria-controls": menuId,
-    onClick: () => setOpen(!isOpen, { focusFirst: !isOpen }),
+    onClick: (event) => setOpen(!isOpen, { focusFirst: !isOpen, event }),
     onKeyDown: (event) => {
-      if (event.key === "ArrowDown") { event.preventDefault(); setOpen(true, { focusFirst: true }); }
-      if (event.key === "Escape") { event.preventDefault(); setOpen(false, { restoreFocus: true }); }
+      if (event.key === "ArrowDown") { event.preventDefault(); setOpen(true, { focusFirst: true, event }); }
+      if (event.key === "Escape") { event.preventDefault(); setOpen(false, { restoreFocus: true, event }); }
     },
   };
+  const menuAccessibleLabel = label || triggerLabel;
+  const hasTrigger = resolvedVariant === "icon-trigger"
+    ? Boolean(triggerLabel)
+    : resolvedVariant === "avatar-trigger"
+      ? Boolean(triggerLabel)
+      : Boolean(triggerLabel);
 
   return React.createElement(
     "span",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["menu", className].filter(Boolean).join(" "),
-      "data-variant": resolvedVariant,
-      "data-density": resolvedDensity,
-      "data-state": isDisabled ? "disabled" : interactionState,
+      ...flowVariantProps(resolvedVariant),
+      ...flowDensityProps(resolvedDensity),
+      ...flowStateProps(isDisabled ? "disabled" : resolvedInteractionState),
       "data-align": resolvedAlign,
       "data-open": String(Boolean(isOpen)),
     },
-    resolvedVariant === "icon-trigger"
-      ? React.createElement(IconButton, { ...triggerProps, ariaLabel: label || triggerLabel, icon: "more_horiz", variant: "ghost", density: resolvedDensity })
-      : resolvedVariant === "avatar-trigger"
-        ? React.createElement("button", { ...triggerProps, type: "button", className: "menu__trigger menu__trigger--avatar", "aria-label": label || "Account menu" }, React.createElement(Avatar, { name: avatarName || triggerLabel, status: avatarStatus, size: avatarSize }))
-        : React.createElement(Button, { ...triggerProps, label: triggerLabel, variant: "secondary", density: resolvedDensity, trailingIcon: isOpen ? "expand_less" : "expand_more" }),
+    hasTrigger && resolvedVariant === "icon-trigger"
+      ? React.createElement(IconButton, { ...triggerProps, label: triggerLabel, icon: "more_horiz", variant: "ghost", density: resolvedDensity })
+      : hasTrigger && resolvedVariant === "avatar-trigger"
+        ? React.createElement("button", { ...triggerProps, type: "button", className: "menu__trigger menu__trigger--avatar", "aria-label": triggerLabel }, React.createElement(Avatar, { name: avatarName, status: avatarStatus, size: avatarSize, density: resolvedDensity }))
+        : hasTrigger ? React.createElement(Button, { ...triggerProps, label: triggerLabel, variant: "secondary", density: resolvedDensity, trailingIcon: isOpen ? "expand_less" : "expand_more" }) : null,
     React.createElement(
       "div",
       {
@@ -121,33 +129,37 @@ export const Menu = forwardRef(function Menu({
         hidden: !isOpen,
         id: menuId,
         role: "menu",
-        "aria-label": label,
+        "aria-label": menuAccessibleLabel,
         onKeyDown: onPanelKeyDown,
       },
       resolvedItems.map((item, index) => {
         if (item === "divider" || item?.separator) return React.createElement("span", { key: `separator-${index}`, className: "menu__separator", role: "separator" });
-        const key = item.key ?? item.label ?? String(index);
+        const key = item.key;
+        const { key: itemKey, label: itemLabel, icon, disabled: itemDisabled, tone, shortcut, separator, onClick, ...itemRest } = item;
         return React.createElement(
           "button",
           {
+            ...flowRestProps(itemRest),
             key,
             type: "button",
             className: "menu__item",
-            disabled: Boolean(item.disabled),
+            disabled: Boolean(itemDisabled),
             role: "menuitem",
             tabIndex: -1,
             "data-key": key,
-            "data-tone": item.tone || undefined,
-            "aria-disabled": item.disabled ? "true" : undefined,
-            onClick: () => {
-              if (item.disabled) return;
-              onSelect?.(item);
-              setOpen(false, { restoreFocus: true });
+            ...flowToneProps(normalizeFlowValue(tone, validItemTones, undefined)),
+            "aria-disabled": itemDisabled ? "true" : undefined,
+            onClick: (event) => {
+              if (itemDisabled) return;
+              onClick?.(event);
+              if (event.defaultPrevented) return;
+              onSelect?.(item, event);
+              setOpen(false, { restoreFocus: true, event });
             },
           },
-          item.icon ? React.createElement("span", { className: "menu__item-icon", "aria-hidden": "true" }, item.icon) : null,
-          React.createElement("span", { className: "menu__item-label" }, item.label ?? ""),
-          item.shortcut ? React.createElement("kbd", { className: "menu__item-shortcut" }, item.shortcut) : null,
+          icon ? React.createElement("span", { className: "menu__item-icon", "aria-hidden": "true" }, icon) : null,
+          React.createElement("span", { className: "menu__item-label" }, itemLabel),
+          shortcut ? React.createElement("kbd", { className: "menu__item-shortcut" }, shortcut) : null,
         );
       }),
     ),

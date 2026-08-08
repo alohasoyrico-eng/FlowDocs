@@ -1,4 +1,5 @@
 import type {
+  ChangeEvent,
   ForwardRefExoticComponent,
   InputHTMLAttributes,
   RefAttributes,
@@ -14,10 +15,10 @@ export interface SliderValueMeta {
   min: number;
   max: number;
   step: number;
-  unit: string;
+  unit?: string;
 }
 
-export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type" | "value" | "defaultValue" | "onChange" | "onInput"> {
+export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "style" | "size" | "type" | "value" | "defaultValue" | "onChange" | "onInput" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   value?: number;
   min?: number;
@@ -31,7 +32,7 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   name?: string;
   valueLabel?: string;
   formatValue?: (value: number) => string;
-  onValueChange?: (value: number, meta: SliderValueMeta) => void;
+  onValueChange?: (value: number, meta: SliderValueMeta, event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface SliderComponent extends ForwardRefExoticComponent<SliderProps & RefAttributes<HTMLInputElement>> {

@@ -1,20 +1,34 @@
-import type { ButtonProps } from "./Button.js";
-import type { InputProps } from "./Input.js";
-import type { ForwardRefExoticComponent, HTMLAttributes, RefAttributes } from "react";
+import type { ForwardRefExoticComponent, HTMLAttributes, KeyboardEvent, MouseEvent, RefAttributes } from "react";
 import { popoverPlatformContract } from "../components/platforms/index.js";
 
 export type PopoverVariant = "information" | "action" | "form" | "metric";
 export type PopoverState = "default" | "closed" | "open" | "hover" | "focus" | "warning" | "disabled";
 export type PopoverPlacement = "top" | "right" | "bottom" | "left";
 export type PopoverDensity = "sm" | "md" | "lg";
+export type PopoverOpenChangeEvent = MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>;
 
-export interface PopoverAction extends ButtonProps {
+export interface PopoverAction {
   key?: string;
+  label: string;
+  variant?: "primary" | "secondary" | "tertiary" | "ghost" | "danger";
+  intent?: "default" | "danger";
+  density?: PopoverDensity;
+  disabled?: boolean;
+  loading?: boolean;
+  icon?: string;
+  trailingIcon?: string;
+  type?: "button" | "submit" | "reset";
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-export interface PopoverField extends Pick<InputProps, "label" | "value" | "placeholder" | "helper"> {}
+export interface PopoverField {
+  label: string;
+  value?: string;
+  placeholder?: string;
+  helper?: string;
+}
 
-export interface PopoverProps extends Omit<HTMLAttributes<HTMLSpanElement>, "onChange"> {
+export interface PopoverProps extends Omit<HTMLAttributes<HTMLSpanElement>, "style" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   triggerLabel: string;
   title: string;
   description?: string;
@@ -28,8 +42,8 @@ export interface PopoverProps extends Omit<HTMLAttributes<HTMLSpanElement>, "onC
   disabled?: boolean;
   actions?: PopoverAction[];
   field?: PopoverField;
-  onOpenChange?: (open: boolean) => void;
-  onAction?: (key: string) => void;
+  onOpenChange?: (open: boolean, event?: PopoverOpenChangeEvent) => void;
+  onAction?: (key: string, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface PopoverComponent extends ForwardRefExoticComponent<PopoverProps & RefAttributes<HTMLSpanElement>> {

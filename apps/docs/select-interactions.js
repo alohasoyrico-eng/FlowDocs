@@ -1,9 +1,6 @@
-import { hydrateTransitionalSelect } from "./generated/components/components/fields.js?v=21";
-
 export function setupSelectDemos(root = document) {
   root.querySelectorAll('[data-doc-component="select"]:not([data-select-ready="true"])').forEach((demo) => {
     demo.dataset.selectReady = "true";
-    hydrateTransitionalSelect(demo);
   });
 }
 

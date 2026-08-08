@@ -1,13 +1,10 @@
 import React, { forwardRef } from "react";
 import { spinnerPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowToneProps, flowStateProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
-const validDensities = new Set(["sm", "md", "lg"]);
 const validTones = new Set(["accent", "ink", "success", "warning", "danger"]);
 const validStates = new Set(["default", "loading", "decorative", "subtle", "disabled"]);
 
-function normalizeDensity(density) {
-  return validDensities.has(density) ? density : "md";
-}
 
 function normalizeTone(tone) {
   return validTones.has(tone) ? tone : "accent";
@@ -18,8 +15,8 @@ function normalizeState(state) {
 }
 
 export const Spinner = forwardRef(function Spinner({
-  label = "Loading",
-  density = "md",
+  label,
+  density,
   tone = "accent",
   state = "loading",
   decorative = false,
@@ -27,20 +24,20 @@ export const Spinner = forwardRef(function Spinner({
   ...rest
 }, ref) {
   const resolvedState = decorative ? "decorative" : normalizeState(state);
-  const isDecorative = decorative || resolvedState === "decorative";
+  const isDecorative = decorative || resolvedState === "decorative" || !label;
 
   return React.createElement(
     "span",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["spinner", className].filter(Boolean).join(" "),
       role: isDecorative ? undefined : "status",
       "aria-hidden": isDecorative ? "true" : undefined,
-      "aria-label": isDecorative ? undefined : label,
-      "data-density": normalizeDensity(density),
-      "data-tone": normalizeTone(tone),
-      "data-state": resolvedState,
+      "aria-label": !isDecorative && label ? label : undefined,
+      ...flowDensityProps(normalizeFlowDensity(density)),
+      ...flowToneProps(normalizeTone(tone)),
+      ...flowStateProps(resolvedState),
     },
     React.createElement(
       "svg",

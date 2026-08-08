@@ -3,15 +3,11 @@ import { dialogPlatformContract } from "../components/platforms/index.js?v=1";
 import { Button } from "./Button.js";
 import { IconButton } from "./IconButton.js";
 import { Input } from "./Input.js";
+import { flowStateProps, flowToneProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["confirmation", "destructive", "form", "review", "success"]);
 const validStates = new Set(["open", "focus", "closing", "default", "closed"]);
 const validTones = new Set(["neutral", "info", "success", "danger"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, valid, fallback) {
-  return valid.has(value) ? value : fallback;
-}
 
 function slug(value) {
   return String(value ?? "dialog").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -24,19 +20,24 @@ function resolveTone(tone, variant) {
   return "neutral";
 }
 
+function hasStableFieldName(field) {
+  return field?.name !== undefined && field?.name !== null && field?.name !== "";
+}
+
 export const Dialog = forwardRef(function Dialog({
-  label = "Dialog",
-  description = "",
-  triggerLabel = "Open dialog",
-  actions = [],
-  open = false,
+  label,
+  description,
+  triggerLabel,
+  closeLabel,
+  actions,
+  open: openProp,
   tone = "neutral",
   variant = "confirmation",
   state = "closed",
-  density = "md",
-  icon = "",
-  fields = [],
-  id = "",
+  density,
+  icon,
+  fields,
+  id,
   onOpenChange,
   onAction,
   className = "",
@@ -45,52 +46,60 @@ export const Dialog = forwardRef(function Dialog({
   const reactId = useId();
   const triggerRef = useRef(null);
   const closeRef = useRef(null);
-  const resolvedVariant = normalize(variant, validVariants, "confirmation");
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "confirmation");
   const resolvedTone = resolveTone(tone, resolvedVariant);
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const initialState = normalize(state, validStates, "closed");
-  const initiallyOpen = Boolean(open);
-  const [isOpen, setIsOpen] = useState(initiallyOpen);
+  const resolvedDensity = normalizeFlowDensity(density);
+  const initialState = normalizeFlowValue(state, validStates, "closed");
+  const isOpenControlled = openProp !== undefined;
+  const initiallyOpen = Boolean(openProp) || initialState === "open" || initialState === "focus";
+  const [internalOpen, setInternalOpen] = useState(initiallyOpen);
+  const isOpen = isOpenControlled ? Boolean(openProp) : internalOpen;
   const [interactionState, setInteractionState] = useState(initiallyOpen ? initialState : initialState === "default" ? "default" : "closed");
+  const controlledInteractionState = isOpen ? "open" : initialState === "default" ? "default" : "closed";
+  const resolvedInteractionState = isOpenControlled ? controlledInteractionState : interactionState;
+  const resolvedState = isOpen ? resolvedInteractionState : resolvedInteractionState === "default" ? "default" : "closed";
   const dialogId = id || `dialog-${slug(label)}-${reactId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const titleId = `${dialogId}-title`;
   const resolvedIcon = icon || { danger: "warning", info: "info", success: "check_circle", neutral: "" }[resolvedTone];
+  const hasTrigger = Boolean(triggerLabel);
+  const sourceFields = Array.isArray(fields) ? fields : [];
+  const visibleFields = sourceFields.filter((field) => field?.label && hasStableFieldName(field));
 
-  const setOpen = (nextOpen, { restoreFocus = false } = {}) => {
+  const setOpen = (nextOpen, { restoreFocus = false, event } = {}) => {
     const normalizedOpen = Boolean(nextOpen);
-    setIsOpen(normalizedOpen);
-    setInteractionState(normalizedOpen ? "open" : "closed");
-    onOpenChange?.(normalizedOpen);
+    if (!isOpenControlled) setInternalOpen(normalizedOpen);
+    if (!isOpenControlled) setInteractionState(normalizedOpen ? "open" : "closed");
+    onOpenChange?.(normalizedOpen, event);
     if (normalizedOpen) requestAnimationFrame(() => closeRef.current?.focus());
     if (restoreFocus) requestAnimationFrame(() => triggerRef.current?.focus());
   };
 
-  const closeDialog = ({ restoreFocus = true } = {}) => setOpen(false, { restoreFocus });
+  const closeDialog = ({ restoreFocus = true, event } = {}) => setOpen(false, { restoreFocus, event });
 
   const onKeyDown = (event) => {
     if (event.key !== "Escape") return;
     event.preventDefault();
-    closeDialog();
+    closeDialog({ event });
   };
 
-  const resolvedActions = actions.length ? actions : [
-    { label: resolvedTone === "danger" ? "Confirm" : "Continue", key: "confirm", variant: "primary" },
-    { label: "Cancel", key: "cancel", variant: "secondary" },
-  ];
+  const sourceActions = Array.isArray(actions) ? actions : [];
+  const resolvedActions = sourceActions.filter((action) => action?.label && action.key !== undefined && action.key !== null && action.key !== "");
+
+  if (!label) return null;
 
   return React.createElement(
     "div",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["dialog", `dialog--${resolvedTone}`, className].filter(Boolean).join(" "),
       "data-open": String(Boolean(isOpen)),
-      "data-variant": resolvedVariant,
-      "data-state": isOpen ? interactionState : interactionState === "default" ? "default" : "closed",
-      "data-tone": resolvedTone,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowToneProps(resolvedTone),
+      ...flowDensityProps(resolvedDensity),
     },
-    React.createElement(Button, {
+    hasTrigger ? React.createElement(Button, {
       ref: triggerRef,
       label: triggerLabel,
       variant: "secondary",
@@ -100,8 +109,8 @@ export const Dialog = forwardRef(function Dialog({
       "aria-haspopup": "dialog",
       "aria-expanded": String(Boolean(isOpen)),
       "aria-controls": dialogId,
-      onClick: () => setOpen(true),
-    }),
+      onClick: (event) => setOpen(true, { event }),
+    }) : null,
     React.createElement(
       "div",
       {
@@ -109,7 +118,7 @@ export const Dialog = forwardRef(function Dialog({
         hidden: !isOpen,
         "data-overlay-dismiss": "",
         onClick: (event) => {
-          if (event.target === event.currentTarget) closeDialog();
+          if (event.target === event.currentTarget) closeDialog({ event });
         },
         onKeyDown,
       },
@@ -133,24 +142,24 @@ export const Dialog = forwardRef(function Dialog({
             React.createElement("h3", { id: titleId }, label),
             description ? React.createElement("p", null, description) : null,
           ),
-          React.createElement(IconButton, {
+          closeLabel ? React.createElement(IconButton, {
             ref: closeRef,
-            ariaLabel: "Close dialog",
+            label: closeLabel,
             icon: "close",
             density: resolvedDensity,
             variant: "ghost",
             className: "dialog__close",
             "data-overlay-close": "",
-            onClick: () => closeDialog(),
-          }),
+            onClick: (event) => closeDialog({ event }),
+          }) : null,
         ),
-        fields.length
+        visibleFields.length
           ? React.createElement(
             "div",
             { className: "dialog__body dialog__fields" },
-            fields.map((field, index) => React.createElement(Input, {
+            visibleFields.map((field) => React.createElement(Input, {
               ...field,
-              key: field.name ?? field.label ?? index,
+              key: field.name,
               density: field.density ?? resolvedDensity,
               readOnly: field.readOnly ?? true,
             })),
@@ -161,21 +170,22 @@ export const Dialog = forwardRef(function Dialog({
             "footer",
             null,
             resolvedActions.map((action, index) => {
-              const actionLabel = action.label ?? "Action";
+              const actionLabel = action.label;
               const needsDangerIntent = action.intent == null && resolvedTone === "danger" && index === 0;
               return React.createElement(Button, {
                 ...action,
-                key: action.key ?? actionLabel,
+                key: action.key,
                 label: actionLabel,
                 density: action.density ?? resolvedDensity,
                 variant: action.variant === "danger" ? "primary" : action.variant ?? (index === 0 ? "primary" : "secondary"),
                 intent: action.variant === "danger" ? "danger" : needsDangerIntent ? "danger" : action.intent,
                 "data-overlay-close": "",
-                "data-key": action.key ?? actionLabel,
+                "data-key": action.key,
                 onClick: (event) => {
                   action.onClick?.(event);
-                  onAction?.(action.key ?? actionLabel);
-                  closeDialog();
+                  if (event.defaultPrevented) return;
+                  onAction?.(action.key, event);
+                  closeDialog({ event });
                 },
               });
             }),

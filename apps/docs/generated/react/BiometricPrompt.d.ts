@@ -1,6 +1,7 @@
 import type {
   ForwardRefExoticComponent,
   HTMLAttributes,
+  MouseEvent,
   RefAttributes,
 } from "react";
 import type { biometricPromptPlatformContract } from "../components/platforms/index.js";
@@ -9,7 +10,7 @@ export type BiometricPromptVariant = "fingerprint" | "face" | "passcode" | "fall
 export type BiometricPromptState = "default" | "focus" | "authenticating" | "success" | "warning" | "error" | "disabled" | "scanning";
 export type BiometricPromptDensity = "sm" | "md" | "lg";
 
-export interface BiometricPromptProps extends HTMLAttributes<HTMLElement> {
+export interface BiometricPromptProps extends Omit<HTMLAttributes<HTMLElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   description?: string;
   variant?: BiometricPromptVariant;
@@ -19,6 +20,8 @@ export interface BiometricPromptProps extends HTMLAttributes<HTMLElement> {
   icon?: string;
   density?: BiometricPromptDensity;
   fullWidth?: boolean;
+  onAction?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onFallback?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface BiometricPromptComponent extends ForwardRefExoticComponent<BiometricPromptProps & RefAttributes<HTMLElement>> {

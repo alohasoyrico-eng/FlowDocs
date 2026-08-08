@@ -2,10 +2,10 @@ import React, { forwardRef, useId } from "react";
 import { emptyStatePlatformContract } from "../components/platforms/index.js?v=1";
 import { Button } from "./Button.js";
 import { Spinner } from "./Spinner.js";
+import { flowStateProps, flowVariantProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["first-use", "search-empty", "permission", "error", "maintenance"]);
 const validStates = new Set(["default", "action", "search-empty", "permission", "loading", "error"]);
-const validDensities = new Set(["sm", "md", "lg"]);
 
 function normalizeVariant(variant) {
   return validVariants.has(variant) ? variant : "first-use";
@@ -15,19 +15,14 @@ function normalizeState(state) {
   return validStates.has(state) ? state : "default";
 }
 
-function normalizeDensity(density) {
-  return validDensities.has(density) ? density : "md";
-}
-
 export const EmptyState = forwardRef(function EmptyState({
   title,
-  label,
-  description = "",
-  icon = "",
+  description,
+  icon,
   action,
   variant = "first-use",
   state = "default",
-  density = "md",
+  density,
   fullWidth = false,
   onAction,
   className = "",
@@ -38,22 +33,24 @@ export const EmptyState = forwardRef(function EmptyState({
   const titleId = id ? `${id}-title` : `empty-state-title-${reactId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const resolvedVariant = normalizeVariant(variant);
   const resolvedState = normalizeState(state);
-  const resolvedDensity = normalizeDensity(density);
-  const resolvedTitle = title ?? label ?? "No results";
+  const resolvedDensity = normalizeFlowDensity(density);
+  if (!title) return null;
   const showIcon = Boolean(icon) || resolvedState === "loading";
   const actionLabel = action?.label;
+  const actionKey = action?.key;
+  const canRenderAction = Boolean(actionLabel && actionKey !== undefined && actionKey !== null && actionKey !== "");
 
   return React.createElement(
     "section",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       id,
       className: ["empty-state", className].filter(Boolean).join(" "),
       "aria-labelledby": titleId,
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-full-width": String(Boolean(fullWidth)),
     },
     showIcon
@@ -61,23 +58,24 @@ export const EmptyState = forwardRef(function EmptyState({
         "span",
         { className: "empty-state__icon", "aria-hidden": "true" },
         resolvedState === "loading"
-          ? React.createElement(Spinner, { label: "Loading empty state", density: "sm", decorative: true })
+          ? React.createElement(Spinner, { density: resolvedDensity || undefined, decorative: true })
           : icon,
       )
       : null,
-    React.createElement("h3", { className: "empty-state__title", id: titleId }, resolvedTitle),
+    React.createElement("h3", { className: "empty-state__title", id: titleId }, title),
     description
       ? React.createElement("p", { className: "empty-state__description" }, description)
       : null,
-    actionLabel
+    canRenderAction
       ? React.createElement(Button, {
         ...action,
         label: actionLabel,
-        density: action.density ?? resolvedDensity,
+        density: action.density ?? (resolvedDensity || undefined),
         variant: action.variant ?? "primary",
         onClick: (event) => {
           action.onClick?.(event);
-          onAction?.(action.key ?? actionLabel);
+          if (event.defaultPrevented) return;
+          onAction?.(actionKey, event);
         },
       })
       : null,

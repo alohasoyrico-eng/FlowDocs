@@ -1,14 +1,11 @@
 import React, { forwardRef, useId } from "react";
 import { progressIndicatorPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowToneProps, flowStateProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
-const validDensities = new Set(["sm", "md"]);
 const validTones = new Set(["accent", "success", "warning", "danger", "ink"]);
 const terminalStates = new Set(["paused", "complete", "error", "disabled"]);
 const validStates = new Set(["default", "active", "indeterminate", "paused", "complete", "error", "disabled"]);
 
-function normalizeDensity(density) {
-  return validDensities.has(density) ? density : "md";
-}
 
 function normalizeTone(tone) {
   return validTones.has(tone) ? tone : "accent";
@@ -27,24 +24,16 @@ function progressMeta({ value = 0, max = 100, state = "active", indeterminate = 
   return { numericMax, numericValue, percent, resolvedState, isIndeterminate };
 }
 
-function valueText({ resolvedState, percent, isIndeterminate }) {
-  if (isIndeterminate) return "In progress";
-  if (resolvedState === "paused") return `Paused at ${Math.round(percent)}%`;
-  if (resolvedState === "complete") return "Complete";
-  if (resolvedState === "error") return `Error at ${Math.round(percent)}%`;
-  if (resolvedState === "disabled") return "Unavailable";
-  return undefined;
-}
-
 export const ProgressIndicator = forwardRef(function ProgressIndicator({
   label,
+  ariaValueText,
   value = 0,
   max = 100,
   indeterminate = false,
   showValue = false,
   tone = "accent",
   state = "active",
-  density = "md",
+  density,
   fullWidth = false,
   className = "",
   id,
@@ -53,11 +42,12 @@ export const ProgressIndicator = forwardRef(function ProgressIndicator({
   const generatedId = useId();
   const labelId = id ? `${id}-label` : `progress-label-${generatedId}`;
   const { numericMax, numericValue, percent, resolvedState, isIndeterminate } = progressMeta({ value, max, state, indeterminate });
+  if (!label) return null;
 
   return React.createElement(
     "div",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       id,
       className: ["progress", className].filter(Boolean).join(" "),
@@ -66,18 +56,18 @@ export const ProgressIndicator = forwardRef(function ProgressIndicator({
       "aria-valuemin": "0",
       "aria-valuemax": isIndeterminate ? undefined : String(numericMax),
       "aria-valuenow": isIndeterminate ? undefined : String(numericValue),
-      "aria-valuetext": valueText({ resolvedState, percent, isIndeterminate }),
+      "aria-valuetext": ariaValueText,
       "aria-disabled": resolvedState === "disabled" ? "true" : undefined,
-      "data-tone": normalizeTone(tone),
-      "data-state": resolvedState,
-      "data-density": normalizeDensity(density),
+      ...flowToneProps(normalizeTone(tone)),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(normalizeFlowDensity(density)),
       "data-full-width": String(Boolean(fullWidth)),
       "data-indeterminate": String(Boolean(isIndeterminate)),
     },
     React.createElement(
       "span",
       { className: "progress__meta" },
-      React.createElement("span", { className: "progress__label", id: labelId }, label ?? "Progress"),
+      React.createElement("span", { className: "progress__label", id: labelId }, label),
       showValue && !isIndeterminate
         ? React.createElement("span", { className: "progress__value" }, `${Math.round(percent)}%`)
         : null,
@@ -85,7 +75,13 @@ export const ProgressIndicator = forwardRef(function ProgressIndicator({
     React.createElement(
       "span",
       { className: "progress__track" },
-      React.createElement("span", { className: "progress__fill", style: { "--progress-value": `${percent}%` } }),
+      React.createElement("progress", {
+        className: "progress__meter",
+        max: numericMax,
+        value: isIndeterminate ? undefined : numericValue,
+        tabIndex: -1,
+        "aria-hidden": "true",
+      }),
     ),
   );
 });

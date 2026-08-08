@@ -1,4 +1,4 @@
-import type { ForwardRefExoticComponent, InputHTMLAttributes, RefAttributes } from "react";
+import type { ChangeEvent, FocusEvent, ForwardRefExoticComponent, InputHTMLAttributes, KeyboardEvent, MouseEvent, RefAttributes } from "react";
 import type { comboboxPlatformContract } from "../components/platforms/index.js";
 
 export type ComboboxDensity = "sm" | "md" | "lg";
@@ -18,11 +18,25 @@ export interface ComboboxValueMeta {
   cleared?: boolean;
 }
 
-export interface ComboboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "size"> {
+export type ComboboxValueChangeEvent =
+  | ChangeEvent<HTMLInputElement>
+  | KeyboardEvent<HTMLInputElement>
+  | MouseEvent<HTMLSpanElement>
+  | MouseEvent<HTMLButtonElement>;
+export type ComboboxOpenChangeEvent =
+  | FocusEvent<HTMLInputElement>
+  | ChangeEvent<HTMLInputElement>
+  | KeyboardEvent<HTMLInputElement>
+  | MouseEvent<HTMLSpanElement>
+  | MouseEvent<HTMLButtonElement>;
+
+export interface ComboboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "style" | "onChange" | "value" | "size" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   helper?: string;
   icon?: string;
   options: ComboboxOption[];
+  optionsLabel?: string;
+  clearSelectionLabel?: string;
   value?: string;
   name?: string;
   placeholder?: string;
@@ -30,7 +44,9 @@ export interface ComboboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
   disabled?: boolean;
   density?: ComboboxDensity;
   state?: ComboboxState;
-  onValueChange?: (value: string, meta: ComboboxValueMeta) => void;
+  open?: boolean;
+  onValueChange?: (value: string, meta: ComboboxValueMeta, event: ComboboxValueChangeEvent) => void;
+  onOpenChange?: (open: boolean, event?: ComboboxOpenChangeEvent) => void;
 }
 
 export interface ComboboxComponent extends ForwardRefExoticComponent<ComboboxProps & RefAttributes<HTMLInputElement>> {

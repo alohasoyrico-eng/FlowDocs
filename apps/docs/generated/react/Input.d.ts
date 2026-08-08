@@ -1,4 +1,4 @@
-import type { ForwardRefExoticComponent, InputHTMLAttributes, RefAttributes } from "react";
+import type { ChangeEvent, ForwardRefExoticComponent, InputHTMLAttributes, MouseEvent, RefAttributes } from "react";
 import { inputPlatformContract } from "../components/platforms/index.js";
 
 export type InputVariant = "text" | "email" | "password" | "number" | "currency" | "unit" | "search";
@@ -12,7 +12,7 @@ export type InputValueMeta = {
   numericValue?: number | null;
 };
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix" | "onChange"> {
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "style" | "size" | "prefix" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   helper?: string;
   helperText?: string;
@@ -28,8 +28,13 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   loading?: boolean;
   align?: InputAlign;
   revealable?: boolean;
+  revealed?: boolean;
+  revealLabel?: string;
+  hideLabel?: string;
+  locale?: string | string[];
   autocomplete?: string;
-  onValueChange?: (value: string, meta: InputValueMeta) => void;
+  onValueChange?: (value: string, meta: InputValueMeta, event: ChangeEvent<HTMLInputElement>) => void;
+  onRevealChange?: (revealed: boolean, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface InputComponent extends ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>> {

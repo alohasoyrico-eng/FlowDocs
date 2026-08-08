@@ -1,37 +1,42 @@
-import type { AvatarProps } from "./Avatar.js";
-import type { ForwardRefExoticComponent, HTMLAttributes, RefAttributes } from "react";
+import type { AvatarSize, AvatarStatus } from "./Avatar.js";
+import type { ButtonHTMLAttributes, ForwardRefExoticComponent, HTMLAttributes, KeyboardEvent, MouseEvent, RefAttributes } from "react";
 import { menuPlatformContract } from "../components/platforms/index.js";
 
 export type MenuVariant = "actions" | "grouped" | "selection" | "danger" | "icon-trigger" | "avatar-trigger";
 export type MenuDensity = "sm" | "md" | "lg";
 export type MenuState = "default" | "closed" | "open" | "focus" | "disabled";
 export type MenuAlign = "start" | "end" | "right";
+export type MenuItemTone = "danger";
+export type MenuOpenChangeEvent = MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>;
 
-export interface MenuItem {
-  label?: string;
+export interface MenuItem extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "type" | "children" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+  label: string;
   icon?: string;
-  key?: string;
+  key: string;
   disabled?: boolean;
-  separator?: boolean;
-  tone?: string;
+  tone?: MenuItemTone;
   shortcut?: string;
 }
 
-export interface MenuProps extends Omit<HTMLAttributes<HTMLSpanElement>, "onSelect"> {
+export interface MenuSeparator {
+  separator: true;
+}
+
+export interface MenuProps extends Omit<HTMLAttributes<HTMLSpanElement>, "style" | "onSelect" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   triggerLabel: string;
-  items: Array<MenuItem | "divider">;
+  items: Array<MenuItem | MenuSeparator | "divider">;
   open?: boolean;
   label?: string;
   variant?: MenuVariant;
   avatarName?: string;
-  avatarStatus?: AvatarProps["status"];
-  avatarSize?: AvatarProps["size"];
+  avatarStatus?: AvatarStatus;
+  avatarSize?: AvatarSize;
   density?: MenuDensity;
   state?: MenuState;
   align?: MenuAlign;
   disabled?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  onSelect?: (item: MenuItem) => void;
+  onOpenChange?: (open: boolean, event?: MenuOpenChangeEvent) => void;
+  onSelect?: (item: MenuItem, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface MenuComponent extends ForwardRefExoticComponent<MenuProps & RefAttributes<HTMLSpanElement>> {

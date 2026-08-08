@@ -1,4 +1,4 @@
-import type { ForwardRefExoticComponent, HTMLAttributes, RefAttributes } from "react";
+import type { ForwardRefExoticComponent, HTMLAttributes, KeyboardEvent, MouseEvent, RefAttributes } from "react";
 import type { kpiTilePlatformContract } from "../components/platforms/index.js";
 
 export type KpiTileVariant = "standard" | "delta" | "threshold" | "sparkline" | "drill-in";
@@ -9,15 +9,16 @@ export type KpiTileTrend = "up" | "down" | "flat";
 
 export interface KpiTileMeta {
   label?: string;
-  value?: string;
+  value: string;
   delta?: string;
   tone: KpiTileTone;
   variant: KpiTileVariant;
 }
+export type KpiTileSelectEvent = MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>;
 
-export interface KpiTileProps extends Omit<HTMLAttributes<HTMLElement>, "onSelect"> {
+export interface KpiTileProps extends Omit<HTMLAttributes<HTMLElement>, "style" | "onSelect" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label?: string;
-  value?: string;
+  value: string;
   delta?: string;
   trend?: KpiTileTrend;
   tone?: KpiTileTone;
@@ -30,8 +31,7 @@ export interface KpiTileProps extends Omit<HTMLAttributes<HTMLElement>, "onSelec
   selected?: boolean;
   disabled?: boolean;
   loading?: boolean;
-  ariaLabel?: string;
-  onSelect?: (metric: KpiTileMeta) => void;
+  onSelect?: (metric: KpiTileMeta, event: KpiTileSelectEvent) => void;
 }
 
 export interface KpiTileComponent extends ForwardRefExoticComponent<KpiTileProps & RefAttributes<HTMLElement>> {

@@ -2,11 +2,11 @@ import React, { forwardRef, useState } from "react";
 import { toastPlatformContract } from "../components/platforms/index.js?v=1";
 import { Button } from "./Button.js";
 import { IconButton } from "./IconButton.js";
+import { flowToneProps, flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validTones = new Set(["neutral", "info", "success", "warning", "danger"]);
 const validVariants = new Set(["status", "progress", "warning", "recovery", "undo"]);
 const validStates = new Set(["default", "visible", "action", "stacked", "exiting"]);
-const validDensities = new Set(["sm", "md", "lg"]);
 
 const toneIcons = {
   neutral: "info",
@@ -16,46 +16,50 @@ const toneIcons = {
   danger: "error",
 };
 
-function normalize(value, valid, fallback) {
-  return valid.has(value) ? value : fallback;
-}
-
 export const Toast = forwardRef(function Toast({
-  label = "Toast",
-  description = "",
+  label,
+  description,
   tone = "neutral",
   variant = "status",
   state = "visible",
-  density = "md",
+  density,
   icon = "",
-  actionLabel = "",
+  actionLabel,
   dismissible = false,
+  dismissLabel,
+  dismissed: dismissedProp,
   onAction,
   onDismiss,
+  onDismissChange,
   className = "",
   ...rest
 }, ref) {
-  const resolvedTone = normalize(tone, validTones, "neutral");
-  const resolvedVariant = normalize(variant, validVariants, "status");
-  const resolvedState = normalize(state, validStates, "visible");
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const [dismissed, setDismissed] = useState(false);
+  const resolvedTone = normalizeFlowValue(tone, validTones, "neutral");
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "status");
+  const resolvedState = normalizeFlowValue(state, validStates, "visible");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const isDismissedControlled = dismissedProp !== undefined;
+  const [internalDismissed, setInternalDismissed] = useState(false);
+  const dismissed = isDismissedControlled ? Boolean(dismissedProp) : internalDismissed;
   const hidden = dismissed || resolvedState === "default";
   const role = resolvedTone === "danger" || resolvedTone === "warning" ? "alert" : "status";
+  const canRenderAction = Boolean(actionLabel && onAction);
+
+  if (!label) return null;
 
   return React.createElement(
     "article",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["toast", className].filter(Boolean).join(" "),
       hidden,
       role,
       "aria-live": role === "alert" ? "assertive" : "polite",
-      "data-tone": resolvedTone,
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowToneProps(resolvedTone),
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
     },
     React.createElement("span", { className: "toast__icon", "aria-hidden": "true" }, icon || toneIcons[resolvedTone]),
     React.createElement(
@@ -64,25 +68,28 @@ export const Toast = forwardRef(function Toast({
       React.createElement("strong", null, label),
       description ? React.createElement("p", null, description) : null,
     ),
-    actionLabel
+    canRenderAction
       ? React.createElement(Button, {
         label: actionLabel,
         variant: "ghost",
-        density: "sm",
+        density: resolvedDensity,
         className: "toast__action",
         "data-toast-action": "",
-        onClick: () => onAction?.(),
+        onClick: (event) => onAction(event),
       })
       : null,
-    dismissible
+    dismissible && dismissLabel
       ? React.createElement(IconButton, {
-        ariaLabel: "Dismiss notification",
+        label: dismissLabel,
         icon: "close",
+        density: resolvedDensity,
         className: "toast__dismiss",
         "data-toast-dismiss": "",
-        onClick: () => {
-          setDismissed(true);
-          onDismiss?.();
+        onClick: (event) => {
+          onDismiss?.(event);
+          if (event.defaultPrevented) return;
+          if (!isDismissedControlled) setInternalDismissed(true);
+          onDismissChange?.(true, event);
         },
       })
       : null,

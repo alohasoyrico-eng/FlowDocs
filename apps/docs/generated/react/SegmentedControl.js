@@ -1,24 +1,30 @@
 import React, { forwardRef, useId, useMemo, useRef, useState } from "react";
 import { segmentedControlPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowVariantProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
+
+const validVariants = new Set(["outlined", "toolbar", "compact", "icon-only"]);
 
 function itemKey(item) {
-  return item?.key ?? item?.value ?? item?.label ?? "";
+  return item?.key ?? item?.value ?? "";
+}
+
+function hasStableItemKey(item) {
+  const key = item?.key ?? item?.value;
+  return key !== undefined && key !== null && key !== "";
 }
 
 function normalizeItems(items) {
-  return (items?.length ? items : [
-    { key: "first", label: "First" },
-    { key: "second", label: "Second" },
-    { key: "third", label: "Third" },
-  ]).map((item) => ({
+  return (Array.isArray(items) ? items : []).filter((item) => item?.label && hasStableItemKey(item)).map((item) => ({
     ...item,
     key: itemKey(item),
-    label: item?.label ?? itemKey(item) ?? "Option",
+    label: item.label,
   }));
 }
 
 function selectedFromItems(items, selectedKey) {
-  return selectedKey || itemKey(items.find((item) => item.selected)) || itemKey(items[0]) || "";
+  if (selectedKey !== undefined) return selectedKey;
+  const selectedItemKey = itemKey(items.find((item) => item.selected));
+  return selectedItemKey !== "" ? selectedItemKey : itemKey(items[0]);
 }
 
 function nextEnabledKey(items, currentKey, direction) {
@@ -31,7 +37,7 @@ function nextEnabledKey(items, currentKey, direction) {
 export const SegmentedControl = forwardRef(function SegmentedControl({
   label,
   items,
-  selectedKey = "",
+  selectedKey,
   onValueChange,
   variant = "outlined",
   density,
@@ -42,60 +48,53 @@ export const SegmentedControl = forwardRef(function SegmentedControl({
   const generatedId = useId();
   const controlId = id ?? `segmented-control-${generatedId}`;
   const normalizedItems = useMemo(() => normalizeItems(items), [items]);
+  const isSelectedKeyControlled = selectedKey !== undefined;
   const [currentKey, setCurrentKey] = useState(() => selectedFromItems(normalizedItems, selectedKey));
   const itemRefs = useRef(new Map());
-  const activeKey = selectedKey || currentKey || selectedFromItems(normalizedItems, selectedKey);
-  const activeIndex = Math.max(0, normalizedItems.findIndex((item) => item.key === activeKey));
-  const resolvedLabel = label ?? "Options";
+  const activeKey = isSelectedKeyControlled ? selectedKey : currentKey || selectedFromItems(normalizedItems, selectedKey);
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "outlined");
 
-  const commitKey = (nextKey, restoreFocus = false) => {
+  if (!label || !normalizedItems.length) return null;
+
+  const commitKey = (nextKey, restoreFocus = false, event) => {
     const option = normalizedItems.find((item) => item.key === nextKey);
     if (!option || option.disabled) return;
-    setCurrentKey(nextKey);
-    onValueChange?.(nextKey);
-    if (restoreFocus) requestAnimationFrame(() => itemRefs.current.get(nextKey)?.focus());
+    if (!isSelectedKeyControlled) setCurrentKey(nextKey);
+    onValueChange?.(nextKey, event);
+    const schedule = globalThis.requestAnimationFrame ?? ((callback) => globalThis.setTimeout?.(callback, 0));
+    if (restoreFocus) schedule(() => itemRefs.current.get(nextKey)?.focus());
   };
 
-  const move = (direction) => {
-    commitKey(nextEnabledKey(normalizedItems, activeKey, direction), true);
+  const move = (direction, event) => {
+    commitKey(nextEnabledKey(normalizedItems, activeKey, direction), true, event);
   };
 
-  const moveToEdge = (edge) => {
+  const moveToEdge = (edge, event) => {
     const enabled = normalizedItems.filter((item) => !item.disabled);
     const next = edge === "first" ? enabled[0] : enabled[enabled.length - 1];
-    if (next) commitKey(next.key, true);
+    if (next) commitKey(next.key, true, event);
   };
 
   return React.createElement(
     "div",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       id: controlId,
       className: ["segmented-control", className].filter(Boolean).join(" "),
       role: "tablist",
-      "aria-label": resolvedLabel,
-      "data-variant": variant,
-      "data-density": density || undefined,
-      style: {
-        ...(rest.style ?? {}),
-        "--comp-segmented-control-count": String(Math.max(normalizedItems.length, 1)),
-      },
+      "aria-label": label,
+      ...flowVariantProps(resolvedVariant),
+      ...flowDensityProps(density),
     },
-    React.createElement("span", {
-      className: "segmented-control__indicator",
-      "aria-hidden": "true",
-      style: {
-        "--comp-segmented-control-index": String(activeIndex),
-        "--comp-segmented-control-count": String(Math.max(normalizedItems.length, 1)),
-      },
-    }),
     normalizedItems.map((item) => {
       const selected = item.key === activeKey;
-      const iconOnly = variant === "icon-only" && Boolean(item.icon);
+      const iconOnly = resolvedVariant === "icon-only" && Boolean(item.icon);
+      const { key, value, label: itemLabel, icon, selected: itemSelected, disabled, onClick, onKeyDown, ...itemRest } = item;
       return React.createElement(
         "button",
         {
+          ...itemRest,
           key: item.key,
           ref: (node) => {
             if (node) itemRefs.current.set(item.key, node);
@@ -104,34 +103,41 @@ export const SegmentedControl = forwardRef(function SegmentedControl({
           type: "button",
           className: "segmented-control__item",
           role: "tab",
-          disabled: Boolean(item.disabled),
+          disabled: Boolean(disabled),
           tabIndex: selected ? 0 : -1,
           "aria-selected": String(selected),
-          "aria-label": iconOnly ? item.label : undefined,
+          "aria-label": iconOnly ? itemLabel : undefined,
           "data-segmented-control-item": "",
           "data-key": item.key,
           "data-icon-only": iconOnly ? "true" : undefined,
-          onClick: () => commitKey(item.key),
+          onClick: (event) => {
+            onClick?.(event);
+            if (event.defaultPrevented) return;
+            commitKey(item.key, false, event);
+          },
           onKeyDown: (event) => {
+            onKeyDown?.(event);
+            if (event.defaultPrevented) return;
             if (event.key === "ArrowRight") {
               event.preventDefault();
-              move(1);
+              move(1, event);
             } else if (event.key === "ArrowLeft") {
               event.preventDefault();
-              move(-1);
+              move(-1, event);
             } else if (event.key === "Home") {
               event.preventDefault();
-              moveToEdge("first");
+              moveToEdge("first", event);
             } else if (event.key === "End") {
               event.preventDefault();
-              moveToEdge("last");
+              moveToEdge("last", event);
             }
           },
         },
-        item.icon
-          ? React.createElement("span", { className: "segmented-control__icon", "aria-hidden": "true" }, item.icon)
+        selected ? React.createElement("span", { className: "segmented-control__indicator", "aria-hidden": "true" }) : null,
+        icon
+          ? React.createElement("span", { className: "segmented-control__icon", "aria-hidden": "true" }, icon)
           : null,
-        React.createElement("span", { className: "segmented-control__label", "aria-hidden": iconOnly ? "true" : undefined }, item.label),
+        React.createElement("span", { className: "segmented-control__label", "aria-hidden": iconOnly ? "true" : undefined }, itemLabel),
       );
     }),
   );

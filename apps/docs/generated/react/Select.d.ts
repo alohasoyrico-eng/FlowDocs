@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ForwardRefExoticComponent, RefAttributes } from "react";
+import type { ButtonHTMLAttributes, ForwardRefExoticComponent, KeyboardEvent, MouseEvent, RefAttributes } from "react";
 import { selectPlatformContract } from "../components/platforms/index.js";
 
 export type SelectDensity = "sm" | "md" | "lg";
@@ -14,19 +14,28 @@ export type SelectValueMeta = {
   label: string;
   meta: string;
 };
+export type SelectValueChangeEvent = MouseEvent<HTMLSpanElement> | KeyboardEvent<HTMLSpanElement>;
+export type SelectOpenChangeEvent =
+  | MouseEvent<HTMLButtonElement>
+  | KeyboardEvent<HTMLButtonElement>
+  | KeyboardEvent<HTMLSpanElement>
+  | MouseEvent<HTMLSpanElement>;
 
-export interface SelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "disabled" | "value" | "onChange"> {
+export interface SelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "disabled" | "value" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   helper?: string;
   icon?: string;
   options: SelectOption[];
+  optionsLabel?: string;
   value?: string;
   name?: string;
   disabled?: boolean;
   density?: SelectDensity;
   variant?: SelectVariant;
   state?: SelectState;
-  onValueChange?: (value: string, meta: SelectValueMeta) => void;
+  open?: boolean;
+  onValueChange?: (value: string, meta: SelectValueMeta, event: SelectValueChangeEvent) => void;
+  onOpenChange?: (open: boolean, event?: SelectOpenChangeEvent) => void;
 }
 
 export interface SelectComponent extends ForwardRefExoticComponent<SelectProps & RefAttributes<HTMLButtonElement>> {

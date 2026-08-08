@@ -1,6 +1,7 @@
 import type {
   ButtonHTMLAttributes,
   ForwardRefExoticComponent,
+  MouseEvent,
   RefAttributes,
 } from "react";
 import type { quickActionPlatformContract } from "../components/platforms/index.js";
@@ -16,7 +17,7 @@ export interface QuickActionMeta {
   state: QuickActionState;
 }
 
-export interface QuickActionProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface QuickActionProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   icon?: string;
   badge?: string;
@@ -26,7 +27,7 @@ export interface QuickActionProps extends ButtonHTMLAttributes<HTMLButtonElement
   loading?: boolean;
   disabled?: boolean;
   tone?: QuickActionTone;
-  onAction?: (meta: QuickActionMeta) => void;
+  onAction?: (meta: QuickActionMeta, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface QuickActionComponent extends ForwardRefExoticComponent<QuickActionProps & RefAttributes<HTMLButtonElement>> {

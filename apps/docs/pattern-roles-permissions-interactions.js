@@ -1,5 +1,3 @@
-import { createTransitionalBadge } from "./generated/components/components/status.js?v=1";
-
 const PERMISSION_COLUMNS = ["capability", "manager", "finance", "support"];
 const CONTROL_RULES = {
   "fuel-manager": {
@@ -93,7 +91,12 @@ function findRoleCell(demo, capability, column) {
 
 function renderRoleBadge(cell, state) {
   if (!cell) return;
-  cell.replaceChildren(createTransitionalBadge({ label: state.label, tone: state.tone, variant: "status" }));
+  const badge = cell.querySelector("[data-doc-component='badge'], .badge");
+  if (!badge) return;
+  badge.dataset.tone = state.tone;
+  badge.dataset.variant = "status";
+  const label = badge.querySelector(".badge__label, [data-badge-label]") ?? badge;
+  label.replaceChildren(state.label);
 }
 
 function updateAuditEvent(demo, { label, description, status, state = "verified", tone = "success" }) {

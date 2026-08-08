@@ -2,33 +2,29 @@ import React, { forwardRef, useId, useRef, useState } from "react";
 import { popoverPlatformContract } from "../components/platforms/index.js?v=1";
 import { Button } from "./Button.js";
 import { Input } from "./Input.js";
+import { flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["information", "action", "form", "metric"]);
 const validStates = new Set(["default", "closed", "open", "hover", "focus", "warning", "disabled"]);
 const validPlacements = new Set(["top", "right", "bottom", "left"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, valid, fallback) {
-  return valid.has(value) ? value : fallback;
-}
 
 function slug(value) {
   return String(value ?? "popover").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
 export const Popover = forwardRef(function Popover({
-  triggerLabel = "Open",
-  title = "Popover",
-  description = "",
-  id = "",
-  open = false,
+  triggerLabel,
+  title,
+  description,
+  id,
+  open: openProp,
   variant = "information",
   state = "default",
   placement = "bottom",
-  density = "md",
+  density,
   fullWidth = false,
   disabled = false,
-  actions = [],
+  actions,
   field,
   onOpenChange,
   onAction,
@@ -37,48 +33,55 @@ export const Popover = forwardRef(function Popover({
 }, ref) {
   const reactId = useId();
   const triggerRef = useRef(null);
-  const resolvedVariant = normalize(variant, validVariants, "information");
-  const resolvedPlacement = normalize(placement, validPlacements, "bottom");
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const initialState = disabled ? "disabled" : normalize(state, validStates, "default");
-  const initiallyOpen = Boolean(open) || ["open", "focus", "warning"].includes(initialState);
-  const [isOpen, setIsOpen] = useState(initiallyOpen);
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "information");
+  const resolvedPlacement = normalizeFlowValue(placement, validPlacements, "bottom");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const initialState = disabled ? "disabled" : normalizeFlowValue(state, validStates, "default");
+  const isOpenControlled = openProp !== undefined;
+  const initiallyOpen = Boolean(openProp) || ["open", "focus", "warning"].includes(initialState);
+  const [internalOpen, setInternalOpen] = useState(initiallyOpen);
+  const isOpen = isOpenControlled ? Boolean(openProp) : internalOpen;
   const [interactionState, setInteractionState] = useState(initiallyOpen ? "open" : initialState);
+  const resolvedInteractionState = isOpenControlled ? (isOpen ? "open" : initialState) : interactionState;
   const panelId = id || `popover-${slug(triggerLabel)}-${reactId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
-  const resolvedActions = actions.length ? actions : resolvedVariant === "action"
-    ? [{ label: "Apply", variant: "primary" }, { label: "Cancel", variant: "secondary" }]
-    : [];
-  const isDisabled = disabled || interactionState === "disabled";
+  const titleId = `${panelId}-title`;
+  const sourceActions = Array.isArray(actions) ? actions : [];
+  const resolvedActions = sourceActions.filter((action) => action?.label && action.key !== undefined && action.key !== null && action.key !== "");
+  const isDisabled = disabled || resolvedInteractionState === "disabled";
+  const hasTrigger = Boolean(triggerLabel);
+  const hasField = Boolean(field?.label);
 
-  const setOpen = (nextOpen, { restoreFocus = false } = {}) => {
+  if (!triggerLabel || !title) return null;
+
+  const setOpen = (nextOpen, { restoreFocus = false, event } = {}) => {
     if (isDisabled) return;
     const normalizedOpen = Boolean(nextOpen);
-    setIsOpen(normalizedOpen);
-    setInteractionState(normalizedOpen ? "open" : "closed");
-    onOpenChange?.(normalizedOpen);
+    if (!isOpenControlled) setInternalOpen(normalizedOpen);
+    if (!isOpenControlled) setInteractionState(normalizedOpen ? "open" : "closed");
+    onOpenChange?.(normalizedOpen, event);
     if (restoreFocus) requestAnimationFrame(() => triggerRef.current?.focus());
   };
 
   const closeFromKeyboard = (event) => {
     if (event.key !== "Escape") return;
     event.preventDefault();
-    setOpen(false, { restoreFocus: true });
+    setOpen(false, { restoreFocus: true, event });
   };
 
   return React.createElement(
     "span",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["popover", className].filter(Boolean).join(" "),
       "data-open": String(Boolean(isOpen)),
-      "data-variant": resolvedVariant,
-      "data-state": isDisabled ? "disabled" : interactionState,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(isDisabled ? "disabled" : resolvedInteractionState),
       "data-placement": resolvedPlacement,
-      "data-density": resolvedDensity,
+      ...flowDensityProps(resolvedDensity),
       "data-full-width": String(Boolean(fullWidth)),
     },
-    React.createElement(Button, {
+    hasTrigger ? React.createElement(Button, {
       ref: triggerRef,
       label: triggerLabel,
       variant: resolvedVariant === "metric" ? "tertiary" : "secondary",
@@ -91,9 +94,9 @@ export const Popover = forwardRef(function Popover({
       "aria-haspopup": "dialog",
       "aria-expanded": String(Boolean(isOpen)),
       "aria-controls": panelId,
-      onClick: () => setOpen(!isOpen),
+      onClick: (event) => setOpen(!isOpen, { event }),
       onKeyDown: closeFromKeyboard,
-    }),
+    }) : null,
     React.createElement(
       "section",
       {
@@ -101,17 +104,17 @@ export const Popover = forwardRef(function Popover({
         hidden: !isOpen,
         id: panelId,
         role: "dialog",
-        "aria-label": title || triggerLabel || "Popover",
+        "aria-labelledby": titleId,
         onKeyDown: closeFromKeyboard,
       },
-      React.createElement("strong", null, title || "Popover"),
+      React.createElement("strong", { id: titleId }, title),
       description ? React.createElement("p", null, description) : null,
-      resolvedVariant === "form"
+      resolvedVariant === "form" && hasField
         ? React.createElement(Input, {
-          label: field?.label ?? "Label",
+          label: field.label,
           value: field?.value ?? "",
-          placeholder: field?.placeholder ?? "Short value",
-          helper: field?.helper ?? "Keep this field local to the trigger.",
+          placeholder: field?.placeholder,
+          helper: field?.helper,
           density: resolvedDensity,
           readOnly: true,
         })
@@ -121,19 +124,20 @@ export const Popover = forwardRef(function Popover({
           "footer",
           { className: "popover__actions" },
           resolvedActions.map((action) => {
-            const actionLabel = action.label ?? "Action";
+            const actionLabel = action.label;
             return React.createElement(Button, {
               ...action,
-              key: action.key ?? actionLabel,
+              key: action.key,
               label: actionLabel,
               density: action.density ?? resolvedDensity,
               variant: action.variant ?? "secondary",
               "data-popover-action": "",
-              "data-key": action.key ?? actionLabel,
+              "data-key": action.key,
               onClick: (event) => {
                 action.onClick?.(event);
-                onAction?.(action.key ?? actionLabel);
-                setOpen(false, { restoreFocus: true });
+                if (event.defaultPrevented) return;
+                onAction?.(action.key, event);
+                setOpen(false, { restoreFocus: true, event });
               },
             });
           }),

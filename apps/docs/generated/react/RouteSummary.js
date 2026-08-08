@@ -2,32 +2,42 @@ import React, { forwardRef } from "react";
 import { routeSummaryPlatformContract } from "../components/platforms/index.js?v=1";
 import { Button } from "./Button.js";
 import { IconButton } from "./IconButton.js";
+import { flowToneProps, flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["standard", "compact", "compare", "policy"]);
 const validStates = new Set(["default", "hover", "focus", "selected", "warning", "disabled"]);
-const validDensities = new Set(["sm", "md", "lg"]);
 const validTones = new Set(["neutral", "info", "warning"]);
 
-function normalize(value, allowed, fallback) {
-  return allowed.has(value) ? value : fallback;
+function isValidRouteAction(action, compact) {
+  if (!action) return false;
+  const hasStableKey = action.key !== undefined && action.key !== null && action.key !== "";
+  return hasStableKey && Boolean(action.label);
 }
 
 function renderAction(action, index, { compact, density, disabled }) {
   const actionDisabled = Boolean(disabled || action?.disabled);
+  const actionKey = action?.key;
+  const handleActionClick = (event) => {
+    event.stopPropagation();
+    action?.onClick?.(event);
+    if (event.defaultPrevented) return;
+    action?.onAction?.(String(actionKey), action, event);
+  };
   if (compact) {
     return React.createElement(IconButton, {
-      key: action?.key ?? `${action?.label ?? "action"}-${index}`,
+      key: actionKey,
       icon: action?.icon ?? "close",
-      ariaLabel: action?.ariaLabel ?? action?.label ?? "Cancel route",
+      label: action.label,
       variant: action?.variant ?? "ghost",
-      density: action?.density ?? "sm",
+      density: action?.density ?? density,
       disabled: actionDisabled,
-      onClick: action?.onAction ?? action?.onClick,
+      onClick: handleActionClick,
     });
   }
+  if (!action?.label) return null;
   return React.createElement(Button, {
-    key: action?.key ?? `${action?.label ?? "action"}-${index}`,
-    label: action?.label ?? "Action",
+    key: actionKey,
+    label: action.label,
     icon: action?.icon,
     trailingIcon: action?.trailingIcon,
     variant: action?.variant ?? (index === 0 ? "primary" : "secondary"),
@@ -35,18 +45,18 @@ function renderAction(action, index, { compact, density, disabled }) {
     density: action?.density ?? density,
     disabled: actionDisabled,
     loading: Boolean(action?.loading),
-    onClick: action?.onAction ?? action?.onClick,
+    onClick: handleActionClick,
   });
 }
 
 export const RouteSummary = forwardRef(function RouteSummary({
   label,
-  description = "",
-  metrics = [],
-  actions = [],
+  description,
+  metrics,
+  actions,
   variant = "standard",
   state = "default",
-  density = "md",
+  density,
   tone = "neutral",
   icon = "navigation",
   selected = false,
@@ -55,28 +65,32 @@ export const RouteSummary = forwardRef(function RouteSummary({
   className = "",
   ...rest
 }, ref) {
-  const resolvedVariant = normalize(variant, validVariants, "standard");
-  const resolvedState = disabled ? "disabled" : selected ? "selected" : normalize(state, validStates, "default");
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const resolvedTone = normalize(tone, validTones, resolvedState === "warning" || resolvedVariant === "policy" ? "warning" : "neutral");
-  const resolvedLabel = label ?? "Route";
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "standard");
+  const resolvedState = disabled ? "disabled" : selected ? "selected" : normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
+  const resolvedTone = normalizeFlowValue(tone, validTones, resolvedState === "warning" || resolvedVariant === "policy" ? "warning" : "neutral");
+  if (!label) return null;
   const isDisabled = resolvedState === "disabled";
   const isCompact = resolvedVariant === "compact";
+  const sourceMetrics = Array.isArray(metrics) ? metrics : [];
+  const sourceActions = Array.isArray(actions) ? actions : [];
+  const visibleMetrics = sourceMetrics.filter((metric) => metric?.key && metric?.label && metric?.value);
+  const visibleActions = sourceActions.filter((action) => isValidRouteAction(action, isCompact));
 
   return React.createElement(
     "article",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["route-summary", className].filter(Boolean).join(" "),
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
-      "data-tone": resolvedTone,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
+      ...flowToneProps(resolvedTone),
       "data-full-width": String(Boolean(fullWidth)),
       "aria-selected": resolvedState === "selected" ? "true" : undefined,
       "aria-disabled": isDisabled ? "true" : undefined,
-      tabIndex: resolvedState === "focus" ? 0 : rest.tabIndex,
+      tabIndex: rest.tabIndex,
     },
     React.createElement(
       "header",
@@ -87,27 +101,27 @@ export const RouteSummary = forwardRef(function RouteSummary({
       React.createElement(
         "div",
         { className: "route-summary__label" },
-        React.createElement("strong", null, resolvedLabel),
+        React.createElement("strong", null, label),
         description ? React.createElement("small", null, description) : null,
       ),
     ),
-    metrics?.length
+    visibleMetrics.length
       ? React.createElement(
           "div",
           { className: "route-summary__metrics" },
-          metrics.map((metric, index) => React.createElement(
+          visibleMetrics.map((metric) => React.createElement(
             "span",
-            { key: metric?.key ?? `${metric?.label ?? "metric"}-${index}` },
-            React.createElement("small", null, metric?.label ?? ""),
-            React.createElement("strong", null, metric?.value ?? ""),
+            { key: metric.key },
+            React.createElement("small", null, metric.label),
+            React.createElement("strong", null, metric.value),
           )),
         )
       : null,
-    actions?.length
+    visibleActions.length
       ? React.createElement(
           "footer",
           null,
-          actions.map((action, index) => renderAction(action, index, { compact: isCompact, density: resolvedDensity, disabled: isDisabled })),
+          visibleActions.map((action, index) => renderAction(action, index, { compact: isCompact, density: resolvedDensity || undefined, disabled: isDisabled })),
         )
       : null,
   );

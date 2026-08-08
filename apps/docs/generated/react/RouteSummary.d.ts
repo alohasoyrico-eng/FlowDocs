@@ -1,9 +1,12 @@
 import type {
   HTMLAttributes,
   ForwardRefExoticComponent,
+  MouseEvent,
   RefAttributes,
 } from "react";
 import type { routeSummaryPlatformContract } from "../components/platforms/index.js";
+import type { ButtonIntent, ButtonVariant } from "./Button.js";
+import type { IconButtonVariant } from "./IconButton.js";
 
 export type RouteSummaryVariant = "standard" | "compact" | "compare" | "policy";
 export type RouteSummaryState = "default" | "hover" | "focus" | "selected" | "warning" | "disabled";
@@ -19,19 +22,18 @@ export interface RouteMetric {
 export interface RouteSummaryAction {
   key?: string;
   label?: string;
-  ariaLabel?: string;
   icon?: string;
   trailingIcon?: string;
-  variant?: string;
-  intent?: string;
+  variant?: ButtonVariant | IconButtonVariant;
+  intent?: ButtonIntent;
   density?: RouteSummaryDensity;
   disabled?: boolean;
   loading?: boolean;
-  onAction?: () => void;
-  onClick?: () => void;
+  onAction?: (key: string, action: RouteSummaryAction, event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-export interface RouteSummaryProps extends HTMLAttributes<HTMLElement> {
+export interface RouteSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   description?: string;
   metrics?: RouteMetric[];

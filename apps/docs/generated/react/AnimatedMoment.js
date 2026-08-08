@@ -1,24 +1,9 @@
 import React, { forwardRef } from "react";
 import { animatedMomentPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 const validVariants = new Set(["success", "empty", "loading", "celebration"]);
 const validStates = new Set(["idle", "playing", "paused", "complete", "reduced-motion", "disabled"]);
-const validDensities = new Set(["sm", "md", "lg"]);
-
-function normalize(value, allowed, fallback) {
-  return allowed.has(value) ? value : fallback;
-}
-
-function stateLabel(state) {
-  return {
-    idle: "Idle",
-    playing: "Playing",
-    paused: "Paused",
-    complete: "Complete",
-    "reduced-motion": "Reduced motion",
-    disabled: "Disabled",
-  }[state] ?? "Idle";
-}
 
 function variantIcon(variant, icon) {
   if (icon) return icon;
@@ -32,38 +17,42 @@ function variantIcon(variant, icon) {
 
 export const AnimatedMoment = forwardRef(function AnimatedMoment({
   label,
-  description = "",
+  description,
   variant = "success",
   state = "playing",
-  density = "md",
+  density,
   fullWidth = false,
   icon = "",
-  animationSource = "",
+  animationSource,
   animationData,
-  reducedMotionFallback = "Short controlled animation with reduced-motion fallback.",
+  reducedMotionFallback,
+  stateLabel,
   className = "",
   ...rest
 }, ref) {
-  const resolvedVariant = normalize(variant, validVariants, "success");
-  const resolvedState = normalize(state, validStates, "idle");
-  const resolvedDensity = normalize(density, validDensities, "md");
-  const resolvedLabel = label ?? "Animated moment";
+  const resolvedVariant = normalizeFlowValue(variant, validVariants, "success");
+  const resolvedState = normalizeFlowValue(state, validStates, "idle");
+  const resolvedDensity = normalizeFlowDensity(density);
+  if (!label) return null;
   const resolvedIcon = variantIcon(resolvedVariant, icon);
+  const resolvedStateLabel = stateLabel;
   const hasAsset = Boolean(animationSource || animationData);
   const canAnimate = hasAsset && resolvedState !== "reduced-motion" && resolvedState !== "disabled";
+  const accessibleLabel = resolvedStateLabel ? `${label}: ${resolvedStateLabel}` : label;
+  const supportingCopy = description || reducedMotionFallback;
 
   return React.createElement(
     "div",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["animated-moment", className].filter(Boolean).join(" "),
-      "data-variant": resolvedVariant,
-      "data-state": resolvedState,
-      "data-density": resolvedDensity,
+      ...flowVariantProps(resolvedVariant),
+      ...flowStateProps(resolvedState),
+      ...flowDensityProps(resolvedDensity),
       "data-full-width": String(Boolean(fullWidth)),
       role: "img",
-      "aria-label": `${resolvedLabel}: ${stateLabel(resolvedState)}`,
+      "aria-label": accessibleLabel,
       "aria-disabled": resolvedState === "disabled" ? "true" : undefined,
     },
     React.createElement("span", { className: "animated-moment__icon material-symbol", "aria-hidden": "true" }, resolvedIcon),
@@ -76,24 +65,24 @@ export const AnimatedMoment = forwardRef(function AnimatedMoment({
           className: "animation-asset animated-moment__asset",
           "data-animation-library": "lottie-web",
           "data-animation-runtime": canAnimate ? "available" : "fallback",
-          "data-state": resolvedState,
+          ...flowStateProps(resolvedState),
           "data-renderer": "svg",
           "data-animated-moment-asset": "",
           role: "img",
-          "aria-label": resolvedLabel,
+          "aria-label": label,
         },
         React.createElement("span", { className: "animation-asset__viewport", "aria-hidden": "true" }),
         React.createElement(
           "span",
           { className: "animation-asset__fallback", "aria-hidden": "true", hidden: canAnimate || undefined },
           React.createElement("span", { className: "animation-asset__fallback-icon material-symbol" }, resolvedIcon),
-          React.createElement("span", { className: "animation-asset__fallback-label" }, reducedMotionFallback),
+          reducedMotionFallback ? React.createElement("span", { className: "animation-asset__fallback-label" }, reducedMotionFallback) : null,
         ),
       ),
     ),
-    React.createElement("strong", null, label ?? "Action complete"),
-    React.createElement("span", { className: "animated-moment__state" }, stateLabel(resolvedState)),
-    React.createElement("small", null, description || reducedMotionFallback),
+    React.createElement("strong", null, label),
+    resolvedStateLabel ? React.createElement("span", { className: "animated-moment__state", hidden: true }, resolvedStateLabel) : null,
+    supportingCopy ? React.createElement("small", null, supportingCopy) : null,
     React.createElement("span", { className: "animated-moment__cue", "data-animated-moment-cue": "", "aria-hidden": "true" }),
   );
 });

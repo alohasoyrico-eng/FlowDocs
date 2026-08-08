@@ -1,6 +1,3 @@
-import { hydrateCombobox } from "#design-system/components";
-import { iconGlyph } from "./icon-system.js";
-
 export function setupStatefulComponentDemos(root = document) {
   setupComboboxDemos(root);
   setupChipDemos(root);
@@ -17,18 +14,6 @@ export function setupStatefulComponentDemos(root = document) {
   setupDatePickerDemos(root);
   setupDateRangePickerDemos(root);
   setupTreeViewDemos(root);
-}
-
-function setStyleProperty(node, name, value) {
-  if (node?.style?.setProperty) {
-    node.style.setProperty(name, value);
-    return;
-  }
-  if (node?.style?.values) {
-    node.style.values[name] = value;
-    return;
-  }
-  node?.setAttribute?.("style", `${node.getAttribute?.("style") ?? ""}; ${name}: ${value}`);
 }
 
 function setupCardNumberInputDemos(root = document) {
@@ -52,7 +37,6 @@ function setupCardSecurityCodeInputDemos(root = document) {
 function setupComboboxDemos(root = document) {
   root.querySelectorAll('[data-doc-component="combobox"]:not([data-stateful-ready="true"])').forEach((demo) => {
     demo.dataset.statefulReady = "true";
-    hydrateCombobox(demo);
   });
 }
 
@@ -145,107 +129,12 @@ function setupSliderDemos(root = document) {
 function setupSegmentedControlDemos(root = document) {
   root.querySelectorAll('[data-doc-component="segmented-control"]:not([data-stateful-ready="true"])').forEach((control) => {
     control.dataset.statefulReady = "true";
-    const items = [...control.querySelectorAll('[role="tab"], [data-segmented-control-item]')];
-    const indicator = control.querySelector(".segmented-control__indicator");
-    const syncIndicator = (item) => {
-      const index = Math.max(0, items.indexOf(item));
-      setStyleProperty(control, "--comp-segmented-control-count", String(Math.max(items.length, 1)));
-      setStyleProperty(indicator, "--comp-segmented-control-count", String(Math.max(items.length, 1)));
-      setStyleProperty(indicator, "--comp-segmented-control-index", String(index));
-    };
-    const activate = (item) => {
-      items.forEach((option) => {
-        option.setAttribute("aria-selected", String(option === item));
-        option.tabIndex = option === item ? 0 : -1;
-      });
-      syncIndicator(item);
-    };
-    items.forEach((item, index) => {
-      item.addEventListener("click", () => activate(item));
-      item.addEventListener("keydown", (event) => {
-        const next = horizontalItemForKey(event.key, items, index);
-        if (!next) return;
-        event.preventDefault();
-        next.focus();
-        activate(next);
-      });
-    });
-    syncIndicator(items.find((item) => item.getAttribute("aria-selected") === "true") ?? items[0]);
   });
 }
 
 function setupTreeViewDemos(root = document) {
   root.querySelectorAll('[data-doc-component="tree-view"]:not([data-stateful-ready="true"])').forEach((tree) => {
     tree.dataset.statefulReady = "true";
-    const items = [...tree.querySelectorAll("[data-tree-item]")];
-    const controls = items.map((item) => item.querySelector("[data-tree-control]")).filter(Boolean);
-    const visibleItems = () => items.filter((item) => !item.hidden);
-    const updateNestedVisibility = () => {
-      const collapsedLevels = [];
-      items.forEach((item) => {
-        const level = Number(item.getAttribute("aria-level") ?? 1);
-        while (collapsedLevels.length && collapsedLevels[collapsedLevels.length - 1] >= level) collapsedLevels.pop();
-        item.hidden = collapsedLevels.length > 0;
-        if (item.getAttribute("aria-expanded") === "false") collapsedLevels.push(level);
-      });
-    };
-    const setExpanded = (item, expanded) => {
-      if (!item.hasAttribute("aria-expanded")) return;
-      const value = String(Boolean(expanded));
-      item.setAttribute("aria-expanded", value);
-      const control = item.querySelector("[data-tree-control]");
-      control?.setAttribute("aria-expanded", value);
-      const disclosure = control?.querySelector(".button__icon--trailing");
-      if (disclosure) disclosure.textContent = iconGlyph("expand_more");
-      updateNestedVisibility();
-    };
-    const selectItem = (item) => {
-      items.forEach((option) => {
-        const selected = option === item;
-        option.setAttribute("aria-selected", String(selected));
-        option.removeAttribute("tabindex");
-        const control = option.querySelector("[data-tree-control]");
-        control?.setAttribute("aria-selected", String(selected));
-        control?.setAttribute("tabindex", selected ? "0" : "-1");
-      });
-    };
-    const moveTo = (index) => {
-      const next = visibleItems()[index];
-      if (!next) return;
-      selectItem(next);
-      next.querySelector("[data-tree-control]")?.focus();
-    };
-    items.forEach((item, index) => {
-      item.removeAttribute("tabindex");
-      const control = controls[index];
-      control?.addEventListener("click", () => {
-        selectItem(item);
-        if (item.hasAttribute("aria-expanded")) {
-          setExpanded(item, item.getAttribute("aria-expanded") !== "true");
-        }
-      });
-      control?.addEventListener("keydown", (event) => {
-        const keyActions = {
-          ArrowDown: () => Math.min(visibleItems().length - 1, visibleItems().indexOf(item) + 1),
-          ArrowUp: () => Math.max(0, visibleItems().indexOf(item) - 1),
-          Home: () => 0,
-          End: () => visibleItems().length - 1,
-        };
-        if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
-          const expanded = item.getAttribute("aria-expanded");
-          if (expanded == null) return;
-          event.preventDefault();
-          setExpanded(item, event.key === "ArrowRight");
-          return;
-        }
-        const nextIndex = keyActions[event.key]?.();
-        if (nextIndex == null) return;
-        event.preventDefault();
-        moveTo(nextIndex);
-      });
-    });
-    updateNestedVisibility();
-    if (!items.some((item) => item.getAttribute("aria-selected") === "true")) selectItem(items[0]);
   });
 }
 

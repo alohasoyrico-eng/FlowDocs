@@ -8,8 +8,16 @@ import type { animatedMomentPlatformContract } from "../components/platforms/ind
 export type AnimatedMomentVariant = "success" | "empty" | "loading" | "celebration";
 export type AnimatedMomentState = "idle" | "playing" | "paused" | "complete" | "reduced-motion" | "disabled";
 export type AnimatedMomentDensity = "sm" | "md" | "lg";
+export type AnimatedMomentJsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | AnimatedMomentJsonValue[]
+  | { [key: string]: AnimatedMomentJsonValue };
+export type AnimatedMomentAnimationData = { [key: string]: AnimatedMomentJsonValue };
 
-export interface AnimatedMomentProps extends HTMLAttributes<HTMLDivElement> {
+export interface AnimatedMomentProps extends Omit<HTMLAttributes<HTMLDivElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   label: string;
   description?: string;
   variant?: AnimatedMomentVariant;
@@ -18,8 +26,9 @@ export interface AnimatedMomentProps extends HTMLAttributes<HTMLDivElement> {
   fullWidth?: boolean;
   icon?: string;
   animationSource?: string;
-  animationData?: unknown;
+  animationData?: AnimatedMomentAnimationData;
   reducedMotionFallback?: string;
+  stateLabel?: string;
 }
 
 export interface AnimatedMomentComponent extends ForwardRefExoticComponent<AnimatedMomentProps & RefAttributes<HTMLDivElement>> {

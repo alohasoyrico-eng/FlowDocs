@@ -5,9 +5,10 @@ import {
   resolveCountryCallingCodeOption,
 } from "../components/index.js?v=1";
 import { countrySelectorPlatformContract } from "../components/platforms/index.js?v=1";
+import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
 
 function CountryFlag({ country, className = "" }) {
-  const code = String(country ?? "MX").toUpperCase();
+  const code = String(country ?? "").toUpperCase();
   return React.createElement(
     "span",
     {
@@ -37,7 +38,7 @@ function matchesQuery(option, query) {
 }
 
 export const CountrySelector = forwardRef(function CountrySelector({
-  label = "Country",
+  label,
   value,
   country,
   countries,
@@ -46,33 +47,48 @@ export const CountrySelector = forwardRef(function CountrySelector({
   density,
   inline = false,
   searchable = true,
-  searchPlaceholder = "Search country or code",
-  ariaLabel,
-  listboxLabel,
+  searchPlaceholder = "",
+  emptyText,
+  open: openProp,
   className = "",
   onValueChange,
+  onOpenChange,
   id,
   ...rest
 }, ref) {
   const generatedId = useId();
   const selectorId = id ?? `country-selector-${generatedId}`;
   const options = useMemo(() => normalizeCountryCallingCodeOptions(countries), [countries]);
+  const isValueControlled = country !== undefined || value !== undefined;
   const initialCountry = resolveCountryCallingCodeOption({ country: country ?? value }, options);
-  const [selectedCountry, setSelectedCountry] = useState(initialCountry);
+  const [internalCountry, setInternalCountry] = useState(initialCountry);
+  const selectedCountry = isValueControlled ? resolveCountryCallingCodeOption({ country: country ?? value }, options) : internalCountry;
   const [activeCountryCode, setActiveCountryCode] = useState(initialCountry.country);
-  const [open, setOpen] = useState(false);
+  const isOpenControlled = openProp !== undefined;
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = isOpenControlled ? Boolean(openProp) : internalOpen;
   const [query, setQuery] = useState("");
   const filteredOptions = options.filter((option) => matchesQuery(option, query));
   const activeOption = filteredOptions.find((option) => option.country === activeCountryCode) ?? filteredOptions.find((option) => option.country === selectedCountry.country) ?? filteredOptions[0];
   const activeIndex = Math.max(options.findIndex((option) => option.country === activeOption?.country), 0);
   const resolvedState = disabled ? "disabled" : invalid ? "error" : "default";
-  const commitOption = (option) => {
+
+  if (!label) return null;
+
+  const setOpen = (nextOpen, event) => {
+    if (disabled) return;
+    const normalizedOpen = Boolean(nextOpen);
+    if (!isOpenControlled) setInternalOpen(normalizedOpen);
+    onOpenChange?.(normalizedOpen, event);
+  };
+
+  const commitOption = (option, event) => {
     if (!option || disabled) return;
-    setSelectedCountry(option);
+    if (!isValueControlled) setInternalCountry(option);
     setActiveCountryCode(option.country);
-    setOpen(false);
+    setOpen(false, event);
     setQuery("");
-    onValueChange?.(option.country, option);
+    onValueChange?.(option.country, option, event);
   };
   const moveActive = (direction) => {
     const currentIndex = filteredOptions.findIndex((option) => option.country === activeOption?.country);
@@ -83,15 +99,15 @@ export const CountrySelector = forwardRef(function CountrySelector({
   return React.createElement(
     "span",
     {
-      ...rest,
+      ...flowRestProps(rest),
       ref,
       className: ["select-control", inline ? "select-control--inline" : "", "country-selector", className].filter(Boolean).join(" "),
       "data-country-selector": "",
       "data-country": selectedCountry.country,
       "data-value": selectedCountry.country,
       "data-open": String(open),
-      "data-density": density || undefined,
-      "data-state": resolvedState === "default" ? undefined : resolvedState,
+      ...flowDensityProps(density),
+      ...flowStateProps(resolvedState === "default" ? undefined : resolvedState),
     },
     React.createElement(
       "span",
@@ -104,33 +120,33 @@ export const CountrySelector = forwardRef(function CountrySelector({
         "aria-haspopup": "listbox",
         "aria-controls": `${selectorId}-listbox`,
         "aria-activedescendant": `${selectorId}-option-${activeIndex}`,
-        "aria-label": ariaLabel ?? label,
+        "aria-label": label,
         "aria-disabled": disabled ? "true" : undefined,
         "aria-invalid": invalid ? "true" : undefined,
-        onClick: () => {
+        onClick: (event) => {
           if (!disabled) {
             setActiveCountryCode(selectedCountry.country);
-            setOpen((current) => !current);
+            setOpen(!open, event);
           }
         },
         onKeyDown: (event) => {
           if (disabled) return;
           if (["Enter", " "].includes(event.key)) {
             event.preventDefault();
-            setOpen((current) => !current);
+            setOpen(!open, event);
           }
           if (event.key === "Escape") {
             event.preventDefault();
-            setOpen(false);
+            setOpen(false, event);
           }
           if (event.key === "ArrowDown") {
             event.preventDefault();
-            setOpen(true);
+            setOpen(true, event);
             moveActive(1);
           }
           if (event.key === "ArrowUp") {
             event.preventDefault();
-            setOpen(true);
+            setOpen(true, event);
             moveActive(-1);
           }
         },
@@ -151,7 +167,7 @@ export const CountrySelector = forwardRef(function CountrySelector({
         className: "select-control__listbox country-selector__listbox",
         "data-country-selector-list": "",
         role: "listbox",
-        "aria-label": listboxLabel ?? `${label} options`,
+        "aria-label": `${label} options`,
       },
       searchable
         ? React.createElement(
@@ -167,7 +183,7 @@ export const CountrySelector = forwardRef(function CountrySelector({
             onKeyDown: (event) => {
               if (event.key === "Escape") {
                 event.preventDefault();
-                setOpen(false);
+                setOpen(false, event);
               }
             },
           }),
@@ -191,15 +207,15 @@ export const CountrySelector = forwardRef(function CountrySelector({
             tabIndex: hidden ? undefined : -1,
             hidden,
             "aria-selected": String(isSelected),
-            onClick: () => commitOption(option),
+            onClick: (event) => commitOption(option, event),
             onKeyDown: (event) => {
               if (["Enter", " "].includes(event.key)) {
                 event.preventDefault();
-                commitOption(option);
+                commitOption(option, event);
               }
               if (event.key === "Escape") {
                 event.preventDefault();
-                setOpen(false);
+                setOpen(false, event);
               }
             },
           },
@@ -213,7 +229,7 @@ export const CountrySelector = forwardRef(function CountrySelector({
           React.createElement("span", { className: "country-selector__option-check", "aria-hidden": "true" }, "check"),
         );
       }),
-      React.createElement("span", { className: "country-selector__empty", "data-country-selector-empty": "", role: "status", hidden: filteredOptions.length > 0 }, "No results"),
+      emptyText ? React.createElement("span", { className: "country-selector__empty", "data-country-selector-empty": "", role: "status", hidden: filteredOptions.length > 0 }, emptyText) : null,
     ),
   );
 });

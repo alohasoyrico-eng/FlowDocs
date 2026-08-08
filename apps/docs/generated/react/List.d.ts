@@ -1,29 +1,31 @@
-import type { ForwardRefExoticComponent, HTMLAttributes, ReactNode, RefAttributes } from "react";
+import type { ButtonHTMLAttributes, ForwardRefExoticComponent, HTMLAttributes, MouseEvent, ReactNode, RefAttributes } from "react";
 import type { listPlatformContract } from "../components/platforms/index.js";
 
 export type ListVariant = "standard" | "compact" | "action" | "status" | "media";
 export type ListState = "default" | "hover" | "selected" | "loading" | "error" | "disabled";
 export type ListDensity = "sm" | "md" | "lg";
+export type ListItemTone = "danger";
 
-export interface ListItem {
-  key?: string;
-  label?: ReactNode;
+export interface ListItem extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "style" | "type" | "children" | "value" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+  key: string;
+  label: ReactNode;
   meta?: ReactNode;
   value?: ReactNode;
   icon?: string;
-  state?: ListState | string;
-  tone?: string;
+  state?: ListState;
+  tone?: ListItemTone;
   disabled?: boolean;
 }
 
-export interface ListProps extends Omit<HTMLAttributes<HTMLUListElement>, "onSelect"> {
+export interface ListProps extends Omit<HTMLAttributes<HTMLUListElement>, "style" | "onSelect" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
   items: ListItem[];
   variant?: ListVariant;
   state?: ListState;
   interactive?: boolean;
   label?: string;
+  selectedKey?: string;
   density?: ListDensity;
-  onSelect?: (key: string) => void;
+  onSelect?: (key: string, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface ListComponent extends ForwardRefExoticComponent<ListProps & RefAttributes<HTMLUListElement>> {
