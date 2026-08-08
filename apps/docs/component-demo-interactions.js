@@ -244,113 +244,25 @@ function inputPreviewIcon(demo = {}) {
 
 function setupTextAreaDemos(root = document) {
   root.querySelectorAll(".field.docs-package-demo:not([data-demo-ready='true'])").forEach((label) => {
-    const textarea = label.querySelector(".text-area");
-    const counter = label.querySelector("[data-text-area-counter]");
-    if (!textarea || !counter) return;
     label.dataset.demoReady = "true";
-    const update = () => {
-      const max = Number(textarea.getAttribute("maxlength"));
-      counter.textContent = Number.isFinite(max) ? `${textarea.value.length}/${max}` : String(textarea.value.length);
-      counter.dataset.overLimit = String(Number.isFinite(max) && textarea.value.length >= max);
-    };
-    textarea.addEventListener("input", update);
-    update();
   });
 }
 
 function setupIconButtonDemos(root = document) {
   root.querySelectorAll(".icon-button.docs-package-demo:not([data-demo-ready='true'])").forEach((button) => {
-    if (button.disabled) return;
     button.dataset.demoReady = "true";
-    const isToggle = button.dataset.toggle === "true";
-    button.addEventListener("click", () => {
-      if (isToggle) {
-        const pressed = button.getAttribute("aria-pressed") === "true";
-        button.setAttribute("aria-pressed", String(!pressed));
-        button.dataset.state = pressed ? "default" : "selected";
-        const symbol = button.querySelector(".material-symbol");
-        if (symbol) symbol.dataset.iconFill = String(!pressed);
-        return;
-      }
-      button.dataset.state = "pressed";
-      window.setTimeout(() => {
-        if (button.isConnected) button.dataset.state = "default";
-      }, 240);
-    });
   });
 }
 
 function setupCardDemos(root = document) {
   root.querySelectorAll(".card[data-interactive='true']:not([data-demo-ready='true'])").forEach((card) => {
-    if (card.getAttribute("aria-disabled") === "true") return;
     card.dataset.demoReady = "true";
-    card.tabIndex = card.tabIndex >= 0 ? card.tabIndex : 0;
-    if (!card.getAttribute("role")) card.setAttribute("role", "button");
-    const baseState = card.dataset.state || "interactive";
-    const basePressed = card.getAttribute("aria-pressed") || "false";
-    const pulse = () => {
-      card.dataset.state = "selected";
-      card.setAttribute("aria-pressed", "true");
-      window.setTimeout(() => {
-        if (card.isConnected) {
-          card.dataset.state = baseState;
-          card.setAttribute("aria-pressed", basePressed);
-        }
-      }, 650);
-    };
-    card.addEventListener("click", pulse);
-    card.addEventListener("keydown", (event) => {
-      if (event.key !== "Enter" && event.key !== " ") return;
-      event.preventDefault();
-      pulse();
-    });
   });
 }
 
 function setupSliderDemos(root = document) {
   root.querySelectorAll(".slider.docs-package-demo:not([data-demo-ready='true'])").forEach((slider) => {
-    const input = slider.querySelector("[data-slider-input]");
-    const output = slider.querySelector("[data-slider-output]");
-    if (!input || !output) return;
     slider.dataset.demoReady = "true";
-    const min = Number(input.min || 0);
-    const max = Number(input.max || 100);
-    const valueMultiplier = Number(slider.dataset.valueMultiplier || 1);
-    const formatValue = () => {
-      const raw = Number(input.value);
-      const rendered = Number.isFinite(raw * valueMultiplier) ? raw * valueMultiplier : raw;
-      return `${slider.dataset.valuePrefix ?? ""}${Number.isInteger(rendered) ? rendered : rendered.toFixed(1)}${slider.dataset.valueSuffix ?? ""}`;
-    };
-    const percentFor = () => {
-      const range = max - min;
-      if (!range) return 0;
-      return Math.max(0, Math.min(100, ((Number(input.value) - min) / range) * 100));
-    };
-    const sync = () => {
-      const text = formatValue();
-      slider.dataset.value = String(input.value);
-      slider.dataset.pct = String(Math.round(percentFor()));
-      output.textContent = text;
-      input.setAttribute("aria-valuetext", text);
-    };
-    input.addEventListener("input", sync);
-    input.addEventListener("change", sync);
-    input.addEventListener("pointerdown", () => {
-      slider.dataset.dragging = "true";
-      if (!["disabled", "error"].includes(slider.dataset.state)) slider.dataset.state = "dragging";
-    });
-    input.addEventListener("pointerup", () => {
-      slider.dataset.dragging = "false";
-      if (slider.dataset.state === "dragging") slider.dataset.state = "default";
-    });
-    input.addEventListener("focus", () => {
-      if (!["disabled", "error", "dragging"].includes(slider.dataset.state)) slider.dataset.state = "focus";
-    });
-    input.addEventListener("blur", () => {
-      slider.dataset.dragging = "false";
-      if (slider.dataset.state === "focus" || slider.dataset.state === "dragging") slider.dataset.state = "default";
-    });
-    sync();
   });
 }
 
