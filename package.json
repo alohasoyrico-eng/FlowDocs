@@ -28,7 +28,9 @@
     "#design-system/content/template-blueprints": "flow/content/template-blueprints",
     "#design-system/content/home": "flow/content/home",
     "#design-system/content/i18n-ui": "flow/content/i18n-ui",
-    "#design-system/specs/system": "flow/specs/system"
+    "#design-system/specs/system": "flow/specs/system",
+    "#design-system/specs/foundations/*": "flow/specs/foundations/*",
+    "#design-system/specs/primitives/*": "flow/specs/primitives/*"
   },
   "scripts": {
     "build:docs-content": "node scripts/build-docs-content.mjs",

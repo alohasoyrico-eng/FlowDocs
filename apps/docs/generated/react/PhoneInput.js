@@ -6,7 +6,7 @@ import {
 } from "../components/index.js?v=1";
 import { phoneInputPlatformContract } from "../components/platforms/index.js?v=1";
 import { CountrySelector } from "./CountrySelector.js";
-import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
+import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps, flowDataProps, normalizeFlowDensity } from "./internal/props.js";
 
 const validVariants = new Set(["country-code", "compact", "otp-handoff", "readonly"]);
 const validStates = new Set(["default", "hover", "focus", "valid", "warning", "error", "disabled"]);
@@ -79,6 +79,7 @@ export const PhoneInput = forwardRef(function PhoneInput({
   const resolvedVariant = normalizeFlowValue(variant, validVariants, "country-code");
   const isReadonly = resolvedVariant === "readonly";
   const resolvedState = disabled ? "disabled" : error ? "error" : normalizeFlowValue(state, validStates, "default");
+  const resolvedDensity = normalizeFlowDensity(density);
   const resolvedHelper = error || helper;
   const formattedValue = formatPhoneValue(digits, selectedCountry.nationalLength);
   const describedBy = resolvedHelper ? `${inputId}-helper` : undefined;
@@ -109,8 +110,9 @@ export const PhoneInput = forwardRef(function PhoneInput({
     "label",
     {
       className: ["field", "phone-input", className].filter(Boolean).join(" "),
+      ...flowDataProps(rest),
       ...flowStateProps(resolvedState),
-      ...flowDensityProps(density),
+      ...flowDensityProps(resolvedDensity),
       ...flowVariantProps(resolvedVariant),
     },
     React.createElement("span", { className: "field__label", id: `${inputId}-label` }, label),
@@ -123,7 +125,7 @@ export const PhoneInput = forwardRef(function PhoneInput({
         countries: countryOptions,
         disabled: disabled || isReadonly,
         invalid: Boolean(error),
-        density,
+        density: resolvedDensity,
         inline: true,
         searchable: false,
         emptyText,

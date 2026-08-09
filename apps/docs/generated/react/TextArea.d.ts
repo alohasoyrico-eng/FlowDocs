@@ -1,4 +1,5 @@
 import type { ChangeEvent, ForwardRefExoticComponent, RefAttributes, TextareaHTMLAttributes } from "react";
+import type { FlowDataAttributes } from "./internal/props.js";
 import { textAreaPlatformContract } from "../components/platforms/index.js";
 
 export type TextAreaDensity = "sm" | "md" | "lg";
@@ -9,7 +10,7 @@ export interface TextAreaChangeMeta {
   maxLength?: number;
 }
 
-export interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "style" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+export interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "style" | "onChange" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable">, FlowDataAttributes {
   label: string;
   helper?: string;
   helperText?: string;
@@ -19,7 +20,6 @@ export interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaE
   density?: TextAreaDensity;
   state?: TextAreaState;
   onValueChange?: (value: string, meta: TextAreaChangeMeta, event: ChangeEvent<HTMLTextAreaElement>) => void;
-  onChange?: (value: string, meta: TextAreaChangeMeta, event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export interface TextAreaComponent extends ForwardRefExoticComponent<TextAreaProps & RefAttributes<HTMLTextAreaElement>> {

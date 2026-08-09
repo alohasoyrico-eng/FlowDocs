@@ -1,15 +1,18 @@
 import type { ButtonHTMLAttributes, ForwardRefExoticComponent, HTMLAttributes, RefAttributes } from "react";
+import type { FlowDataAttributes } from "./internal/props.js";
 import { tagPlatformContract } from "../components/platforms/index.js";
 
 export type TagVariant = "metadata" | "status" | "platform" | "link";
 export type TagTone = "neutral" | "info" | "success" | "warning" | "danger";
 export type TagState = "default" | "hover" | "pressed" | "focus" | "disabled";
+export type TagDensity = "sm" | "md" | "lg";
 
-export interface TagProps extends Omit<HTMLAttributes<HTMLSpanElement> & ButtonHTMLAttributes<HTMLButtonElement>, "style" | "disabled" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+export interface TagProps extends Omit<HTMLAttributes<HTMLSpanElement> & ButtonHTMLAttributes<HTMLButtonElement>, "style" | "disabled" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable">, FlowDataAttributes {
   label: string;
   variant?: TagVariant;
   tone?: TagTone;
   state?: TagState;
+  density?: TagDensity;
   icon?: string;
   interactive?: boolean;
   disabled?: boolean;

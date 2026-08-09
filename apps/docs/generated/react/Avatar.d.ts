@@ -1,15 +1,15 @@
 import type { ForwardRefExoticComponent, HTMLAttributes, RefAttributes } from "react";
+import type { FlowDataAttributes } from "./internal/props.js";
 import { avatarPlatformContract } from "../components/platforms/index.js";
 
-export type AvatarSize = "sm" | "md" | "lg" | "xl";
+export type AvatarDensity = "sm" | "md" | "lg";
 export type AvatarStatus = "none" | "online" | "busy" | "offline";
 export type AvatarState = "default" | "online" | "busy" | "offline" | "disabled" | "unknown";
 
-export interface AvatarProps extends Omit<HTMLAttributes<HTMLSpanElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+export interface AvatarProps extends Omit<HTMLAttributes<HTMLSpanElement>, "style" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable">, FlowDataAttributes {
   name: string;
   src?: string;
-  size?: AvatarSize;
-  density?: "sm" | "md" | "lg";
+  density?: AvatarDensity;
   status?: AvatarStatus;
   state?: AvatarState;
 }

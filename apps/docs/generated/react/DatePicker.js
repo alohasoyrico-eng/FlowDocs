@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useId, useMemo, useRef, useState } from "react";
 import { datePickerPlatformContract } from "../components/platforms/index.js?v=1";
-import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
+import { flowStateProps, flowDensityProps, flowRestProps, flowDataProps, normalizeFlowDensity } from "./internal/props.js";
 
 function parseDate(value) {
   if (!value) return null;
@@ -113,6 +113,7 @@ export const DatePicker = forwardRef(function DatePicker({
     document.addEventListener("mousedown", onPointerDown);
     return () => document.removeEventListener("mousedown", onPointerDown);
   }, [open]);
+  const resolvedDensity = normalizeFlowDensity(density);
 
   if (!label) return null;
 
@@ -197,9 +198,10 @@ export const DatePicker = forwardRef(function DatePicker({
     "div",
     {
       className: ["field date-picker", className].filter(Boolean).join(" "),
+      ...flowDataProps(rest),
       ref: rootRef,
       ...flowStateProps(resolvedState),
-      ...flowDensityProps(density),
+      ...flowDensityProps(resolvedDensity),
       "data-open": String(open),
     },
     React.createElement("span", { className: "field__label date-picker__label", id: `${controlId}-label` }, label),

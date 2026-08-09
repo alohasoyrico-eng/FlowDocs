@@ -1,6 +1,6 @@
 import React, { forwardRef, useId, useMemo, useState } from "react";
 import { comboboxPlatformContract } from "../components/platforms/index.js?v=1";
-import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
+import { flowStateProps, flowDensityProps, flowRestProps, flowDataProps, normalizeFlowDensity } from "./internal/props.js";
 
 function optionValue(option) {
   return option.value ?? "";
@@ -78,6 +78,7 @@ export const Combobox = forwardRef(function Combobox({
   const enabledOptions = filteredOptions.filter((option) => !option.disabled);
   const activeOption = enabledOptions[activeIndex] ?? enabledOptions[0] ?? null;
   const resolvedState = normalizedState({ disabled, state, currentValue: displayInputValue, visibleCount: filteredOptions.length });
+  const resolvedDensity = normalizeFlowDensity(density);
 
   if (!label || !normalizedOptions.length) return null;
 
@@ -138,8 +139,9 @@ export const Combobox = forwardRef(function Combobox({
     "label",
     {
       className: ["field", className].filter(Boolean).join(" "),
+      ...flowDataProps(rest),
       ...flowStateProps(resolvedState),
-      ...flowDensityProps(density),
+      ...flowDensityProps(resolvedDensity),
     },
     React.createElement("span", { className: "field__label", id: `${comboboxId}-label` }, label),
     React.createElement(
@@ -148,7 +150,7 @@ export const Combobox = forwardRef(function Combobox({
         className: "combobox",
         "data-open": String(isOpen),
         ...flowStateProps(resolvedState),
-        ...flowDensityProps(density),
+        ...flowDensityProps(resolvedDensity),
         "data-value": selectedValue,
         "data-combobox-control": "",
       },

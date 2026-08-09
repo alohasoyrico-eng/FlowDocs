@@ -1,6 +1,6 @@
 import React, { forwardRef, useId, useState } from "react";
 import { textAreaPlatformContract } from "../components/platforms/index.js?v=1";
-import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
+import { flowStateProps, flowDensityProps, flowRestProps, flowDataProps, normalizeFlowDensity } from "./internal/props.js";
 
 function resolveState({ disabled = false, loading = false, error = "", state, value = "" } = {}) {
   if (disabled) return "disabled";
@@ -24,7 +24,6 @@ export const TextArea = forwardRef(function TextArea({
   maxLength,
   density,
   state,
-  onChange,
   onValueChange,
   className = "",
   id,
@@ -42,6 +41,7 @@ export const TextArea = forwardRef(function TextArea({
   const helperId = resolvedHelper ? `${textAreaId}-helper` : "";
   const describedBy = [helperId, counterId].filter(Boolean).join(" ") || undefined;
   const counterText = maxLength != null ? `${String(currentValue ?? "").length}/${Number(maxLength)}` : "";
+  const resolvedDensity = normalizeFlowDensity(density);
 
   if (!label) return null;
 
@@ -51,15 +51,15 @@ export const TextArea = forwardRef(function TextArea({
     const meta = { maxLength: maxLength == null ? undefined : Number(maxLength), length: String(nextValue).length };
     if (!isValueControlled) setInternalValue(nextValue);
     onValueChange?.(nextValue, meta, event);
-    onChange?.(nextValue, meta, event);
   };
 
   return React.createElement(
     "label",
     {
       className: ["field", className].filter(Boolean).join(" "),
+      ...flowDataProps(rest),
       ...flowStateProps(resolvedState),
-      ...flowDensityProps(density),
+      ...flowDensityProps(resolvedDensity),
     },
     React.createElement("span", { className: "field__label", id: `${textAreaId}-label` }, label),
     React.createElement(

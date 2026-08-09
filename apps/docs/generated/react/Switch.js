@@ -1,6 +1,6 @@
 import React, { forwardRef, useState } from "react";
 import { switchPlatformContract } from "../components/platforms/index.js?v=1";
-import { flowStateProps, flowDensityProps, flowRestProps } from "./internal/props.js";
+import { flowStateProps, flowDensityProps, flowRestProps, flowDataProps, normalizeFlowDensity } from "./internal/props.js";
 
 function normalizeState({ checked, disabled, state, error }) {
   if (disabled) return "disabled";
@@ -37,13 +37,15 @@ export const Switch = forwardRef(function Switch({
     if (!isCheckedControlled) setInternalChecked(nextChecked);
     onCheckedChange?.(nextChecked, { name }, event);
   };
+  const resolvedDensity = normalizeFlowDensity(density);
 
   return React.createElement(
     "label",
     {
       className: ["switch", className].filter(Boolean).join(" "),
+      ...flowDataProps(rest),
       ...flowStateProps(normalizedState),
-      ...flowDensityProps(density),
+      ...flowDensityProps(resolvedDensity),
       "data-checked": String(currentChecked),
       "data-invalid": isInvalid ? "true" : undefined,
     },

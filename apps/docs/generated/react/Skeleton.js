@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { skeletonPlatformContract } from "../components/platforms/index.js?v=1";
-import { flowStateProps, flowVariantProps, flowRestProps } from "./internal/props.js";
+import { flowStateProps, flowVariantProps, flowDensityProps, flowRestProps, normalizeFlowDensity } from "./internal/props.js";
 
 const validVariants = new Set(["text", "title", "circle", "card", "pill", "row", "media", "chart", "table"]);
 const validStates = new Set(["default", "loading", "stale", "paused", "loaded", "disabled"]);
@@ -77,6 +77,7 @@ function skeletonCellStyle({ rowIndex, columnIndex, columnCount }) {
 export const Skeleton = forwardRef(function Skeleton({
   label,
   variant = "text",
+  density,
   lines = 3,
   rows,
   columns = 4,
@@ -99,6 +100,7 @@ export const Skeleton = forwardRef(function Skeleton({
     "--comp-skeleton-current-columns": resolvedVariant === "table" ? columnCount : undefined,
   });
   const boneCount = singleBoneVariants.has(resolvedVariant) ? 1 : clampNumber(lines, 1, 6, 3);
+  const resolvedDensity = normalizeFlowDensity(density);
 
   if (!label) return null;
 
@@ -112,6 +114,7 @@ export const Skeleton = forwardRef(function Skeleton({
       "aria-busy": String(isBusy),
       "aria-label": label,
       ...flowVariantProps(resolvedVariant),
+      ...flowDensityProps(resolvedDensity),
       ...flowStateProps(resolvedState),
       "data-full-width": String(Boolean(fullWidth)),
       "data-rows": resolvedVariant === "table" ? String(rowCount) : undefined,

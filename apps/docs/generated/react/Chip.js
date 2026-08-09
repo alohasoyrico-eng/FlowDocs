@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { chipPlatformContract } from "../components/platforms/index.js?v=1";
-import { flowToneProps, flowStateProps, flowVariantProps, flowRestProps } from "./internal/props.js";
+import { flowToneProps, flowStateProps, flowVariantProps, flowDensityProps, flowRestProps, normalizeFlowDensity } from "./internal/props.js";
 
 const validVariants = new Set(["filter", "input", "suggestion", "assist"]);
 const validTones = new Set(["default", "danger", "warning"]);
@@ -27,6 +27,7 @@ export const Chip = forwardRef(function Chip({
   variant = "filter",
   tone = "default",
   state = "default",
+  density,
   selected = false,
   disabled = false,
   removable = false,
@@ -48,6 +49,7 @@ export const Chip = forwardRef(function Chip({
   const canInteract = Boolean(rest.onClick || canRemove || typeof onSelectedChange === "function" || resolvedType === "submit" || resolvedType === "reset");
   const isInteractive = (Boolean(interactive) || isSelected || canRemove || typeof onSelectedChange === "function") && canInteract;
   const element = isInteractive ? "button" : "span";
+  const resolvedDensity = normalizeFlowDensity(density);
 
   if (!label) return null;
 
@@ -77,6 +79,7 @@ export const Chip = forwardRef(function Chip({
       "aria-disabled": !isInteractive && resolvedState === "disabled" ? "true" : undefined,
       ...flowVariantProps(resolvedVariant),
       ...flowToneProps(resolvedTone),
+      ...flowDensityProps(resolvedDensity),
       ...flowStateProps(resolvedState),
       "data-selected": String(isSelected),
       "data-chip-remove": canRemove ? "true" : undefined,

@@ -1339,13 +1339,6 @@
   --comp-button-current-font-size: var(--component-font-size-small);
 }
 
-.button[data-density="md"] {
-  --comp-button-current-size: var(--comp-button-size-md);
-  --comp-button-current-padding: var(--comp-button-padding-md);
-  --comp-button-current-icon-size: var(--comp-button-icon-size-md);
-  --comp-button-current-font-size: var(--component-font-size-label);
-}
-
 .button[data-density="lg"] {
   --comp-button-current-size: var(--comp-button-size-lg);
   --comp-button-current-padding: var(--comp-button-padding-lg);
@@ -1571,11 +1564,6 @@
 .icon-button[data-density="sm"] {
   --comp-icon-button-current-size: var(--comp-icon-button-size-sm);
   --comp-icon-button-current-icon-size: var(--comp-icon-button-icon-size-sm);
-}
-
-.icon-button[data-density="md"] {
-  --comp-icon-button-current-size: var(--comp-icon-button-size-md);
-  --comp-icon-button-current-icon-size: var(--comp-icon-button-icon-size-md);
 }
 
 .icon-button[data-density="lg"] {
@@ -4223,10 +4211,6 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
     opacity var(--comp-avatar-motion-duration) var(--comp-avatar-motion-ease),
     transform var(--comp-avatar-motion-press-duration) var(--comp-avatar-motion-press-ease);
 }
-
-.avatar--sm { --comp-avatar-size: var(--component-badge-min-size); }
-.avatar--lg { --comp-avatar-size: var(--component-inline-size-lg); }
-.avatar--xl { --comp-avatar-size: var(--component-space-16); }
 
 .avatar[data-density="sm"] { --comp-avatar-size: calc(var(--component-density-control-height) - var(--component-space-5)); }
 .avatar[data-density="lg"] { --comp-avatar-size: calc(var(--component-density-control-height) + var(--component-space-4)); }
@@ -7370,10 +7354,6 @@ body[data-contrast="quiet"] .motion-boundary[data-variant="route"] .motion-bound
 
 .illustration-asset[data-density="sm"] {
   --comp-illustration-asset-max-size: var(--component-illustration-asset-max-size-sm);
-}
-
-.illustration-asset[data-density="md"] {
-  --comp-illustration-asset-max-size: var(--component-illustration-asset-max-size-md);
 }
 
 .illustration-asset[data-density="lg"] {

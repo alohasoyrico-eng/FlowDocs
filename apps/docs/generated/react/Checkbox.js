@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { checkboxPlatformContract } from "../components/platforms/index.js?v=1";
-import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
+import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps, flowDataProps, normalizeFlowDensity } from "./internal/props.js";
 
 const validVariants = new Set(["default", "descriptive", "select-all", "compact"]);
 
@@ -63,16 +63,18 @@ export const Checkbox = forwardRef(function Checkbox({
     if (!isCheckedControlled) setInternalChecked(nextChecked);
     onCheckedChange?.(nextChecked, { indeterminate: false, value }, event);
   };
+  const resolvedDensity = normalizeFlowDensity(density);
 
   return React.createElement(
     "label",
     {
       className: ["choice checkbox", className].filter(Boolean).join(" "),
+      ...flowDataProps(rest),
       "data-checked": String(currentChecked),
       "data-indeterminate": String(currentIndeterminate),
       ...flowVariantProps(resolvedVariant),
       ...flowStateProps(normalizedState),
-      ...flowDensityProps(density),
+      ...flowDensityProps(resolvedDensity),
       "data-invalid": isInvalid ? "true" : undefined,
     },
     React.createElement("input", {

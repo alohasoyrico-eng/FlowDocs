@@ -1,11 +1,12 @@
-import type { AvatarSize, AvatarStatus } from "./Avatar.js";
+import type { AvatarStatus } from "./Avatar.js";
 import type { ButtonHTMLAttributes, ForwardRefExoticComponent, HTMLAttributes, KeyboardEvent, MouseEvent, RefAttributes } from "react";
+import type { FlowDataAttributes } from "./internal/props.js";
 import { menuPlatformContract } from "../components/platforms/index.js";
 
 export type MenuVariant = "actions" | "grouped" | "selection" | "danger" | "icon-trigger" | "avatar-trigger";
 export type MenuDensity = "sm" | "md" | "lg";
 export type MenuState = "default" | "closed" | "open" | "focus" | "disabled";
-export type MenuAlign = "start" | "end" | "right";
+export type MenuAlign = "start" | "end";
 export type MenuItemTone = "danger";
 export type MenuOpenChangeEvent = MouseEvent<HTMLElement> | KeyboardEvent<HTMLElement>;
 
@@ -22,7 +23,7 @@ export interface MenuSeparator {
   separator: true;
 }
 
-export interface MenuProps extends Omit<HTMLAttributes<HTMLSpanElement>, "style" | "onSelect" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable"> {
+export interface MenuProps extends Omit<HTMLAttributes<HTMLSpanElement>, "style" | "onSelect" | "dangerouslySetInnerHTML" | "suppressHydrationWarning" | "suppressContentEditableWarning" | "contentEditable">, FlowDataAttributes {
   triggerLabel: string;
   items: Array<MenuItem | MenuSeparator | "divider">;
   open?: boolean;
@@ -30,7 +31,6 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLSpanElement>, "style"
   variant?: MenuVariant;
   avatarName?: string;
   avatarStatus?: AvatarStatus;
-  avatarSize?: AvatarSize;
   density?: MenuDensity;
   state?: MenuState;
   align?: MenuAlign;

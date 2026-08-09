@@ -24,14 +24,15 @@ export type {
 export { Avatar } from "./Avatar.js";
 export type {
   AvatarComponent,
+  AvatarDensity,
   AvatarProps,
-  AvatarSize,
   AvatarState,
   AvatarStatus,
 } from "./Avatar.js";
 export { Badge } from "./Badge.js";
 export type {
   BadgeComponent,
+  BadgeDensity,
   BadgeProps,
   BadgeState,
   BadgeTone,
@@ -148,6 +149,7 @@ export type {
 } from "./Checkbox.js";
 export type {
   ChipComponent,
+  ChipDensity,
   ChipProps,
   ChipState,
   ChipTone,
@@ -200,6 +202,7 @@ export type {
 export { MotionBoundary } from "./MotionBoundary.js";
 export type {
   MotionBoundaryComponent,
+  MotionBoundaryDensity,
   MotionBoundaryProps,
   MotionBoundaryState,
   MotionBoundaryVariant,
@@ -389,6 +392,7 @@ export type {
 export { Skeleton } from "./Skeleton.js";
 export type {
   SkeletonComponent,
+  SkeletonDensity,
   SkeletonProps,
   SkeletonState,
   SkeletonVariant,
@@ -438,6 +442,7 @@ export type {
 export { Tabs } from "./Tabs.js";
 export type {
   TabsComponent,
+  TabsDensity,
   TabsItem,
   TabsProps,
   TabsVariant,
@@ -456,6 +461,7 @@ export type {
 export { Tag } from "./Tag.js";
 export type {
   TagComponent,
+  TagDensity,
   TagProps,
   TagState,
   TagTone,

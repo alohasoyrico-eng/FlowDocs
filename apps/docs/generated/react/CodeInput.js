@@ -1,6 +1,6 @@
 import React, { forwardRef, useId, useState } from "react";
 import { codeInputPlatformContract } from "../components/platforms/index.js?v=1";
-import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps } from "./internal/props.js";
+import { flowVariantProps, flowStateProps, normalizeFlowValue, flowDensityProps, flowRestProps, flowDataProps, normalizeFlowDensity } from "./internal/props.js";
 
 const validVariants = new Set(["sms", "otp", "approval", "masked", "compact"]);
 const validStates = new Set(["default", "hover", "focus", "complete", "warning", "error", "disabled"]);
@@ -55,6 +55,7 @@ export const CodeInput = forwardRef(function CodeInput({
   const describedBy = resolvedHelper ? `${inputId}-helper` : undefined;
   const isMasked = Boolean(masked) || resolvedVariant === "masked";
   const activeIndex = Math.min(digits.length, Math.max(resolvedLength - 1, 0));
+  const resolvedDensity = normalizeFlowDensity(density);
 
   if (!label) return null;
 
@@ -62,8 +63,9 @@ export const CodeInput = forwardRef(function CodeInput({
     "label",
     {
       className: ["field code-input", className].filter(Boolean).join(" "),
+      ...flowDataProps(rest),
       ...flowStateProps(resolvedState),
-      ...flowDensityProps(density),
+      ...flowDensityProps(resolvedDensity),
       ...flowVariantProps(resolvedVariant),
       "data-masked": isMasked ? "true" : undefined,
       "data-focused": focused ? "true" : "false",

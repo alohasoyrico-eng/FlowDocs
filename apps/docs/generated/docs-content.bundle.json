@@ -32131,6 +32131,7 @@
             "Expose aria-autocomplete=list, aria-expanded, aria-controls, and aria-activedescendant.",
             "Keep option text and metadata available as text, not icon-only.",
             "Show visible empty-state copy when filtering has no matches.",
+            "Escape closes the option layer without changing the current input value.",
             "Return focus to the input after selecting or clearing."
           ]
         },
@@ -32625,6 +32626,7 @@
             "Expose combobox/listbox semantics with aria-expanded and aria-controls.",
             "Keep country label and calling code available as text.",
             "Do not use the flag as the only accessible signal.",
+            "Escape closes the country list without changing the selected country.",
             "Return focus to the trigger after selection."
           ]
         },
@@ -36608,7 +36610,7 @@
             "density": "md",
             "state": "filled"
           },
-          "snippet": "<TextArea label=\"Driver notes\" value={note} maxLength={120} onChange={setNote} />"
+          "snippet": "<TextArea label=\"Driver notes\" value={note} maxLength={120} onValueChange={setNote} />"
         },
         "api-foundations": {
           "copy": "Text Area API is for multiline free-form text. Rich text, mentions, templates, autosave, and comment threads belong to future patterns.",
@@ -36662,10 +36664,10 @@
               "notes": "Blocks editing."
             },
             {
-              "name": "onChange",
-              "type": "(value: string) => void",
-              "required": "yes",
-              "notes": "Reports the next value."
+              "name": "onValueChange",
+              "type": "(value: string, meta: TextAreaChangeMeta) => void",
+              "required": "no",
+              "notes": "Reports the next value and counter metadata."
             }
           ]
         },
@@ -39578,6 +39580,7 @@
             "Show on focus and hover; dismiss on blur, pointer leave, Escape, or scroll context changes.",
             "Keep tooltip content non-interactive; use Popover when the layer contains controls.",
             "Do not hide required instructions exclusively inside a tooltip.",
+            "Keyboard users must be able to reveal the tooltip through focus and dismiss it with Escape.",
             "Keep the trigger accessible name independent from the tooltip copy."
           ]
         },
@@ -43939,12 +43942,6 @@
               "notes": "Avatar status rendered by the trigger when variant is avatar-trigger."
             },
             {
-              "name": "avatarSize",
-              "type": "sm | md | lg | xl",
-              "required": "No",
-              "notes": "Avatar size rendered by the trigger when variant is avatar-trigger."
-            },
-            {
               "name": "density",
               "type": "sm | md | lg",
               "required": "No",
@@ -46537,7 +46534,7 @@
               "layout": "row",
               "demo": {
                 "name": "Luis Vera",
-                "density": "xl",
+                "density": "lg",
                 "status": "busy"
               }
             },
@@ -46633,14 +46630,13 @@
             },
             {
               "name": "density",
-              "label": "Size",
+              "label": "Density",
               "type": "select",
               "value": "md",
               "options": [
                 "sm",
                 "md",
-                "lg",
-                "xl"
+                "lg"
               ]
             },
             {
@@ -46697,7 +46693,7 @@
               "name": "density",
               "type": "Density",
               "required": "No",
-              "notes": "Density-aware scale: sm, md, lg, or xl."
+              "notes": "Density-aware scale: sm, md, or lg."
             },
             {
               "name": "status",
@@ -53275,6 +53271,7 @@
             "Support keyboard navigation when the calendar is open.",
             "Expose disabled dates and unavailable reasons.",
             "Keep selected date visible as text.",
+            "Escape closes the calendar and restores focus to the trigger.",
             "Do not use for date ranges or reporting windows."
           ]
         },
