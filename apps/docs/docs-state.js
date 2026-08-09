@@ -58,7 +58,7 @@ export function componentAgentSpec(entry, layerName = "Component") {
   const contract = artifactContract(entry);
   return contract
     ? {
-        source: "packages/specs/specs/unison.system.json",
+        source: "flow/specs/system",
         name: entry.id,
         layer: contract.layer,
         platform: contract.platform,

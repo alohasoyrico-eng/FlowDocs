@@ -224,7 +224,7 @@ function foundationSpec(entry) {
         { label: labels.rejectIf ?? "Reject if", value: `${contract.rejectIf.length} blockers`, copy: contract.rejectIf[0] },
       ],
       code: `${entry.id}.foundation
-source: packages/specs/specs/unison.system.json
+source: flow/specs/system
 purpose: ${contract.purpose}
 roles:
 ${contract.roles.map((role) => `  - ${role.id}: ${role.token} -> ${role.use}`).join("\n")}
