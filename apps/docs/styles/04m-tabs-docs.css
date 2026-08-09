@@ -1,29 +1,29 @@
 :is(.detail-page, .reference-doc) {
-  --comp-tabs-gap: var(--sys-space-1);
-  --comp-tabs-padding: var(--sys-space-1);
-  --comp-tabs-border: var(--sys-frame-border-thin);
-  --comp-tabs-radius: var(--sys-frame-radius-full);
-  --comp-tabs-bg: var(--sys-energy-surface-sunken);
-  --comp-tabs-tab-height: max(44px, var(--ref-frame-height-control-sm));
-  --comp-tabs-tab-padding-x: var(--sys-space-4);
-  --comp-tabs-tab-radius: var(--sys-frame-radius-full);
-  --comp-tabs-tab-bg: transparent;
-  --comp-tabs-tab-bg-selected: var(--sys-energy-surface-primary);
-  --comp-tabs-tab-text: var(--sys-energy-text-secondary);
-  --comp-tabs-tab-text-selected: var(--sys-energy-text-primary);
-  --comp-tabs-underline-color: var(--sys-energy-action-primary);
-  --comp-tabs-underline-border: var(--sys-energy-border-default);
-  --comp-tabs-font-size: var(--sys-voice-size-4);
-  --comp-tabs-font-weight: var(--sys-voice-weight-medium);
-  --comp-tabs-font-weight-selected: var(--sys-voice-weight-bold);
-  --comp-tabs-overflow: visible;
-  --comp-tabs-focus-ring: var(--sys-a11y-focus-ring);
-  --comp-tabs-focus-offset: var(--sys-a11y-focus-offset);
-  --comp-tabs-badge-gap: var(--sys-space-1);
-  --comp-tabs-indicator-left: 0px;
-  --comp-tabs-indicator-width: 0px;
-  --comp-tabs-indicator-block: calc(100% - (var(--comp-tabs-padding) * 2));
-  --comp-tabs-indicator-transition: left var(--sys-duration-base) var(--sys-motion-curve-touch), width var(--sys-duration-base) var(--sys-motion-curve-touch);
+  --docs-detail-tabs-gap: var(--sys-space-1);
+  --docs-detail-tabs-padding: var(--sys-space-1);
+  --docs-detail-tabs-border: var(--sys-frame-border-thin);
+  --docs-detail-tabs-radius: var(--sys-frame-radius-full);
+  --docs-detail-tabs-bg: var(--sys-energy-surface-sunken);
+  --docs-detail-tabs-tab-height: max(var(--sys-a11y-touch-target-min), var(--ref-frame-height-control-sm));
+  --docs-detail-tabs-tab-padding-x: var(--sys-space-4);
+  --docs-detail-tabs-tab-radius: var(--sys-frame-radius-full);
+  --docs-detail-tabs-tab-bg: transparent;
+  --docs-detail-tabs-tab-bg-selected: var(--sys-energy-surface-primary);
+  --docs-detail-tabs-tab-text: var(--sys-energy-text-secondary);
+  --docs-detail-tabs-tab-text-selected: var(--sys-energy-text-primary);
+  --docs-detail-tabs-underline-color: var(--sys-energy-action-primary);
+  --docs-detail-tabs-underline-border: var(--sys-energy-border-default);
+  --docs-detail-tabs-font-size: var(--sys-voice-size-4);
+  --docs-detail-tabs-font-weight: var(--sys-voice-weight-medium);
+  --docs-detail-tabs-font-weight-selected: var(--sys-voice-weight-bold);
+  --docs-detail-tabs-overflow: visible;
+  --docs-detail-tabs-focus-ring: var(--sys-a11y-focus-ring);
+  --docs-detail-tabs-focus-offset: var(--sys-a11y-focus-offset);
+  --docs-detail-tabs-badge-gap: var(--sys-space-1);
+  --docs-detail-tabs-indicator-left: 0;
+  --docs-detail-tabs-indicator-width: 0;
+  --docs-detail-tabs-indicator-block: calc(100% - (var(--docs-detail-tabs-padding) * 2));
+  --docs-detail-tabs-indicator-transition: left var(--sys-duration-base) var(--sys-motion-curve-touch), width var(--sys-duration-base) var(--sys-motion-curve-touch);
 }
 
 .detail-tablist {
@@ -31,13 +31,13 @@
   position: relative;
   display: inline-flex;
   flex-wrap: nowrap;
-  gap: var(--comp-tabs-gap);
+  gap: var(--docs-detail-tabs-gap);
   inline-size: max-content;
   max-inline-size: min(100%, var(--sys-frame-doc-device-min-block));
-  padding: var(--comp-tabs-padding);
-  border: var(--comp-tabs-border) solid transparent;
-  border-radius: var(--comp-tabs-radius);
-  background: var(--comp-tabs-bg);
+  padding: var(--docs-detail-tabs-padding);
+  border: var(--docs-detail-tabs-border) solid transparent;
+  border-radius: var(--docs-detail-tabs-radius);
+  background: var(--docs-detail-tabs-bg);
   overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: none;
@@ -56,15 +56,15 @@
   content: "";
   position: absolute;
   z-index: var(--sys-depth-z-base);
-  inset-block-start: var(--comp-tabs-padding);
-  inset-inline-start: var(--comp-tabs-indicator-left);
-  inline-size: var(--comp-tabs-indicator-width);
-  block-size: var(--comp-tabs-indicator-block);
-  border-radius: var(--comp-tabs-tab-radius);
-  background: var(--comp-tabs-tab-bg-selected);
+  inset-block-start: var(--docs-detail-tabs-padding);
+  inset-inline-start: var(--docs-detail-tabs-indicator-left);
+  inline-size: var(--docs-detail-tabs-indicator-width);
+  block-size: var(--docs-detail-tabs-indicator-block);
+  border-radius: var(--docs-detail-tabs-tab-radius);
+  background: var(--docs-detail-tabs-tab-bg-selected);
   box-shadow: var(--sys-depth-elevation-1);
   pointer-events: none;
-  transition: var(--comp-tabs-indicator-transition);
+  transition: var(--docs-detail-tabs-indicator-transition);
 }
 
 .detail-tablist [role="tab"] {
@@ -72,18 +72,18 @@
   z-index: var(--sys-depth-z-raised);
   display: inline-flex;
   align-items: center;
-  gap: var(--comp-tabs-badge-gap);
-  min-block-size: var(--comp-tabs-tab-height);
+  gap: var(--docs-detail-tabs-badge-gap);
+  min-block-size: var(--docs-detail-tabs-tab-height);
   max-inline-size: 100%;
-  padding: 0 var(--comp-tabs-tab-padding-x);
+  padding: 0 var(--docs-detail-tabs-tab-padding-x);
   border: 0;
-  border-radius: var(--comp-tabs-tab-radius);
-  background: var(--comp-tabs-tab-bg);
-  color: var(--comp-tabs-tab-text);
+  border-radius: var(--docs-detail-tabs-tab-radius);
+  background: var(--docs-detail-tabs-tab-bg);
+  color: var(--docs-detail-tabs-tab-text);
   flex: 0 0 auto;
   font: inherit;
-  font-size: var(--comp-tabs-font-size);
-  font-weight: var(--comp-tabs-font-weight);
+  font-size: var(--docs-detail-tabs-font-size);
+  font-weight: var(--docs-detail-tabs-font-weight);
   white-space: nowrap;
   cursor: pointer;
   outline: none;
@@ -91,18 +91,18 @@
 }
 
 .detail-tablist [role="tab"][aria-selected="true"] {
-  background: var(--comp-tabs-tab-bg);
-  color: var(--comp-tabs-tab-text-selected);
+  background: var(--docs-detail-tabs-tab-bg);
+  color: var(--docs-detail-tabs-tab-text-selected);
   box-shadow: none;
-  font-weight: var(--comp-tabs-font-weight-selected);
+  font-weight: var(--docs-detail-tabs-font-weight-selected);
 }
 
 .detail-tablist [role="tab"]:focus,
 .detail-tablist [role="tab"]:focus-visible,
 .detail-tablist[data-state="focus"] [role="tab"][aria-selected="true"] {
   z-index: var(--sys-depth-z-floating);
-  outline: var(--comp-tabs-focus-ring);
-  outline-offset: var(--comp-tabs-focus-offset);
+  outline: var(--docs-detail-tabs-focus-ring);
+  outline-offset: var(--docs-detail-tabs-focus-offset);
 }
 
 .detail-tablist [role="tab"]:hover,
@@ -120,7 +120,7 @@
 }
 
 .detail-tablist[data-variant="underline"] {
-  --comp-tabs-indicator-block: var(--sys-frame-border-indicator);
+  --docs-detail-tabs-indicator-block: var(--sys-frame-border-indicator);
   gap: var(--sys-space-5);
   padding: 0;
   border-color: transparent;
@@ -143,20 +143,20 @@
 }
 
 .detail-tablist[data-variant="scrollable"] {
-  --comp-tabs-overflow: auto hidden;
+  --docs-detail-tabs-overflow: auto hidden;
   flex-wrap: nowrap;
   justify-content: flex-start;
   scrollbar-width: thin;
 }
 
 .detail-tablist[data-variant="underline"] [role="tab"] {
-  min-block-size: var(--comp-tabs-tab-height);
+  min-block-size: var(--docs-detail-tabs-tab-height);
   padding: 0 var(--sys-space-1);
   border-radius: 0;
 }
 
 .detail-tablist[data-variant="underline"] [role="tab"][aria-selected="true"] {
-  background: var(--comp-tabs-tab-bg);
+  background: var(--docs-detail-tabs-tab-bg);
   color: var(--sys-energy-action-primary);
   box-shadow: none;
 }
@@ -238,12 +238,12 @@
 
 @media (max-width: 420px) {
   :is(.detail-page, .reference-doc) .detail-tabs.detail-tablist {
-    --comp-tabs-tab-padding-x: var(--sys-space-2);
+    --docs-detail-tabs-tab-padding-x: var(--sys-space-2);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   :is(.detail-page, .reference-doc) {
-    --comp-tabs-indicator-transition: left var(--sys-duration-instant) var(--sys-motion-curve-standard), width var(--sys-duration-instant) var(--sys-motion-curve-standard);
+    --docs-detail-tabs-indicator-transition: left var(--sys-duration-instant) var(--sys-motion-curve-standard), width var(--sys-duration-instant) var(--sys-motion-curve-standard);
   }
 }

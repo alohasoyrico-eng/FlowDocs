@@ -31,16 +31,16 @@
 }
 
 .playground-controls .playground-check {
-  --comp-playground-check-size: var(--sys-symbol-size-lg);
-  --comp-playground-check-radius: var(--sys-radius-xs);
-  --comp-playground-check-border: var(--sys-energy-border-default);
-  --comp-playground-check-border-active: var(--sys-energy-action-primary);
-  --comp-playground-check-bg: var(--sys-energy-surface-primary);
-  --comp-playground-check-bg-active: var(--sys-energy-action-primary);
-  --comp-playground-check-icon: var(--sys-energy-surface-primary);
-  --comp-playground-check-focus: var(--sys-state-focus-ring);
-  --comp-playground-check-offset: var(--sys-state-focus-offset);
-  --comp-playground-check-transition: var(--sys-momentum-transition-touch);
+  --docs-playground-check-size: var(--sys-symbol-size-lg);
+  --docs-playground-check-radius: var(--sys-radius-xs);
+  --docs-playground-check-border: var(--sys-energy-border-default);
+  --docs-playground-check-border-active: var(--sys-energy-action-primary);
+  --docs-playground-check-bg: var(--sys-energy-surface-primary);
+  --docs-playground-check-bg-active: var(--sys-energy-action-primary);
+  --docs-playground-check-icon: var(--sys-energy-surface-primary);
+  --docs-playground-check-focus: var(--sys-state-focus-ring);
+  --docs-playground-check-offset: var(--sys-state-focus-offset);
+  --docs-playground-check-transition: var(--sys-momentum-transition-touch);
   position: relative;
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
@@ -53,8 +53,8 @@
 .playground-controls .playground-check input {
   position: absolute;
   inset: 0 auto auto 0;
-  inline-size: var(--comp-playground-check-size);
-  block-size: var(--comp-playground-check-size);
+  inline-size: var(--docs-playground-check-size);
+  block-size: var(--docs-playground-check-size);
   min-block-size: 0;
   margin: 0;
   padding: 0;
@@ -65,16 +65,16 @@
 .playground-check__box {
   display: inline-grid;
   place-items: center;
-  inline-size: var(--comp-playground-check-size);
-  block-size: var(--comp-playground-check-size);
-  border: var(--sys-frame-border-medium) solid var(--comp-playground-check-border);
-  border-radius: var(--comp-playground-check-radius);
-  background: var(--comp-playground-check-bg);
-  color: var(--comp-playground-check-icon);
+  inline-size: var(--docs-playground-check-size);
+  block-size: var(--docs-playground-check-size);
+  border: var(--sys-frame-border-medium) solid var(--docs-playground-check-border);
+  border-radius: var(--docs-playground-check-radius);
+  background: var(--docs-playground-check-bg);
+  color: var(--docs-playground-check-icon);
   transition:
-    border-color var(--comp-playground-check-transition),
-    background var(--comp-playground-check-transition),
-    box-shadow var(--comp-playground-check-transition);
+    border-color var(--docs-playground-check-transition),
+    background var(--docs-playground-check-transition),
+    box-shadow var(--docs-playground-check-transition);
 }
 
 .playground-check__box .material-symbol {
@@ -83,8 +83,8 @@
 }
 
 .playground-check input:checked + .playground-check__box {
-  border-color: var(--comp-playground-check-border-active);
-  background: var(--comp-playground-check-bg-active);
+  border-color: var(--docs-playground-check-border-active);
+  background: var(--docs-playground-check-bg-active);
 }
 
 .playground-check input:checked + .playground-check__box .material-symbol {
@@ -101,8 +101,8 @@
 }
 
 .playground-check input:focus-visible + .playground-check__box {
-  outline: var(--comp-playground-check-focus);
-  outline-offset: var(--comp-playground-check-offset);
+  outline: var(--docs-playground-check-focus);
+  outline-offset: var(--docs-playground-check-offset);
 }
 
 @media (max-width: 52rem) {

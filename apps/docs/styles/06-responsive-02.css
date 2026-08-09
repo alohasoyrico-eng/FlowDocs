@@ -14,8 +14,8 @@
     flex-direction: row;
     gap: var(--sys-space-xs);
     min-inline-size: max-content;
-    min-block-size: var(--comp-tabs-tab-height);
-    padding: 0 var(--comp-tabs-tab-padding-x);
+    min-block-size: var(--docs-detail-tabs-tab-height);
+    padding: 0 var(--docs-detail-tabs-tab-padding-x);
     font-size: var(--sys-voice-size-3);
     line-height: var(--sys-voice-line-height-dense);
   }
