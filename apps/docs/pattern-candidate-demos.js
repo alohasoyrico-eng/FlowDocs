@@ -337,20 +337,24 @@ function toolbarDemoPanel() {
 }
 
 function filterChipGroupDemoPanel() {
-  const filters = [["region", "Region: North"], ["status", "Status: Active"], ["policy", "Policy: Fuel only"]];
   return html`
     <section class="doc-panel wide pattern-filter-chip-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Active filter chips</h2>
-      <div class="pattern-filter-chip-demo" data-filter-chip-demo>
-        ${packageDemo("badge", { label: "3 active", tone: "info", variant: "standard", live: true }, { "data-filter-chip-count": "" })}
-        <div class="pattern-filter-chip-demo__chips" data-filter-chip-list>
-          ${filters.map(([id, label]) => packageDemo("chip", { label, selected: true, removable: true }, { "data-filter-chip": id })).join("")}
-        </div>
-        <div data-filter-chip-empty hidden>${packageDemo("empty-state", { label: "No active filters", description: "Add filters from the toolbar to refine this view.", icon: "filter_alt_off" })}</div>
-        <footer>${packageDemo("button", { label: "Clear all filters", variant: "secondary", icon: "close" }, { "data-filter-chip-clear": "" })}</footer>
-        <div data-filter-chip-toast hidden>${packageDemo("toast", { label: "Filters cleared", description: "All active filters were removed.", tone: "success" }, { "data-pattern-toast": "filter-chip-group" })}</div>
-      </div>
+      ${patternReactDemo("filter-chip-group", {
+        label: "Active vehicle filters",
+        density: "md",
+        state: "active",
+        resultCount: 128,
+        filters: [
+          { key: "region", label: "Region: North" },
+          { key: "status", label: "Status: Active" },
+          { key: "policy", label: "Policy: Fuel only", tone: "warning" },
+        ],
+        empty: { title: "No active filters", description: "Add filters from the toolbar or advanced filters to refine this view.", icon: "filter_alt_off" },
+        reset: { label: "Clear all filters", variant: "secondary" },
+        "data-pattern-demo": "filter-chip-group",
+      })}
     </section>
   `;
 }

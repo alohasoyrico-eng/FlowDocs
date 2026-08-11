@@ -15,7 +15,6 @@
 .pattern-autocomplete-demo,
 .pattern-select-layer-demo,
 .pattern-multi-select-demo,
-.pattern-filter-chip-demo,
 .pattern-file-upload-demo {
   position: relative;
   display: grid;
@@ -55,7 +54,6 @@
 .pattern-autocomplete-demo [hidden],
 .pattern-select-layer-demo [hidden],
 .pattern-multi-select-demo [hidden],
-.pattern-filter-chip-demo [hidden],
 .pattern-file-upload-demo [hidden] {
   display: none;
 }
@@ -214,22 +212,11 @@
   min-block-size: var(--sys-frame-height-control-lg);
 }
 
-.pattern-file-upload-demo__actions,
-.pattern-filter-chip-demo footer {
+.pattern-file-upload-demo__actions {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sys-space-2);
   align-items: center;
-}
-
-.pattern-filter-chip-demo footer {
-  justify-content: flex-end;
-}
-
-.pattern-filter-chip-demo__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sys-space-2);
 }
 
 .pattern-file-upload-demo__actions {
@@ -245,7 +232,6 @@
   .pattern-autocomplete-demo,
   .pattern-select-layer-demo,
   .pattern-multi-select-demo,
-  .pattern-filter-chip-demo,
   .pattern-file-upload-demo,
   .pattern-command-demo__surface,
   .pattern-notification-demo__panel,
@@ -265,8 +251,7 @@
     grid-template-columns: 1fr;
   }
 
-  .pattern-file-upload-demo__actions,
-  .pattern-filter-chip-demo footer {
+  .pattern-file-upload-demo__actions {
     align-items: stretch;
     flex-direction: column;
   }

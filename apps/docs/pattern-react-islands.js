@@ -1,5 +1,5 @@
 import React from "react";
-import { candidatePatternReactComponents, candidatePatternReactIslandWrappers } from "./pattern-react-candidate-islands.js?v=9";
+import { candidatePatternReactComponents, candidatePatternReactIslandWrappers } from "./pattern-react-candidate-islands.js?v=10";
 import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1";
 import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { CalendarView } from "./generated/react/patterns/CalendarView.js?v=1";
