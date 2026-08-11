@@ -1,5 +1,6 @@
 import { html } from "./detail-tabs-core.js?v=3";
 import { componentDemo } from "./component-demo.js?v=60";
+import { journeyReactPatternOverviewDemo } from "./pattern-journey-react-demos.js?v=1";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -19,6 +20,8 @@ function patternReactDemo(pattern, props, state = "default", variant = "standard
 }
 
 export function journeyPatternOverviewDemo(patternId) {
+  const reactDemo = journeyReactPatternOverviewDemo(patternId);
+  if (reactDemo) return reactDemo;
   if (patternId === "authentication-login-biometrics-and-otp") return authJourneyDemoPanel();
   if (patternId === "driver-onboarding-mobile") return driverOnboardingDemoPanel();
   if (patternId === "fleet-manager-onboarding-desktop") return fleetManagerOnboardingDemoPanel();

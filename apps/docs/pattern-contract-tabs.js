@@ -6,7 +6,7 @@ import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=26"
 import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=6";
 import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=7";
 import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=8";
-import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=2";
+import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=3";
 import { operationalPatternOverviewDemo } from "./pattern-operational-demos.js?v=2";
 
 export function hasPatternSource(entry) {

@@ -434,6 +434,7 @@ function checkDemoQualityInventory() {
     "pattern-mobile-react-demos.js",
     "pattern-mobile-demos.js",
     "pattern-utility-demos.js",
+    "pattern-journey-react-demos.js",
     "pattern-journey-demos.js",
     "pattern-operational-demos.js",
     "pattern-shell-react-demos.js",
@@ -458,6 +459,8 @@ function checkDemoQualityInventory() {
   const patternReactIslands = fs.existsSync(patternReactIslandsFile) ? read(patternReactIslandsFile) : "";
   const desktopPatternReactIslandsFile = path.join(docsAppDir, "pattern-react-desktop-islands.js");
   const desktopPatternReactIslands = fs.existsSync(desktopPatternReactIslandsFile) ? read(desktopPatternReactIslandsFile) : "";
+  const journeyPatternReactIslandsFile = path.join(docsAppDir, "pattern-react-journey-islands.js");
+  const journeyPatternReactIslands = fs.existsSync(journeyPatternReactIslandsFile) ? read(journeyPatternReactIslandsFile) : "";
   const mobilePatternReactIslandsFile = path.join(docsAppDir, "pattern-react-mobile-islands.js");
   const mobilePatternReactIslands = fs.existsSync(mobilePatternReactIslandsFile) ? read(mobilePatternReactIslandsFile) : "";
   const shellPatternReactIslandsFile = path.join(docsAppDir, "pattern-react-shell-islands.js");
@@ -467,11 +470,12 @@ function checkDemoQualityInventory() {
   const reactComponentsBlock = reactIslands.match(/const reactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const patternReactComponentsBlock = patternReactIslands.match(/const patternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const desktopPatternReactComponentsBlock = desktopPatternReactIslands.match(/const desktopPatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
+  const journeyPatternReactComponentsBlock = journeyPatternReactIslands.match(/const journeyPatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const mobilePatternReactComponentsBlock = mobilePatternReactIslands.match(/const mobilePatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const shellPatternReactComponentsBlock = shellPatternReactIslands.match(/const shellPatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const candidatePatternReactComponentsBlock = candidatePatternReactIslands.match(/const candidatePatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const reactComponentKeys = new Set(
-    [...`${reactComponentsBlock}\n${patternReactComponentsBlock}\n${desktopPatternReactComponentsBlock}\n${mobilePatternReactComponentsBlock}\n${shellPatternReactComponentsBlock}\n${candidatePatternReactComponentsBlock}`.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
+    [...`${reactComponentsBlock}\n${patternReactComponentsBlock}\n${desktopPatternReactComponentsBlock}\n${journeyPatternReactComponentsBlock}\n${mobilePatternReactComponentsBlock}\n${shellPatternReactComponentsBlock}\n${candidatePatternReactComponentsBlock}`.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
   );
 
   const components = catalog?.components ?? [];
