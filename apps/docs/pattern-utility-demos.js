@@ -368,15 +368,20 @@ function transferListDemoPanel() {
 function dragSortableListDemoPanel() {
   return html`
     <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Dashboard module order</h2>
-      <div class="pattern-sortable-demo pattern-utility-demo" data-sortable-demo>
-        ${packageDemo("motion-boundary", { label: "Dashboard order", state: "ready" })}
-        <ol class="pattern-sortable-demo__list" data-sortable-list>
-          <li data-sortable-item="Spend overview">Spend overview ${packageDemo("button", { label: "Move down", variant: "secondary", icon: "arrow_downward" }, { "data-sortable-down": "" })}</li>
-          <li data-sortable-item="Exceptions">Exceptions ${packageDemo("button", { label: "Move up", variant: "secondary", icon: "arrow_upward" }, { "data-sortable-up": "" })}</li>
-          <li data-sortable-item="Maintenance">Maintenance ${packageDemo("button", { label: "Move up", variant: "secondary", icon: "arrow_upward" }, { "data-sortable-up": "" })}</li>
-        </ol>
-        <div data-sortable-toast hidden>${packageDemo("toast", { label: "Order updated", description: "Dashboard module order changed.", tone: "success" })}</div>
-      </div>
+      ${patternReactDemo("drag-sortable-list", {
+        label: "Dashboard order",
+        density: "md",
+        motionBoundary: { label: "Dashboard order", state: "ready" },
+        items: [
+          { key: "spend", label: "Spend overview", description: "Revenue and fuel deltas", icon: "dashboard" },
+          { key: "exceptions", label: "Exceptions", description: "Open operational issues", icon: "report" },
+          { key: "maintenance", label: "Maintenance", description: "Upcoming service windows", icon: "build" },
+        ],
+        saveAction: { label: "Save order", icon: "save" },
+        undoAction: { label: "Undo move", icon: "undo" },
+        resetAction: { label: "Reset order", icon: "restart_alt" },
+        "data-pattern-demo": "drag-sortable-list",
+      })}
     </section>`;
 }
 

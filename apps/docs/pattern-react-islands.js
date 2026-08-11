@@ -3,6 +3,7 @@ import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/
 import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1";
 import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1";
+import { DragSortableList } from "./generated/react/patterns/DragSortableList.js?v=1";
 import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1";
 import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1";
 import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1";
@@ -18,6 +19,7 @@ export const patternReactComponents = {
   "avatar-group": AvatarGroup,
   "chart-legend-item": ChartLegendItem,
   "checkbox-group": CheckboxGroup,
+  "drag-sortable-list": DragSortableList,
   "gantt-chart": GanttChart,
   "polar-chart": PolarChart,
   "preference-management": PreferenceManagement,
@@ -152,10 +154,78 @@ function TransferListIsland({ initialProps }) {
   });
 }
 
+function DragSortableListIsland({ initialProps }) {
+  const initialItems = initialProps.items ?? [
+    { key: "spend", label: "Spend overview", description: "Revenue and fuel deltas", icon: "dashboard" },
+    { key: "exceptions", label: "Exceptions", description: "Open operational issues", icon: "report" },
+    { key: "maintenance", label: "Maintenance", description: "Upcoming service windows", icon: "build" },
+  ];
+  const [items, setItems] = React.useState(initialItems);
+  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? initialItems[0]?.key ?? "");
+  const [movingKey, setMovingKey] = React.useState("");
+  const [state, setState] = React.useState(initialProps.state ?? "idle");
+
+  const moveItem = (key, direction) => {
+    setItems((current) => {
+      const index = current.findIndex((item) => item.key === key);
+      const targetIndex = direction === "up" ? index - 1 : index + 1;
+      if (index < 0 || targetIndex < 0 || targetIndex >= current.length) return current;
+      const next = [...current];
+      const [item] = next.splice(index, 1);
+      next.splice(targetIndex, 0, item);
+      return next;
+    });
+    setMovingKey(key);
+    setSelectedKey(key);
+    setState("dirty");
+    window.setTimeout(() => setMovingKey((current) => current === key ? "" : current), 180);
+  };
+
+  return React.createElement(DragSortableList, {
+    ...initialProps,
+    items,
+    selectedKey,
+    movingKey,
+    state,
+    dirty: state === "dirty",
+    feedback: state === "dirty"
+      ? { label: "Order updated", description: "Dashboard module order changed.", tone: "success" }
+      : state === "saved"
+        ? { label: "Order saved", description: "The dashboard order is available to the team.", tone: "success" }
+        : initialProps.feedback,
+    onSelect: (key, event) => {
+      setSelectedKey(key);
+      initialProps.onSelect?.(key, event);
+    },
+    onMoveItem: (key, direction, event) => {
+      moveItem(key, direction);
+      initialProps.onMoveItem?.(key, direction, event);
+    },
+    onSave: (event) => {
+      setState("saved");
+      initialProps.onSave?.(event);
+    },
+    onUndo: (event) => {
+      setItems(initialItems);
+      setMovingKey("");
+      setState("idle");
+      initialProps.onUndo?.(event);
+    },
+    onReset: (event) => {
+      setItems(initialItems);
+      setSelectedKey(initialItems[0]?.key ?? "");
+      setMovingKey("");
+      setState("idle");
+      initialProps.onReset?.(event);
+    },
+  });
+}
+
 export const patternReactIslandWrappers = {
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
   "chart-legend-item": ChartLegendItemIsland,
   "checkbox-group": CheckboxGroupIsland,
+  "drag-sortable-list": DragSortableListIsland,
   "pull-to-refresh": PullToRefreshIsland,
   "radio-group": RadioGroupIsland,
   "snackbar-provider": SnackbarProviderIsland,

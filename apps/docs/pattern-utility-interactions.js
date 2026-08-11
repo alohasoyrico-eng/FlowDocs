@@ -13,11 +13,6 @@ function handleUtilityPatternClick(event) {
   const timelineFilter = event.target.closest("[data-timeline-filter]");
   if (timelineFilter) return filterTimeline(timelineFilter.closest("[data-timeline-demo]"), timelineFilter.dataset.timelineFilter);
 
-  const sortUp = event.target.closest("[data-sortable-up]");
-  if (sortUp) return moveSortableItem(sortUp.closest("li"), -1);
-
-  const sortDown = event.target.closest("[data-sortable-down]");
-  if (sortDown) return moveSortableItem(sortDown.closest("li"), 1);
 }
 
 function handleUtilityPatternInput(event) {
@@ -58,13 +53,4 @@ function filterTimeline(demo, filter) {
     count.textContent = `${visible} ${visible === 1 ? "event" : "events"}`;
     count.setAttribute("aria-label", `${visible} visible timeline ${visible === 1 ? "event" : "events"}`);
   }
-}
-
-function moveSortableItem(item, direction) {
-  if (!item) return;
-  const sibling = direction < 0 ? item.previousElementSibling : item.nextElementSibling;
-  if (!sibling) return;
-  if (direction < 0) item.parentNode.insertBefore(item, sibling);
-  else item.parentNode.insertBefore(sibling, item);
-  item.closest("[data-sortable-demo]")?.querySelector("[data-sortable-toast]")?.removeAttribute("hidden");
 }
