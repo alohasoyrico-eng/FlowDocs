@@ -67,20 +67,33 @@ const reactDistSource = firstExistingPath([
 ]);
 if (!reactDistSource) throw new Error("Unable to locate @design-system/react dist for docs assets.");
 fs.cpSync(reactDistSource, reactOutputDir, { recursive: true });
-for (const file of fs.readdirSync(reactOutputDir).filter((name) => name.endsWith(".js") || name.endsWith(".d.ts"))) {
-  const outputFile = path.join(reactOutputDir, file);
-  const extensionSuffix = file.endsWith(".js") ? "?v=1" : "";
+function walkFiles(dir) {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const file = path.join(dir, entry.name);
+    if (entry.isDirectory()) return walkFiles(file);
+    return [file];
+  });
+}
+function relativeImport(fromFile, toFile, suffix = "") {
+  const relativePath = path.relative(path.dirname(fromFile), toFile).replaceAll(path.sep, "/");
+  const specifier = relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
+  return `${specifier}${suffix}`;
+}
+for (const outputFile of walkFiles(reactOutputDir).filter((file) => file.endsWith(".js") || file.endsWith(".d.ts"))) {
+  const extensionSuffix = outputFile.endsWith(".js") ? "?v=1" : "";
+  const componentsImport = relativeImport(outputFile, path.join(componentModuleOutputDir, "index.js"), extensionSuffix);
+  const platformsImport = relativeImport(outputFile, path.join(componentModuleOutputDir, "platforms/index.js"), extensionSuffix);
   fs.writeFileSync(
     outputFile,
     fs.readFileSync(outputFile, "utf8")
-      .replaceAll('"@design-system/components/platforms"', `"../components/platforms/index.js${extensionSuffix}"`)
-      .replaceAll('"@alohasoyrico-eng/flow/components/platforms"', `"../components/platforms/index.js${extensionSuffix}"`)
-      .replaceAll('"#flow/platforms"', `"../components/platforms/index.js${extensionSuffix}"`)
-      .replaceAll('"../../components/src/platforms/index.js"', `"../components/platforms/index.js${extensionSuffix}"`)
-      .replaceAll('"@design-system/components"', `"../components/index.js${extensionSuffix}"`)
-      .replaceAll('"@alohasoyrico-eng/flow/components"', `"../components/index.js${extensionSuffix}"`)
-      .replaceAll('"#flow/components"', `"../components/index.js${extensionSuffix}"`)
-      .replaceAll('"../../components/src/index.js"', `"../components/index.js${extensionSuffix}"`)
+      .replaceAll('"@design-system/components/platforms"', `"${platformsImport}"`)
+      .replaceAll('"@alohasoyrico-eng/flow/components/platforms"', `"${platformsImport}"`)
+      .replaceAll('"#flow/platforms"', `"${platformsImport}"`)
+      .replaceAll('"../../components/src/platforms/index.js"', `"${platformsImport}"`)
+      .replaceAll('"@design-system/components"', `"${componentsImport}"`)
+      .replaceAll('"@alohasoyrico-eng/flow/components"', `"${componentsImport}"`)
+      .replaceAll('"#flow/components"', `"${componentsImport}"`)
+      .replaceAll('"../../components/src/index.js"', `"${componentsImport}"`)
   );
 }
 fs.writeFileSync(tokenOutputFile, `${generatedHeader("packages/tokens/styles/tokens.css")}${tokenSource}`);

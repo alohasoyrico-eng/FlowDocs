@@ -1,5 +1,6 @@
 import { html, slug } from "./detail-tabs-core.js?v=3";
 import { componentDemo } from "./component-demo.js?v=60";
+import { operationalReactPatternOverviewDemo } from "./pattern-operational-react-demos.js?v=1";
 
 function attrText(attrs = {}) {
   return Object.entries(attrs).map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`).join(" ");
@@ -146,6 +147,8 @@ function operationTable(label) {
 }
 
 export function operationalPatternOverviewDemo(patternId) {
+  const reactDemo = operationalReactPatternOverviewDemo(patternId);
+  if (reactDemo) return reactDemo;
   const demo = operationalPatterns[patternId];
   if (!demo) return "";
   return html`

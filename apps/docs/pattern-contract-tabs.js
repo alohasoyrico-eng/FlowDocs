@@ -7,7 +7,7 @@ import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=6";
 import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=7";
 import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=8";
 import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=3";
-import { operationalPatternOverviewDemo } from "./pattern-operational-demos.js?v=2";
+import { operationalPatternOverviewDemo } from "./pattern-operational-demos.js?v=3";
 
 export function hasPatternSource(entry) {
   return Boolean(patternSource(entry));
@@ -45,7 +45,7 @@ function patternContractOverview(entry) {
 }
 
 function patternOverviewDemo(patternId) {
-  const dedicatedDemo = candidatePatternOverviewDemo(patternId) || desktopPatternOverviewDemo(patternId) || utilityPatternOverviewDemo(patternId) || operationalPatternOverviewDemo(patternId) || mobilePatternOverviewDemo(patternId) || journeyPatternOverviewDemo(patternId);
+  const dedicatedDemo = candidatePatternOverviewDemo(patternId) || operationalPatternOverviewDemo(patternId) || desktopPatternOverviewDemo(patternId) || utilityPatternOverviewDemo(patternId) || mobilePatternOverviewDemo(patternId) || journeyPatternOverviewDemo(patternId);
   if (dedicatedDemo) return dedicatedDemo;
   if (patternId === "bulk-actions") return bulkActionsDemoPanel();
   if (patternId === "multi-step-form") return multiStepFormDemoPanel();

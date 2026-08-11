@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { createMapsPrimitive } from "#flow/components";
+import { createMapsPrimitive } from "../../components/index.js?v=1";
 import { Button } from "../Button.js";
 import { EmptyState } from "../EmptyState.js";
 import { ErrorPanel } from "../ErrorPanel.js";
