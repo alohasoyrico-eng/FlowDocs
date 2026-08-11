@@ -574,6 +574,19 @@ function checkComponentDetailTemplateReadiness() {
       propsTables,
       demoGrids,
     }));
+  const customRendererSharedBoundaryIds = componentDetailRendererInventory
+    .filter((entry) => entry.kind === "gold-custom" && entry.usesSharedSection && entry.surfaceSections === 0)
+    .map((entry) => entry.id)
+    .sort();
+  const customRendererOwnSurfaceIds = componentDetailRendererInventory
+    .filter((entry) => entry.kind === "gold-custom" && entry.surfaceSections > 0)
+    .map((entry) => entry.id)
+    .sort();
+  const requiredPilotSharedBoundaryIds = ["input"];
+  const pilotSharedBoundaryGaps = requiredPilotSharedBoundaryIds.filter((id) => {
+    const entry = componentDetailRendererInventory.find((item) => item.id === id);
+    return !entry || !entry.usesSharedSection || entry.surfaceSections > 0 || entry.docPanels || entry.rawControls;
+  });
   const rendererKindSummary = componentDetailRendererInventory.reduce((summary, entry) => {
     summary[entry.kind] = (summary[entry.kind] ?? 0) + 1;
     return summary;
@@ -605,6 +618,15 @@ function checkComponentDetailTemplateReadiness() {
     componentSurfaceHotspots: componentOwnSurfaceMatches,
     rendererKindSummary,
     migrationCategorySummary,
+    customRendererSharedBoundaryIds,
+    customRendererOwnSurfaceIds,
+    customRendererSharedBoundaryProgress: {
+      migrated: customRendererSharedBoundaryIds.length,
+      remaining: customRendererOwnSurfaceIds.length,
+      total: customRendererSharedBoundaryIds.length + customRendererOwnSurfaceIds.length,
+    },
+    requiredPilotSharedBoundaryIds,
+    pilotSharedBoundaryGaps,
     rendererInventory: componentDetailRendererInventory,
     templateGaps,
     requiredFlowBuildingBlocks: ["Surface", "Card", "Tabs", "Table", "Button", "IconButton", "Input", "Select", "Switch"],
@@ -633,6 +655,12 @@ function checkComponentDetailTemplateReadiness() {
   }
   if (countMatches(componentRuntimeWithoutBridges, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g)) {
     add("warnings", docsAppDir, 1, "Component detail still contains raw controls or overlay roles; migrate controls through Flow React components or justified template slots.");
+  }
+  if (templateGaps.length) {
+    add("errors", docsAppDir, 1, `Component detail template gaps must stay closed for family and candidate renderers: ${templateGaps.map((entry) => `${entry.file}#${entry.id}`).join(", ")}.`);
+  }
+  if (pilotSharedBoundaryGaps.length) {
+    add("errors", docsAppDir, 1, `Component detail shared Surface pilot regressed: ${pilotSharedBoundaryGaps.join(", ")}.`);
   }
 }
 
