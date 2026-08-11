@@ -33,15 +33,6 @@ function handleCandidatePatternClick(event) {
     return closeConfirmationDialog(demo);
   }
 
-  const actionSheetOpen = event.target.closest("[data-action-sheet-open]");
-  if (actionSheetOpen) return openActionSheet(actionSheetOpen.closest("[data-action-sheet-demo]"));
-
-  const actionSheetClose = event.target.closest("[data-action-sheet-close], [data-action-sheet] [data-overlay-close], [data-action-sheet] [data-overlay-dismiss]");
-  if (actionSheetClose) return closeActionSheet(actionSheetClose.closest("[data-action-sheet-demo]"));
-
-  const actionSheetMenu = event.target.closest("[data-action-menu] [data-key], [data-action-menu] button");
-  if (actionSheetMenu) return selectActionSheetItem(actionSheetMenu.closest("[data-action-sheet-demo]"));
-
   const searchResult = event.target.closest("[data-search-result]");
   if (searchResult) return selectSearchResult(searchResult.closest("[data-search-demo]"), searchResult);
 
@@ -91,7 +82,6 @@ function handleCandidatePatternKeydown(event) {
   document.querySelectorAll("[data-command-surface]:not([hidden])").forEach((surface) => closeCommandPalette(surface.closest("[data-command-demo]")));
   document.querySelectorAll("[data-notification-panel]:not([hidden])").forEach((panel) => closeNotificationPanel(panel.closest("[data-notification-demo]")));
   document.querySelectorAll("[data-confirmation-dialog]:not([hidden])").forEach((dialog) => closeConfirmationDialog(dialog.closest("[data-confirmation-demo]")));
-  document.querySelectorAll("[data-action-sheet]:not([hidden])").forEach((sheet) => closeActionSheet(sheet.closest("[data-action-sheet-demo]")));
 }
 
 function openCommandPalette(demo) {
@@ -188,27 +178,6 @@ function closeConfirmationDialog(demo) {
 function confirmConfirmationDialog(demo) {
   closeConfirmationDialog(demo);
   const toast = demo?.querySelector("[data-confirmation-toast]");
-  if (toast) toast.hidden = false;
-}
-
-function openActionSheet(demo) {
-  const sheet = demo?.querySelector("[data-action-sheet]");
-  if (!sheet) return;
-  sheet.hidden = false;
-  demo.dataset.actionSheetState = "open";
-  sheet.querySelector("[data-action-sheet-close]")?.focus();
-}
-
-function closeActionSheet(demo) {
-  const sheet = demo?.querySelector("[data-action-sheet]");
-  if (sheet) sheet.hidden = true;
-  if (demo) demo.dataset.actionSheetState = "closed";
-  demo?.querySelector("[data-action-sheet-open]")?.focus();
-}
-
-function selectActionSheetItem(demo) {
-  closeActionSheet(demo);
-  const toast = demo?.querySelector("[data-action-sheet-toast]");
   if (toast) toast.hidden = false;
 }
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { ActionSheet } from "./generated/react/patterns/ActionSheet.js?v=1";
 import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1";
 import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { CalendarView } from "./generated/react/patterns/CalendarView.js?v=1";
@@ -16,6 +17,7 @@ import { TransferList } from "./generated/react/patterns/TransferList.js?v=1";
 import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
 
 export const patternReactComponents = {
+  "action-sheet": ActionSheet,
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtp,
   "avatar-group": AvatarGroup,
   "calendar-view": CalendarView,
@@ -48,6 +50,32 @@ function AuthenticationLoginBiometricsAndOtpIsland({ initialProps }) {
       ? { label: "Use biometric", variant: "secondary", icon: "fingerprint", onClick: () => setState("biometric-prompt") }
       : { label: "Reset", variant: "secondary", icon: "refresh", onClick: () => setState("idle") },
     onSubmit: () => setState((current) => current === "idle" ? "otp-sent" : "recovered"),
+  });
+}
+
+function ActionSheetIsland({ initialProps }) {
+  const [open, setOpen] = React.useState(Boolean(initialProps.open));
+  const [feedback, setFeedback] = React.useState(initialProps.feedback);
+  return React.createElement(ActionSheet, {
+    ...initialProps,
+    open,
+    feedback,
+    onOpenChange: (nextOpen, event) => {
+      setOpen(Boolean(nextOpen));
+      initialProps.onOpenChange?.(nextOpen, event);
+    },
+    onAction: (key, event) => {
+      setOpen(false);
+      if (key !== "cancel") setFeedback({ label: "Action selected", description: "Vehicle action is ready.", tone: "success" });
+      initialProps.onAction?.(key, event);
+    },
+    cancelAction: {
+      ...(initialProps.cancelAction ?? { label: "Cancel" }),
+      onClick: (event) => {
+        setOpen(false);
+        initialProps.cancelAction?.onClick?.(event);
+      },
+    },
   });
 }
 
@@ -280,6 +308,7 @@ function CalendarViewIsland({ initialProps }) {
 }
 
 export const patternReactIslandWrappers = {
+  "action-sheet": ActionSheetIsland,
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
   "calendar-view": CalendarViewIsland,
   "chart-legend-item": ChartLegendItemIsland,

@@ -3,6 +3,14 @@ import { avatarMenuMarkup } from "./avatar-menu-slot.js?v=1";
 import { notificationPanelMarkup } from "./notification-panel-slot.js?v=1";
 import { patternPackageDemo as packageDemo, searchSlotMarkup } from "./search-slot.js?v=2";
 
+function escapeAttribute(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
+  return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
 function bottomSheetPatternDemo({
   label = "Mobile sheet",
   description = "",
@@ -122,15 +130,20 @@ function actionSheetDemoPanel() {
     <section class="doc-panel wide pattern-action-sheet-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Mobile action sheet</h2>
-      <div class="pattern-action-sheet-demo" data-action-sheet-demo>
-        ${packageDemo("button", { label: "Vehicle actions", icon: "more_horiz" }, { "data-action-sheet-open": "" })}
-        <div data-action-sheet hidden>
-          ${bottomSheetPatternDemo({ label: "JMX-214-B actions", description: "Choose a contextual action for this vehicle.", items: ["Open card detail", "Share route", "Freeze card"], actions: [{ label: "Open detail" }, { label: "Cancel", variant: "secondary" }] }, { "data-action-sheet-surface": "" })}
-          ${packageDemo("menu", { trigger: "More actions", label: "Vehicle actions", items: [{ label: "Open detail" }, { label: "Share route" }, { label: "Freeze card", tone: "danger" }] }, { "data-action-menu": "" })}
-          <footer>${packageDemo("button", { label: "Cancel", variant: "secondary" }, { "data-action-sheet-close": "" })}</footer>
-        </div>
-        <div data-action-sheet-toast hidden>${packageDemo("toast", { label: "Action selected", description: "Vehicle action is ready.", tone: "success" }, { "data-pattern-toast": "action-sheet" })}</div>
-      </div>
+      ${patternReactDemo("action-sheet", {
+        label: "JMX-214-B actions",
+        description: "Choose a contextual action for this vehicle.",
+        density: "md",
+        dialog: { triggerLabel: "Vehicle actions", closeLabel: "Cancel", variant: "confirmation" },
+        actions: [
+          { key: "open", label: "Open detail", icon: "open_in_new", prominent: true },
+          { key: "share", label: "Share route", icon: "ios_share" },
+          { key: "freeze", label: "Freeze card", icon: "block", tone: "danger" },
+        ],
+        overflow: { triggerLabel: "More actions", label: "Vehicle actions" },
+        cancelAction: { key: "cancel", label: "Cancel", variant: "secondary" },
+        "data-pattern-demo": "action-sheet",
+      })}
     </section>
   `;
 }
