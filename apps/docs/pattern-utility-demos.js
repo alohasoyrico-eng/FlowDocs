@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 
 function packageDemo(component, demo = {}, attrs = {}) {
@@ -38,7 +38,7 @@ export function utilityPatternOverviewDemo(patternId) {
 
 function checkboxGroupDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">React pattern demo</span>
       <h2>Policy scope selection</h2>
       ${patternReactDemo("checkbox-group", {
@@ -64,7 +64,7 @@ function checkboxGroupDemoPanel() {
 
 function radioGroupDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">React pattern demo</span>
       <h2>Approval routing choice</h2>
       ${patternReactDemo("radio-group", {
@@ -89,7 +89,7 @@ function radioGroupDemoPanel() {
 
 function ganttChartDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">React pattern demo</span>
       <h2>Rollout schedule</h2>
       ${patternReactDemo("gantt-chart", {
@@ -123,7 +123,7 @@ function ganttChartDemoPanel() {
 
 function waterfallChartDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">React pattern demo</span>
       <h2>Spend bridge</h2>
       ${patternReactDemo("waterfall-chart", {
@@ -149,7 +149,7 @@ function waterfallChartDemoPanel() {
 
 function polarChartDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">React pattern demo</span>
       <h2>Fleet mix by risk</h2>
       ${patternReactDemo("polar-chart", {
@@ -174,7 +174,7 @@ function polarChartDemoPanel() {
 
 function preferenceManagementDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">React pattern demo</span>
       <h2>Workspace preferences</h2>
       ${patternReactDemo("preference-management", {
@@ -227,7 +227,7 @@ function preferenceManagementDemoPanel() {
 
 function snackbarProviderDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Shared feedback queue</h2>
       ${patternReactDemo("snackbar-provider", {
@@ -272,7 +272,7 @@ function timelineDemoPanel() {
     },
   ];
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Fleet activity timeline</h2>
       ${patternReactDemo("timeline", {
@@ -289,7 +289,7 @@ function timelineDemoPanel() {
 
 function sectionHeaderDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Dense section entry</h2>
       <div class="pattern-section-header-demo pattern-utility-demo" data-section-header-demo>
@@ -312,7 +312,7 @@ function sectionHeaderDemoPanel() {
 
 function pullToRefreshDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Refreshable movement feed</h2>
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Refreshable movement feed</h2>
       ${patternReactDemo("pull-to-refresh", {
         label: "Refreshable movement feed",
         description: "Recent movements update without replacing the governed feed surface.",
@@ -326,7 +326,7 @@ function pullToRefreshDemoPanel() {
 
 function avatarGroupDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Accountable team group</h2>
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Accountable team group</h2>
       ${patternReactDemo("avatar-group", {
         label: "Accountable team group",
         density: "md",
@@ -346,7 +346,7 @@ function avatarGroupDemoPanel() {
 
 function transferListDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Assign vehicles to policy</h2>
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Assign vehicles to policy</h2>
       ${patternReactDemo("transfer-list", {
         label: "Assign vehicles to policy",
         density: "md",
@@ -367,7 +367,7 @@ function transferListDemoPanel() {
 
 function dragSortableListDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Dashboard module order</h2>
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Dashboard module order</h2>
       ${patternReactDemo("drag-sortable-list", {
         label: "Dashboard order",
         density: "md",
@@ -387,7 +387,7 @@ function dragSortableListDemoPanel() {
 
 function calendarViewDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Maintenance calendar</h2>
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Maintenance calendar</h2>
       ${patternReactDemo("calendar-view", {
         label: "Maintenance calendar",
         density: "md", selectedDate: "2026-07-18", timezoneLabel: "America/Mexico_City",

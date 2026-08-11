@@ -1,4 +1,4 @@
-import { html, icon } from "./detail-tabs-core.js?v=3";
+import { html, icon } from "./detail-tabs-core.js?v=5";
 import { avatarMenuMarkup, accountMenuSections } from "./avatar-menu-slot.js?v=1";
 import { notificationPanelMarkup } from "./notification-panel-slot.js?v=1";
 import { patternPackageDemo as packageDemo, searchSlotMarkup } from "./search-slot.js?v=2";
@@ -36,7 +36,7 @@ function topbarDesignPanels() {
 
 function sidebarViewportOrganizationPanel() {
   return html`
-    <section class="doc-panel wide pattern-design-section pattern-design-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Design</span>
       <h2>Viewport organization</h2>
       <div class="pattern-design-demo-grid">
@@ -49,7 +49,7 @@ function sidebarViewportOrganizationPanel() {
 
 function sidebarResponsiveLayoutPanel() {
   return html`
-    <section class="doc-panel wide pattern-design-section pattern-design-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Responsive layout patterns</h2>
       <div class="pattern-design-demo-grid">
         ${demoCard("Hierarchy", "Parent groups carry icons, children stay text-first", sidebarDesktopDemo("hierarchy"))}
@@ -63,7 +63,7 @@ function sidebarResponsiveLayoutPanel() {
 
 function topbarViewportOrganizationPanel() {
   return html`
-    <section class="doc-panel wide pattern-design-section pattern-design-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Design</span>
       <h2>Viewport organization</h2>
       <div class="pattern-design-demo-grid pattern-design-demo-grid--topbar">
@@ -76,7 +76,7 @@ function topbarViewportOrganizationPanel() {
 
 function topbarResponsiveLayoutPanel() {
   return html`
-    <section class="doc-panel wide pattern-design-section pattern-design-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Responsive layout patterns</h2>
       <div class="pattern-design-demo-grid pattern-design-demo-grid--topbar">
         ${demoCard("Search priority", "Topbar keeps the search slot; Search and Autocomplete own result behavior", topbarSearchDemo())}
@@ -90,7 +90,7 @@ function topbarResponsiveLayoutPanel() {
 
 function sidebarVariantStatusPanel() {
   return html`
-    <section class="doc-panel wide pattern-design-section pattern-design-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Variant status</h2>
       <div class="pattern-variant-grid">
         ${variantCard("Persistent", "Current", "Desktop and wide tablet use the real sidebar beside content.")}
@@ -103,7 +103,7 @@ function sidebarVariantStatusPanel() {
 
 function topbarVariantStatusPanel() {
   return html`
-    <section class="doc-panel wide pattern-design-section pattern-design-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Variant status</h2>
       <div class="pattern-variant-grid">
         ${variantCard("Docs shell", "Current", "Brand, search, language, grid, and theme actions use the real topbar.")}
@@ -140,7 +140,7 @@ function topbarSlotContractPanel() {
 
 function slotContractPanel(title, rows) {
   return html`
-    <section class="doc-panel wide pattern-rule-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${title}</h2>
       <div class="props-table">
         ${rows.map(([slot, status, rule]) => `<div><code>${slot}</code><span>Slot</span><span>${status}</span><span>${rule}</span></div>`).join("")}

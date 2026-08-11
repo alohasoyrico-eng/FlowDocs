@@ -1,4 +1,4 @@
-import { html, slug } from "./detail-tabs-core.js?v=3";
+import { html, slug } from "./detail-tabs-core.js?v=5";
 import { avatarMenuMarkup } from "./avatar-menu-slot.js?v=1";
 import { searchSlotMarkup } from "./search-slot.js?v=2";
 

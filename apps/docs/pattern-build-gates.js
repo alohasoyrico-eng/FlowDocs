@@ -1,4 +1,4 @@
-import { html, icon, ui } from "./detail-tabs-core.js?v=3";
+import { html, icon, ui } from "./detail-tabs-core.js?v=5";
 
 export function patternBuildGatePanel(entry) {
   const gates = entry.id === "sidebar"
@@ -15,7 +15,7 @@ export function patternBuildGatePanel(entry) {
         "Mobile fallback preserves navigation, search, and account access."
       ];
   return html`
-    <section class="doc-panel wide pattern-build-gates">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-build-gates" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("build.qualityGates")}</h2>
       <div class="checklist-grid">
         ${gates.map((gate) => `<article>${icon("check_circle")}<span>${gate}</span></article>`).join("")}

@@ -1,6 +1,6 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
-import { journeyReactPatternOverviewDemo } from "./pattern-journey-react-demos.js?v=1";
+import { journeyReactPatternOverviewDemo } from "./pattern-journey-react-demos.js?v=2";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -30,7 +30,7 @@ export function journeyPatternOverviewDemo(patternId) {
 
 function authJourneyDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-journey-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Recoverable sign-in</h2>
       ${patternReactDemo("authentication-login-biometrics-and-otp", {
@@ -48,7 +48,7 @@ function authJourneyDemoPanel() {
 
 function driverOnboardingDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-journey-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Driver mobile setup</h2>
       <div class="pattern-driver-onboarding pattern-journey-demo pattern-journey-demo--mobile" data-driver-onboarding-demo data-journey-step="0">
@@ -83,7 +83,7 @@ function fleetManagerOnboardingDemoPanel() {
     { id: "kld-901-c", plate: "KLD-901-C", driver: "Luis Vera", status: "Needs role", spend: "$631" },
   ];
   return html`
-    <section class="doc-panel wide pattern-journey-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Fleet manager workspace setup</h2>
       <div class="pattern-fleet-onboarding pattern-journey-demo" data-fleet-onboarding-demo data-journey-step="0">

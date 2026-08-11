@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -18,7 +18,7 @@ export function shellPatternOverviewDemo(patternId) {
 
 function topbarDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-topbar-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-topbar-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Product shell topbar</h2>
       ${patternReactDemo("topbar", {
@@ -75,7 +75,7 @@ function topbarDemoPanel() {
 
 function sidebarDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-sidebar-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-sidebar-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Workspace sidebar</h2>
       ${patternReactDemo("sidebar", {
@@ -116,7 +116,7 @@ function sidebarDemoPanel() {
 
 function sectionHeaderDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-section-header-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-section-header-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Operational section header</h2>
       ${patternReactDemo("section-header", {
@@ -152,7 +152,7 @@ function sectionHeaderDemoPanel() {
 
 function settingsReactDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-settings-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-settings-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Workspace settings</h2>
       ${patternReactDemo("settings", {

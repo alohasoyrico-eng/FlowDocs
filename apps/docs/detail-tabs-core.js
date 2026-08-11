@@ -68,16 +68,16 @@ export function threeTabs(entry, overviewExtra, designBody, buildBody) {
 export function overviewPanel(entry) {
   return html`
     <div class="panel-grid">
-      <section class="doc-panel wide">
+      <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
         <h2>${ui("overview.whyItExists")}</h2>
         <p>${entry.summary}</p>
         <p>${ui("overview.intentCopy")}</p>
       </section>
-      <section class="doc-panel">
+      <section class="surface docs-section-surface detail-section-surface" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
         <h2>${ui("overview.platform")}</h2>
         <p>${entry.platform}</p>
       </section>
-      <section class="doc-panel">
+      <section class="surface docs-section-surface detail-section-surface" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
         <h2>${ui("overview.publicTokens")}</h2>
         <div class="token-list">${entry.tokens.map((token) => `<code>${token}</code>`).join("")}</div>
       </section>
@@ -93,7 +93,7 @@ export function teamsPanel(entry) {
       ${audiences
         .map(
           (audience) => html`
-            <section class="doc-panel">
+            <section class="surface docs-section-surface detail-section-surface" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
               <h2>${audience}</h2>
               <p>${teamNotes[audience] ?? teamNotes.fallback}</p>
             </section>
@@ -114,7 +114,7 @@ export function decisionPanel(entry) {
 
 export function tokenPanel(entry) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.tokenModel")}</h2>
       <p>${referenceCopy.tokenModel?.copy}</p>
       <div class="token-list">${entry.tokens.map((token) => `<code>${token}</code>`).join("")}</div>
@@ -155,7 +155,7 @@ export function engineeringPanel(entry) {
         tokens: entry.tokens,
       };
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("build.engineeringContract")}</h2>
       <ul>
         ${items.map((item) => `<li>${item}</li>`).join("")}
@@ -169,7 +169,7 @@ export function specPanel(entry) {
   const props = specProps(entry);
   const gates = specQualityGates(entry);
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("build.specAndApi")}</h2>
       <p>${ui("build.specIntro")}</p>
       <div class="props-table">
@@ -228,7 +228,7 @@ export function guidelinesPanel(entry) {
   const doItems = ["pattern", "template"].includes(entry.type) && contract?.agentInstructions ? contract.agentInstructions : referenceCopy.guidelines?.do ?? [];
   const dontItems = ["pattern", "template"].includes(entry.type) && contract?.rejectIf ? contract.rejectIf : referenceCopy.guidelines?.doNot ?? [];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("guidelines.title")}</h2>
       <div class="guidelines-grid">
         <article>
@@ -250,7 +250,7 @@ export function guidelinesPanel(entry) {
 
 export function demoMatrixPanel(entry) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.demoMatrix")}</h2>
       <p>${referenceCopy.demoMatrix?.copy}</p>
       <div class="demo-matrix">
@@ -270,7 +270,7 @@ export function agentPanel(entry, layerName) {
   const preserve = interpolateList(referenceCopy.mielGeneric?.preserve, entry);
   if (contract) {
     return html`
-      <section class="doc-panel wide">
+      <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
         <span class="eyebrow">MIEL</span>
         <h2>${ui("miel.title")}</h2>
         <p>${ui("miel.intro")}</p>
@@ -280,20 +280,20 @@ export function agentPanel(entry, layerName) {
           <article><h3>${ui("miel.agentMustAsk")}</h3><ul>${mustAsk.map((item) => `<li>${item}</li>`).join("")}</ul></article>
         </div>
       </section>
-      <section class="doc-panel wide">
+      <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
         <h2>${ui("miel.humanReview")}</h2>
         <div class="checklist-grid">
           ${preserve.map((item) => `<article>${icon("check_circle")}<span>${item}</span></article>`).join("")}
         </div>
       </section>
-      <section class="doc-panel wide">
+      <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
         <h2>${ui("miel.machineContract")}</h2>
         <pre>${JSON.stringify(agentSpec, null, 2)}</pre>
       </section>
     `;
   }
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">MIEL</span>
       <h2>${ui("miel.title")}</h2>
       <p>${ui("miel.intro")}</p>
@@ -303,13 +303,13 @@ export function agentPanel(entry, layerName) {
         <article><h3>${ui("miel.agentMustAsk")}</h3><ul>${mustAsk.map((item) => `<li>${item}</li>`).join("")}</ul></article>
       </div>
     </section>
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("miel.humanReview")}</h2>
       <div class="checklist-grid">
         ${preserve.map((item) => `<article>${icon("check_circle")}<span>${item}</span></article>`).join("")}
       </div>
     </section>
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("miel.machineContract")}</h2>
       <pre>${JSON.stringify(agentSpec, null, 2)}</pre>
     </section>
@@ -318,7 +318,7 @@ export function agentPanel(entry, layerName) {
 
 export function listPanel(title, items) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${title}</h2>
       <ul>${items.map((entry) => `<li>${entry}</li>`).join("")}</ul>
     </section>

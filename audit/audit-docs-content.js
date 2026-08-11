@@ -284,6 +284,87 @@ function checkDetailShellTemplateReadiness() {
   }
 }
 
+function checkArtifactDetailSurfaceReadiness() {
+  const artifactDetailFiles = [
+    docsDetailTabsFile.replace(/detail-tabs\.js$/, "detail-tabs-core.js"),
+    path.join(docsAppDir, "pattern-tabs.js"),
+    path.join(docsAppDir, "pattern-contract-tabs.js"),
+    path.join(docsAppDir, "template-tabs.js"),
+    path.join(docsAppDir, "pattern-build-gates.js"),
+    path.join(docsAppDir, "pattern-candidate-demos.js"),
+    path.join(docsAppDir, "pattern-design-lead.js"),
+    path.join(docsAppDir, "pattern-desktop-demos.js"),
+    path.join(docsAppDir, "pattern-desktop-react-demos.js"),
+    path.join(docsAppDir, "pattern-focused-design.js"),
+    path.join(docsAppDir, "pattern-journey-demos.js"),
+    path.join(docsAppDir, "pattern-journey-react-demos.js"),
+    path.join(docsAppDir, "pattern-miel-tabs.js"),
+    path.join(docsAppDir, "pattern-mobile-demos.js"),
+    path.join(docsAppDir, "pattern-mobile-react-demos.js"),
+    path.join(docsAppDir, "pattern-operational-demos.js"),
+    path.join(docsAppDir, "pattern-operational-react-demos.js"),
+    path.join(docsAppDir, "pattern-shell-react-demos.js"),
+    path.join(docsAppDir, "pattern-utility-demos.js"),
+    path.join(docsAppDir, "template-desktop-demos.js"),
+    path.join(docsAppDir, "template-domain-demos.js"),
+    path.join(docsAppDir, "template-react-demos.js"),
+  ].filter((file) => fs.existsSync(file));
+  const panelHotspots = artifactDetailFiles
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countMatches(read(file), /doc-panel/g) }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
+  const migratedSurfaceSections = artifactDetailFiles.reduce((total, file) => total + countMatches(read(file), /class="surface docs-section-surface detail-section-surface/g), 0);
+  const missingSurfaceBoundary = artifactDetailFiles
+    .map((file) => {
+      const text = read(file);
+      const surfaces = countMatches(text, /class="surface docs-section-surface detail-section-surface/g);
+      const roles = countMatches(text, /class="surface docs-section-surface detail-section-surface[^"]*" data-surface-role="section"/g);
+      return { file: path.relative(process.cwd(), file), surfaces, roles };
+    })
+    .filter((entry) => entry.surfaces !== entry.roles);
+  const sharedHelperBoundaries = [
+    {
+      file: path.join(docsAppDir, "family-component-docs.js"),
+      helper: "artifactFoundationTracePanel",
+      ready: /export function artifactFoundationTracePanel[\s\S]*?<section class="surface docs-section-surface detail-section-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
+        read(path.join(docsAppDir, "family-component-docs.js")),
+      ),
+    },
+    {
+      file: path.join(docsAppDir, "visual-examples.js"),
+      helper: "examplePanel",
+      ready: /export function examplePanel[\s\S]*?<section class="surface docs-section-surface detail-section-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
+        read(path.join(docsAppDir, "visual-examples.js")),
+      ),
+    },
+  ];
+  const missingSharedHelperBoundaries = sharedHelperBoundaries
+    .filter((entry) => !entry.ready)
+    .map((entry) => ({ file: path.relative(process.cwd(), entry.file), helper: entry.helper }));
+
+  result.inventory.artifactDetailSurfaceReadiness = {
+    files: artifactDetailFiles.map((file) => path.relative(process.cwd(), file)),
+    migratedSurfaceSections,
+    rawDocPanelHotspots: panelHotspots,
+    missingSurfaceBoundary,
+    sharedHelperBoundaries: sharedHelperBoundaries.map((entry) => ({
+      file: path.relative(process.cwd(), entry.file),
+      helper: entry.helper,
+      ready: entry.ready,
+    })),
+  };
+
+  if (panelHotspots.length) {
+    add("warnings", docsAppDir, 1, `Artifact detail tabs still use doc-panel instead of Surface-backed docs-section-surface: ${panelHotspots.map((entry) => `${entry.file} (${entry.count})`).join(", ")}.`);
+  }
+  if (missingSurfaceBoundary.length) {
+    add("warnings", docsAppDir, 1, `Artifact detail Surface sections must declare data-surface-role="section": ${missingSurfaceBoundary.map((entry) => entry.file).join(", ")}.`);
+  }
+  if (missingSharedHelperBoundaries.length) {
+    add("warnings", docsAppDir, 1, `Artifact detail shared helpers must render through Surface boundaries: ${missingSharedHelperBoundaries.map((entry) => `${entry.file}#${entry.helper}`).join(", ")}.`);
+  }
+}
+
 function checkComponentDetailTemplateReadiness() {
   const componentModuleFiles = docsGoldComponentModuleFiles
     .filter((file) => !file.endsWith("gold-component-docs.js"))
@@ -757,6 +838,7 @@ module.exports = {
   checkTemplateBlueprints,
   checkDemoQualityInventory,
   checkDetailShellTemplateReadiness,
+  checkArtifactDetailSurfaceReadiness,
   checkComponentDetailTemplateReadiness,
   checkI18nReadiness,
 };

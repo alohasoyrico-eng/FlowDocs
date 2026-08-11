@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -173,7 +173,7 @@ export function reactTemplateDemo(entry) {
   const demo = templateData[entry.id];
   if (!demo) return "";
   return html`
-    <section class="doc-panel wide template-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide template-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <div class="template-desktop-panel__header">
         <div>
           <span class="eyebrow">Product demo</span>

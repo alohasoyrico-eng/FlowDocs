@@ -1,5 +1,5 @@
-import { artifactContract, artifactFoundationTracePanel, cardLink, examplePanel, findPattern, html, icon, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=3";
-import { desktopTemplateDemo } from "./template-desktop-demos.js?v=16";
+import { artifactContract, artifactFoundationTracePanel, cardLink, examplePanel, findPattern, html, icon, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=5";
+import { desktopTemplateDemo } from "./template-desktop-demos.js?v=17";
 
 export function templateTabs(entry) {
   const blueprint = templateBlueprints[entry.title];
@@ -14,7 +14,7 @@ export function templateTabs(entry) {
 export function productPanel(entry) {
   const blueprint = templateBlueprints[entry.title];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.productContext")}</h2>
       <p>${entry.summary}</p>
       <p>${blueprint?.primary ?? templateBlueprintFallbacks.primary}</p>
@@ -30,7 +30,7 @@ export function productPanel(entry) {
 export function templateStandardPanel(entry) {
   const blueprint = templateBlueprints[entry.title];
   return html`
-    <section class="doc-panel wide reference-section">
+    <section class="surface docs-section-surface detail-section-surface wide reference-section" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">${ui("reference.templateStandard")}</span>
       <h2>${entry.title} production model</h2>
       <p>${entry.summary}</p>
@@ -43,7 +43,7 @@ export function templateScreenSystemPanel(entry) {
   const blueprint = templateBlueprints[entry.title];
   const modules = blueprint?.modules ?? [];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.screenSystem")}</h2>
       <p>${blueprint?.screenSystem ?? templateBlueprintFallbacks.screenSystem}</p>
       <div class="role-grid">
@@ -58,7 +58,7 @@ export function templateStateMatrixPanel(entry) {
   const states = blueprint?.states ?? ["loaded", "loading", "empty", "error", "permission", "offline"];
   const surfaces = blueprint?.surfaces ?? ["Mobile", "Tablet", "Laptop", "Desktop"];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.templateStateMatrix")}</h2>
       <p>${referenceTemplate(templateBlueprintFallbacks.stateMatrixCopy, entry)}</p>
       <div class="button-matrix">
@@ -78,7 +78,7 @@ export function stateLabel(state) {
 export function templateContractPanel(entry) {
   const blueprint = templateBlueprints[entry.title];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("contract.template")}</h2>
       <div class="props-table">
         <div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
@@ -100,7 +100,7 @@ export function iaPanel(entry) {
   const templateModulesUsed = entry.templateModulesUsed ?? [];
   const blueprint = templateBlueprints[entry.title];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.informationArchitecture")}</h2>
       <p>${blueprint?.informationArchitecture ?? templateBlueprintFallbacks.informationArchitecture}</p>
       ${blueprint ? `<div class="nav-model">${blueprint.nav.map((item) => `<span>${item}</span>`).join("")}</div>` : ""}

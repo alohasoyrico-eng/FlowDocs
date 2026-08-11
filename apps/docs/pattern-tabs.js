@@ -1,9 +1,9 @@
-import { artifactContract, artifactFoundationTracePanel, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, icon, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=3";
-import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=51";
-import { patternBuildGatePanel } from "./pattern-build-gates.js?v=3";
-import { focusedPatternDesignPanels, topbarMarkup } from "./pattern-focused-design.js?v=23";
-import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=1";
-import { patternMielTabs } from "./pattern-miel-tabs.js?v=6";
+import { artifactContract, artifactFoundationTracePanel, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, icon, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=52";
+import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
+import { focusedPatternDesignPanels, topbarMarkup } from "./pattern-focused-design.js?v=24";
+import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=2";
+import { patternMielTabs } from "./pattern-miel-tabs.js?v=7";
 
 export function patternTabs(entry) {
   if (entry.id === "sidebar" || entry.id === "topbar") {
@@ -47,7 +47,7 @@ export function patternExamplePanel(entry) {
 
 function topbarPatternPanel(entry) {
   return html`
-    <section class="doc-panel wide pattern-stage-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-stage-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">${ui("reference.realExample")}</span>
       <h2>${entry.title} documentation shell</h2>
       <div class="pattern-stage pattern-stage--real-shell pattern-stage--real-topbar" data-pattern-demo="topbar">
@@ -71,7 +71,7 @@ function topbarPatternPanel(entry) {
 
 function sidebarPatternPanel(entry) {
   return html`
-    <section class="doc-panel wide pattern-stage-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-stage-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">${ui("reference.realExample")}</span>
       <h2>${entry.title} docs shell frame</h2>
       <div class="pattern-stage pattern-stage--real-shell pattern-stage--real-sidebar" data-pattern-demo="sidebar">
@@ -129,7 +129,7 @@ function sidebarFoundationsPanel() {
     ["Iconography", "Material Symbols use system family, size, optical alignment, and parent-only rules."],
     ["Accessibility", "Disclosure state, focus ring, touch target, aria-current, and reduced-motion behavior are required."]
   ];
-  return html`<section class="doc-panel wide pattern-rule-panel"><h2>Foundations consumed</h2><div class="props-table">${rows.map(([name, rule]) => `<div><code>${name}</code><span>Foundation</span><span>Required</span><span>${rule}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Foundations consumed</h2><div class="props-table">${rows.map(([name, rule]) => `<div><code>${name}</code><span>Foundation</span><span>Required</span><span>${rule}</span></div>`).join("")}</div></section>`;
 }
 
 function topbarFoundationsPanel() {
@@ -146,7 +146,7 @@ function topbarFoundationsPanel() {
     ["Iconography", "Utility icons use Material Symbols sizing and optical alignment; brand slot can swap logo safely."],
     ["Accessibility", "Landmarks, role search, aria-current, aria-haspopup, aria-expanded, focus ring, Escape, and reduced motion are required."]
   ];
-  return html`<section class="doc-panel wide pattern-rule-panel"><h2>Topbar foundations consumed</h2><div class="props-table">${rows.map(([name, rule]) => `<div><code>${name}</code><span>Foundation</span><span>Required</span><span>${rule}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar foundations consumed</h2><div class="props-table">${rows.map(([name, rule]) => `<div><code>${name}</code><span>Foundation</span><span>Required</span><span>${rule}</span></div>`).join("")}</div></section>`;
 }
 
 function topbarSlotPanel() {
@@ -158,7 +158,7 @@ function topbarSlotPanel() {
     ["actions", "Language, contrast, grid, help, notifications, or compact utility commands."],
     ["account", "Avatar trigger plus Menu for settings, profile, workspace, and sign out."]
   ];
-  return html`<section class="doc-panel wide pattern-rule-panel"><h2>Topbar slots</h2><div class="props-table">${rows.map((row) => `<div><code>${row[0]}</code><span>Slot</span><span>Configurable</span><span>${row[1]}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar slots</h2><div class="props-table">${rows.map((row) => `<div><code>${row[0]}</code><span>Slot</span><span>Configurable</span><span>${row[1]}</span></div>`).join("")}</div></section>`;
 }
 
 function topbarSearchPanel() {
@@ -167,7 +167,7 @@ function topbarSearchPanel() {
     ["Autocomplete", "Pattern dependency", "Owns suggestions, keyboard movement, loading, no-result recovery, and selection when the search slot predicts entities."],
     ["Command Palette", "Pattern candidate", "Separate from topbar when search executes actions, not just artifact lookup."]
   ];
-  return html`<section class="doc-panel wide pattern-rule-panel"><h2>Search boundary</h2><div class="props-table">${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>Decision</span><span>${row[2]}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Search boundary</h2><div class="props-table">${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>Decision</span><span>${row[2]}</span></div>`).join("")}</div></section>`;
 }
 
 function topbarVariantsPanel() {
@@ -179,7 +179,7 @@ function topbarVariantsPanel() {
     ["Account-aware", "Avatar opens Menu with settings, workspace, profile, and logout."],
     ["Notification-aware", "Unread Badge and notification menu/panel use state and tone without hijacking navigation."]
   ];
-  return html`<section class="doc-panel wide pattern-rule-panel"><h2>Topbar variants</h2><div class="role-grid">${variants.map(([name, rule]) => `<article><span>${icon("web_asset")}</span><strong>${name}</strong><p>${rule}</p></article>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar variants</h2><div class="role-grid">${variants.map(([name, rule]) => `<article><span>${icon("web_asset")}</span><strong>${name}</strong><p>${rule}</p></article>`).join("")}</div></section>`;
 }
 
 function sidebarLayoutPanel() {
@@ -199,7 +199,7 @@ function sidebarMotionPanel() {
     ["Mobile drawer", "Slides from the navigation edge with focus restoration and Escape close."],
     ["Active state", "Changes instantly; do not animate route identity in a way that delays orientation."]
   ];
-  return html`<section class="doc-panel wide pattern-rule-panel"><h2>Motion contract</h2><div class="architecture-chain">${rows.map(([name, rule], index) => `<article><b>${index + 1}</b><strong>${name}</strong><span>${rule}</span></article>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Motion contract</h2><div class="architecture-chain">${rows.map(([name, rule], index) => `<article><b>${index + 1}</b><strong>${name}</strong><span>${rule}</span></article>`).join("")}</div></section>`;
 }
 
 function sidebarVariantsPanel() {
@@ -208,7 +208,7 @@ function sidebarVariantsPanel() {
     ["Drawer", "Mobile behavior opened from Topbar/Menu, with focus trap and close affordance."],
     ["With Footer", "Optional utility region for help, version, workspace, account, or environment status."]
   ];
-  return html`<section class="doc-panel wide pattern-rule-panel"><h2>Sidebar variants</h2><div class="role-grid">${variants.map(([name, rule]) => `<article><span>${icon("view_sidebar")}</span><strong>${name}</strong><p>${rule}</p></article>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Sidebar variants</h2><div class="role-grid">${variants.map(([name, rule]) => `<article><span>${icon("view_sidebar")}</span><strong>${name}</strong><p>${rule}</p></article>`).join("")}</div></section>`;
 }
 
 function sidebarContractPanel() {
@@ -220,7 +220,7 @@ function sidebarContractPanel() {
     ["footer", "SidebarFooter", "optional", "Separate utility region for account, help, version, workspace, or environment."],
     ["responsiveMode", "persistent | drawer", "yes", "Breakpoint behavior coordinated with Topbar menu access."]
   ];
-  return html`<section class="doc-panel wide"><h2>${ui("contract.pattern")}</h2><div class="props-table"><div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>${ui("contract.pattern")}</h2><div class="props-table"><div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}</div></section>`;
 }
 
 function topbarContractPanel() {
@@ -234,7 +234,7 @@ function topbarContractPanel() {
     ["account", "AvatarMenuSlot", "optional", "Avatar component plus Menu for settings, workspace, profile, sign out."],
     ["responsiveMode", "full | compact | mobile", "yes", "Defines which slots stay visible, compress, or move to sidebar/drawer."]
   ];
-  return html`<section class="doc-panel wide"><h2>${ui("contract.pattern")}</h2><div class="props-table"><div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>${ui("contract.pattern")}</h2><div class="props-table"><div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}</div></section>`;
 }
 
 export function journeyPanel(entry) {
@@ -269,7 +269,7 @@ export function screensPanel(entry) {
   const contract = artifactContract(entry);
   const componentsUsed = contract?.componentDependencies ?? entry.componentsUsed ?? [];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.screensComponents")}</h2>
       <p>These are the expected building blocks for ${entry.title}. Each one should link to its component contract before implementation.</p>
       <div class="relation-grid">
@@ -298,7 +298,7 @@ export function researchPanel(entry) {
 export function patternStandardPanel(entry) {
   const contract = artifactContract(entry);
   return html`
-    <section class="doc-panel wide reference-section">
+    <section class="surface docs-section-surface detail-section-surface wide reference-section" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">${ui("reference.patternStandard")}</span>
       <h2>${entry.title} playbook</h2>
       <p>${entry.summary}</p>
@@ -313,7 +313,7 @@ export function patternDecisionTreePanel(entry) {
     ...(referenceCopy.pattern?.fallbackDecisions ?? []),
   ].map((row) => row.map((value) => referenceTemplate(value, entry)));
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.decisionTree")}</h2>
       <div class="architecture-chain">
         ${decisions.map(([name, copy], index) => `<article><b>${index + 1}</b><strong>${name}</strong><span>${copy}</span></article>`).join("")}
@@ -339,7 +339,7 @@ export function patternContractPanel(entry) {
       ]
     : (referenceCopy.pattern?.fallbackContractRows ?? []).map((row) => row.map((value) => referenceTemplate(value, entry, { componentsUsed: (entry.componentsUsed ?? []).join(", ") })));
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("contract.pattern")}</h2>
       <div class="props-table">
         <div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>

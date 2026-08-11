@@ -1,4 +1,4 @@
-import { examplePanel, html, icon, interpolateList, primitiveExample, referenceCopy, threeTabs, ui, listPanel, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=3";
+import { examplePanel, html, icon, interpolateList, primitiveExample, referenceCopy, threeTabs, ui, listPanel, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 
 export function primitiveTabs(entry) {
   if (entry.title === "Density") {

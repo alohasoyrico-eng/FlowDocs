@@ -1,4 +1,4 @@
-import { html, icon } from "./detail-tabs-core.js?v=3";
+import { html, icon } from "./detail-tabs-core.js?v=5";
 
 export function patternDesignLeadPanel(entry) {
   if (entry.id === "sidebar") return sidebarDesignLeadPanel();
@@ -28,7 +28,7 @@ function topbarDesignLeadPanel() {
 
 function designLeadPanel(title, copy, rules) {
   return html`
-    <section class="doc-panel wide pattern-design-lead">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-design-lead" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Design</span>
       <h2>${title}</h2>
       <p>${copy}</p>

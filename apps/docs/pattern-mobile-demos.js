@@ -1,6 +1,6 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
-import { mobileReactPatternOverviewDemo } from "./pattern-mobile-react-demos.js?v=1";
+import { mobileReactPatternOverviewDemo } from "./pattern-mobile-react-demos.js?v=2";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -54,7 +54,7 @@ export function mobilePatternOverviewDemo(patternId) {
 
 function fullscreenSheetDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-mobile-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Mobile station edit</h2>
       <div class="pattern-fullscreen-sheet-demo pattern-mobile-demo" data-fullscreen-sheet-demo data-step-index="0">
@@ -91,7 +91,7 @@ function fullscreenSheetDemoPanel() {
 
 function swipeActionsDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-mobile-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Row actions with explicit reveal</h2>
       <div class="pattern-swipe-actions-demo pattern-mobile-demo" data-swipe-actions-demo>
@@ -114,7 +114,7 @@ function swipeActionsDemoPanel() {
 
 function quickActionsGridDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-mobile-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Card shortcut grid</h2>
       <div class="pattern-quick-actions-grid-demo pattern-mobile-demo" data-quick-actions-grid-demo>
@@ -135,7 +135,7 @@ function quickActionsGridDemoPanel() {
 
 function drawerAdapterDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-mobile-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Inspector drawer adapter</h2>
       <div class="pattern-drawer-adapter-demo pattern-mobile-demo" data-drawer-adapter-demo>

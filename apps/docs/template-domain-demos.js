@@ -1,4 +1,4 @@
-import { html, slug } from "./detail-tabs-core.js?v=3";
+import { html, slug } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { renderSidebarPattern, renderTopbarPattern } from "./pattern-shell-renderers.js?v=6";
 
@@ -62,7 +62,7 @@ function patternBadges(patterns = []) {
 function templateShell(entry, blueprint, body) {
   const frame = templateFrame(entry, blueprint, body);
   return html`
-    <section class="doc-panel wide template-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide template-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <div class="template-desktop-panel__header">
         <div><span class="eyebrow">Product demo</span><h2>${entry.title}</h2></div>
         ${packageDemo("button", { label: "Open full screen", icon: "open_in_full" }, { "data-template-fullscreen-open": "" })}

@@ -1,6 +1,6 @@
-import { html, slug } from "./detail-tabs-core.js?v=3";
+import { html, slug } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
-import { operationalReactPatternOverviewDemo } from "./pattern-operational-react-demos.js?v=2";
+import { operationalReactPatternOverviewDemo } from "./pattern-operational-react-demos.js?v=3";
 
 function attrText(attrs = {}) {
   return Object.entries(attrs).map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`).join(" ");
@@ -152,7 +152,7 @@ export function operationalPatternOverviewDemo(patternId) {
   const demo = operationalPatterns[patternId];
   if (!demo) return "";
   return html`
-    <section class="doc-panel wide pattern-utility-panel" data-operational-pattern-demo="${patternId}">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail" data-operational-pattern-demo="${patternId}">
       <span class="eyebrow">Operational demo</span>
       <h2>${demo.title}</h2>
       <div class="surface template-module-surface" data-flow-primitive="surface" data-surface-role="section" data-template-pattern="${slug(demo.pattern)}">

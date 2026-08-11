@@ -1,6 +1,6 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
-import { desktopReactPatternOverviewDemo } from "./pattern-desktop-react-demos.js?v=1";
+import { desktopReactPatternOverviewDemo } from "./pattern-desktop-react-demos.js?v=2";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -26,7 +26,7 @@ export function desktopPatternOverviewDemo(patternId) {
 
 function kpiCardDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Dashboard KPI band</h2>
       <div class="pattern-kpi-card-demo pattern-desktop-demo" data-kpi-card-demo>
@@ -51,7 +51,7 @@ function chartWrapperDemoPanel() {
     { id: "mar", period: "Mar", spend: "$84k", variance: "+12%" },
   ];
   return html`
-    <section class="doc-panel wide pattern-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Chart module with accessible summary</h2>
       <div class="pattern-chart-wrapper-demo pattern-desktop-demo" data-chart-wrapper-demo>
@@ -82,7 +82,7 @@ function virtualDataTableDemoPanel() {
     { id: "vtc-660-h", plate: "VTC-660-H", driver: "Bruno Diaz", status: { label: "Frozen", tone: "danger" }, region: "West", spend: "$86", spendValue: 86 },
   ];
   return html`
-    <section class="doc-panel wide pattern-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Operational data table</h2>
       <div class="pattern-virtual-table-demo pattern-desktop-demo" data-virtual-table-demo data-page="1" data-page-size="5" data-status="all">
@@ -144,7 +144,7 @@ function advancedFiltersDemoPanel() {
     { id: "west-frozen", vehicle: "PZN-118-D", driver: "Noe Ruiz", region: "West", status: "Frozen", period: "2026-07-08" },
   ];
   return html`
-    <section class="doc-panel wide pattern-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Dashboard filter set</h2>
       <div class="pattern-advanced-filters-demo pattern-desktop-demo" data-advanced-filters-demo data-applied="false">
@@ -204,7 +204,7 @@ function columnConfiguratorDemoPanel() {
     { key: "spend", label: "Spend", mono: true, align: "right", priority: "tertiary" },
   ];
   return html`
-    <section class="doc-panel wide pattern-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Column visibility controls</h2>
       <div class="pattern-column-config-demo pattern-desktop-demo" data-column-config-demo>
@@ -238,7 +238,7 @@ function rolesAndPermissionsDemoPanel() {
     { id: "roles", capability: "Manage roles", manager: { label: "Blocked", tone: "danger" }, finance: { label: "Blocked", tone: "danger" }, support: { label: "Blocked", tone: "danger" } },
   ];
   return html`
-    <section class="doc-panel wide pattern-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Permission review matrix</h2>
       <div class="pattern-roles-demo pattern-desktop-demo" data-roles-demo data-dirty="false">
@@ -272,7 +272,7 @@ function driverVehicleAdministrationDemoPanel() {
     { id: "mtr-330-a", plate: "MTR-330-A", status: "Maintenance", driver: "Unassigned", action: "Recover" },
   ];
   return html`
-    <section class="doc-panel wide pattern-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Driver and vehicle lifecycle</h2>
       <div class="pattern-admin-demo pattern-desktop-demo" data-admin-demo data-view="drivers">

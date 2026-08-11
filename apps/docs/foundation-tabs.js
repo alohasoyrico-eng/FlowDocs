@@ -1,4 +1,4 @@
-import { examplePanel, foundationExample, foundationRoles, html, icon, referenceCopy, referenceTemplate, threeTabs, ui, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=3";
+import { examplePanel, foundationExample, foundationRoles, html, icon, referenceCopy, referenceTemplate, threeTabs, ui, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 
 export function foundationTabs(entry) {
   return threeTabs(entry, `${foundationOverviewPanel(entry)}${foundationRoleGrid(entry)}${examplePanel(entry)}`, `${foundationArchitecturePanel(entry)}${foundationVisualExplanationPanel(entry)}${guidelinesPanel(entry)}`, `${foundationContractPanel(entry)}${specPanel(entry)}${agentPanel(entry, "Foundation")}`);

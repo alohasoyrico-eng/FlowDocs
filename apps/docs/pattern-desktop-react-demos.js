@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -35,7 +35,7 @@ export function desktopReactPatternOverviewDemo(patternId) {
 }
 
 function kpiCardReactPanel() {
-  return html`<section class="doc-panel wide pattern-desktop-panel"><span class="eyebrow">Interactive demo</span><h2>Dashboard KPI card</h2>${patternReactDemo("kpi-card", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Dashboard KPI card</h2>${patternReactDemo("kpi-card", {
     label: "Fuel spend",
     value: "$84.2k",
     unit: "MXN",
@@ -53,7 +53,7 @@ function kpiCardReactPanel() {
 }
 
 function chartWrapperReactPanel() {
-  return html`<section class="doc-panel wide pattern-desktop-panel"><span class="eyebrow">Interactive demo</span><h2>Chart module with summary</h2>${patternReactDemo("chart-wrapper", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Chart module with summary</h2>${patternReactDemo("chart-wrapper", {
     label: "Fuel spend trend",
     description: "Chart, summary metric, table fallback, and actions stay in one governed pattern.",
     density: "md",
@@ -69,7 +69,7 @@ function chartWrapperReactPanel() {
 }
 
 function virtualDataTableReactPanel() {
-  return html`<section class="doc-panel wide pattern-desktop-panel"><span class="eyebrow">Interactive demo</span><h2>Operational data table</h2>${patternReactDemo("virtual-data-table", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Operational data table</h2>${patternReactDemo("virtual-data-table", {
     label: "Vehicle operations",
     description: "Sortable, selectable, paginated table without a parallel docs table implementation.",
     density: "sm",
@@ -91,7 +91,7 @@ function virtualDataTableReactPanel() {
 }
 
 function advancedFiltersReactPanel() {
-  return html`<section class="doc-panel wide pattern-desktop-panel"><span class="eyebrow">Interactive demo</span><h2>Advanced filters</h2>${patternReactDemo("advanced-filters", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Advanced filters</h2>${patternReactDemo("advanced-filters", {
     label: "Vehicle filters",
     description: "Saved views, fields, applied chips, validation, and feedback are composed from Flow.",
     density: "md",
@@ -113,7 +113,7 @@ function advancedFiltersReactPanel() {
 }
 
 function columnConfiguratorReactPanel() {
-  return html`<section class="doc-panel wide pattern-desktop-panel"><span class="eyebrow">Interactive demo</span><h2>Column configuration</h2>${patternReactDemo("column-configurator", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Column configuration</h2>${patternReactDemo("column-configurator", {
     label: "Vehicle columns",
     description: "Column visibility persists without inventing a docs-only chooser.",
     density: "sm",
@@ -139,7 +139,7 @@ function columnConfiguratorReactPanel() {
 }
 
 function rolesAndPermissionsReactPanel() {
-  return html`<section class="doc-panel wide pattern-desktop-panel"><span class="eyebrow">Interactive demo</span><h2>Roles and permissions</h2>${patternReactDemo("roles-and-permissions", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Roles and permissions</h2>${patternReactDemo("roles-and-permissions", {
     label: "Fleet access matrix",
     description: "Permission changes remain auditable and confirmation-aware.",
     density: "sm",
@@ -160,7 +160,7 @@ function rolesAndPermissionsReactPanel() {
 }
 
 function bulkActionsReactPanel() {
-  return html`<section class="doc-panel wide pattern-desktop-panel"><span class="eyebrow">Interactive demo</span><h2>Bulk actions toolbar</h2>${patternReactDemo("bulk-actions", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Bulk actions toolbar</h2>${patternReactDemo("bulk-actions", {
     label: "Vehicle bulk actions",
     density: "sm",
     state: "selected",

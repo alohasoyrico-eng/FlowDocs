@@ -1,6 +1,6 @@
 import { artifactCard, artifactTypeLabel, cardLink, configureCatalogRenderers, groupCollection, label } from "./catalog-renderers.js";
 import { loadDocsContent } from "./content-sources.js?v=202";
-import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=56";
+import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=57";
 import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=293";
 import { applyLocalizedChrome, configureDocsChrome, setupLanguageToggle } from "./docs-chrome.js?v=2";
 import { renderCollectionContent, renderDetailContent, renderShell } from "./docs-layout.js?v=224";
@@ -30,7 +30,7 @@ import {
   templateBlueprints,
   ui,
 } from "./docs-state.js";
-import { artifactFoundationTracePanel, configureFamilyComponentDocs, familyComponentTabs } from "./family-component-docs.js?v=2";
+import { artifactFoundationTracePanel, configureFamilyComponentDocs, familyComponentTabs } from "./family-component-docs.js?v=3";
 import { configureFoundationReference, foundationReferenceContent, foundationRoles, foundationSubtitle } from "./foundation-reference.js";
 import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDemo, breadcrumbsDemo, buttonDemo, cardDemo, cardExpiryInputDemo, cardNumberInputDemo, cardSecurityCodeInputDemo, cardSummaryDemo, checkboxDemo, chipDemo, comboboxDemo, configureGoldComponentDocs, countrySelectorDemo, demoCell, dialogDemo, drawerDemo, emptyStateDemo, errorPanelDemo, floatingActionButtonDemo, goldComponentDocumentationTabs, iconButtonDemo, inlineValidationDemo, animatedMomentDemo, menuDemo, motionBoundaryDemo, movementRowDemo, paginationDemo, popoverDemo, progressIndicatorDemo, quickActionDemo, radioButtonDemo, selectDemo, skeletonDemo, spinnerDemo, sliderDemo, stepperDemo, switchDemo, tableDemo, tabsDemo, tabsDemoFromData, tagDemo, textAreaDemo, inputDemo, toastDemo, tooltipDemo, treeViewDemo } from "./gold-component-docs.js?v=325";
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=1";
@@ -57,7 +57,7 @@ import {
 } from "./reference-layout.js";
 import { setupContrastToggle, setupGridOverlay, updateGridOverlay } from "./shell-controls.js";
 import { escapeHtml, html, interpolateList, referenceTemplate, slug } from "./utils.js";
-import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js";
+import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=1";
 
 const $ = (selector) => document.querySelector(selector);
 const app = $("#app");
@@ -365,7 +365,7 @@ async function boot() {
   } catch (error) {
     window.__systemBoot = { status: "failed", message: error?.message ?? String(error), stack: error?.stack ?? "" };
     console.error(ui("shell.bootFailedLog"), error);
-    app.innerHTML = `<main class="section"><section class="doc-panel wide"><h1>${ui("shell.bootFailedTitle")}</h1><p>${escapeHtml(window.__systemBoot.message)}</p></section></main>`;
+    app.innerHTML = `<main class="section"><section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h1>${ui("shell.bootFailedTitle")}</h1><p>${escapeHtml(window.__systemBoot.message)}</p></section></main>`;
   }
 }
 

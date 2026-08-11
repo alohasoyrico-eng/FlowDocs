@@ -1,13 +1,13 @@
-import { artifactContract, artifactFoundationTracePanel, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=3";
+import { artifactContract, artifactFoundationTracePanel, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { patternCopy } from "./docs-state.js";
-import { patternBuildGatePanel } from "./pattern-build-gates.js?v=3";
-import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=26";
-import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=6";
-import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=7";
-import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=8";
-import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=3";
-import { operationalPatternOverviewDemo } from "./pattern-operational-demos.js?v=3";
+import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
+import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=27";
+import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=7";
+import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=8";
+import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=9";
+import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=4";
+import { operationalPatternOverviewDemo } from "./pattern-operational-demos.js?v=4";
 
 export function hasPatternSource(entry) {
   return Boolean(patternSource(entry));
@@ -30,7 +30,7 @@ function patternSource(entry) {
 function patternContractOverview(entry) {
   const source = patternSource(entry);
   return html`
-    <section class="doc-panel wide pattern-stage-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-stage-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Pattern contract</span>
       <h2>${entry.title}</h2>
       <p>${source.purpose ?? entry.summary}</p>
@@ -69,7 +69,7 @@ function bulkActionsDemoPanel() {
     { id: "mtr-330-a", plate: "MTR-330-A", driver: "Iris Mora", status: "Frozen", spend: "$120" },
   ];
   return html`
-    <section class="doc-panel wide pattern-bulk-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-bulk-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Bulk action selection</h2>
       <div class="pattern-bulk-demo" data-pattern-bulk-actions data-selected-count="0">
@@ -115,7 +115,7 @@ function bulkActionsDemoPanel() {
 
 function multiStepFormDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-multi-step-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-multi-step-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Vehicle request wizard</h2>
       <div class="pattern-multi-step" data-multi-step-demo data-step-index="0">
@@ -154,7 +154,7 @@ function multiStepFormDemoPanel() {
 
 function settingsDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-settings-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-settings-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Workspace settings</h2>
       <div class="pattern-settings-demo" data-settings-demo data-dirty="false">
@@ -206,7 +206,7 @@ function helpCenterDemoPanel() {
     ["roles", "Roles and access", "Review workspace permissions before inviting operators.", "Security", "roles access permissions"],
   ];
   return html`
-    <section class="doc-panel wide pattern-help-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-help-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Help center search</h2>
       <div class="pattern-help-demo" data-help-demo>
@@ -253,7 +253,7 @@ function patternDependencyPanel(entry, source) {
   const tokens = contract?.tokenDependencies ?? entry.tokens ?? [];
   const primitiveSlots = (source.slots ?? []).filter((row) => primitives.includes(row[1]));
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Design System dependencies</h2>
       ${dependencyGroup("Foundations", foundations, (name) =>
         cardLink("foundations", slug(name), "foundation", name, "Governing foundation consumed by this pattern contract."),
@@ -309,7 +309,7 @@ function patternContractDesign(entry) {
 
 function patternFoundationPanel(source) {
   return html`
-    <section class="doc-panel wide pattern-rule-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Foundations consumed</h2>
       <div class="props-table">
         ${(source.foundations ?? []).map(([name, rule]) => `<div><code>${name}</code><span>Foundation</span><span>Required</span><span>${rule}</span></div>`).join("")}
@@ -320,7 +320,7 @@ function patternFoundationPanel(source) {
 
 function patternSlotContractPanel(source) {
   return html`
-    <section class="doc-panel wide pattern-rule-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Slot contract</h2>
       <div class="props-table">
         <div><strong>Slot</strong><strong>Type</strong><strong>Required</strong><strong>Notes</strong></div>
@@ -332,7 +332,7 @@ function patternSlotContractPanel(source) {
 
 function patternVariantPanel(source) {
   return html`
-    <section class="doc-panel wide pattern-design-section pattern-design-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Variants and states</h2>
       <div class="pattern-variant-grid">
         ${(source.variants ?? []).map(([name, status, rule]) => `<article class="pattern-variant-card"><strong>${name}</strong><span>${status}</span><p>${rule}</p></article>`).join("")}
@@ -343,7 +343,7 @@ function patternVariantPanel(source) {
 
 function patternMotionPanel(source) {
   return html`
-    <section class="doc-panel wide pattern-rule-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Motion contract</h2>
       <div class="architecture-chain">
         ${(source.motion ?? []).map(([name, rule], index) => `<article><b>${index + 1}</b><strong>${name}</strong><span>${rule}</span></article>`).join("")}
@@ -367,7 +367,7 @@ function patternContractMiel(entry) {
   const source = patternSource(entry);
   const miel = source.miel ?? {};
   return html`
-    <section class="doc-panel wide pattern-miel-panel" data-pattern-doc="miel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-miel-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail" data-pattern-doc="miel">
       <header class="pattern-miel-header">
         <span class="eyebrow">MIEL</span>
         <h2>${entry.title} MIEL</h2>

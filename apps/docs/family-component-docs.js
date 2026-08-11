@@ -279,7 +279,7 @@ function testingEvidenceFor(layer) {
 export function artifactFoundationTracePanel(entry, artifactType) {
   const rows = artifactFoundationTraceRows(entry, artifactType);
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">${ui("reference.foundationTrace")}</span>
       <h2>${ui("reference.howFoundationsGovern")} ${entry.title}</h2>
       <p>${entry.title} must be implemented through foundation decisions before it becomes a component, pattern, or template surface.</p>

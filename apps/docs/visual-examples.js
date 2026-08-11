@@ -77,7 +77,7 @@ export function visualPanel(entry, kind) {
 export function examplePanel(entry) {
   const { html, ui } = deps;
   return html`
-    <section class="doc-panel wide example-panel">
+    <section class="surface docs-section-surface detail-section-surface wide example-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">${ui("reference.realExample")}</span>
       <h2>${exampleTitle(entry)}</h2>
       <p>${exampleCopy(entry)}</p>

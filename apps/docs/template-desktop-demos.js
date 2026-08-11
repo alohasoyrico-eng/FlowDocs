@@ -1,9 +1,9 @@
-import { html, slug } from "./detail-tabs-core.js?v=3";
+import { html, slug } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { renderSidebarPattern, renderTopbarPattern } from "./pattern-shell-renderers.js?v=6";
 import { renderAdminRiskReviewPattern, renderDriverVehicleAdministrationPattern, renderRolesAndPermissionsPattern, renderRolesAndPermissionsToolbar } from "./pattern-business-renderers.js?v=5";
-import { domainDesktopTemplateDemo } from "./template-domain-demos.js?v=1";
-import { reactTemplateDemo } from "./template-react-demos.js?v=1";
+import { domainDesktopTemplateDemo } from "./template-domain-demos.js?v=2";
+import { reactTemplateDemo } from "./template-react-demos.js?v=2";
 
 const templateFoundations = "energy frame voice depth momentum state tone growth symbol iconography accessibility";
 
@@ -82,7 +82,7 @@ function templateShell(entry, blueprint, body) {
   const frame = templateDesktopFrame(entry, blueprint, body);
   const patterns = entry.patternsUsed ?? [];
   return html`
-    <section class="doc-panel wide template-desktop-panel">
+    <section class="surface docs-section-surface detail-section-surface wide template-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <div class="template-desktop-panel__header">
         <div>
           <span class="eyebrow">Product demo</span>

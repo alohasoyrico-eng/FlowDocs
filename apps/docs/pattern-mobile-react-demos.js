@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -31,7 +31,7 @@ export function mobileReactPatternOverviewDemo(patternId) {
 }
 
 function bottomSheetReactPanel() {
-  return html`<section class="doc-panel wide pattern-mobile-panel"><span class="eyebrow">Interactive demo</span><h2>Contextual bottom sheet</h2>${patternReactDemo("bottom-sheet", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Contextual bottom sheet</h2>${patternReactDemo("bottom-sheet", {
     label: "Fuel purchase actions",
     description: "Mobile contextual actions stay delegated to Drawer/List/Button contracts.",
     density: "md",
@@ -48,7 +48,7 @@ function bottomSheetReactPanel() {
 }
 
 function fullscreenSheetReactPanel() {
-  return html`<section class="doc-panel wide pattern-mobile-panel"><span class="eyebrow">Interactive demo</span><h2>Mobile station edit</h2>${patternReactDemo("fullscreen-sheet", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Mobile station edit</h2>${patternReactDemo("fullscreen-sheet", {
     label: "Station policy",
     description: "A full-screen task flow using Stepper, fields, validation, actions, and feedback.",
     density: "md",
@@ -73,7 +73,7 @@ function fullscreenSheetReactPanel() {
 }
 
 function swipeActionsReactPanel() {
-  return html`<section class="doc-panel wide pattern-mobile-panel"><span class="eyebrow">Interactive demo</span><h2>Row swipe actions</h2>${patternReactDemo("swipe-actions", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Row swipe actions</h2>${patternReactDemo("swipe-actions", {
     label: "Fuel purchase actions",
     density: "md",
     state: "revealed",
@@ -89,7 +89,7 @@ function swipeActionsReactPanel() {
 }
 
 function quickActionsGridReactPanel() {
-  return html`<section class="doc-panel wide pattern-mobile-panel"><span class="eyebrow">Interactive demo</span><h2>Card shortcut grid</h2>${patternReactDemo("quick-actions-grid", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Card shortcut grid</h2>${patternReactDemo("quick-actions-grid", {
     label: "Card shortcuts",
     density: "md",
     state: "default",
@@ -102,7 +102,7 @@ function quickActionsGridReactPanel() {
 }
 
 function drawerAdapterReactPanel() {
-  return html`<section class="doc-panel wide pattern-mobile-panel"><span class="eyebrow">Interactive demo</span><h2>Responsive drawer adapter</h2>${patternReactDemo("drawer-adapter", {
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Responsive drawer adapter</h2>${patternReactDemo("drawer-adapter", {
     label: "Vehicle inspector",
     description: "Drawer adapts shell, list, menu, and task content without a parallel overlay implementation.",
     density: "md",

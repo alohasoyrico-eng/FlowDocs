@@ -1,6 +1,6 @@
-import { html } from "./detail-tabs-core.js?v=3";
+import { html } from "./detail-tabs-core.js?v=5";
 import { patternPackageDemo as packageDemo } from "./search-slot.js?v=2";
-import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=1";
+import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=2";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -62,7 +62,7 @@ export function candidatePatternOverviewDemo(patternId) {
 
 function commandPaletteDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-command-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-command-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Command palette</h2>
       ${patternReactDemo("command-palette", {
@@ -85,7 +85,7 @@ function commandPaletteDemoPanel() {
 
 function notificationPanelDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-notification-demo-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-notification-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Notification panel</h2>
       ${patternReactDemo("notification-panel", {
@@ -107,7 +107,7 @@ function notificationPanelDemoPanel() {
 
 function avatarMenuDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-avatar-menu-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-avatar-menu-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Avatar menu</h2>
       ${patternReactDemo("avatar-menu", {
@@ -129,7 +129,7 @@ function avatarMenuDemoPanel() {
 
 function confirmationDialogDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-confirmation-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-confirmation-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Destructive confirmation</h2>
       ${patternReactDemo("confirmation-dialog", {
@@ -150,7 +150,7 @@ function confirmationDialogDemoPanel() {
 
 function actionSheetDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-action-sheet-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-action-sheet-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Mobile action sheet</h2>
       ${patternReactDemo("action-sheet", {
@@ -173,7 +173,7 @@ function actionSheetDemoPanel() {
 
 function searchDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-search-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-search-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Scoped search</h2>
       ${patternReactDemo("search", {
@@ -204,7 +204,7 @@ function searchDemoPanel() {
 
 function autocompleteDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-autocomplete-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-autocomplete-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Entity autocomplete</h2>
       ${patternReactDemo("autocomplete", {
@@ -226,7 +226,7 @@ function autocompleteDemoPanel() {
 
 function selectOptionLayerDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-select-layer-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-select-layer-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Permissioned option layer</h2>
       ${patternReactDemo("select-option-layer", {
@@ -248,7 +248,7 @@ function selectOptionLayerDemoPanel() {
 
 function multiSelectDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-multi-select-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-multi-select-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Multi select filters</h2>
       ${patternReactDemo("multi-select", {
@@ -273,7 +273,7 @@ function multiSelectDemoPanel() {
 
 function formSectionDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-form-section-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-form-section-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Editable form section</h2>
       ${patternReactDemo("form-section", {
@@ -297,7 +297,7 @@ function formSectionDemoPanel() {
 
 function toolbarDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-toolbar-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-toolbar-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Table toolbar</h2>
       ${patternReactDemo("toolbar", {
@@ -341,7 +341,7 @@ function toolbarDemoPanel() {
 
 function filterChipGroupDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-filter-chip-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-filter-chip-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Active filter chips</h2>
       ${patternReactDemo("filter-chip-group", {
@@ -364,7 +364,7 @@ function filterChipGroupDemoPanel() {
 
 function fileUploadDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-file-upload-panel">
+    <section class="surface docs-section-surface detail-section-surface wide pattern-file-upload-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Interactive demo</span>
       <h2>Evidence upload</h2>
       ${patternReactDemo("file-upload", {
