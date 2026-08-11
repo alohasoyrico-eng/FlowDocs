@@ -144,17 +144,21 @@ if (window.__systemBoot?.status !== "ready") {
   throw new Error(`Docs boot failed: ${window.__systemBoot?.message ?? "unknown"}`);
 }
 
-const routes = [
-  "#/foundations/energy",
-  "#/components/button",
-  "#/components/select",
-  "#/components/card",
-  "#/primitives/density",
-  "#/patterns/select-option-layer",
-  "#/templates/driver-card-wallet",
-];
+const docsContent = JSON.parse(await fs.readFile(path.join(docsDir, "generated/docs-content.bundle.json"), "utf8"));
+const routeCollections = ["foundations", "primitives", "components", "patterns", "templates"];
+const routes = routeCollections.flatMap((collection) =>
+  (docsContent.catalog?.[collection] ?? []).map((entry) => ({
+    collection,
+    id: entry.id,
+    route: `#/${collection}/${entry.id}`,
+  })),
+);
 
-for (const route of routes) {
+if (!routes.length) {
+  throw new Error("Docs runtime audit could not derive routes from generated docs content.");
+}
+
+for (const { collection, id, route } of routes) {
   window.location.hash = route;
   window.dispatchEvent(new Event("hashchange"));
   if (window.__systemBoot?.status === "failed") {
@@ -166,6 +170,12 @@ for (const route of routes) {
   if (app.innerHTML.includes("shell.bootFailedTitle") || app.innerHTML.includes("Design System docs failed")) {
     throw new Error(`Docs route rendered boot failure fallback: ${route}`);
   }
+  if (!app.innerHTML.includes(`data-detail="${collection}:${id}"`)) {
+    throw new Error(`Docs route did not render its detail page: ${route}`);
+  }
+  if (app.innerHTML.includes("docs-demo-error")) {
+    throw new Error(`Docs route rendered a demo error placeholder: ${route}`);
+  }
 }
 
-console.log("docs runtime routes passed");
+console.log(`docs runtime routes passed (${routes.length} detail routes)`);
