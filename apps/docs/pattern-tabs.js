@@ -2,12 +2,14 @@ import { artifactContract, artifactFoundationTracePanel, cardLink, componentAgen
 import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=47";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=3";
 import { focusedPatternDesignPanels, topbarMarkup } from "./pattern-focused-design.js?v=23";
+import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=1";
 import { patternMielTabs } from "./pattern-miel-tabs.js?v=6";
 
 export function patternTabs(entry) {
   if (entry.id === "sidebar" || entry.id === "topbar") {
+    const reactOverview = shellPatternOverviewDemo(entry.id) || patternExamplePanel(entry);
     const tabs = [
-      [ui("tabs.overview"), `${patternExamplePanel(entry)}${patternStandardPanel(entry)}${artifactFoundationTracePanel(entry, "Pattern")}`],
+      [ui("tabs.overview"), `${reactOverview}${patternStandardPanel(entry)}${artifactFoundationTracePanel(entry, "Pattern")}`],
       [ui("tabs.design"), patternDesignBody(entry)],
       [ui("tabs.build"), patternBuildBody(entry)],
       [ui("tabs.miel"), patternMielTabs(entry)],

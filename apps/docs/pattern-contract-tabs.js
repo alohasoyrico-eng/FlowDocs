@@ -2,7 +2,7 @@ import { artifactContract, artifactFoundationTracePanel, cardLink, findComponent
 import { componentDemo } from "./component-demo.js?v=60";
 import { patternCopy } from "./docs-state.js";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=3";
-import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=25";
+import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=26";
 import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=5";
 import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=6";
 import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=8";
@@ -47,7 +47,6 @@ function patternContractOverview(entry) {
 function patternOverviewDemo(patternId) {
   if (patternId === "bulk-actions") return bulkActionsDemoPanel();
   if (patternId === "multi-step-form") return multiStepFormDemoPanel();
-  if (patternId === "settings") return settingsDemoPanel();
   if (patternId === "help-center") return helpCenterDemoPanel();
   return candidatePatternOverviewDemo(patternId) || desktopPatternOverviewDemo(patternId) || utilityPatternOverviewDemo(patternId) || operationalPatternOverviewDemo(patternId) || mobilePatternOverviewDemo(patternId) || journeyPatternOverviewDemo(patternId);
 }

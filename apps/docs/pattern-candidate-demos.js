@@ -1,5 +1,6 @@
 import { html } from "./detail-tabs-core.js?v=3";
 import { patternPackageDemo as packageDemo } from "./search-slot.js?v=2";
+import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=1";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -41,6 +42,8 @@ function bottomSheetPatternDemo({
 }
 
 export function candidatePatternOverviewDemo(patternId) {
+  const shellDemo = shellPatternOverviewDemo(patternId);
+  if (shellDemo) return shellDemo;
   if (patternId === "command-palette") return commandPaletteDemoPanel();
   if (patternId === "notification-panel") return notificationPanelDemoPanel();
   if (patternId === "avatar-menu") return avatarMenuDemoPanel();

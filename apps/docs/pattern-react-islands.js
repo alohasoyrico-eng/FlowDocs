@@ -1,5 +1,6 @@
 import React from "react";
 import { candidatePatternReactComponents, candidatePatternReactIslandWrappers } from "./pattern-react-candidate-islands.js?v=11";
+import { shellPatternReactComponents, shellPatternReactIslandWrappers } from "./pattern-react-shell-islands.js?v=1";
 import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1";
 import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { CalendarView } from "./generated/react/patterns/CalendarView.js?v=1";
@@ -18,6 +19,7 @@ import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1
 
 export const patternReactComponents = {
   ...candidatePatternReactComponents,
+  ...shellPatternReactComponents,
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtp,
   "avatar-group": AvatarGroup,
   "calendar-view": CalendarView,
@@ -283,6 +285,7 @@ function CalendarViewIsland({ initialProps }) {
 
 export const patternReactIslandWrappers = {
   ...candidatePatternReactIslandWrappers,
+  ...shellPatternReactIslandWrappers,
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
   "calendar-view": CalendarViewIsland,
   "chart-legend-item": ChartLegendItemIsland,
