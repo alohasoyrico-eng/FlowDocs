@@ -13,9 +13,6 @@ function handleUtilityPatternClick(event) {
   const timelineFilter = event.target.closest("[data-timeline-filter]");
   if (timelineFilter) return filterTimeline(timelineFilter.closest("[data-timeline-demo]"), timelineFilter.dataset.timelineFilter);
 
-  const refresh = event.target.closest("[data-pull-refresh-action]");
-  if (refresh) return runPullRefresh(refresh.closest("[data-pull-refresh-demo]"));
-
   const transferMove = event.target.closest("[data-transfer-move]");
   if (transferMove) return moveTransferItem(transferMove.closest("[data-transfer-demo]"));
 
@@ -64,12 +61,6 @@ function filterTimeline(demo, filter) {
     count.textContent = `${visible} ${visible === 1 ? "event" : "events"}`;
     count.setAttribute("aria-label", `${visible} visible timeline ${visible === 1 ? "event" : "events"}`);
   }
-}
-
-function runPullRefresh(demo) {
-  if (!demo) return;
-  demo.querySelector("[data-pull-refresh-progress]")?.removeAttribute("hidden");
-  demo.querySelector("[data-pull-refresh-toast]")?.removeAttribute("hidden");
 }
 
 function toggleUtilityHidden(demo, selector) {

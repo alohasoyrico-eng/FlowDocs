@@ -313,12 +313,14 @@ function sectionHeaderDemoPanel() {
 function pullToRefreshDemoPanel() {
   return html`
     <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Refreshable movement feed</h2>
-      <div class="pattern-pull-refresh-demo pattern-utility-demo" data-pull-refresh-demo>
-        ${packageDemo("button", { label: "Refresh feed", icon: "refresh" }, { "data-pull-refresh-action": "" })}
-        <div data-pull-refresh-progress hidden>${packageDemo("progress-indicator", { label: "Refreshing movements", value: 72 })}</div>
-        ${packageDemo("list", { label: "Recent movements", items: [{ label: "Fuel purchase", meta: "Station 24 - Today", value: "$842", icon: "local_gas_station" }, { label: "Receipt synced", meta: "Route 18 - Yesterday", value: "Done", icon: "receipt_long" }] })}
-        <div data-pull-refresh-toast hidden>${packageDemo("toast", { label: "Feed refreshed", description: "Latest movements are now visible.", tone: "success" })}</div>
-      </div>
+      ${patternReactDemo("pull-to-refresh", {
+        label: "Refreshable movement feed",
+        description: "Recent movements update without replacing the governed feed surface.",
+        density: "md",
+        fallbackAction: { label: "Refresh feed", icon: "refresh" },
+        list: { label: "Recent movements", items: [{ label: "Fuel purchase", meta: "Station 24 - Today", value: "$842", icon: "local_gas_station" }, { label: "Receipt synced", meta: "Route 18 - Yesterday", value: "Done", icon: "receipt_long" }] },
+        "data-pattern-demo": "pull-to-refresh",
+      })}
     </section>`;
 }
 

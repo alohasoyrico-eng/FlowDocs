@@ -6,6 +6,7 @@ import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1";
 import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1";
 import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1";
 import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1";
+import { PullToRefresh } from "./generated/react/patterns/PullToRefresh.js?v=1";
 import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1";
 import { SnackbarProvider } from "./generated/react/patterns/SnackbarProvider.js?v=1";
 import { Timeline } from "./generated/react/patterns/Timeline.js?v=1";
@@ -19,6 +20,7 @@ export const patternReactComponents = {
   "gantt-chart": GanttChart,
   "polar-chart": PolarChart,
   "preference-management": PreferenceManagement,
+  "pull-to-refresh": PullToRefresh,
   "radio-group": RadioGroup,
   "snackbar-provider": SnackbarProvider,
   timeline: Timeline,
@@ -82,6 +84,23 @@ function SnackbarProviderIsland({ initialProps }) {
   });
 }
 
+function PullToRefreshIsland({ initialProps }) {
+  const [state, setState] = React.useState(initialProps.state ?? "idle");
+  const progress = state === "complete" ? 100 : state === "refreshing" ? 72 : 0;
+  return React.createElement(PullToRefresh, {
+    ...initialProps,
+    state,
+    progress,
+    refreshing: state === "refreshing",
+    complete: state === "complete",
+    feedback: state === "complete" ? { label: "Feed refreshed", description: "Latest movements are now visible.", tone: "success" } : initialProps.feedback,
+    onRefresh: () => {
+      setState("refreshing");
+      window.setTimeout(() => setState("complete"), 350);
+    },
+  });
+}
+
 function TimelineIsland({ initialProps }) {
   const allEvents = Array.isArray(initialProps.events) ? initialProps.events : [];
   const [filter, setFilter] = React.useState(initialProps.initialFilter ?? "all");
@@ -110,6 +129,7 @@ export const patternReactIslandWrappers = {
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
   "chart-legend-item": ChartLegendItemIsland,
   "checkbox-group": CheckboxGroupIsland,
+  "pull-to-refresh": PullToRefreshIsland,
   "radio-group": RadioGroupIsland,
   "snackbar-provider": SnackbarProviderIsland,
   timeline: TimelineIsland,
