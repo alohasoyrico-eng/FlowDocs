@@ -4,7 +4,7 @@ import { desktopPatternReactComponents, desktopPatternReactIslandWrappers } from
 import { journeyPatternReactComponents, journeyPatternReactIslandWrappers } from "./pattern-react-journey-islands.js?v=1";
 import { mobilePatternReactComponents, mobilePatternReactIslandWrappers } from "./pattern-react-mobile-islands.js?v=1";
 import { operationalPatternReactComponents, operationalPatternReactIslandWrappers } from "./pattern-react-operational-islands.js?v=2";
-import { shellPatternReactComponents, shellPatternReactIslandWrappers } from "./pattern-react-shell-islands.js?v=1";
+import { shellPatternReactComponents, shellPatternReactIslandWrappers } from "./pattern-react-shell-islands.js?v=2";
 import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1";
 import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { CalendarView } from "./generated/react/patterns/CalendarView.js?v=1";

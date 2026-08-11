@@ -1,7 +1,7 @@
 import React from "react";
 import { SectionHeader } from "./generated/react/patterns/SectionHeader.js?v=1";
 import { Settings } from "./generated/react/patterns/Settings.js?v=1";
-import { Sidebar } from "./generated/react/patterns/Sidebar.js?v=1";
+import { Sidebar } from "./generated/react/patterns/Sidebar.js?v=2";
 import { Topbar } from "./generated/react/patterns/Topbar.js?v=1";
 
 export const shellPatternReactComponents = {

@@ -61,7 +61,7 @@ import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
-import { patternReactComponents, patternReactIslandWrappers } from "./pattern-react-islands.js?v=29";
+import { patternReactComponents, patternReactIslandWrappers } from "./pattern-react-islands.js?v=30";
 import { templateReactComponents, templateReactIslandWrappers } from "./template-react-islands.js?v=1";
 
 const mounted = new WeakMap(); const reactComponents = {

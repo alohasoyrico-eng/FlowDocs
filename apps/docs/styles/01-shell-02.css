@@ -143,10 +143,13 @@
 }
 
 .sidebar a {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   gap: var(--sys-space-md);
   align-items: center;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   min-block-size: var(--sys-frame-height-control-sm);
   padding: var(--sys-space-sm) var(--sys-space-md);
   border-radius: var(--sys-frame-radius-container);
@@ -160,6 +163,7 @@
   align-items: center;
   gap: var(--sys-space-2);
   min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
 .sidebar a > .material-symbol,
@@ -186,13 +190,17 @@
 .sidebar-group {
   display: grid;
   gap: var(--sys-space-1);
+  min-inline-size: 0;
 }
 
 .sidebar-group summary {
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   gap: var(--sys-space-3);
   align-items: center;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   min-block-size: var(--sys-frame-height-control-sm);
   padding: var(--sys-space-2) var(--sys-space-3);
   border-radius: var(--sys-frame-radius-container);
@@ -234,6 +242,7 @@
 .sidebar-group div {
   display: grid;
   gap: var(--sys-space-micro);
+  min-inline-size: 0;
   padding-inline-start: var(--sys-space-2);
 }
 
