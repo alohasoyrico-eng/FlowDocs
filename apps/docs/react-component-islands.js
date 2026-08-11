@@ -52,6 +52,7 @@ import { Slider } from "./generated/react/Slider.js?v=1";
 import { Spinner } from "./generated/react/Spinner.js?v=1";
 import { StationPin } from "./generated/react/StationPin.js?v=1";
 import { Stepper } from "./generated/react/Stepper.js?v=1";
+import { Surface } from "./generated/react/Surface.js?v=1";
 import { Switch } from "./generated/react/Switch.js?v=1";
 import { Tabs } from "./generated/react/Tabs.js?v=1";
 import { Table } from "./generated/react/Table.js?v=1";
@@ -116,6 +117,7 @@ const mounted = new WeakMap(); const reactComponents = {
   spinner: Spinner,
   "station-pin": StationPin,
   stepper: Stepper,
+  surface: Surface,
   switch: Switch,
   tabs: Tabs,
   table: Table,

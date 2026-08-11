@@ -214,6 +214,94 @@ function checkTemplateBlueprints() {
   }
 }
 
+function countMatches(text, pattern) {
+  return (text.match(pattern) ?? []).length;
+}
+
+function topMatches(files, pattern, limit = 12) {
+  return files
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countMatches(read(file), pattern) }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file))
+    .slice(0, limit);
+}
+
+function checkComponentDetailTemplateReadiness() {
+  const componentModuleFiles = docsGoldComponentModuleFiles
+    .filter((file) => !file.endsWith("gold-component-docs.js"))
+    .sort();
+  const componentModules = componentModuleFiles.map((file) => ({
+    file,
+    text: read(file),
+  }));
+  const componentRuntime = componentModules.map((entry) => entry.text).join("\n");
+  const simpleRenderer = fs.existsSync(path.join(docsAppDir, "gold-simple-component-docs.js"))
+    ? read(path.join(docsAppDir, "gold-simple-component-docs.js"))
+    : "";
+  const reactIslandsFile = path.join(docsAppDir, "react-component-islands.js");
+  const reactIslands = fs.existsSync(reactIslandsFile) ? read(reactIslandsFile) : "";
+
+  const templateSectionIds = [
+    "operational-example",
+    "anatomy",
+    "accessibility",
+    "variants",
+    "states",
+    "variant-state-behavior",
+    "full-width",
+    "responsive-layout-patterns",
+    "viewport-organization",
+    "playground",
+    "api-foundations",
+    "guidelines",
+    "tests-rejection-rules",
+    "miel",
+  ];
+  const simpleRendererSections = templateSectionIds.filter((section) => simpleRenderer.includes(`${section}`));
+  const componentDocPanelMatches = topMatches(componentModuleFiles, /doc-panel/g, 16);
+  const componentRawControlMatches = topMatches(componentModuleFiles, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g, 16);
+  const componentOwnSurfaceMatches = topMatches(componentModuleFiles, /class="surface|template-module-surface|doc-panel/g, 16);
+  const customGoldRenderers = componentModules
+    .filter((entry) => !/renderSimpleGoldSection\(entry,\s*section/.test(entry.text) && /export function render[A-Za-z0-9]+GoldSection/.test(entry.text))
+    .map((entry) => path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, ""))
+    .sort();
+  const simpleGoldRenderers = componentModules
+    .filter((entry) => /renderSimpleGoldSection\(entry,\s*section/.test(entry.text))
+    .map((entry) => path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, ""))
+    .sort();
+
+  result.inventory.componentDetailTemplateReadiness = {
+    componentDetailModules: componentModuleFiles.length,
+    simpleGoldRenderers: simpleGoldRenderers.length,
+    customGoldRenderers: customGoldRenderers.length,
+    customGoldRendererIds: customGoldRenderers,
+    sharedSimpleRendererSections: simpleRendererSections,
+    rawDocPanelMatches: countMatches(componentRuntime, /doc-panel/g),
+    rawInteractiveMatches: countMatches(componentRuntime, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g),
+    rawCardMatches: countMatches(componentRuntime, /class="card|cardLink\(|card-/g),
+    componentDocPanelHotspots: componentDocPanelMatches,
+    componentRawControlHotspots: componentRawControlMatches,
+    componentSurfaceHotspots: componentOwnSurfaceMatches,
+    requiredFlowBuildingBlocks: ["Surface", "Card", "Tabs", "Table", "Button", "IconButton", "Input", "Select", "Switch"],
+  };
+
+  if (!reactIslands.includes("import { Surface }") || !reactIslands.includes("surface: Surface")) {
+    add("errors", reactIslandsFile, 1, "Component detail templates must be able to mount the Flow Surface primitive through React islands.");
+  }
+  if (simpleRendererSections.length < templateSectionIds.length) {
+    add("warnings", path.join(docsAppDir, "gold-simple-component-docs.js"), 1, `Shared component detail renderer is missing expected sections: ${templateSectionIds.filter((section) => !simpleRendererSections.includes(section)).join(", ")}.`);
+  }
+  if (customGoldRenderers.length) {
+    add("warnings", docsAppDir, 1, `Component detail migration must account for custom gold renderers outside renderSimpleGoldSection: ${customGoldRenderers.join(", ")}.`);
+  }
+  if (countMatches(componentRuntime, /doc-panel/g)) {
+    add("warnings", docsAppDir, 1, "Component detail still uses doc-panel surfaces; migrate shared and custom renderers to a Flow Surface-backed ComponentDetailTemplate.");
+  }
+  if (countMatches(componentRuntime, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g)) {
+    add("warnings", docsAppDir, 1, "Component detail still contains raw controls or overlay roles; migrate controls through Flow React components or justified template slots.");
+  }
+}
+
 function checkI18nReadiness() {
   const appFile = docsAppFile;
   const app = read(appFile);
@@ -571,5 +659,6 @@ module.exports = {
   checkPatternDependencyLayering,
   checkTemplateBlueprints,
   checkDemoQualityInventory,
+  checkComponentDetailTemplateReadiness,
   checkI18nReadiness,
 };
