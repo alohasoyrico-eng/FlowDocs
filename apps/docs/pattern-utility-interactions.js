@@ -13,9 +13,6 @@ function handleUtilityPatternClick(event) {
   const timelineFilter = event.target.closest("[data-timeline-filter]");
   if (timelineFilter) return filterTimeline(timelineFilter.closest("[data-timeline-demo]"), timelineFilter.dataset.timelineFilter);
 
-  const transferMove = event.target.closest("[data-transfer-move]");
-  if (transferMove) return moveTransferItem(transferMove.closest("[data-transfer-demo]"));
-
   const sortUp = event.target.closest("[data-sortable-up]");
   if (sortUp) return moveSortableItem(sortUp.closest("li"), -1);
 
@@ -60,21 +57,6 @@ function filterTimeline(demo, filter) {
   if (count) {
     count.textContent = `${visible} ${visible === 1 ? "event" : "events"}`;
     count.setAttribute("aria-label", `${visible} visible timeline ${visible === 1 ? "event" : "events"}`);
-  }
-}
-
-function toggleUtilityHidden(demo, selector) {
-  const node = demo?.querySelector(selector);
-  if (node) node.hidden = !node.hidden;
-}
-
-function moveTransferItem(demo) {
-  if (!demo) return;
-  demo.querySelector("[data-transfer-selected]").innerHTML = `<strong>JMX-214-B</strong><span>Ana Sosa - Active</span>`;
-  const count = demo.querySelector("[data-transfer-count]");
-  if (count) {
-    count.textContent = "1 selected";
-    count.setAttribute("aria-label", "1 selected vehicle");
   }
 }
 

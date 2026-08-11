@@ -10,6 +10,7 @@ import { PullToRefresh } from "./generated/react/patterns/PullToRefresh.js?v=1";
 import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1";
 import { SnackbarProvider } from "./generated/react/patterns/SnackbarProvider.js?v=1";
 import { Timeline } from "./generated/react/patterns/Timeline.js?v=1";
+import { TransferList } from "./generated/react/patterns/TransferList.js?v=1";
 import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
 
 export const patternReactComponents = {
@@ -24,6 +25,7 @@ export const patternReactComponents = {
   "radio-group": RadioGroup,
   "snackbar-provider": SnackbarProvider,
   timeline: Timeline,
+  "transfer-list": TransferList,
   "waterfall-chart": WaterfallChart,
 };
 
@@ -125,6 +127,31 @@ function TimelineIsland({ initialProps }) {
   });
 }
 
+function TransferListIsland({ initialProps }) {
+  const initialSource = initialProps.source ?? [
+    { key: "jmx", label: "JMX-214-B", meta: "Ana Sosa", valueLabel: "Move", icon: "directions_car" },
+    { key: "kld", label: "KLD-901-C", meta: "Luis Vera", valueLabel: "Move", icon: "directions_car" },
+  ];
+  const [source, setSource] = React.useState(initialSource);
+  const [target, setTarget] = React.useState(initialProps.target ?? []);
+  const selectedSourceKeys = source.filter((item) => item.selected).map((item) => item.key);
+  const selectedTargetKeys = target.filter((item) => item.selected).map((item) => item.key);
+  return React.createElement(TransferList, {
+    ...initialProps,
+    source,
+    target,
+    selectedSourceKeys,
+    selectedTargetKeys,
+    onItemCheckedChange: (side, key, checked) => {
+      const update = (items) => items.map((item) => item.key === key ? { ...item, selected: checked } : item);
+      side === "source" ? setSource(update) : setTarget(update);
+    },
+    moveToTargetAction: { ...(initialProps.moveToTargetAction ?? {}), onClick: () => { setTarget((current) => [...current, ...source.filter((item) => item.selected).map((item) => ({ ...item, selected: false, valueLabel: "Selected" }))]); setSource((current) => current.filter((item) => !item.selected)); } },
+    moveToSourceAction: { ...(initialProps.moveToSourceAction ?? {}), onClick: () => { setSource((current) => [...current, ...target.filter((item) => item.selected).map((item) => ({ ...item, selected: false, valueLabel: "Move" }))]); setTarget((current) => current.filter((item) => !item.selected)); } },
+    feedback: target.length ? { label: "Vehicle assigned", description: "Selected vehicles moved into the policy.", tone: "success" } : initialProps.feedback,
+  });
+}
+
 export const patternReactIslandWrappers = {
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
   "chart-legend-item": ChartLegendItemIsland,
@@ -133,4 +160,5 @@ export const patternReactIslandWrappers = {
   "radio-group": RadioGroupIsland,
   "snackbar-provider": SnackbarProviderIsland,
   timeline: TimelineIsland,
+  "transfer-list": TransferListIsland,
 };

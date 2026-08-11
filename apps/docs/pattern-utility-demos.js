@@ -347,14 +347,21 @@ function avatarGroupDemoPanel() {
 function transferListDemoPanel() {
   return html`
     <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Assign vehicles to policy</h2>
-      <div class="pattern-transfer-list-demo pattern-utility-demo" data-transfer-demo>
-        ${packageDemo("input", { label: "Search available", placeholder: "Vehicle or driver" }, { "data-transfer-search": "" })}
-        <div class="pattern-transfer-list-demo__panes">
-          <div><h3>Available</h3><div data-transfer-available>${packageDemo("list", { label: "Available vehicles", interactive: true, items: [{ label: "JMX-214-B", meta: "Ana Sosa", value: "Move", icon: "directions_car" }, { label: "KLD-901-C", meta: "Luis Vera", value: "Move", icon: "directions_car" }] })}</div></div>
-          <div><h3>Selected</h3><div data-transfer-selected>${packageDemo("empty-state", { label: "No vehicles selected", description: "Move vehicles into the policy before saving.", icon: "playlist_add" })}</div></div>
-        </div>
-        <footer>${packageDemo("button", { label: "Move selected", icon: "arrow_forward" }, { "data-transfer-move": "" })}${packageDemo("badge", { label: "0 selected", tone: "neutral", variant: "standard" }, { "data-transfer-count": "" })}</footer>
-      </div>
+      ${patternReactDemo("transfer-list", {
+        label: "Assign vehicles to policy",
+        density: "md",
+        sourceLabel: "Available vehicles",
+        targetLabel: "Selected vehicles",
+        filterInput: { label: "Search available", placeholder: "Vehicle or driver" },
+        source: [
+          { key: "jmx", label: "JMX-214-B", meta: "Ana Sosa", valueLabel: "Move", icon: "directions_car" },
+          { key: "kld", label: "KLD-901-C", meta: "Luis Vera", valueLabel: "Move", icon: "directions_car" },
+        ],
+        validation: { label: "Policy assignment", message: "Move at least one vehicle into the policy before saving.", state: "info" },
+        moveToTargetAction: { label: "Move selected", icon: "arrow_forward" },
+        moveToSourceAction: { label: "Move back", icon: "arrow_back" },
+        "data-pattern-demo": "transfer-list",
+      })}
     </section>`;
 }
 
