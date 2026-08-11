@@ -324,6 +324,25 @@ function TabsIsland({ initialProps }) {
   });
 }
 
+function DetailShellTabsIsland({ initialProps, mountNode }) {
+  const fallbackKey = initialProps.items?.find?.((item) => item.selected)?.key
+    ?? initialProps.items?.[0]?.key
+    ?? "";
+  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? fallbackKey);
+  return React.createElement(Tabs, {
+    ...initialProps,
+    selectedKey,
+    onValueChange: (nextKey, event) => {
+      setSelectedKey(nextKey);
+      mountNode?.dispatchEvent(new CustomEvent("docs-detail-tab-change", {
+        bubbles: true,
+        detail: { tabId: nextKey },
+      }));
+      initialProps.onValueChange?.(nextKey, event);
+    },
+  });
+}
+
 function SliderIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? 0);
   return React.createElement(Slider, {
@@ -352,6 +371,7 @@ const reactIslandWrappers = {
   "segmented-control": SegmentedControlIsland, "radio-button": RadioButtonIsland,
   switch: SwitchIsland, tabs: TabsIsland, slider: SliderIsland,
   "text-area": TextAreaIsland,
+  "detail-shell-tabs": DetailShellTabsIsland,
   "chat-composer": ChatComposerIsland,
   ...patternReactIslandWrappers,
   ...templateReactIslandWrappers,
@@ -362,12 +382,12 @@ function parseProps(node) { try { return JSON.parse(node.dataset.reactProps ?? "
 export function setupReactComponentIslands(root = document) {
   for (const node of Array.from(root.querySelectorAll?.("[data-react-component]:not([data-react-mounted='true'])") ?? [])) {
     const Component = reactComponents[node.dataset.reactComponent];
-    if (!Component) continue;
+    const Island = reactIslandWrappers[node.dataset.reactComponent];
+    if (!Component && !Island) continue;
     const reactRoot = mounted.get(node) ?? createRoot(node);
     mounted.set(node, reactRoot);
     node.dataset.reactMounted = "true";
     const props = parseProps(node);
-    const Island = reactIslandWrappers[node.dataset.reactComponent];
-    reactRoot.render(Island ? React.createElement(Island, { initialProps: props }) : React.createElement(Component, props));
+    reactRoot.render(Island ? React.createElement(Island, { initialProps: props, mountNode: node }) : React.createElement(Component, props));
   }
 }

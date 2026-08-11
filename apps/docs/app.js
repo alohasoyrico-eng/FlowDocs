@@ -1,9 +1,9 @@
 import { artifactCard, artifactTypeLabel, cardLink, configureCatalogRenderers, groupCollection, label } from "./catalog-renderers.js";
 import { loadDocsContent } from "./content-sources.js?v=202";
 import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=56";
-import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=292";
+import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=293";
 import { applyLocalizedChrome, configureDocsChrome, setupLanguageToggle } from "./docs-chrome.js?v=2";
-import { renderCollectionContent, renderDetailContent, renderShell } from "./docs-layout.js?v=223";
+import { renderCollectionContent, renderDetailContent, renderShell } from "./docs-layout.js?v=224";
 import {
   applyDocsContent,
   artifactContract,
@@ -140,35 +140,14 @@ function renderDetail(collection, id) {
   const tabs = detailTabs(collection, entry);
   app.innerHTML = shell(renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }), collection);
 
-  const tabButtons = [...document.querySelectorAll("[data-tab]")];
-  const activateTab = (button) => {
-    tabButtons.forEach((item) => {
-      const selected = item === button;
-      item.classList.toggle("active", selected);
-      item.setAttribute("aria-selected", String(selected));
-      item.tabIndex = selected ? 0 : -1;
-    });
-    const selected = tabs.find((tab) => tab.id === button.dataset.tab);
+  const tabShell = document.querySelector('[data-react-component="detail-shell-tabs"]');
+  const activateTab = (tabId) => {
+    const selected = tabs.find((tab) => tab.id === tabId);
     if (!selected) return;
     $("#tabPanel").innerHTML = selected.body;
     setupDocumentationInteractions(interactionDeps());
   };
-  tabButtons.forEach((button, index) => {
-    button.addEventListener("click", () => activateTab(button));
-    button.addEventListener("keydown", (event) => {
-      const keyActions = {
-        ArrowLeft: () => tabButtons[(index - 1 + tabButtons.length) % tabButtons.length],
-        ArrowRight: () => tabButtons[(index + 1) % tabButtons.length],
-        Home: () => tabButtons[0],
-        End: () => tabButtons[tabButtons.length - 1],
-      };
-      const nextTab = keyActions[event.key]?.();
-      if (!nextTab) return;
-      event.preventDefault();
-      nextTab.focus();
-      activateTab(nextTab);
-    });
-  });
+  tabShell?.addEventListener("docs-detail-tab-change", (event) => activateTab(event.detail?.tabId));
   setupDocumentationInteractions(interactionDeps());
 }
 

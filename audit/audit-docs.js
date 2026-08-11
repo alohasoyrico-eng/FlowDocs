@@ -14,6 +14,7 @@ const {
   checkPatternDependencyLayering,
   checkTemplateBlueprints,
   checkDemoQualityInventory,
+  checkDetailShellTemplateReadiness,
   checkComponentDetailTemplateReadiness,
   checkI18nReadiness,
 } = require("./audit-docs-content.js");
@@ -43,6 +44,7 @@ checkPrimitiveRoutesAndContent();
 checkPatternDependencyLayering();
 checkTemplateBlueprints();
 checkDemoQualityInventory();
+checkDetailShellTemplateReadiness();
 checkComponentDetailTemplateReadiness();
 checkI18nReadiness();
 checkHomeContentOwnership();

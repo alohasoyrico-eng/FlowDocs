@@ -52,6 +52,28 @@ export function renderCollectionContent({ artifactCard, collection, collections,
   `;
 }
 
+function escapeAttribute(value) {
+  return String(value ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function detailShellTabsIsland({ entry, tabs, ui }) {
+  const props = {
+    label: `${entry.title} ${ui("shell.sections")}`,
+    selectedKey: tabs[0]?.id ?? "",
+    variant: "default",
+    className: "detail-tabs detail-tablist",
+    "data-doc-template": "detail-shell",
+    "data-doc-control-bridge": "detail-shell-tabs",
+    "data-component-source": "flow",
+    items: tabs.map((tab, index) => ({
+      key: tab.id,
+      label: tab.label,
+      selected: index === 0,
+    })),
+  };
+  return `<span class="docs-react-island docs-detail-tabs-island" data-react-component="detail-shell-tabs" data-component-source="react" data-doc-component="tabs" data-doc-template="detail-shell" data-doc-control-bridge="detail-shell-tabs" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+}
+
 export function renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }) {
   const implementationLabel = componentImplementationLabel(collection, entry, componentImplementationStatus);
   return html`
@@ -76,9 +98,7 @@ export function renderDetailContent({ artifactTypeLabel, collection, componentIm
         </div>
       </header>
       <div class="detail-layout">
-        <nav class="detail-tabs detail-tablist" data-variant="default" role="tablist" aria-label="${entry.title} ${ui("shell.sections")}">
-          ${tabs.map((tab, index) => `<button type="button" class="${index === 0 ? "active" : ""}" data-tab="${tab.id}" role="tab" aria-selected="${String(index === 0)}" tabindex="${index === 0 ? "0" : "-1"}">${icon(tabIcon(tab))}<span>${tab.label}</span></button>`).join("")}
-        </nav>
+        ${detailShellTabsIsland({ entry, tabs, ui })}
         <section class="tab-panel" id="tabPanel">${tabs[0].body}</section>
       </div>
     </article>

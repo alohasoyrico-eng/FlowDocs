@@ -236,6 +236,54 @@ function countComponentDetailRawControls(file, text) {
   return countMatches(stripAllowedComponentDetailControlBridges(text), rawControlPattern);
 }
 
+function checkDetailShellTemplateReadiness() {
+  const docsLayout = read(docsLayoutFile);
+  const appRuntime = read(docsAppFile);
+  const reactIslandsFile = path.join(docsAppDir, "react-component-islands.js");
+  const reactIslands = read(reactIslandsFile);
+  const requiredShellMarkers = [
+    'data-react-component="detail-shell-tabs"',
+    'data-doc-component="tabs"',
+    'data-component-source="react"',
+    'data-doc-template="detail-shell"',
+    'data-doc-control-bridge="detail-shell-tabs"',
+    '"data-component-source": "flow"',
+    'className: "detail-tabs detail-tablist"',
+    "items: tabs.map",
+  ];
+  const missingShellMarkers = requiredShellMarkers.filter((marker) => !docsLayout.includes(marker));
+  const detailShellStart = docsLayout.indexOf("function detailShellTabsIsland");
+  const detailShellEnd = docsLayout.indexOf("function componentImplementationLabel");
+  const detailShellRuntime = detailShellStart >= 0 && detailShellEnd > detailShellStart
+    ? docsLayout.slice(detailShellStart, detailShellEnd)
+    : docsLayout;
+  const rawDetailTabShellMatches = docsLayout.includes('data-doc-control-bridge="detail-shell-tabs"')
+    ? countMatches(detailShellRuntime, /class="tabs|class="tabs__|role="tablist"|role="tab"|<button\b/g)
+    : countMatches(detailShellRuntime, /role="tablist"|role="tab"|<button\b/g);
+  const wrapperReady = reactIslands.includes("function DetailShellTabsIsland") && reactIslands.includes('"detail-shell-tabs": DetailShellTabsIsland');
+
+  result.inventory.detailShellTemplateReadiness = {
+    consumesFlowTabsReactIsland: missingShellMarkers.length === 0 && wrapperReady,
+    missingShellMarkers,
+    rawDetailTabShellMatches,
+    wrapperReady,
+    vanillaBridgeScoped: appRuntime.includes('document.querySelector(\'[data-react-component="detail-shell-tabs"]\')'),
+  };
+
+  if (missingShellMarkers.length) {
+    add("warnings", docsLayoutFile, 1, `Detail shell tabs must mount the Flow Tabs React island with contract markers: ${missingShellMarkers.join(", ")}.`);
+  }
+  if (rawDetailTabShellMatches) {
+    add("warnings", docsLayoutFile, 1, "Detail shell tabs still author raw tablist controls or package classes; route them through the Flow Tabs React island.");
+  }
+  if (!wrapperReady) {
+    add("warnings", reactIslandsFile, 1, "Detail shell tabs must have a React island wrapper around Flow Tabs.");
+  }
+  if (!appRuntime.includes('document.querySelector(\'[data-react-component="detail-shell-tabs"]\')')) {
+    add("warnings", docsAppFile, 1, "Detail shell tab behavior must be scoped to the named detail-shell-tabs bridge.");
+  }
+}
+
 function checkComponentDetailTemplateReadiness() {
   const componentModuleFiles = docsGoldComponentModuleFiles
     .filter((file) => !file.endsWith("gold-component-docs.js"))
@@ -680,6 +728,7 @@ module.exports = {
   checkPatternDependencyLayering,
   checkTemplateBlueprints,
   checkDemoQualityInventory,
+  checkDetailShellTemplateReadiness,
   checkComponentDetailTemplateReadiness,
   checkI18nReadiness,
 };
