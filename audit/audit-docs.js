@@ -16,6 +16,7 @@ const {
   checkDemoQualityInventory,
   checkDetailShellTemplateReadiness,
   checkArtifactDetailSurfaceReadiness,
+  checkFoundationPrimitiveDetailSurfaceReadiness,
   checkComponentDetailTemplateReadiness,
   checkI18nReadiness,
 } = require("./audit-docs-content.js");
@@ -47,6 +48,7 @@ checkTemplateBlueprints();
 checkDemoQualityInventory();
 checkDetailShellTemplateReadiness();
 checkArtifactDetailSurfaceReadiness();
+checkFoundationPrimitiveDetailSurfaceReadiness();
 checkComponentDetailTemplateReadiness();
 checkI18nReadiness();
 checkHomeContentOwnership();

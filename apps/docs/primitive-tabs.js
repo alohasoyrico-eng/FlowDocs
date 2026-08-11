@@ -14,7 +14,7 @@ export function primitiveTabs(entry) {
 
 export function primitiveOverviewPanel(entry) {
   return html`
-    <section class="doc-panel wide reference-section">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide reference-section" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <span class="eyebrow">${ui("reference.primitiveOverview")}</span>
       <h2>${entry.title}</h2>
       <p>${entry.summary}</p>
@@ -26,7 +26,7 @@ export function primitiveOverviewPanel(entry) {
 export function densityCoordinatorPanel() {
   const dependencies = referenceCopy.density?.dependencies ?? [];
   return html`
-    <section class="doc-panel wide density-coordinator-panel">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide density-coordinator-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.coordinatorRole")}</h2>
       <p>${referenceCopy.density?.coordinatorCopy}</p>
       <div class="density-coordinator-grid">
@@ -49,7 +49,7 @@ export function densityCoordinatorPanel() {
 export function densityDecisionPanel() {
   const rows = referenceCopy.density?.decisionRows ?? [];
   return html`
-    <section class="doc-panel wide density-decision-panel">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide density-decision-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.densityDecision")}</h2>
       <p>${referenceCopy.density?.decisionCopy}</p>
       <div class="density-decision-grid">
@@ -71,7 +71,7 @@ export function densityDecisionPanel() {
 
 export function primitiveDemoPanel(entry) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.liveDemo")}</h2>
       <p>${referenceCopy.primitive?.demoCopy}</p>
       ${primitiveExample(entry)}
@@ -85,7 +85,7 @@ export function primitiveResponsibilitiesPanel(entry) {
 
 export function primitiveTokenChainPanel(entry) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.tokenChain")}</h2>
       <p>${referenceCopy.primitive?.tokenChainCopy}</p>
       <div class="architecture-chain">
@@ -98,7 +98,7 @@ export function primitiveTokenChainPanel(entry) {
 
 export function primitiveApiPanel(entry) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.primitiveApi")}</h2>
       <div class="props-table">
         <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>

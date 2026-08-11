@@ -1,4 +1,4 @@
-import { referenceCallout, referenceCodeBlock, referenceSection } from "./reference-layout.js";
+import { referenceCallout, referenceCodeBlock, referenceSection } from "./reference-layout.js?v=1";
 
 let primitiveCopy = {};
 let html = String.raw;

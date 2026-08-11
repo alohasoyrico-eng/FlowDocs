@@ -6,7 +6,7 @@ export function foundationTabs(entry) {
 
 export function foundationOverviewPanel(entry) {
   return html`
-    <section class="doc-panel wide reference-section">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide reference-section" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <span class="eyebrow">${ui("reference.overview")}</span>
       <h2>${entry.title} foundation</h2>
       <p>${entry.summary}</p>
@@ -18,7 +18,7 @@ export function foundationOverviewPanel(entry) {
 export function foundationRoleGrid(entry) {
   const roles = foundationRoles(entry);
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.semanticRoleGroups")}</h2>
       <p>${referenceCopy.foundation?.roleGridCopy}</p>
       <div class="role-grid">
@@ -30,7 +30,7 @@ export function foundationRoleGrid(entry) {
 
 export function foundationArchitecturePanel(entry) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.architecture")}</h2>
       <p>${referenceTemplate(referenceCopy.foundation?.architectureCopy, entry)}</p>
       <div class="architecture-chain">
@@ -47,7 +47,7 @@ export function foundationArchitecturePanel(entry) {
 
 export function foundationVisualExplanationPanel(entry) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.visualExplanation")}</h2>
       <p>${referenceTemplate(referenceCopy.foundation?.visualExplanationCopy, entry)}</p>
       ${foundationExample(entry)}
@@ -57,7 +57,7 @@ export function foundationVisualExplanationPanel(entry) {
 
 export function foundationContractPanel(entry) {
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.foundationContract")}</h2>
       <div class="props-table">
         <div><strong>${ui("table.contract")}</strong><strong>${ui("table.meaning")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.prevents")}</strong></div>

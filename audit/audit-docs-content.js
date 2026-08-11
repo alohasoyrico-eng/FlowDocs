@@ -365,6 +365,70 @@ function checkArtifactDetailSurfaceReadiness() {
   }
 }
 
+function checkFoundationPrimitiveDetailSurfaceReadiness() {
+  const detailFiles = [
+    path.join(docsAppDir, "foundation-tabs.js"),
+    path.join(docsAppDir, "primitive-tabs.js"),
+  ].filter((file) => fs.existsSync(file));
+  const panelHotspots = detailFiles
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countMatches(read(file), /doc-panel/g) }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
+  const migratedSurfaceSections = detailFiles.reduce(
+    (total, file) => total + countMatches(read(file), /class="surface docs-section-surface foundation-primitive-detail-surface/g),
+    0,
+  );
+  const missingSurfaceBoundary = detailFiles
+    .map((file) => {
+      const text = read(file);
+      const surfaces = countMatches(text, /class="surface docs-section-surface foundation-primitive-detail-surface/g);
+      const roles = countMatches(text, /class="surface docs-section-surface foundation-primitive-detail-surface[^"]*" data-surface-role="section"/g);
+      return { file: path.relative(process.cwd(), file), surfaces, roles };
+    })
+    .filter((entry) => entry.surfaces !== entry.roles);
+  const visualExamples = fs.existsSync(docsVisualExamplesFile) ? read(docsVisualExamplesFile) : "";
+  const visualPanelReady = /export function visualPanel[\s\S]*?<section class="surface docs-section-surface foundation-primitive-detail-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
+    visualExamples,
+  );
+  const referenceLayoutFile = path.join(docsAppDir, "reference-layout.js");
+  const referenceLayout = fs.existsSync(referenceLayoutFile) ? read(referenceLayoutFile) : "";
+  const referenceSectionReady = /export function referenceSection[\s\S]*?<section class="surface docs-section-surface foundation-primitive-detail-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
+    referenceLayout,
+  );
+
+  result.inventory.foundationPrimitiveDetailSurfaceReadiness = {
+    files: detailFiles.map((file) => path.relative(process.cwd(), file)),
+    migratedSurfaceSections,
+    rawDocPanelHotspots: panelHotspots,
+    missingSurfaceBoundary,
+    sharedHelperBoundaries: [
+      {
+        file: path.relative(process.cwd(), docsVisualExamplesFile),
+        helper: "visualPanel",
+        ready: visualPanelReady,
+      },
+      {
+        file: path.relative(process.cwd(), referenceLayoutFile),
+        helper: "referenceSection",
+        ready: referenceSectionReady,
+      },
+    ],
+  };
+
+  if (panelHotspots.length) {
+    add("warnings", docsAppDir, 1, `Foundation/Primitive detail tabs still use doc-panel instead of Surface-backed docs-section-surface: ${panelHotspots.map((entry) => `${entry.file} (${entry.count})`).join(", ")}.`);
+  }
+  if (missingSurfaceBoundary.length) {
+    add("warnings", docsAppDir, 1, `Foundation/Primitive detail Surface sections must declare data-surface-role="section": ${missingSurfaceBoundary.map((entry) => entry.file).join(", ")}.`);
+  }
+  if (!visualPanelReady) {
+    add("warnings", docsVisualExamplesFile, 1, "Foundation/Primitive visualPanel must render through a Flow Surface boundary.");
+  }
+  if (!referenceSectionReady) {
+    add("warnings", referenceLayoutFile, 1, "Foundation/Primitive referenceSection must render through a Flow Surface boundary.");
+  }
+}
+
 function checkComponentDetailTemplateReadiness() {
   const componentModuleFiles = docsGoldComponentModuleFiles
     .filter((file) => !file.endsWith("gold-component-docs.js"))
@@ -839,6 +903,7 @@ module.exports = {
   checkDemoQualityInventory,
   checkDetailShellTemplateReadiness,
   checkArtifactDetailSurfaceReadiness,
+  checkFoundationPrimitiveDetailSurfaceReadiness,
   checkComponentDetailTemplateReadiness,
   checkI18nReadiness,
 };

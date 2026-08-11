@@ -31,7 +31,7 @@ import {
   ui,
 } from "./docs-state.js";
 import { artifactFoundationTracePanel, configureFamilyComponentDocs, familyComponentTabs } from "./family-component-docs.js?v=3";
-import { configureFoundationReference, foundationReferenceContent, foundationRoles, foundationSubtitle } from "./foundation-reference.js";
+import { configureFoundationReference, foundationReferenceContent, foundationRoles, foundationSubtitle } from "./foundation-reference.js?v=1";
 import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDemo, breadcrumbsDemo, buttonDemo, cardDemo, cardExpiryInputDemo, cardNumberInputDemo, cardSecurityCodeInputDemo, cardSummaryDemo, checkboxDemo, chipDemo, comboboxDemo, configureGoldComponentDocs, countrySelectorDemo, demoCell, dialogDemo, drawerDemo, emptyStateDemo, errorPanelDemo, floatingActionButtonDemo, goldComponentDocumentationTabs, iconButtonDemo, inlineValidationDemo, animatedMomentDemo, menuDemo, motionBoundaryDemo, movementRowDemo, paginationDemo, popoverDemo, progressIndicatorDemo, quickActionDemo, radioButtonDemo, selectDemo, skeletonDemo, spinnerDemo, sliderDemo, stepperDemo, switchDemo, tableDemo, tabsDemo, tabsDemoFromData, tagDemo, textAreaDemo, inputDemo, toastDemo, tooltipDemo, treeViewDemo } from "./gold-component-docs.js?v=325";
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=1";
 import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=3";
@@ -45,7 +45,7 @@ import {
   primitiveResponsibilitiesReferenceSection,
   primitiveSpecMatrixSection,
   primitiveTokenReferenceSection,
-} from "./primitive-reference.js";
+} from "./primitive-reference.js?v=1";
 import {
   configureReferenceLayout,
   referenceCallout,
@@ -54,10 +54,10 @@ import {
   referenceHeader,
   referencePeerNav,
   referenceSection,
-} from "./reference-layout.js";
+} from "./reference-layout.js?v=1";
 import { setupContrastToggle, setupGridOverlay, updateGridOverlay } from "./shell-controls.js";
 import { escapeHtml, html, interpolateList, referenceTemplate, slug } from "./utils.js";
-import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=1";
+import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=2";
 
 const $ = (selector) => document.querySelector(selector);
 const app = $("#app");

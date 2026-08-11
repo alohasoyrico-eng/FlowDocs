@@ -66,7 +66,7 @@ export function visualExample(collection, entry) {
 export function visualPanel(entry, kind) {
   const { html, ui } = deps;
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.visualExample")}</h2>
       <p>This example shows the expected visual grammar for ${entry.title}. It is intentionally schematic: enough to teach structure without becoming a fake final screen.</p>
       ${visualExample(kind + "s", entry)}

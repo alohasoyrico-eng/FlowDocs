@@ -1,4 +1,4 @@
-import { referenceSection } from "./reference-layout.js";
+import { referenceSection } from "./reference-layout.js?v=1";
 
 let foundationCopy = {};
 let html = String.raw;

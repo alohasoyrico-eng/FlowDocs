@@ -62,7 +62,7 @@ export function referenceCallout(title, copy, intent = "accent") {
 export function referenceSection(title, description, body, headingRole = "display") {
   const { html } = deps;
   return html`
-    <section class="reference-section-block" data-heading-role="${headingRole}">
+    <section class="surface docs-section-surface foundation-primitive-detail-surface reference-section-block" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail" data-heading-role="${headingRole}">
       <div class="reference-section-head">
         <h2>${title}</h2>
         ${description ? `<p>${description}</p>` : ""}

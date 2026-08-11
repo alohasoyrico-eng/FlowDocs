@@ -10,7 +10,7 @@ import {
   voiceTokenSection,
   voiceTypographySection,
 } from "./foundation-visual-sections.js";
-import { referenceCodeBlock, referenceDivider, referenceSection } from "./reference-layout.js";
+import { referenceCodeBlock, referenceDivider, referenceSection } from "./reference-layout.js?v=1";
 
 let foundationCopy = {};
 let referenceCopy = {};
