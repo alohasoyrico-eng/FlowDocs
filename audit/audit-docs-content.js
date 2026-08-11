@@ -582,7 +582,7 @@ function checkComponentDetailTemplateReadiness() {
     .filter((entry) => entry.kind === "gold-custom" && entry.surfaceSections > 0)
     .map((entry) => entry.id)
     .sort();
-  const requiredPilotSharedBoundaryIds = ["input"];
+  const requiredPilotSharedBoundaryIds = ["input", "text-area"];
   const pilotSharedBoundaryGaps = requiredPilotSharedBoundaryIds.filter((id) => {
     const entry = componentDetailRendererInventory.find((item) => item.id === id);
     return !entry || !entry.usesSharedSection || entry.surfaceSections > 0 || entry.docPanels || entry.rawControls;
