@@ -1,4 +1,4 @@
-import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls, selectDemoFromData } from "./gold-component-data.js?v=230";
 
@@ -79,17 +79,7 @@ function selectAnatomyPanel() {
 }
 
 function selectAccessibilityPanel() {
-  const accessibility = componentSectionData("select", "accessibility");
-  const items = accessibility.items ?? [];
-  return html`
-    <section ${selectSurfaceAttrs("accessibility")}>
-      <h2>${ui("component.accessibility")}</h2>
-      <p>State precedence: ${accessibility.statePrecedence ?? "disabled, loading, error, open, focus, filled, default"}.</p>
-      <div class="checklist-grid">
-        ${items.map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}
-      </div>
-    </section>
-  `;
+  return html`<section ${selectSurfaceAttrs("accessibility")}>${componentDetailAccessibilityContent("select", "disabled, loading, error, open, focus, filled, default")}</section>`;
 }
 
 function selectViewportOrganizationPanel() {
@@ -218,44 +208,21 @@ function selectPlaygroundPanel() {
 }
 
 function selectContractPanel() {
-  const props = componentApiProps("select");
   return html`
     <section ${selectSurfaceAttrs("api-foundations")}>
       <h2>${ui("build.apiAndFoundations")}</h2>
       <p>${componentSectionCopy("select", "api-foundations")}</p>
-      <div class="props-table">
-        <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
-        ${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}
-      </div>
+      ${componentDetailApiPropsTable("select")}
     </section>
   `;
 }
 
 function selectGuidelinesPanel() {
-  const groups = componentSectionData("select", "guidelines").groups ?? [];
-  return html`
-    <section ${selectSurfaceAttrs("guidelines")}>
-      <h2>${ui("guidelines.title")}</h2>
-      <div class="guidelines-grid">
-        ${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}
-      </div>
-    </section>
-  `;
+  return html`<section ${selectSurfaceAttrs("guidelines")}>${componentDetailGuidelinesContent("select")}</section>`;
 }
 
 function selectTestPanel() {
-  const tests = componentSectionData("select", "tests-rejection-rules");
-  const mustTest = tests.mustTest ?? [];
-  const rejectIf = tests.rejectIf ?? [];
-  return html`
-    <section ${selectSurfaceAttrs("tests-rejection-rules")}>
-      <h2>${ui("tests.title")}</h2>
-      <div class="two-column-list">
-        <article><h3>${ui("tests.mustTest")}</h3><ul>${mustTest.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-        <article><h3>${ui("tests.rejectIf")}</h3><ul>${rejectIf.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-      </div>
-    </section>
-  `;
+  return html`<section ${selectSurfaceAttrs("tests-rejection-rules")}>${componentDetailTestsContent("select")}</section>`;
 }
 
 export function selectDemo(label, value, helper, density = "", state = "", variant = "default", leadingIcon = "") {

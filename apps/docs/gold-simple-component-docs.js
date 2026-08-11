@@ -1,4 +1,4 @@
-import { componentDetailSection, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 import { componentDemo } from "./component-demo.js?v=61";
 
@@ -83,8 +83,7 @@ export function simpleAnatomyPanel(component) {
 }
 
 export function simpleAccessibilityPanel(component) {
-  const accessibility = componentSectionData(component, "accessibility");
-  return componentDetailSection({ component, section: "accessibility", children: html`<h2>${ui("component.accessibility")}</h2><p>State precedence: ${accessibility.statePrecedence}.</p><div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div>` });
+  return componentDetailSection({ component, section: "accessibility", children: componentDetailAccessibilityContent(component) });
 }
 
 export function simpleVariantsPanel(component, demoFromData) {
@@ -130,18 +129,15 @@ export function simplePlaygroundPanel(component, demoFromData) {
 }
 
 export function simpleGuidelinesPanel(component) {
-  const groups = componentSectionData(component, "guidelines").groups ?? [];
-  return componentDetailSection({ component, section: "guidelines", children: html`<h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${(group.items ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div>` });
+  return componentDetailSection({ component, section: "guidelines", children: componentDetailGuidelinesContent(component) });
 }
 
 export function simpleContractPanel(component) {
-  const props = componentApiProps(component);
-  return componentDetailSection({ component, section: "api-foundations", children: html`<h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy(component, "api-foundations")}</p><div class="comparison-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div>` });
+  return componentDetailSection({ component, section: "api-foundations", children: html`<h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy(component, "api-foundations")}</p>${componentDetailApiPropsTable(component, "comparison-table")}` });
 }
 
 export function simpleTestPanel(component) {
-  const tests = componentSectionData(component, "tests-rejection-rules");
-  return componentDetailSection({ component, section: "tests-rejection-rules", children: html`<h2>${ui("tests.title")}</h2><div class="guidelines-grid"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div>` });
+  return componentDetailSection({ component, section: "tests-rejection-rules", children: componentDetailTestsContent(component, "guidelines-grid") });
 }
 
 export function renderSimpleGoldSection(entry, section, demoFromData) {

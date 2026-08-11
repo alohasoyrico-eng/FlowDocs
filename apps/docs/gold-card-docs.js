@@ -1,4 +1,4 @@
-import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { cardDemoFromData, playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -71,17 +71,7 @@ function cardAnatomyPanel() {
 }
 
 function cardAccessibilityPanel() {
-  const accessibility = componentSectionData("card", "accessibility");
-  const items = accessibility.items ?? [];
-  return html`
-    <section ${cardSurfaceAttrs("accessibility")}>
-      <h2>${ui("component.accessibility")}</h2>
-      <p>State precedence: ${accessibility.statePrecedence ?? "disabled, loading, error, selected, focus, hover, default"}.</p>
-      <div class="checklist-grid">
-        ${items.map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}
-      </div>
-    </section>
-  `;
+  return html`<section ${cardSurfaceAttrs("accessibility")}>${componentDetailAccessibilityContent("card", "disabled, loading, error, selected, focus, hover, default")}</section>`;
 }
 
 function cardViewportOrganizationPanel() {
@@ -276,44 +266,21 @@ function cardPlaygroundPanel() {
 }
 
 function cardContractPanel() {
-  const props = componentApiProps("card");
   return html`
     <section ${cardSurfaceAttrs("api-foundations")}>
       <h2>${ui("build.apiAndFoundations")}</h2>
       <p>${componentSectionCopy("card", "api-foundations")}</p>
-      <div class="props-table">
-        <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
-        ${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}
-      </div>
+      ${componentDetailApiPropsTable("card")}
     </section>
   `;
 }
 
 function cardGuidelinesPanel() {
-  const groups = componentSectionData("card", "guidelines").groups ?? [];
-  return html`
-    <section ${cardSurfaceAttrs("guidelines")}>
-      <h2>${ui("guidelines.title")}</h2>
-      <div class="guidelines-grid">
-        ${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}
-      </div>
-    </section>
-  `;
+  return html`<section ${cardSurfaceAttrs("guidelines")}>${componentDetailGuidelinesContent("card")}</section>`;
 }
 
 function cardTestPanel() {
-  const tests = componentSectionData("card", "tests-rejection-rules");
-  const mustTest = tests.mustTest ?? [];
-  const rejectIf = tests.rejectIf ?? [];
-  return html`
-    <section ${cardSurfaceAttrs("tests-rejection-rules")}>
-      <h2>${ui("tests.title")}</h2>
-      <div class="two-column-list">
-        <article><h3>${ui("tests.mustTest")}</h3><ul>${mustTest.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-        <article><h3>${ui("tests.rejectIf")}</h3><ul>${rejectIf.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-      </div>
-    </section>
-  `;
+  return html`<section ${cardSurfaceAttrs("tests-rejection-rules")}>${componentDetailTestsContent("card")}</section>`;
 }
 
 export function cardDemo(demo = {}, value, detail, iconName, state = "default") {
