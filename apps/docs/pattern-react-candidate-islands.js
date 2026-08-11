@@ -1,5 +1,6 @@
 import React from "react";
 import { ActionSheet } from "./generated/react/patterns/ActionSheet.js?v=1";
+import { AvatarMenu } from "./generated/react/patterns/AvatarMenu.js?v=1";
 import { CommandPalette } from "./generated/react/patterns/CommandPalette.js?v=1";
 import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
 import { NotificationPanel } from "./generated/react/patterns/NotificationPanel.js?v=1";
@@ -7,6 +8,7 @@ import { Search } from "./generated/react/patterns/Search.js?v=1";
 
 export const candidatePatternReactComponents = {
   "action-sheet": ActionSheet,
+  "avatar-menu": AvatarMenu,
   "command-palette": CommandPalette,
   "confirmation-dialog": ConfirmationDialog,
   "notification-panel": NotificationPanel,
@@ -36,6 +38,37 @@ function ActionSheetIsland({ initialProps }) {
         initialProps.cancelAction?.onClick?.(event);
       },
     },
+  });
+}
+
+function AvatarMenuIsland({ initialProps }) {
+  const [open, setOpen] = React.useState(Boolean(initialProps.open));
+  const [state, setState] = React.useState(initialProps.state ?? "closed");
+  const [selectedLabel, setSelectedLabel] = React.useState("");
+  const isSigningOut = state === "signing-out";
+  return React.createElement(AvatarMenu, {
+    ...initialProps,
+    open,
+    state: isSigningOut ? "signing-out" : open ? "open" : state,
+    signingOut: isSigningOut,
+    onOpenChange: (nextOpen, event) => {
+      setOpen(Boolean(nextOpen));
+      setState((current) => current === "signing-out" ? current : nextOpen ? "open" : "closed");
+      initialProps.onOpenChange?.(nextOpen, event);
+    },
+    onSelect: (item, event) => {
+      if (item?.key === "sign-out") {
+        setOpen(false);
+        setState("signing-out");
+        window.setTimeout(() => setState("closed"), 600);
+      } else {
+        setSelectedLabel(item?.label ?? "");
+        setOpen(false);
+        setState("closed");
+      }
+      initialProps.onSelect?.(item, event);
+    },
+    "data-selected-action": selectedLabel || undefined,
   });
 }
 
@@ -162,6 +195,7 @@ function SearchIsland({ initialProps }) {
 
 export const candidatePatternReactIslandWrappers = {
   "action-sheet": ActionSheetIsland,
+  "avatar-menu": AvatarMenuIsland,
   "command-palette": CommandPaletteIsland,
   "confirmation-dialog": ConfirmationDialogIsland,
   "notification-panel": NotificationPanelIsland,

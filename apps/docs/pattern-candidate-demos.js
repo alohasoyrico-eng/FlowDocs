@@ -1,5 +1,4 @@
 import { html } from "./detail-tabs-core.js?v=3";
-import { avatarMenuMarkup } from "./avatar-menu-slot.js?v=1";
 import { patternPackageDemo as packageDemo } from "./search-slot.js?v=2";
 
 function escapeAttribute(value) {
@@ -108,9 +107,19 @@ function avatarMenuDemoPanel() {
     <section class="doc-panel wide pattern-avatar-menu-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Avatar menu</h2>
-      <div class="pattern-avatar-menu-demo" data-avatar-menu-demo>
-        ${avatarMenuMarkup({ attrs: { "data-avatar-menu": "" } })}
-      </div>
+      ${patternReactDemo("avatar-menu", {
+        name: "Ana Sosa",
+        status: "online",
+        triggerLabel: "Ana Sosa",
+        density: "md",
+        items: [
+          { key: "profile", label: "Profile", icon: "account_circle" },
+          { key: "settings", label: "Settings", icon: "settings" },
+          "divider",
+          { key: "sign-out", label: "Sign out", icon: "logout", tone: "danger" },
+        ],
+        "data-pattern-demo": "avatar-menu",
+      })}
     </section>
   `;
 }

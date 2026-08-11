@@ -2,7 +2,7 @@ import { artifactContract, artifactFoundationTracePanel, cardLink, findComponent
 import { componentDemo } from "./component-demo.js?v=60";
 import { patternCopy } from "./docs-state.js";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=3";
-import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=17";
+import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=18";
 import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=5";
 import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=6";
 import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=8";
