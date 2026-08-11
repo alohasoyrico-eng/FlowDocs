@@ -56,7 +56,7 @@ import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
-import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1"; import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1"; import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1"; import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1"; import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1"; import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1"; import { Timeline } from "./generated/react/patterns/Timeline.js?v=1"; import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
+import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1"; import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1"; import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1"; import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1"; import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1"; import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1"; import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1"; import { Timeline } from "./generated/react/patterns/Timeline.js?v=1"; import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
 
 const mounted = new WeakMap(); const reactComponents = {
   accordion: Accordion,
@@ -115,6 +115,7 @@ const mounted = new WeakMap(); const reactComponents = {
   tooltip: Tooltip,
   "tree-view": TreeView,
   "text-area": TextArea,
+  "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtp,
   "chart-legend-item": ChartLegendItem,
   "checkbox-group": CheckboxGroup, "gantt-chart": GanttChart, "polar-chart": PolarChart, "preference-management": PreferenceManagement, "radio-group": RadioGroup,
   timeline: Timeline,
@@ -168,6 +169,8 @@ function CheckboxIsland({ initialProps }) {
 function CheckboxGroupIsland({ initialProps }) { const [value, setValue] = React.useState(initialProps.value ?? initialProps.defaultValue ?? []); return React.createElement(CheckboxGroup, { ...initialProps, value, onValueChange: setValue, onClear: () => setValue([]) }); }
 
 function ChartLegendItemIsland({ initialProps }) { const [hidden, setHidden] = React.useState(Boolean(initialProps.hidden)); return React.createElement(ChartLegendItem, { ...initialProps, hidden, selected: !hidden && Boolean(initialProps.selected ?? true), onToggle: (checked, meta, event) => { setHidden(!checked); initialProps.onToggle?.(checked, meta, event); } }); }
+
+function AuthenticationLoginBiometricsAndOtpIsland({ initialProps }) { const [state, setState] = React.useState(initialProps.state ?? "idle"); const primaryLabel = state === "otp-sent" ? "Verify code" : state === "biometric-prompt" ? "Confirm biometric" : "Send OTP"; return React.createElement(AuthenticationLoginBiometricsAndOtp, { ...initialProps, state, otp: state === "otp-sent" ? { value: "184290", helper: "Code expires in 00:42." } : initialProps.otp, biometric: state === "biometric-prompt" ? { label: "Confirm it is you", description: "Use device biometrics or continue with OTP.", actionLabel: "Confirm biometric", fallback: "Use OTP instead" } : initialProps.biometric, validation: state === "recovered" ? { label: "Authentication status", message: "Sign-in verified.", state: "success" } : initialProps.validation, feedback: state === "recovered" ? { label: "Sign-in verified", description: "The session can continue.", tone: "success" } : initialProps.feedback, primaryAction: { ...(initialProps.primaryAction ?? {}), label: primaryLabel, icon: state === "recovered" ? "check_circle" : "verified_user" }, secondaryAction: state === "idle" ? { label: "Use biometric", variant: "secondary", icon: "fingerprint", onClick: () => setState("biometric-prompt") } : { label: "Reset", variant: "secondary", icon: "refresh", onClick: () => setState("idle") }, onSubmit: () => setState((current) => current === "idle" ? "otp-sent" : "recovered") }); }
 
 function CodeInputIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
@@ -367,7 +370,8 @@ function TimelineIsland({ initialProps }) {
 const reactIslandWrappers = {
   input: InputIsland, "card-expiry-input": CardExpiryInputIsland,
   "card-number-input": CardNumberInputIsland, "card-security-code-input": CardSecurityCodeInputIsland,
-  checkbox: CheckboxIsland, "chart-legend-item": ChartLegendItemIsland,
+  checkbox: CheckboxIsland, "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
+  "chart-legend-item": ChartLegendItemIsland,
   "code-input": CodeInputIsland, combobox: ComboboxIsland,
   "checkbox-group": CheckboxGroupIsland,
   "country-selector": CountrySelectorIsland, "date-picker": DatePickerIsland, "date-range-picker": DateRangePickerIsland,

@@ -10,6 +10,14 @@ function packageDemo(component, demo = {}, attrs = {}) {
   return markup.replace(/^<([a-z0-9-]+)/i, `<$1 ${attrText}`);
 }
 
+function escapeAttribute(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function patternReactDemo(pattern, props, state = "default", variant = "standard") {
+  return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="true" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
 export function journeyPatternOverviewDemo(patternId) {
   if (patternId === "authentication-login-biometrics-and-otp") return authJourneyDemoPanel();
   if (patternId === "driver-onboarding-mobile") return driverOnboardingDemoPanel();
@@ -22,28 +30,15 @@ function authJourneyDemoPanel() {
     <section class="doc-panel wide pattern-journey-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Recoverable sign-in</h2>
-      <div class="pattern-auth-demo pattern-journey-demo" data-auth-journey-demo>
-        <div class="pattern-auth-demo__identity">
-          ${packageDemo("phone-input", { label: "Phone number", value: "55 1842 9011", helper: "Used for OTP and account recovery." }, { "data-auth-phone": "" })}
-          <div data-auth-validation hidden>${packageDemo("inline-validation", { label: "Phone number", message: "Enter a valid phone number before requesting a code.", state: "warning" })}</div>
-          <div class="pattern-journey-actions">
-            ${packageDemo("button", { label: "Send OTP", icon: "sms" }, { "data-auth-send": "" })}
-            ${packageDemo("button", { label: "Use biometric", variant: "secondary", icon: "fingerprint" }, { "data-auth-biometric": "" })}
-          </div>
-        </div>
-        <div class="pattern-auth-demo__otp" data-auth-otp hidden>
-          ${packageDemo("code-input", { label: "Security code", value: "", helper: "Code expires in 00:42." }, { "data-auth-code": "" })}
-          <div class="pattern-journey-actions">
-            ${packageDemo("button", { label: "Verify code", icon: "verified_user" }, { "data-auth-verify": "" })}
-            ${packageDemo("button", { label: "Send again", variant: "secondary", icon: "refresh" }, { "data-auth-resend": "" })}
-          </div>
-        </div>
-        <div class="pattern-auth-demo__biometric" data-auth-biometric-panel hidden>
-          ${packageDemo("biometric-prompt", { label: "Confirm it is you", description: "Use device biometrics or continue with OTP.", actionLabel: "Confirm biometric", fallback: "Use OTP instead" }, { "data-auth-biometric-card": "" })}
-        </div>
-        <div data-auth-error hidden>${packageDemo("error-panel", { label: "Authentication needs review", description: "Retry OTP or use account recovery before continuing.", actionLabel: "Review recovery" })}</div>
-        <div data-auth-toast hidden>${packageDemo("toast", { label: "Sign-in verified", description: "The session can continue.", tone: "success" })}</div>
-      </div>
+      ${patternReactDemo("authentication-login-biometrics-and-otp", {
+        label: "Recoverable sign-in",
+        description: "Used for OTP and account recovery.",
+        density: "md",
+        phone: { label: "Phone number", value: "55 1842 9011", helper: "Used for OTP and account recovery." },
+        validation: { label: "Authentication status", message: "Send a code or use biometrics to continue.", state: "info" },
+        recovery: { label: "Authentication needs review", description: "Retry OTP or use account recovery before continuing.", action: { label: "Review recovery" } },
+        "data-pattern-demo": "authentication-login-biometrics-and-otp",
+      })}
     </section>
   `;
 }

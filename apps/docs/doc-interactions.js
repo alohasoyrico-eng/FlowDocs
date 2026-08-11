@@ -4,7 +4,7 @@ import { setupCandidatePatternInteractions } from "./pattern-candidate-interacti
 import { setupDesktopPatternInteractions } from "./pattern-desktop-interactions.js?v=9";
 import { setupMobilePatternInteractions } from "./pattern-mobile-interactions.js?v=4";
 import { setupUtilityPatternInteractions } from "./pattern-utility-interactions.js?v=1";
-import { setupJourneyPatternInteractions } from "./pattern-journey-interactions.js?v=1";
+import { setupJourneyPatternInteractions } from "./pattern-journey-interactions.js?v=2";
 import { setupDesktopTemplateInteractions } from "./template-desktop-interactions.js?v=6";
 import { setupProcessPatternInteractions } from "./pattern-process-interactions.js?v=3";
 import { setupReferenceDemos } from "./reference-demo-interactions.js";

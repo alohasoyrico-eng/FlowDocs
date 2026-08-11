@@ -3,15 +3,6 @@ export function setupJourneyPatternInteractions() {
 }
 
 function handleJourneyPatternClick(event) {
-  const authSend = event.target.closest("[data-auth-send]");
-  if (authSend) return showAuthOtp(authSend.closest("[data-auth-journey-demo]"));
-
-  const authVerify = event.target.closest("[data-auth-verify]");
-  if (authVerify) return verifyAuth(authVerify.closest("[data-auth-journey-demo]"));
-
-  const authBiometric = event.target.closest("[data-auth-biometric]");
-  if (authBiometric) return showAuthBiometric(authBiometric.closest("[data-auth-journey-demo]"));
-
   const driverNext = event.target.closest("[data-driver-next]");
   if (driverNext) return moveJourneyStep(driverNext.closest("[data-driver-onboarding-demo]"), 1, "[data-driver-toast]");
 
@@ -23,29 +14,6 @@ function handleJourneyPatternClick(event) {
 
   const fleetBack = event.target.closest("[data-fleet-back]");
   if (fleetBack) return moveJourneyStep(fleetBack.closest("[data-fleet-onboarding-demo]"), -1, "[data-fleet-toast]");
-}
-
-function showAuthOtp(demo) {
-  if (!demo) return;
-  demo.querySelector("[data-auth-validation]")?.setAttribute("hidden", "");
-  demo.querySelector("[data-auth-biometric-panel]")?.setAttribute("hidden", "");
-  demo.querySelector("[data-auth-error]")?.setAttribute("hidden", "");
-  demo.querySelector("[data-auth-toast]")?.setAttribute("hidden", "");
-  demo.querySelector("[data-auth-otp]")?.removeAttribute("hidden");
-  demo.querySelector("[data-auth-code] input")?.focus();
-}
-
-function verifyAuth(demo) {
-  if (!demo) return;
-  demo.querySelector("[data-auth-error]")?.setAttribute("hidden", "");
-  demo.querySelector("[data-auth-toast]")?.removeAttribute("hidden");
-}
-
-function showAuthBiometric(demo) {
-  if (!demo) return;
-  demo.querySelector("[data-auth-otp]")?.setAttribute("hidden", "");
-  demo.querySelector("[data-auth-toast]")?.setAttribute("hidden", "");
-  demo.querySelector("[data-auth-biometric-panel]")?.removeAttribute("hidden");
 }
 
 function moveJourneyStep(demo, direction, toastSelector) {
