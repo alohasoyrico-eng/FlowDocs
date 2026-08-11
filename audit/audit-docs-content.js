@@ -447,6 +447,12 @@ function checkDemoQualityInventory() {
     .filter((file) => fs.existsSync(file))
     .map((file) => read(file))
     .join("\n");
+  const reactIslandsFile = path.join(docsAppDir, "react-component-islands.js");
+  const reactIslands = fs.existsSync(reactIslandsFile) ? read(reactIslandsFile) : "";
+  const reactComponentsBlock = reactIslands.match(/const reactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
+  const reactComponentKeys = new Set(
+    [...reactComponentsBlock.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
+  );
 
   const patterns = catalog?.patterns ?? [];
   const templates = catalog?.templates ?? [];
@@ -457,6 +463,8 @@ function checkDemoQualityInventory() {
   const patternCopyNotCatalog = [...patternCopyIds].filter((id) => !patternIds.has(id)).sort();
   const patternSpecNotCatalog = [...patternSpecIds].filter((id) => !patternIds.has(id)).sort();
   const templatesMissingSpec = templates.filter((entry) => !templateSpecIds.has(entry.id)).map((entry) => entry.id);
+  const reactPatternDemoIds = [...new Set([...patternDemoRuntime.matchAll(/patternReactDemo\("([a-z0-9-]+)"/g)].map((match) => match[1]))].sort();
+  const reactPatternDemosMissingRegistration = reactPatternDemoIds.filter((id) => !reactComponentKeys.has(id));
   const patternsMissingDedicatedDemo = patterns
     .filter((entry) => !patternDemoRuntime.includes(`"${entry.id}"`) && !patternDemoRuntime.includes(`'${entry.id}'`))
     .map((entry) => entry.id);
@@ -475,6 +483,8 @@ function checkDemoQualityInventory() {
     patternCopyNotCatalog,
     patternSpecNotCatalog,
     patternsMissingDedicatedDemo,
+    reactPatternDemoIds,
+    reactPatternDemosMissingRegistration,
     templatesMissingSpec,
     templatesMissingDesktopDemo,
   };
@@ -490,6 +500,9 @@ function checkDemoQualityInventory() {
   }
   if (patternsMissingDedicatedDemo.length) {
     add("warnings", docsAppDir, 1, `Patterns without a dedicated overview demo renderer: ${patternsMissingDedicatedDemo.join(", ")}.`);
+  }
+  if (reactPatternDemosMissingRegistration.length) {
+    add("errors", reactIslandsFile, 1, `React pattern demos must mount through react-component-islands.js: ${reactPatternDemosMissingRegistration.join(", ")}.`);
   }
   if (templatesMissingSpec.length) {
     add("warnings", specFile, 1, `Template catalog entries missing machine-readable specs: ${templatesMissingSpec.join(", ")}.`);
