@@ -34,6 +34,7 @@ const {
   read,
   readJson,
   readSpec,
+  result,
   add,
 } = require("./audit-context.js");
 
@@ -419,8 +420,85 @@ function checkI18nReadiness() {
   }
 }
 
+function checkDemoQualityInventory() {
+  const catalog = readJson(catalogFile);
+  const spec = readSpec();
+  const patternCopy = readJson(patternCopyFile);
+  const patternCopyIds = new Set(Object.keys(patternCopy?.patterns ?? {}));
+  const patternSpecIds = new Set(Object.keys(spec?.artifacts?.patterns ?? {}));
+  const templateSpecIds = new Set(Object.keys(spec?.artifacts?.templates ?? {}));
+  const patternDemoFiles = [
+    "pattern-candidate-demos.js",
+    "pattern-desktop-demos.js",
+    "pattern-mobile-demos.js",
+    "pattern-utility-demos.js",
+    "pattern-journey-demos.js",
+    "pattern-contract-tabs.js",
+    "pattern-focused-design.js",
+    "pattern-business-renderers.js",
+  ].map((file) => path.join(docsAppDir, file));
+  const patternDemoRuntime = patternDemoFiles
+    .filter((file) => fs.existsSync(file))
+    .map((file) => read(file))
+    .join("\n");
+  const templateDesktopDemos = fs.existsSync(path.join(docsAppDir, "template-desktop-demos.js"))
+    ? read(path.join(docsAppDir, "template-desktop-demos.js"))
+    : "";
+
+  const patterns = catalog?.patterns ?? [];
+  const templates = catalog?.templates ?? [];
+  const patternIds = new Set(patterns.map((entry) => entry.id));
+  const templateIds = new Set(templates.map((entry) => entry.id));
+  const patternsMissingCopy = patterns.filter((entry) => !patternCopyIds.has(entry.id)).map((entry) => entry.id);
+  const patternsMissingSpec = patterns.filter((entry) => !patternSpecIds.has(entry.id)).map((entry) => entry.id);
+  const patternCopyNotCatalog = [...patternCopyIds].filter((id) => !patternIds.has(id)).sort();
+  const patternSpecNotCatalog = [...patternSpecIds].filter((id) => !patternIds.has(id)).sort();
+  const templatesMissingSpec = templates.filter((entry) => !templateSpecIds.has(entry.id)).map((entry) => entry.id);
+  const patternsMissingDedicatedDemo = patterns
+    .filter((entry) => !patternDemoRuntime.includes(`"${entry.id}"`) && !patternDemoRuntime.includes(`'${entry.id}'`))
+    .map((entry) => entry.id);
+  const templatesMissingDesktopDemo = templates
+    .filter((entry) => !templateDesktopDemos.includes(`entry.id === "${entry.id}"`))
+    .map((entry) => entry.id);
+
+  result.inventory.demoQuality = {
+    foundations: catalog?.foundations?.length ?? 0,
+    primitives: catalog?.primitives?.length ?? 0,
+    components: catalog?.components?.length ?? 0,
+    patterns: patterns.length,
+    templates: templates.length,
+    patternsMissingCopy,
+    patternsMissingSpec,
+    patternCopyNotCatalog,
+    patternSpecNotCatalog,
+    patternsMissingDedicatedDemo,
+    templatesMissingSpec,
+    templatesMissingDesktopDemo,
+  };
+
+  if (patternsMissingCopy.length) {
+    add("warnings", patternCopyFile, 1, `Pattern catalog entries missing copy contracts: ${patternsMissingCopy.join(", ")}.`);
+  }
+  if (patternsMissingSpec.length) {
+    add("warnings", specFile, 1, `Pattern catalog entries missing machine-readable specs: ${patternsMissingSpec.join(", ")}.`);
+  }
+  if (patternCopyNotCatalog.length || patternSpecNotCatalog.length) {
+    add("warnings", catalogFile, 1, `Pattern taxonomy drift: copy-only ${patternCopyNotCatalog.join(", ") || "none"}; spec-only ${patternSpecNotCatalog.join(", ") || "none"}.`);
+  }
+  if (patternsMissingDedicatedDemo.length) {
+    add("warnings", docsAppDir, 1, `Patterns without a dedicated overview demo renderer: ${patternsMissingDedicatedDemo.join(", ")}.`);
+  }
+  if (templatesMissingSpec.length) {
+    add("warnings", specFile, 1, `Template catalog entries missing machine-readable specs: ${templatesMissingSpec.join(", ")}.`);
+  }
+  if (templatesMissingDesktopDemo.length) {
+    add("warnings", path.join(docsAppDir, "template-desktop-demos.js"), 1, `Templates without a dedicated desktop demo renderer: ${templatesMissingDesktopDemo.join(", ")}.`);
+  }
+}
+
 module.exports = {
   checkPatternDependencyLayering,
   checkTemplateBlueprints,
+  checkDemoQualityInventory,
   checkI18nReadiness,
 };
