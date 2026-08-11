@@ -1,4 +1,5 @@
 import { candidateComponentTabs, configureCandidateComponentDocs, hasCandidateCompositionPlan } from "./candidate-component-docs.js?v=1";
+import { componentDemo } from "./component-demo.js?v=60";
 
 let componentCopy = {};
 let referenceCopy = {};
@@ -41,6 +42,7 @@ export function configureFamilyComponentDocs(nextDeps) {
 
 export function familyComponentTabs(entry) {
   if (hasCandidateCompositionPlan(entry.id)) return candidateComponentTabs(entry);
+  if (componentCopy?.components?.[entry.id]) return componentContractFallbackTabs(entry);
   const profile = componentFamilyProfile(entry);
   return threeTabs(
     entry,
@@ -48,6 +50,113 @@ export function familyComponentTabs(entry) {
     `${componentFamilyDemoPanel(entry, profile)}${componentStateMatrixPanel(entry, profile)}${componentResponsiveContractPanel(entry, profile)}${accessibilityPanel(entry)}${guidelinesPanel(entry)}`,
     `${componentFamilyApiPanel(entry, profile)}${componentFamilyTestPanel(entry, profile)}${specPanel(entry)}${agentPanel(entry, "Component")}`,
   );
+}
+
+function componentContractFallbackTabs(entry) {
+  const copy = componentCopy.components[entry.id] ?? {};
+  return threeTabs(
+    entry,
+    `${componentStandardPanel(entry, componentFamilyProfile(entry))}${componentContractScenarioPanel(entry, copy)}${artifactFoundationTracePanel(entry, "Component")}`,
+    `${componentContractDemoPanel(entry, copy, "states")}${componentContractAnatomyPanel(entry, copy)}${componentContractDemoPanel(entry, copy, "variants")}${accessibilityPanel(entry)}${guidelinesPanel(entry)}`,
+    `${componentContractApiPanel(entry, copy)}${componentFamilyTestPanel(entry, componentFamilyProfile(entry))}${specPanel(entry)}${agentPanel(entry, "Component")}`,
+  );
+}
+
+function componentContractScenarioPanel(entry, copy) {
+  const scenario = copy["operational-example"]?.scenario;
+  return html`
+    <section class="doc-panel wide">
+      <h2>${ui("reference.operationalScenario")}</h2>
+      <p>${copy["operational-example"]?.copy ?? entry.summary}</p>
+      <div class="component-standard-demo">
+        <article>
+          <header><span>${icon(iconFor(entry))}</span><strong>${scenario?.rationaleTitle ?? entry.title}</strong></header>
+          <ul>${(scenario?.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul>
+        </article>
+        <article>
+          <strong>${ui("reference.mustProve")}</strong>
+          <div class="component-standard-surface">${componentDemo(entry.id, contractDemoDefaults(entry))}</div>
+        </article>
+      </div>
+    </section>
+  `;
+}
+
+function componentContractDemoPanel(entry, copy, sectionId) {
+  const section = copy[sectionId] ?? {};
+  const demos = dedupeDemos(section.demos ?? []).slice(0, sectionId === "states" ? 8 : 6);
+  if (!demos.length) return "";
+  return html`
+    <section class="doc-panel wide">
+      <h2>${sectionId === "states" ? ui("reference.stateMatrix") : "Variants"}</h2>
+      <p>${section.copy ?? ""}</p>
+      <div class="button-demo-grid states-grid">
+        ${demos.map((demo) => demoCell(demo.label ?? demo.state ?? demo.variant ?? entry.title, componentDemo(entry.id, normalizeContractDemo(entry, demo)))).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function componentContractAnatomyPanel(entry, copy) {
+  const anatomy = copy.anatomy?.items ?? [];
+  if (!anatomy.length) return "";
+  return html`
+    <section class="doc-panel wide">
+      <h2>Anatomy</h2>
+      <div class="role-grid">
+        ${anatomy.map((item) => `<article><span>${icon(iconFor(entry))}</span><strong>${item.part}</strong><p>${item.rule}</p><code>${(item.tokens ?? []).join(", ")}</code></article>`).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function componentContractApiPanel(entry, copy) {
+  const props = copy["api-foundations"]?.props ?? [];
+  if (!props.length) return componentFamilyApiPanel(entry);
+  return html`
+    <section class="doc-panel wide">
+      <h2>${entry.title} ${ui("contract.api")}</h2>
+      <p>${copy["api-foundations"]?.copy ?? ""}</p>
+      <div class="props-table">
+        <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
+        ${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}
+      </div>
+    </section>
+  `;
+}
+
+function dedupeDemos(demos) {
+  const seen = new Set();
+  return demos.filter((demo) => {
+    const key = JSON.stringify(demo);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function normalizeContractDemo(entry, demo = {}) {
+  if (entry.id === "chat-message") return { label: demo.label ?? "Message", body: demo.body ?? demo.message ?? "I can help with that.", meta: demo.timestamp ?? demo.meta ?? "Now", ...demo };
+  if (entry.id === "chat-thread") return { label: demo.label ?? "Support thread", description: "Conversation history", ...demo, messages: chatThreadMessages(demo) };
+  return { label: entry.title, ...demo };
+}
+
+function contractDemoDefaults(entry) {
+  if (entry.id === "input-amount") return { label: "Approved amount", value: "1250.00", currency: "MXN" };
+  if (entry.id === "chat-composer") return { label: "Reply", value: "Can you review this card limit?", sendLabel: "Send" };
+  if (entry.id === "chat-message") return { label: "Support", body: "I can see the station requires a policy override.", meta: "Now", author: "agent" };
+  if (entry.id === "chat-thread") return { label: "Support thread", description: "Conversation history", messages: chatThreadMessages({ messages: 3 }) };
+  return { label: entry.title };
+}
+
+function chatThreadMessages(demo = {}) {
+  const count = Number(demo.messages ?? 3);
+  if (!count) return [];
+  return [
+    { key: "customer", author: "user", label: "Ana Sosa", body: "My fuel card was declined at Station 24.", meta: "2 min ago" },
+    { key: "agent", author: "agent", label: "Support", body: "I can see the station requires a policy override.", meta: "Now" },
+    { key: "system", author: "system", label: "Policy", body: "Override request logged for audit.", meta: "Now" },
+  ].slice(0, Math.min(count, 3));
 }
 
 function componentFamilyProfile(entry) {

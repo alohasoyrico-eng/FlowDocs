@@ -30,7 +30,7 @@ import {
   templateBlueprints,
   ui,
 } from "./docs-state.js";
-import { artifactFoundationTracePanel, configureFamilyComponentDocs, familyComponentTabs } from "./family-component-docs.js?v=1";
+import { artifactFoundationTracePanel, configureFamilyComponentDocs, familyComponentTabs } from "./family-component-docs.js?v=2";
 import { configureFoundationReference, foundationReferenceContent, foundationRoles, foundationSubtitle } from "./foundation-reference.js";
 import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDemo, breadcrumbsDemo, buttonDemo, cardDemo, cardExpiryInputDemo, cardNumberInputDemo, cardSecurityCodeInputDemo, cardSummaryDemo, checkboxDemo, chipDemo, comboboxDemo, configureGoldComponentDocs, countrySelectorDemo, demoCell, dialogDemo, drawerDemo, emptyStateDemo, errorPanelDemo, floatingActionButtonDemo, goldComponentDocumentationTabs, iconButtonDemo, inlineValidationDemo, animatedMomentDemo, menuDemo, motionBoundaryDemo, movementRowDemo, paginationDemo, popoverDemo, progressIndicatorDemo, quickActionDemo, radioButtonDemo, selectDemo, skeletonDemo, spinnerDemo, sliderDemo, stepperDemo, switchDemo, tableDemo, tabsDemo, tabsDemoFromData, tagDemo, textAreaDemo, inputDemo, toastDemo, tooltipDemo, treeViewDemo } from "./gold-component-docs.js?v=325";
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=1";

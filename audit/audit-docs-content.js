@@ -447,6 +447,8 @@ function checkDemoQualityInventory() {
     .filter((file) => fs.existsSync(file))
     .map((file) => read(file))
     .join("\n");
+  const componentDemoFile = path.join(docsAppDir, "component-demo.js");
+  const componentDemoRuntime = fs.existsSync(componentDemoFile) ? read(componentDemoFile) : "";
   const reactIslandsFile = path.join(docsAppDir, "react-component-islands.js");
   const reactIslands = fs.existsSync(reactIslandsFile) ? read(reactIslandsFile) : "";
   const patternReactIslandsFile = path.join(docsAppDir, "pattern-react-islands.js");
@@ -460,10 +462,16 @@ function checkDemoQualityInventory() {
     [...`${reactComponentsBlock}\n${patternReactComponentsBlock}\n${candidatePatternReactComponentsBlock}`.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
   );
 
+  const components = catalog?.components ?? [];
   const patterns = catalog?.patterns ?? [];
   const templates = catalog?.templates ?? [];
+  const componentIds = new Set(components.map((entry) => entry.id));
   const patternIds = new Set(patterns.map((entry) => entry.id));
   const templateIds = new Set(templates.map((entry) => entry.id));
+  const componentDemosMissingRegistration = components
+    .filter((entry) => componentDemoRuntime.includes(`component === "${entry.id}"`) && !reactComponentKeys.has(entry.id))
+    .map((entry) => entry.id);
+  const componentRegistryNotCatalog = [...reactComponentKeys].filter((id) => componentDemoRuntime.includes(`component === "${id}"`) && !componentIds.has(id)).sort();
   const patternsMissingCopy = patterns.filter((entry) => !patternCopyIds.has(entry.id)).map((entry) => entry.id);
   const patternsMissingSpec = patterns.filter((entry) => !patternSpecIds.has(entry.id)).map((entry) => entry.id);
   const patternCopyNotCatalog = [...patternCopyIds].filter((id) => !patternIds.has(id)).sort();
@@ -481,9 +489,11 @@ function checkDemoQualityInventory() {
   result.inventory.demoQuality = {
     foundations: catalog?.foundations?.length ?? 0,
     primitives: catalog?.primitives?.length ?? 0,
-    components: catalog?.components?.length ?? 0,
+    components: components.length,
     patterns: patterns.length,
     templates: templates.length,
+    componentDemosMissingRegistration,
+    componentRegistryNotCatalog,
     patternsMissingCopy,
     patternsMissingSpec,
     patternCopyNotCatalog,
@@ -497,6 +507,12 @@ function checkDemoQualityInventory() {
 
   if (patternsMissingCopy.length) {
     add("warnings", patternCopyFile, 1, `Pattern catalog entries missing copy contracts: ${patternsMissingCopy.join(", ")}.`);
+  }
+  if (componentDemosMissingRegistration.length) {
+    add("errors", reactIslandsFile, 1, `Component demos must mount through react-component-islands.js: ${componentDemosMissingRegistration.join(", ")}.`);
+  }
+  if (componentRegistryNotCatalog.length) {
+    add("warnings", reactIslandsFile, 1, `Component demo registry includes non-catalog component demos: ${componentRegistryNotCatalog.join(", ")}.`);
   }
   if (patternsMissingSpec.length) {
     add("warnings", specFile, 1, `Pattern catalog entries missing machine-readable specs: ${patternsMissingSpec.join(", ")}.`);

@@ -15,6 +15,9 @@ import { CardSecurityCodeInput } from "./generated/react/CardSecurityCodeInput.j
 import { CardSummary } from "./generated/react/CardSummary.js?v=1";
 import { ChartPanel } from "./generated/react/ChartPanel.js?v=1";
 import { Checkbox } from "./generated/react/Checkbox.js?v=1";
+import { ChatComposer } from "./generated/react/ChatComposer.js?v=1";
+import { ChatMessage } from "./generated/react/ChatMessage.js?v=1";
+import { ChatThread } from "./generated/react/ChatThread.js?v=1";
 import { Chip } from "./generated/react/Chip.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { Combobox } from "./generated/react/Combobox.js?v=1";
@@ -29,6 +32,7 @@ import { FloatingActionButton } from "./generated/react/FloatingActionButton.js?
 import { IconButton } from "./generated/react/IconButton.js?v=1";
 import { InlineValidation } from "./generated/react/InlineValidation.js?v=1";
 import { Input } from "./generated/react/Input.js?v=1";
+import { InputAmount } from "./generated/react/InputAmount.js?v=1";
 import { KpiTile } from "./generated/react/KpiTile.js?v=1";
 import { List } from "./generated/react/List.js?v=1";
 import { Menu } from "./generated/react/Menu.js?v=1";
@@ -74,6 +78,9 @@ const mounted = new WeakMap(); const reactComponents = {
   "card-summary": CardSummary,
   "chart-panel": ChartPanel,
   checkbox: Checkbox,
+  "chat-composer": ChatComposer,
+  "chat-message": ChatMessage,
+  "chat-thread": ChatThread,
   chip: Chip,
   "code-input": CodeInput,
   combobox: Combobox,
@@ -88,6 +95,7 @@ const mounted = new WeakMap(); const reactComponents = {
   "icon-button": IconButton,
   "inline-validation": InlineValidation,
   input: Input,
+  "input-amount": InputAmount,
   "kpi-tile": KpiTile,
   list: List,
   menu: Menu,
@@ -124,6 +132,33 @@ function InputIsland({ initialProps }) {
     ...initialProps,
     value,
     onValueChange: setValue,
+  });
+}
+
+function InputAmountIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "");
+  return React.createElement(InputAmount, {
+    ...initialProps,
+    value,
+    onValueChange: setValue,
+  });
+}
+
+function ChatComposerIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? initialProps.defaultValue ?? "");
+  const [sending, setSending] = React.useState(Boolean(initialProps.sending));
+  return React.createElement(ChatComposer, {
+    ...initialProps,
+    value,
+    sending,
+    onValueChange: setValue,
+    onSend: () => {
+      setSending(true);
+      window.setTimeout(() => {
+        setSending(false);
+        setValue("");
+      }, 350);
+    },
   });
 }
 
@@ -304,7 +339,7 @@ function TextAreaIsland({ initialProps }) {
 }
 
 const reactIslandWrappers = {
-  input: InputIsland, "card-expiry-input": CardExpiryInputIsland,
+  input: InputIsland, "input-amount": InputAmountIsland, "card-expiry-input": CardExpiryInputIsland,
   "card-number-input": CardNumberInputIsland, "card-security-code-input": CardSecurityCodeInputIsland,
   checkbox: CheckboxIsland,
   "code-input": CodeInputIsland, combobox: ComboboxIsland,
@@ -313,6 +348,7 @@ const reactIslandWrappers = {
   "segmented-control": SegmentedControlIsland, "radio-button": RadioButtonIsland,
   switch: SwitchIsland, tabs: TabsIsland, slider: SliderIsland,
   "text-area": TextAreaIsland,
+  "chat-composer": ChatComposerIsland,
   ...patternReactIslandWrappers,
 };
 

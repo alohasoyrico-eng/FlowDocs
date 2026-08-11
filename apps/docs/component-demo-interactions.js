@@ -5,7 +5,7 @@ import { setupMenuDemos, setupOverlayDemos } from "./overlay-demo-interactions.j
 import { setupAccordionDemos, setupListDemos, setupTableDemos } from "./display-demo-interactions.js?v=6";
 import { setupStatefulComponentDemos } from "./stateful-component-interactions.js?v=39";
 import { setupChoiceDemos, setupRadioButtonDemos, setupSwitchDemos } from "./choice-demo-interactions.js?v=2";
-import { setupReactComponentIslands } from "./react-component-islands.js?v=5";
+import { setupReactComponentIslands } from "./react-component-islands.js?v=6";
 
 export function setupComponentDemoInteractions(deps) {
   setupComponentPlaygrounds(deps);
