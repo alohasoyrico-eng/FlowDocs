@@ -6,7 +6,7 @@ import { setupMobilePatternInteractions } from "./pattern-mobile-interactions.js
 import { setupUtilityPatternInteractions } from "./pattern-utility-interactions.js?v=6";
 import { setupJourneyPatternInteractions } from "./pattern-journey-interactions.js?v=2";
 import { setupDesktopTemplateInteractions } from "./template-desktop-interactions.js?v=6";
-import { setupProcessPatternInteractions } from "./pattern-process-interactions.js?v=4";
+import { setupProcessPatternInteractions } from "./pattern-process-interactions.js?v=5";
 import { setupReferenceDemos } from "./reference-demo-interactions.js";
 
 export function setupDocumentationInteractions(deps) {

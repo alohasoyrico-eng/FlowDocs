@@ -15,7 +15,6 @@
 .pattern-autocomplete-demo,
 .pattern-select-layer-demo,
 .pattern-multi-select-demo,
-.pattern-toolbar-demo,
 .pattern-filter-chip-demo,
 .pattern-file-upload-demo {
   position: relative;
@@ -56,7 +55,6 @@
 .pattern-autocomplete-demo [hidden],
 .pattern-select-layer-demo [hidden],
 .pattern-multi-select-demo [hidden],
-.pattern-toolbar-demo [hidden],
 .pattern-filter-chip-demo [hidden],
 .pattern-file-upload-demo [hidden] {
   display: none;
@@ -216,13 +214,6 @@
   min-block-size: var(--sys-frame-height-control-lg);
 }
 
-.pattern-toolbar-demo {
-  grid-template-columns: minmax(16rem, 1fr) auto;
-  align-items: end;
-}
-
-.pattern-toolbar-demo__actions,
-.pattern-toolbar-demo__status,
 .pattern-file-upload-demo__actions,
 .pattern-filter-chip-demo footer {
   display: flex;
@@ -231,13 +222,8 @@
   align-items: center;
 }
 
-.pattern-toolbar-demo__actions,
 .pattern-filter-chip-demo footer {
   justify-content: flex-end;
-}
-
-.pattern-toolbar-demo__status {
-  grid-column: 1 / -1;
 }
 
 .pattern-filter-chip-demo__chips {
@@ -259,7 +245,6 @@
   .pattern-autocomplete-demo,
   .pattern-select-layer-demo,
   .pattern-multi-select-demo,
-  .pattern-toolbar-demo,
   .pattern-filter-chip-demo,
   .pattern-file-upload-demo,
   .pattern-command-demo__surface,
@@ -280,12 +265,6 @@
     grid-template-columns: 1fr;
   }
 
-  .pattern-toolbar-demo {
-    grid-template-columns: 1fr;
-  }
-
-  .pattern-toolbar-demo__actions,
-  .pattern-toolbar-demo__status,
   .pattern-file-upload-demo__actions,
   .pattern-filter-chip-demo footer {
     align-items: stretch;

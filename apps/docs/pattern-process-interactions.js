@@ -4,9 +4,6 @@ export function setupProcessPatternInteractions() {
 }
 
 function handleProcessPatternClick(event) {
-  const toolbarExport = event.target.closest("[data-toolbar-export]");
-  if (toolbarExport) return showProcessToast(toolbarExport.closest("[data-toolbar-demo]"), "[data-toolbar-toast]");
-
   const filterChip = event.target.closest("[data-filter-chip]");
   if (filterChip) return removeFilterChip(filterChip.closest("[data-filter-chip-demo]"), filterChip);
 

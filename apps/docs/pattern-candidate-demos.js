@@ -297,19 +297,41 @@ function toolbarDemoPanel() {
     <section class="doc-panel wide pattern-toolbar-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Table toolbar</h2>
-      <div class="pattern-toolbar-demo" data-toolbar-demo>
-        ${packageDemo("input", { label: "Search vehicles", placeholder: "Plate, driver, or region" }, { "data-toolbar-search": "" })}
-        <div class="pattern-toolbar-demo__actions">
-          ${packageDemo("button", { label: "Export", icon: "download", variant: "secondary" }, { "data-toolbar-export": "" })}
-          ${packageDemo("button", { label: "Add vehicle", icon: "add" }, { "data-toolbar-primary": "" })}
-          ${packageDemo("menu", { trigger: "More actions", label: "Toolbar actions", items: [{ label: "Columns" }, { label: "Saved views" }, { label: "Reset table" }] }, { "data-toolbar-menu": "" })}
-        </div>
-        <div class="pattern-toolbar-demo__status">
-          ${packageDemo("badge", { label: "2 filters", tone: "info", variant: "standard", live: true }, { "data-toolbar-count": "" })}
-          ${packageDemo("chip", { label: "Region: North", selected: true, removable: true }, { "data-toolbar-chip": "region" })}
-        </div>
-        <div data-toolbar-toast hidden>${packageDemo("toast", { label: "Export started", description: "Vehicle export is being prepared.", tone: "success" }, { "data-pattern-toast": "toolbar" })}</div>
-      </div>
+      ${patternReactDemo("toolbar", {
+        label: "Vehicle table actions",
+        density: "md",
+        search: {
+          label: "Search vehicles",
+          query: "",
+          input: { label: "Search vehicles", placeholder: "Plate, driver, or region" },
+          delegate: {
+            label: "Search vehicles",
+            query: "",
+            results: [
+              { key: "mx-4821", label: "MX-4821", meta: "Ana Sosa · North Region" },
+              { key: "mx-9130", label: "MX-9130", meta: "City route" },
+            ],
+          },
+        },
+        filters: [
+          { key: "region", label: "Region: North", selected: true },
+          { key: "status", label: "Status: Active", selected: true },
+        ],
+        actions: [
+          { key: "export", label: "Export", icon: "download", variant: "secondary" },
+          { key: "add", label: "Add vehicle", icon: "add", variant: "primary" },
+        ],
+        overflow: {
+          triggerLabel: "More actions",
+          label: "Toolbar actions",
+          items: [
+            { key: "columns", label: "Columns" },
+            { key: "saved-views", label: "Saved views" },
+            { key: "reset", label: "Reset table" },
+          ],
+        },
+        "data-pattern-demo": "toolbar",
+      })}
     </section>
   `;
 }

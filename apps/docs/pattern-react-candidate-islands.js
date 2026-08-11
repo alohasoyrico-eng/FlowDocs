@@ -9,6 +9,8 @@ import { MultiSelect } from "./generated/react/patterns/MultiSelect.js?v=1";
 import { NotificationPanel } from "./generated/react/patterns/NotificationPanel.js?v=1";
 import { Search } from "./generated/react/patterns/Search.js?v=1";
 import { SelectOptionLayer } from "./generated/react/patterns/SelectOptionLayer.js?v=1";
+import { Toolbar } from "./generated/react/patterns/Toolbar.js?v=1";
+import { ToolbarIsland } from "./pattern-react-candidate-toolbar-island.js?v=1";
 
 export const candidatePatternReactComponents = {
   "action-sheet": ActionSheet,
@@ -21,6 +23,7 @@ export const candidatePatternReactComponents = {
   "notification-panel": NotificationPanel,
   search: Search,
   "select-option-layer": SelectOptionLayer,
+  toolbar: Toolbar,
 };
 
 function ActionSheetIsland({ initialProps }) {
@@ -380,4 +383,5 @@ export const candidatePatternReactIslandWrappers = {
   "notification-panel": NotificationPanelIsland,
   search: SearchIsland,
   "select-option-layer": SelectOptionLayerIsland,
+  toolbar: ToolbarIsland,
 };
