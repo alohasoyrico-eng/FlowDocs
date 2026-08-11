@@ -230,18 +230,13 @@ function snackbarProviderDemoPanel() {
     <section class="doc-panel wide pattern-utility-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Shared feedback queue</h2>
-      <div class="pattern-snackbar-demo pattern-utility-demo" data-snackbar-demo>
-        <div class="pattern-snackbar-demo__actions">
-          ${packageDemo("button", { label: "Save view", icon: "bookmark_added" }, { "data-snackbar-add": "save" })}
-          ${packageDemo("button", { label: "Queue retry", variant: "secondary", icon: "sync" }, { "data-snackbar-add": "retry" })}
-          ${packageDemo("badge", { label: "0 queued", tone: "neutral", variant: "standard" }, { "data-snackbar-count": "" })}
-        </div>
-        <div class="pattern-snackbar-demo__region" data-snackbar-region aria-live="polite">
-          <div data-snackbar-empty>${packageDemo("empty-state", { label: "No feedback queued", description: "Trigger a product event to preview provider behavior.", icon: "notifications_none" })}</div>
-          <div data-snackbar-item="save" hidden>${packageDemo("toast", { label: "View saved", description: "This dashboard view is available to your team.", tone: "success", actionLabel: "Undo" })}</div>
-          <div data-snackbar-item="retry" hidden>${packageDemo("toast", { label: "Retry queued", description: "Sync will retry without blocking the task.", tone: "warning", actionLabel: "View" })}</div>
-        </div>
-      </div>
+      ${patternReactDemo("snackbar-provider", {
+        label: "Shared feedback queue",
+        density: "md",
+        maxVisible: 2,
+        action: { label: "Queue feedback", icon: "add_alert" },
+        "data-pattern-demo": "snackbar-provider",
+      })}
     </section>
   `;
 }

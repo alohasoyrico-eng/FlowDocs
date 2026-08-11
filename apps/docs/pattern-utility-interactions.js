@@ -10,9 +10,6 @@ function handleUtilityPatternClick(event) {
   const resetRange = event.target.closest("[data-date-range-reset]");
   if (resetRange) return resetDateRange(resetRange.closest("[data-date-range-demo]"));
 
-  const snackbarAdd = event.target.closest("[data-snackbar-add]");
-  if (snackbarAdd) return showSnackbar(snackbarAdd.closest("[data-snackbar-demo]"), snackbarAdd.dataset.snackbarAdd);
-
   const timelineFilter = event.target.closest("[data-timeline-filter]");
   if (timelineFilter) return filterTimeline(timelineFilter.closest("[data-timeline-demo]"), timelineFilter.dataset.timelineFilter);
 
@@ -54,18 +51,6 @@ function resetDateRange(demo) {
   if (end) end.value = "2026-07-15";
   demo.querySelector("[data-date-range-validation]")?.setAttribute("hidden", "");
   demo.querySelector("[data-date-range-toast]")?.setAttribute("hidden", "");
-}
-
-function showSnackbar(demo, key) {
-  if (!demo) return;
-  demo.querySelector("[data-snackbar-empty]")?.setAttribute("hidden", "");
-  demo.querySelector(`[data-snackbar-item="${key}"]`)?.removeAttribute("hidden");
-  const visible = demo.querySelectorAll("[data-snackbar-item]:not([hidden])").length;
-  const count = demo.querySelector("[data-snackbar-count]");
-  if (count) {
-    count.textContent = `${visible} queued`;
-    count.setAttribute("aria-label", `${visible} feedback messages queued`);
-  }
 }
 
 function filterTimeline(demo, filter) {

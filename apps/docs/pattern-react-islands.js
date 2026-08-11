@@ -6,6 +6,7 @@ import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1";
 import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1";
 import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1";
 import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1";
+import { SnackbarProvider } from "./generated/react/patterns/SnackbarProvider.js?v=1";
 import { Timeline } from "./generated/react/patterns/Timeline.js?v=1";
 import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
 
@@ -17,6 +18,7 @@ export const patternReactComponents = {
   "polar-chart": PolarChart,
   "preference-management": PreferenceManagement,
   "radio-group": RadioGroup,
+  "snackbar-provider": SnackbarProvider,
   timeline: Timeline,
   "waterfall-chart": WaterfallChart,
 };
@@ -62,6 +64,22 @@ function RadioGroupIsland({ initialProps }) {
   return React.createElement(RadioGroup, { ...initialProps, value, onValueChange: setValue, onClear: () => setValue("") });
 }
 
+function SnackbarProviderIsland({ initialProps }) {
+  const presets = initialProps.presets ?? [
+    { key: "save", label: "View saved", description: "This dashboard view is available to your team.", tone: "success", actionLabel: "Undo" },
+    { key: "retry", label: "Retry queued", description: "Sync will retry without blocking the task.", tone: "warning", actionLabel: "View" },
+    { key: "export", label: "Export ready", description: "The report can be downloaded from activity.", tone: "info" },
+  ];
+  const [messages, setMessages] = React.useState(initialProps.messages ?? []);
+  return React.createElement(SnackbarProvider, {
+    ...initialProps,
+    messages,
+    action: initialProps.action ?? { label: "Queue feedback", icon: "add_alert" },
+    onQueueAction: () => setMessages((current) => [...current, { ...presets[current.length % presets.length], key: `${presets[current.length % presets.length].key}-${current.length}` }]),
+    onMessageDismiss: (key) => setMessages((current) => current.filter((message) => message.key !== key)),
+  });
+}
+
 function TimelineIsland({ initialProps }) {
   const allEvents = Array.isArray(initialProps.events) ? initialProps.events : [];
   const [filter, setFilter] = React.useState(initialProps.initialFilter ?? "all");
@@ -91,5 +109,6 @@ export const patternReactIslandWrappers = {
   "chart-legend-item": ChartLegendItemIsland,
   "checkbox-group": CheckboxGroupIsland,
   "radio-group": RadioGroupIsland,
+  "snackbar-provider": SnackbarProviderIsland,
   timeline: TimelineIsland,
 };
