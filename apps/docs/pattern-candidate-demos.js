@@ -226,25 +226,19 @@ function selectOptionLayerDemoPanel() {
     <section class="doc-panel wide pattern-select-layer-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Permissioned option layer</h2>
-      <div class="pattern-select-layer-demo" data-select-layer-demo>
-        ${packageDemo("select", { label: "Card policy", value: "standard", options: [{ label: "Standard policy", value: "standard" }, { label: "Fuel only", value: "fuel" }, { label: "International travel", value: "international" }] }, { "data-select-layer-field": "" })}
-        <div class="pattern-select-layer-demo__options">
-          <div data-select-layer-option="standard" data-selected="true">
-            ${packageDemo("card", { title: "Standard policy", detail: "Default card controls", status: "Selected" })}
-            ${packageDemo("badge", { label: "Selected", tone: "info" })}
-          </div>
-          <div data-select-layer-option="fuel">
-            ${packageDemo("card", { title: "Fuel only", detail: "Restricts spend to fuel stations", status: "Available" })}
-            ${packageDemo("button", { label: "Choose fuel only", variant: "secondary" }, { "data-select-layer-choose": "fuel" })}
-          </div>
-          <div data-select-layer-option="international" data-option-blocked="true">
-            ${packageDemo("card", { title: "International travel", detail: "Requires finance approval before selection", status: "Approval needed" })}
-            ${packageDemo("button", { label: "Review approval", variant: "secondary" }, { "data-select-layer-blocked": "" })}
-          </div>
-        </div>
-        <div data-select-layer-validation hidden>${packageDemo("inline-validation", { label: "International travel", message: "Finance approval is required before this option is available.", state: "warning" })}</div>
-        <div data-select-layer-sheet hidden>${bottomSheetPatternDemo({ label: "Card policy options", description: "Use this sheet on constrained mobile viewports.", items: ["Standard policy", "Fuel only", "International travel"] })}</div>
-      </div>
+      ${patternReactDemo("select-option-layer", {
+        label: "Card policy",
+        helper: "Unavailable policies stay visible with a reason.",
+        value: "standard",
+        density: "md",
+        options: [
+          { label: "Standard policy", value: "standard", reason: "Default card controls" },
+          { label: "Fuel only", value: "fuel", reason: "Restricts spend to fuel stations" },
+          { label: "International travel", value: "international", reason: "Requires finance approval", unavailable: true },
+        ],
+        action: { key: "review-approval", label: "Review approval", icon: "policy", variant: "secondary" },
+        "data-pattern-demo": "select-option-layer",
+      })}
     </section>
   `;
 }

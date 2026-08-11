@@ -6,6 +6,7 @@ import { CommandPalette } from "./generated/react/patterns/CommandPalette.js?v=1
 import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
 import { NotificationPanel } from "./generated/react/patterns/NotificationPanel.js?v=1";
 import { Search } from "./generated/react/patterns/Search.js?v=1";
+import { SelectOptionLayer } from "./generated/react/patterns/SelectOptionLayer.js?v=1";
 
 export const candidatePatternReactComponents = {
   "action-sheet": ActionSheet,
@@ -15,6 +16,7 @@ export const candidatePatternReactComponents = {
   "confirmation-dialog": ConfirmationDialog,
   "notification-panel": NotificationPanel,
   search: Search,
+  "select-option-layer": SelectOptionLayer,
 };
 
 function ActionSheetIsland({ initialProps }) {
@@ -247,6 +249,33 @@ function SearchIsland({ initialProps }) {
   });
 }
 
+function SelectOptionLayerIsland({ initialProps }) {
+  const [value, setValue] = React.useState(initialProps.value ?? "standard");
+  const [state, setState] = React.useState(initialProps.state ?? "closed");
+  const [validation, setValidation] = React.useState(initialProps.validation);
+  return React.createElement(SelectOptionLayer, {
+    ...initialProps,
+    value,
+    state,
+    validation,
+    onOpenChange: (nextOpen, event) => {
+      setState(nextOpen ? "open" : "closed");
+      initialProps.onOpenChange?.(nextOpen, event);
+    },
+    onValueChange: (nextValue, meta, event) => {
+      setValue(nextValue);
+      setState("closed");
+      setValidation({ label: "Selected policy", message: `${meta.label} selected.`, state: "success", live: true });
+      initialProps.onValueChange?.(nextValue, meta, event);
+    },
+    onAction: (key, event) => {
+      setState("permission-blocked");
+      setValidation({ label: "International travel", message: "Finance approval is required before this option is available.", state: "warning", live: true });
+      initialProps.onAction?.(key, event);
+    },
+  });
+}
+
 export const candidatePatternReactIslandWrappers = {
   "action-sheet": ActionSheetIsland,
   autocomplete: AutocompleteIsland,
@@ -255,4 +284,5 @@ export const candidatePatternReactIslandWrappers = {
   "confirmation-dialog": ConfirmationDialogIsland,
   "notification-panel": NotificationPanelIsland,
   search: SearchIsland,
+  "select-option-layer": SelectOptionLayerIsland,
 };

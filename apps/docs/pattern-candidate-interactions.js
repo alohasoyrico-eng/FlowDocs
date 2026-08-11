@@ -3,12 +3,6 @@ export function setupCandidatePatternInteractions() {
 }
 
 function handleCandidatePatternClick(event) {
-  const selectLayerChoose = event.target.closest("[data-select-layer-choose]");
-  if (selectLayerChoose) return chooseSelectLayerOption(selectLayerChoose.closest("[data-select-layer-demo]"), selectLayerChoose.dataset.selectLayerChoose);
-
-  const selectLayerBlocked = event.target.closest("[data-select-layer-blocked]");
-  if (selectLayerBlocked) return showSelectLayerValidation(selectLayerBlocked.closest("[data-select-layer-demo]"));
-
   const multiSelectApply = event.target.closest("[data-multi-select-apply]");
   if (multiSelectApply) return applyMultiSelect(multiSelectApply.closest("[data-multi-select-demo]"));
 }
@@ -17,22 +11,6 @@ document.addEventListener("change", (event) => {
   const multiSelectOption = event.target.closest("[data-multi-select-option]");
   if (multiSelectOption) return updateMultiSelect(multiSelectOption.closest("[data-multi-select-demo]"));
 });
-
-function chooseSelectLayerOption(demo, key) {
-  if (!demo) return;
-  demo.querySelectorAll("[data-select-layer-option]").forEach((option) => {
-    option.dataset.selected = String(option.dataset.selectLayerOption === key);
-  });
-  const select = demo.querySelector("[data-select-layer-field] select");
-  if (select) select.value = key;
-  const validation = demo.querySelector("[data-select-layer-validation]");
-  if (validation) validation.hidden = true;
-}
-
-function showSelectLayerValidation(demo) {
-  const validation = demo?.querySelector("[data-select-layer-validation]");
-  if (validation) validation.hidden = false;
-}
 
 function updateMultiSelect(demo) {
   if (!demo) return;
