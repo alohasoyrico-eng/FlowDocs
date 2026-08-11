@@ -26,11 +26,6 @@
       "reason": "Combobox combines shared panels with custom operational, accessibility, and playground copy for queryable option behavior.",
       "migrationRule": "Keep as hybrid only; any new custom section must declare why shared renderSimpleGoldSection is insufficient."
     },
-    "country-selector": {
-      "status": "intentional-custom",
-      "reason": "Country Selector is a hybrid renderer with component-specific demo transforms and a custom renderer name that maps to existing catalog ids.",
-      "migrationRule": "Keep as hybrid only; sections should delegate to shared panels unless country-specific behavior is required."
-    },
     "icon-button": {
       "status": "intentional-custom",
       "reason": "Icon Button has selected, badged, density, and icon-only state examples that require component-specific transforms.",
