@@ -1,4 +1,4 @@
-import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, artifactContract, componentApiProps, ui } from "./gold-component-core.js?v=214";
+import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, artifactContract, componentApiProps, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 
 import { buttonDemoFromData, playgroundControl } from "./gold-component-data.js?v=230";
@@ -23,6 +23,10 @@ export function renderButtonGoldSection(entry, section) {
   return renderers[section]?.() ?? "";
 }
 
+function buttonSurfaceAttrs(section, className = "", attrs = "") {
+  return componentDetailSectionAttrs({ component: "button", section, className, attrs });
+}
+
 function buttonContract(entry) {
   return artifactContract(entry) ?? {};
 }
@@ -30,7 +34,7 @@ function buttonContract(entry) {
 function buttonOperationalExamplePanel() {
   const scenario = componentSectionData("button", "operational-example").scenario;
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-operational-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("operational-example", "button-operational-panel")}>
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("button", "operational-example")}</p>
       <div class="button-scenario" data-density-context="md">
@@ -58,7 +62,7 @@ function buttonOperationalExamplePanel() {
 function buttonAnatomyPanel(entry) {
   const anatomy = buttonContract(entry).anatomy ?? componentSectionData("button", "anatomy").items ?? [];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("anatomy")}>
       <h2>${ui("component.anatomy")}</h2>
       <div class="button-anatomy">
         ${anatomy
@@ -85,7 +89,7 @@ function buttonAccessibilitySummaryPanel(entry) {
   const accessibility = componentSectionData("button", "accessibility");
   const items = accessibility.items ?? [];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("accessibility")}>
       <h2>${ui("component.accessibility")}</h2>
       <p>${contract.statePrecedence ? `State precedence: ${contract.statePrecedence}.` : accessibility.statePrecedence ? `State precedence: ${accessibility.statePrecedence}.` : referenceCopy.accessibility?.statePrecedenceFallback}</p>
       <div class="checklist-grid">
@@ -98,7 +102,7 @@ function buttonAccessibilitySummaryPanel(entry) {
 function buttonViewportOrganizationPanel() {
   const groups = componentDemoData("button", "viewport-organization", "items");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-viewport-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("viewport-organization", "button-viewport-panel")}>
       <h2>${ui("component.viewportOrganization")}</h2>
       <p>${componentSectionCopy("button", "viewport-organization")}</p>
       <div class="viewport-doc-grid">
@@ -151,7 +155,7 @@ function buttonViewportSurface(group) {
 function buttonPlaygroundPanel() {
   const playground = componentSectionData("button", "playground");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-playground" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-button-playground data-ready="false">
+    <section ${buttonSurfaceAttrs("playground", "button-playground", 'data-button-playground data-ready="false"')}>
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("button", "playground")}</p>
       <div class="playground-layout">
@@ -173,7 +177,7 @@ function buttonContractFromSpecPanel(entry) {
   const props = (contract.props ?? []).filter((prop) => prop.name !== "density");
   const foundations = Object.entries(contract.foundations ?? {});
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("api-foundations")}>
       <h2>${ui("build.apiAndFoundations")}</h2>
       <div class="props-table">
         <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.default")}</strong><strong>${ui("table.rule")}</strong></div>
@@ -208,7 +212,7 @@ function buttonGuidelinesFromSpecPanel(entry) {
     [ui("guidelines.notes"), guidelines.info ?? []],
   ];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("guidelines")}>
       <h2>${ui("guidelines.title")}</h2>
       <div class="guidelines-grid">
         ${groups
@@ -230,7 +234,7 @@ function buttonTestContractFromSpecPanel(entry) {
   const tests = (buttonContract(entry).tests ?? []).filter((item) => !/density/i.test(item));
   const rejectIf = (buttonContract(entry).rejectIf ?? []).filter((item) => !/density/i.test(item));
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("tests-rejection-rules")}>
       <h2>${ui("tests.title")}</h2>
       <div class="two-column-list">
         <article>
@@ -249,7 +253,7 @@ function buttonTestContractFromSpecPanel(entry) {
 function buttonStatesPanel() {
   const states = componentDemoData("button", "states");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("states")}>
       <h2>${ui("component.states")}</h2>
       <p>${componentSectionCopy("button", "states")}</p>
       <div class="button-demo-grid states-grid">
@@ -262,7 +266,7 @@ function buttonStatesPanel() {
 function buttonVariantsPanel() {
   const variants = componentDemoData("button", "variants");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("variants")}>
       <h2>${ui("component.variants")}</h2>
       <p>${componentSectionCopy("button", "variants")}</p>
       <div class="button-demo-grid variant-grid">
@@ -276,7 +280,7 @@ function buttonStateVariantMatrixPanel() {
   const rows = componentDemoData("button", "variant-state-behavior", "rows");
   const states = componentDemoData("button", "variant-state-behavior", "states");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("variant-state-behavior")}>
       <h2>${ui("component.variantStateBehavior")}</h2>
       <p>${componentSectionCopy("button", "variant-state-behavior")}</p>
       <div class="button-demo-grid state-behavior-grid">
@@ -295,7 +299,7 @@ function buttonStateVariantMatrixPanel() {
 function buttonFullWidthPanel() {
   const items = componentDemoData("button", "full-width", "items");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("full-width")}>
       <h2>${ui("component.fullWidth")}</h2>
       <p>${componentSectionCopy("button", "full-width")}</p>
       <div class="full-width-demo">
@@ -315,7 +319,7 @@ function buttonFullWidthPanel() {
 function buttonResponsivePanel() {
   const examples = componentDemoData("button", "responsive-layout-patterns", "examples");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${buttonSurfaceAttrs("responsive-layout-patterns")}>
       <h2>${ui("component.responsiveLayoutPatterns")}</h2>
       <p>${componentSectionCopy("button", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
