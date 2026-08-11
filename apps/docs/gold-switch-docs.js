@@ -1,4 +1,4 @@
-import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, componentDetailSectionAttrs, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -33,8 +33,7 @@ function switchAnatomyPanel() {
 }
 
 function switchAccessibilityPanel() {
-  const accessibility = componentSectionData("switch", "accessibility");
-  return html`<section ${switchSurfaceAttrs("accessibility")}><h2>${ui("component.accessibility")}</h2><p>State precedence: ${accessibility.statePrecedence}.</p><div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div></section>`;
+  return html`<section ${switchSurfaceAttrs("accessibility")}>${componentDetailAccessibilityContent("switch")}</section>`;
 }
 
 function switchVariantsPanel() {
@@ -74,18 +73,15 @@ function switchPlaygroundPanel() {
 }
 
 function switchContractPanel() {
-  const props = componentApiProps("switch");
-  return html`<section ${switchSurfaceAttrs("api-foundations")}><h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy("switch", "api-foundations")}</p><div class="props-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div></section>`;
+  return html`<section ${switchSurfaceAttrs("api-foundations")}><h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy("switch", "api-foundations")}</p>${componentDetailApiPropsTable("switch")}</section>`;
 }
 
 function switchGuidelinesPanel() {
-  const groups = componentSectionData("switch", "guidelines").groups ?? [];
-  return html`<section ${switchSurfaceAttrs("guidelines")}><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
+  return html`<section ${switchSurfaceAttrs("guidelines")}>${componentDetailGuidelinesContent("switch")}</section>`;
 }
 
 function switchTestPanel() {
-  const tests = componentSectionData("switch", "tests-rejection-rules");
-  return html`<section ${switchSurfaceAttrs("tests-rejection-rules")}><h2>${ui("tests.title")}</h2><div class="two-column-list"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
+  return html`<section ${switchSurfaceAttrs("tests-rejection-rules")}>${componentDetailTestsContent("switch")}</section>`;
 }
 
 function switchSurfaceAttrs(section, className = "", attrs = "") {

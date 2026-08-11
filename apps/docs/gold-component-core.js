@@ -97,6 +97,48 @@ function componentDetailChecklist(items = []) {
   `;
 }
 
+function componentDetailAccessibilityContent(component, fallbackStatePrecedence = "") {
+  const accessibility = componentSectionData(component, "accessibility");
+  const statePrecedence = accessibility.statePrecedence ?? fallbackStatePrecedence;
+  return html`
+    <h2>${ui("component.accessibility")}</h2>
+    ${statePrecedence ? `<p>State precedence: ${statePrecedence}.</p>` : ""}
+    ${componentDetailChecklist((accessibility.items ?? []).map((item) => ({ copy: item })))}
+  `;
+}
+
+function componentDetailApiPropsTable(component, className = "") {
+  const props = componentApiProps(component);
+  return componentDetailTable({
+    component,
+    section: "api-foundations",
+    className,
+    columns: [ui("table.prop"), ui("table.type"), ui("table.required"), ui("table.notes")],
+    rows: props.map((prop) => [prop.name, prop.type, prop.required, prop.notes]),
+  });
+}
+
+function componentDetailGuidelinesContent(component) {
+  const groups = componentSectionData(component, "guidelines").groups ?? [];
+  return html`
+    <h2>${ui("guidelines.title")}</h2>
+    <div class="guidelines-grid">
+      ${groups.map((group) => `<article><h3>${group.title}</h3><ul>${(group.items ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}
+    </div>
+  `;
+}
+
+function componentDetailTestsContent(component, className = "two-column-list") {
+  const tests = componentSectionData(component, "tests-rejection-rules");
+  return html`
+    <h2>${ui("tests.title")}</h2>
+    <div class="${className}">
+      <article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
+      <article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
+    </div>
+  `;
+}
+
 export function componentMielPanel(entry) {
   const miel = componentSectionData(entry.id, "miel");
   const agentSpec = componentAgentSpec(entry, "Component");
@@ -142,12 +184,16 @@ export {
   componentAgentSpec,
   componentApiProps,
   componentCopy,
+  componentDetailAccessibilityContent,
+  componentDetailApiPropsTable,
   componentDemoData,
   componentDetailChecklist,
   componentDetailDemoGrid,
+  componentDetailGuidelinesContent,
   componentDetailSection,
   componentDetailSectionAttrs,
   componentDetailTable,
+  componentDetailTestsContent,
   componentSectionCopy,
   componentSectionData,
   html,
