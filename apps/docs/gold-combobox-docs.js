@@ -43,7 +43,7 @@ export function renderComboboxGoldSection(entry, section) {
 export function comboboxOperationalExamplePanel() {
   const scenario = componentSectionData("combobox", "operational-example").scenario;
   return html`
-    <section class="doc-panel wide button-operational-panel">
+    <section class="surface docs-section-surface component-detail-surface wide button-operational-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("combobox", "operational-example")}</p>
       <div class="simple-scenario">
@@ -63,7 +63,7 @@ export function comboboxAnatomyPanel() { return simpleAnatomyPanel("combobox"); 
 export function comboboxAccessibilityPanel() {
   const accessibility = componentSectionData("combobox", "accessibility");
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.accessibility")}</h2>
       <p>State precedence: ${accessibility.statePrecedence}.</p>
       <div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div>
@@ -79,7 +79,7 @@ export function comboboxViewportOrganizationPanel() { return simpleViewportOrgan
 export function comboboxPlaygroundPanel() {
   const playground = componentSectionData("combobox", "playground");
   return html`
-    <section class="doc-panel wide button-playground" data-component-playground="combobox" data-ready="false">
+    <section class="surface docs-section-surface component-detail-surface wide button-playground" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-playground="combobox" data-ready="false">
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("combobox", "playground")}</p>
       <div class="playground-layout">

@@ -25,7 +25,7 @@ export function renderSelectGoldSection(entry, section) {
 function selectOperationalExamplePanel() {
   const scenario = componentSectionData("select", "operational-example").scenario;
   return html`
-    <section class="doc-panel wide button-operational-panel">
+    <section class="surface docs-section-surface component-detail-surface wide button-operational-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("select", "operational-example")}</p>
       <div class="select-scenario">
@@ -52,7 +52,7 @@ function selectOperationalExamplePanel() {
 function selectAnatomyPanel() {
   const anatomy = componentSectionData("select", "anatomy").items ?? [];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.anatomy")}</h2>
       <div class="button-anatomy">
         ${anatomy
@@ -78,7 +78,7 @@ function selectAccessibilityPanel() {
   const accessibility = componentSectionData("select", "accessibility");
   const items = accessibility.items ?? [];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.accessibility")}</h2>
       <p>State precedence: ${accessibility.statePrecedence ?? "disabled, loading, error, open, focus, filled, default"}.</p>
       <div class="checklist-grid">
@@ -91,7 +91,7 @@ function selectAccessibilityPanel() {
 function selectViewportOrganizationPanel() {
   const items = componentDemoData("select", "viewport-organization", "items");
   return html`
-    <section class="doc-panel wide button-viewport-panel">
+    <section class="surface docs-section-surface component-detail-surface wide button-viewport-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.viewportOrganization")}</h2>
       <p>${componentSectionCopy("select", "viewport-organization")}</p>
       <div class="viewport-doc-grid">
@@ -111,7 +111,7 @@ function selectViewportOrganizationPanel() {
 function selectVariantsPanel() {
   const variants = componentDemoData("select", "variants");
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.variants")}</h2>
       <p>${componentSectionCopy("select", "variants")}</p>
       <div class="button-demo-grid states-grid">
@@ -124,7 +124,7 @@ function selectVariantsPanel() {
 function selectStatesPanel() {
   const states = componentDemoData("select", "states");
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.states")}</h2>
       <p>${componentSectionCopy("select", "states")}</p>
       <div class="button-demo-grid states-grid">
@@ -138,7 +138,7 @@ function selectStateVariantMatrixPanel() {
   const rows = componentDemoData("select", "variant-state-behavior", "rows");
   const states = componentDemoData("select", "variant-state-behavior", "states");
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.variantStateBehavior")}</h2>
       <p>${componentSectionCopy("select", "variant-state-behavior")}</p>
       <div class="button-demo-grid state-behavior-grid">
@@ -157,7 +157,7 @@ function selectStateVariantMatrixPanel() {
 function selectFullWidthPanel() {
   const items = componentDemoData("select", "full-width", "items");
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.fullWidth")}</h2>
       <p>${componentSectionCopy("select", "full-width")}</p>
       <div class="full-width-demo">
@@ -177,7 +177,7 @@ function selectFullWidthPanel() {
 function selectResponsivePanel() {
   const examples = componentDemoData("select", "responsive-layout-patterns", "examples");
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("component.responsiveLayoutPatterns")}</h2>
       <p>${componentSectionCopy("select", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
@@ -197,7 +197,7 @@ function selectResponsivePanel() {
 function selectPlaygroundPanel() {
   const playground = componentSectionData("select", "playground");
   return html`
-    <section class="doc-panel wide button-playground" data-component-playground="select" data-ready="false">
+    <section class="surface docs-section-surface component-detail-surface wide button-playground" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-playground="select" data-ready="false">
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("select", "playground")}</p>
       <div class="playground-layout">
@@ -216,7 +216,7 @@ function selectPlaygroundPanel() {
 function selectContractPanel() {
   const props = componentApiProps("select");
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("build.apiAndFoundations")}</h2>
       <p>${componentSectionCopy("select", "api-foundations")}</p>
       <div class="props-table">
@@ -230,7 +230,7 @@ function selectContractPanel() {
 function selectGuidelinesPanel() {
   const groups = componentSectionData("select", "guidelines").groups ?? [];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("guidelines.title")}</h2>
       <div class="guidelines-grid">
         ${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}
@@ -244,7 +244,7 @@ function selectTestPanel() {
   const mustTest = tests.mustTest ?? [];
   const rejectIf = tests.rejectIf ?? [];
   return html`
-    <section class="doc-panel wide">
+    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
       <h2>${ui("tests.title")}</h2>
       <div class="two-column-list">
         <article><h3>${ui("tests.mustTest")}</h3><ul>${mustTest.map((item) => `<li>${item}</li>`).join("")}</ul></article>
