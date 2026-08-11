@@ -1,5 +1,6 @@
 import React from "react";
 import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1";
+import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1";
 import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1";
 import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1";
@@ -12,6 +13,7 @@ import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1
 
 export const patternReactComponents = {
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtp,
+  "avatar-group": AvatarGroup,
   "chart-legend-item": ChartLegendItem,
   "checkbox-group": CheckboxGroup,
   "gantt-chart": GanttChart,

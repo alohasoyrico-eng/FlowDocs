@@ -325,16 +325,20 @@ function pullToRefreshDemoPanel() {
 function avatarGroupDemoPanel() {
   return html`
     <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Accountable team group</h2>
-      <div class="pattern-avatar-group-demo pattern-utility-demo" data-avatar-group-demo>
-        <div class="pattern-avatar-group-demo__stack">
-          ${packageDemo("avatar", { name: "Ana Sosa", status: "online" })}
-          ${packageDemo("avatar", { name: "Luis Vera", status: "away" })}
-          ${packageDemo("avatar", { name: "Iris Mora", status: "none" })}
-          ${packageDemo("badge", { label: "+4", tone: "neutral", variant: "count", ariaLabel: "4 more team members" })}
-          ${packageDemo("button", { label: "Show team", variant: "secondary", icon: "groups" }, { "data-avatar-group-toggle": "" })}
-        </div>
-        <div data-avatar-group-detail hidden>${packageDemo("list", { label: "Team members", items: [{ label: "Ana Sosa", meta: "Owner", value: "Online", icon: "person" }, { label: "Luis Vera", meta: "Approver", value: "Away", icon: "person" }, { label: "4 hidden members", meta: "Permission limited", value: "Private", icon: "lock" }] })}</div>
-      </div>
+      ${patternReactDemo("avatar-group", {
+        label: "Accountable team group",
+        density: "md",
+        maxVisible: 3,
+        identities: [
+          { key: "ana", name: "Ana Sosa", status: "online", meta: "Owner" },
+          { key: "luis", name: "Luis Vera", status: "away", meta: "Approver" },
+          { key: "iris", name: "Iris Mora", status: "none", meta: "Reviewer" },
+          { key: "private", name: "4 hidden members", status: "none", meta: "Permission limited", permissionBlocked: true },
+        ],
+        overflow: { triggerLabel: "Show team", title: "Team members", description: "People with accountability in this workflow.", listLabel: "Hidden team members" },
+        action: { label: "Review team", icon: "groups" },
+        "data-pattern-demo": "avatar-group",
+      })}
     </section>`;
 }
 

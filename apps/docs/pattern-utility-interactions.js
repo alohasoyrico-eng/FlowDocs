@@ -16,9 +16,6 @@ function handleUtilityPatternClick(event) {
   const refresh = event.target.closest("[data-pull-refresh-action]");
   if (refresh) return runPullRefresh(refresh.closest("[data-pull-refresh-demo]"));
 
-  const avatarToggle = event.target.closest("[data-avatar-group-toggle]");
-  if (avatarToggle) return toggleUtilityHidden(avatarToggle.closest("[data-avatar-group-demo]"), "[data-avatar-group-detail]");
-
   const transferMove = event.target.closest("[data-transfer-move]");
   if (transferMove) return moveTransferItem(transferMove.closest("[data-transfer-demo]"));
 
