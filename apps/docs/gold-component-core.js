@@ -97,14 +97,18 @@ function componentDetailChecklist(items = []) {
   `;
 }
 
-function componentDetailAccessibilityContent(component, fallbackStatePrecedence = "") {
+function componentDetailAccessibilityContent(component, fallbackStatePrecedence = "", statePrecedenceOverride = "") {
   const accessibility = componentSectionData(component, "accessibility");
-  const statePrecedence = accessibility.statePrecedence ?? fallbackStatePrecedence;
+  const statePrecedence = statePrecedenceOverride || accessibility.statePrecedence || fallbackStatePrecedence;
   return html`
     <h2>${ui("component.accessibility")}</h2>
     ${statePrecedence ? `<p>State precedence: ${statePrecedence}.</p>` : ""}
     ${componentDetailChecklist((accessibility.items ?? []).map((item) => ({ copy: item })))}
   `;
+}
+
+function componentDetailPropsRowsTable({ className = "", columns = [], rows = [] } = {}) {
+  return componentDetailTable({ className, columns, rows });
 }
 
 function componentDetailApiPropsTable(component, className = "") {
@@ -118,8 +122,7 @@ function componentDetailApiPropsTable(component, className = "") {
   });
 }
 
-function componentDetailGuidelinesContent(component) {
-  const groups = componentSectionData(component, "guidelines").groups ?? [];
+function componentDetailGuidelineGroupsContent(groups = []) {
   return html`
     <h2>${ui("guidelines.title")}</h2>
     <div class="guidelines-grid">
@@ -128,13 +131,41 @@ function componentDetailGuidelinesContent(component) {
   `;
 }
 
-function componentDetailTestsContent(component, className = "two-column-list") {
-  const tests = componentSectionData(component, "tests-rejection-rules");
+function componentDetailGuidelinesContent(component) {
+  return componentDetailGuidelineGroupsContent(componentSectionData(component, "guidelines").groups ?? []);
+}
+
+function componentDetailTestsListContent({ mustTest = [], rejectIf = [], className = "two-column-list" } = {}) {
   return html`
     <h2>${ui("tests.title")}</h2>
     <div class="${className}">
-      <article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
-      <article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
+      <article><h3>${ui("tests.mustTest")}</h3><ul>${mustTest.map((item) => `<li>${item}</li>`).join("")}</ul></article>
+      <article><h3>${ui("tests.rejectIf")}</h3><ul>${rejectIf.map((item) => `<li>${item}</li>`).join("")}</ul></article>
+    </div>
+  `;
+}
+
+function componentDetailTestsContent(component, className = "two-column-list") {
+  const tests = componentSectionData(component, "tests-rejection-rules");
+  return componentDetailTestsListContent({ mustTest: tests.mustTest ?? [], rejectIf: tests.rejectIf ?? [], className });
+}
+
+function componentDetailFoundationCompactList(foundations = []) {
+  return html`
+    <div class="foundation-compact-list">
+      ${foundations
+        .map(([name, coverage]) => {
+          const data = typeof coverage === "string" ? { status: "covered", decision: coverage, behavior: coverage, tokens: [] } : coverage;
+          return html`
+            <article>
+              <header><strong>${name}</strong><span>${data.status}</span></header>
+              <p>${data.decision}</p>
+              <small>${data.behavior}</small>
+              <div class="token-list">${(data.tokens ?? []).map((token) => `<code>${token}</code>`).join("")}</div>
+            </article>
+          `;
+        })
+        .join("")}
     </div>
   `;
 }
@@ -189,10 +220,14 @@ export {
   componentDemoData,
   componentDetailChecklist,
   componentDetailDemoGrid,
+  componentDetailFoundationCompactList,
+  componentDetailGuidelineGroupsContent,
   componentDetailGuidelinesContent,
+  componentDetailPropsRowsTable,
   componentDetailSection,
   componentDetailSectionAttrs,
   componentDetailTable,
+  componentDetailTestsListContent,
   componentDetailTestsContent,
   componentSectionCopy,
   componentSectionData,

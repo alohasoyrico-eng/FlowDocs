@@ -1,4 +1,4 @@
-import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, artifactContract, componentApiProps, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailFoundationCompactList, componentDetailGuidelineGroupsContent, componentDetailPropsRowsTable, componentDetailSectionAttrs, componentDetailTestsListContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, artifactContract, referenceCopy, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 
 import { buttonDemoFromData, playgroundControl } from "./gold-component-data.js?v=230";
@@ -86,15 +86,9 @@ function buttonAnatomyPanel(entry) {
 
 function buttonAccessibilitySummaryPanel(entry) {
   const contract = buttonContract(entry);
-  const accessibility = componentSectionData("button", "accessibility");
-  const items = accessibility.items ?? [];
   return html`
     <section ${buttonSurfaceAttrs("accessibility")}>
-      <h2>${ui("component.accessibility")}</h2>
-      <p>${contract.statePrecedence ? `State precedence: ${contract.statePrecedence}.` : accessibility.statePrecedence ? `State precedence: ${accessibility.statePrecedence}.` : referenceCopy.accessibility?.statePrecedenceFallback}</p>
-      <div class="checklist-grid">
-        ${items.map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}
-      </div>
+      ${componentDetailAccessibilityContent("button", referenceCopy.accessibility?.statePrecedenceFallback, contract.statePrecedence)}
     </section>
   `;
 }
@@ -179,27 +173,11 @@ function buttonContractFromSpecPanel(entry) {
   return html`
     <section ${buttonSurfaceAttrs("api-foundations")}>
       <h2>${ui("build.apiAndFoundations")}</h2>
-      <div class="props-table">
-        <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.default")}</strong><strong>${ui("table.rule")}</strong></div>
-        ${props
-          .map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.default ?? (prop.required ? "required" : "none")}</span><span>${prop.description}</span></div>`)
-          .join("")}
-      </div>
-      <div class="foundation-compact-list">
-        ${foundations
-          .map(([name, coverage]) => {
-            const data = typeof coverage === "string" ? { status: "covered", decision: coverage, behavior: coverage, tokens: [] } : coverage;
-            return html`
-              <article>
-                <header><strong>${name}</strong><span>${data.status}</span></header>
-                <p>${data.decision}</p>
-                <small>${data.behavior}</small>
-                <div class="token-list">${(data.tokens ?? []).map((token) => `<code>${token}</code>`).join("")}</div>
-              </article>
-            `;
-          })
-          .join("")}
-      </div>
+      ${componentDetailPropsRowsTable({
+        columns: [ui("table.prop"), ui("table.type"), ui("table.default"), ui("table.rule")],
+        rows: props.map((prop) => [prop.name, prop.type, prop.default ?? (prop.required ? "required" : "none"), prop.description]),
+      })}
+      ${componentDetailFoundationCompactList(foundations)}
     </section>
   `;
 }
@@ -210,22 +188,10 @@ function buttonGuidelinesFromSpecPanel(entry) {
     [ui("guidelines.do"), guidelines.do ?? []],
     [ui("guidelines.doNot"), guidelines.dont ?? []],
     [ui("guidelines.notes"), guidelines.info ?? []],
-  ];
+  ].map(([title, items]) => ({ title, items }));
   return html`
     <section ${buttonSurfaceAttrs("guidelines")}>
-      <h2>${ui("guidelines.title")}</h2>
-      <div class="guidelines-grid">
-        ${groups
-          .map(
-            ([title, items]) => html`
-              <article>
-                <h3>${title}</h3>
-                <ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>
-              </article>
-            `,
-          )
-          .join("")}
-      </div>
+      ${componentDetailGuidelineGroupsContent(groups)}
     </section>
   `;
 }
@@ -235,17 +201,7 @@ function buttonTestContractFromSpecPanel(entry) {
   const rejectIf = (buttonContract(entry).rejectIf ?? []).filter((item) => !/density/i.test(item));
   return html`
     <section ${buttonSurfaceAttrs("tests-rejection-rules")}>
-      <h2>${ui("tests.title")}</h2>
-      <div class="two-column-list">
-        <article>
-          <h3>${ui("tests.mustTest")}</h3>
-          <ul>${tests.map((item) => `<li>${item}</li>`).join("")}</ul>
-        </article>
-        <article>
-          <h3>${ui("tests.rejectIf")}</h3>
-          <ul>${rejectIf.map((item) => `<li>${item}</li>`).join("")}</ul>
-        </article>
-      </div>
+      ${componentDetailTestsListContent({ mustTest: tests, rejectIf })}
     </section>
   `;
 }
