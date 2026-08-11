@@ -56,7 +56,7 @@ import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
-import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1"; import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1"; import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1"; import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1"; import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1"; import { Timeline } from "./generated/react/patterns/Timeline.js?v=1"; import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
+import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1"; import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1"; import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1"; import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1"; import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1"; import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1"; import { Timeline } from "./generated/react/patterns/Timeline.js?v=1"; import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
 
 const mounted = new WeakMap(); const reactComponents = {
   accordion: Accordion,
@@ -115,6 +115,7 @@ const mounted = new WeakMap(); const reactComponents = {
   tooltip: Tooltip,
   "tree-view": TreeView,
   "text-area": TextArea,
+  "chart-legend-item": ChartLegendItem,
   "checkbox-group": CheckboxGroup, "gantt-chart": GanttChart, "polar-chart": PolarChart, "preference-management": PreferenceManagement, "radio-group": RadioGroup,
   timeline: Timeline,
   "waterfall-chart": WaterfallChart,
@@ -165,6 +166,8 @@ function CheckboxIsland({ initialProps }) {
   });
 }
 function CheckboxGroupIsland({ initialProps }) { const [value, setValue] = React.useState(initialProps.value ?? initialProps.defaultValue ?? []); return React.createElement(CheckboxGroup, { ...initialProps, value, onValueChange: setValue, onClear: () => setValue([]) }); }
+
+function ChartLegendItemIsland({ initialProps }) { const [hidden, setHidden] = React.useState(Boolean(initialProps.hidden)); return React.createElement(ChartLegendItem, { ...initialProps, hidden, selected: !hidden && Boolean(initialProps.selected ?? true), onToggle: (checked, meta, event) => { setHidden(!checked); initialProps.onToggle?.(checked, meta, event); } }); }
 
 function CodeInputIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
@@ -364,7 +367,8 @@ function TimelineIsland({ initialProps }) {
 const reactIslandWrappers = {
   input: InputIsland, "card-expiry-input": CardExpiryInputIsland,
   "card-number-input": CardNumberInputIsland, "card-security-code-input": CardSecurityCodeInputIsland,
-  checkbox: CheckboxIsland, "code-input": CodeInputIsland, combobox: ComboboxIsland,
+  checkbox: CheckboxIsland, "chart-legend-item": ChartLegendItemIsland,
+  "code-input": CodeInputIsland, combobox: ComboboxIsland,
   "checkbox-group": CheckboxGroupIsland,
   "country-selector": CountrySelectorIsland, "date-picker": DatePickerIsland, "date-range-picker": DateRangePickerIsland,
   "phone-input": PhoneInputIsland, pagination: PaginationIsland, select: SelectIsland,
@@ -374,13 +378,7 @@ const reactIslandWrappers = {
   "text-area": TextAreaIsland, timeline: TimelineIsland,
 };
 
-function parseProps(node) {
-  try {
-    return JSON.parse(node.dataset.reactProps ?? "{}");
-  } catch {
-    return {};
-  }
-}
+function parseProps(node) { try { return JSON.parse(node.dataset.reactProps ?? "{}"); } catch { return {}; } }
 
 export function setupReactComponentIslands(root = document) {
   for (const node of Array.from(root.querySelectorAll?.("[data-react-component]:not([data-react-mounted='true'])") ?? [])) {
@@ -391,8 +389,6 @@ export function setupReactComponentIslands(root = document) {
     node.dataset.reactMounted = "true";
     const props = parseProps(node);
     const Island = reactIslandWrappers[node.dataset.reactComponent];
-    reactRoot.render(Island
-      ? React.createElement(Island, { initialProps: props })
-      : React.createElement(Component, props));
+    reactRoot.render(Island ? React.createElement(Island, { initialProps: props }) : React.createElement(Component, props));
   }
 }

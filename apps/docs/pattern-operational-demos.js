@@ -11,16 +11,24 @@ function packageDemo(component, demo = {}, attrs = {}) {
   return markup.replace(/^<([a-z0-9-]+)/i, `<$1 ${attrText({ "data-pattern-component": component, ...attrs })}`);
 }
 
+function escapeAttribute(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function patternReactDemo(pattern, props, state = "default", variant = "standard") {
+  return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="true" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
 const operationalPatterns = {
   "chart-legend-item": {
     title: "Chart legend synchronization",
     pattern: "Chart Wrapper",
-    components: ["checkbox", "badge", "tag"],
+    components: ["chart-legend-item", "chart-panel"],
     body: () => html`
       <div class="template-station-pin-row" data-chart-legend-items>
-        ${packageDemo("checkbox", { label: "Fuel spend", checked: true, description: "$84.2k" })}
-        ${packageDemo("checkbox", { label: "Maintenance", checked: true, description: "$18.4k" })}
-        ${packageDemo("badge", { label: "Selected series", tone: "info", variant: "standard" })}
+        ${patternReactDemo("chart-legend-item", { label: "Fuel spend", value: "$84.2k", description: "Primary cost series", colorLabel: "Blue", selected: true, density: "sm", status: { label: "Visible", tone: "info", variant: "standard" }, "data-pattern-demo": "chart-legend-item" }, "selected")}
+        ${patternReactDemo("chart-legend-item", { label: "Maintenance", value: "$18.4k", description: "Secondary cost series", colorLabel: "Green", selected: true, density: "sm", control: "chip", tag: { label: "Compare", tone: "neutral" }, "data-pattern-demo": "chart-legend-item" }, "selected", "chip")}
+        ${patternReactDemo("chart-legend-item", { label: "Tolls", value: "$9.8k", description: "Hidden by default for comparison", colorLabel: "Amber", hidden: true, density: "sm", control: "button", tooltip: { label: "Toggle toll spend in the chart" }, "data-pattern-demo": "chart-legend-item" }, "hidden", "button")}
       </div>
       ${packageDemo("chart-panel", { label: "Selected series", value: "$102.6k", caption: "Legend state is reflected in chart and table fallback.", values: [32, 54, 48, 70, 62, 84] })}
     `,
