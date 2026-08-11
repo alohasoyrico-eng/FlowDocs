@@ -1,6 +1,6 @@
 import { html, slug } from "./detail-tabs-core.js?v=3";
 import { componentDemo } from "./component-demo.js?v=60";
-import { operationalReactPatternOverviewDemo } from "./pattern-operational-react-demos.js?v=1";
+import { operationalReactPatternOverviewDemo } from "./pattern-operational-react-demos.js?v=2";
 
 function attrText(attrs = {}) {
   return Object.entries(attrs).map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`).join(" ");
