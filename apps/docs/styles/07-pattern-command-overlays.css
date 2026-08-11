@@ -14,8 +14,7 @@
 .pattern-search-demo,
 .pattern-autocomplete-demo,
 .pattern-select-layer-demo,
-.pattern-multi-select-demo,
-.pattern-file-upload-demo {
+.pattern-multi-select-demo {
   position: relative;
   display: grid;
   gap: var(--sys-space-4);
@@ -53,8 +52,7 @@
 .pattern-search-demo [hidden],
 .pattern-autocomplete-demo [hidden],
 .pattern-select-layer-demo [hidden],
-.pattern-multi-select-demo [hidden],
-.pattern-file-upload-demo [hidden] {
+.pattern-multi-select-demo [hidden] {
   display: none;
 }
 
@@ -212,17 +210,6 @@
   min-block-size: var(--sys-frame-height-control-lg);
 }
 
-.pattern-file-upload-demo__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sys-space-2);
-  align-items: center;
-}
-
-.pattern-file-upload-demo__actions {
-  justify-content: flex-start;
-}
-
 @media (max-width: 640px) {
   .pattern-command-demo,
   .pattern-notification-demo,
@@ -232,7 +219,6 @@
   .pattern-autocomplete-demo,
   .pattern-select-layer-demo,
   .pattern-multi-select-demo,
-  .pattern-file-upload-demo,
   .pattern-command-demo__surface,
   .pattern-notification-demo__panel,
   .pattern-action-sheet-demo [data-action-sheet] {
@@ -251,8 +237,4 @@
     grid-template-columns: 1fr;
   }
 
-  .pattern-file-upload-demo__actions {
-    align-items: stretch;
-    flex-direction: column;
-  }
 }

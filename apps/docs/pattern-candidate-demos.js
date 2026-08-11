@@ -364,17 +364,17 @@ function fileUploadDemoPanel() {
     <section class="doc-panel wide pattern-file-upload-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Evidence upload</h2>
-      <div class="pattern-file-upload-demo" data-file-upload-demo data-file-state="empty">
-        <div data-file-upload-empty>${packageDemo("empty-state", { label: "No document selected", description: "Upload a PDF or image under 10 MB.", icon: "upload_file" })}</div>
-        <div class="pattern-file-upload-demo__actions">
-          ${packageDemo("button", { label: "Choose document", icon: "upload_file" }, { "data-file-upload-choose": "" })}
-          ${packageDemo("button", { label: "Remove", variant: "secondary", icon: "delete" }, { "data-file-upload-remove": "", hidden: "" })}
-        </div>
-        <div data-file-upload-summary hidden>${packageDemo("tag", { label: "invoice-july.pdf", tone: "info", icon: "description" })}</div>
-        <div data-file-upload-progress hidden>${packageDemo("progress-indicator", { label: "Upload progress", value: 65, max: 100 })}</div>
-        <div data-file-upload-validation hidden>${packageDemo("inline-validation", { label: "File policy", message: "Only PDF, JPG, or PNG files under 10 MB are accepted.", state: "warning" })}</div>
-        <div data-file-upload-toast hidden>${packageDemo("toast", { label: "Upload complete", description: "invoice-july.pdf is ready for review.", tone: "success" }, { "data-pattern-toast": "file-upload" })}</div>
-      </div>
+      ${patternReactDemo("file-upload", {
+        label: "Evidence upload",
+        description: "Upload a PDF or image under 10 MB.",
+        density: "md",
+        state: "empty",
+        empty: { title: "No document selected", description: "Upload a PDF or image under 10 MB.", icon: "upload_file" },
+        chooseAction: { key: "choose", label: "Choose document", icon: "upload_file" },
+        removeAction: { key: "remove", label: "Remove", variant: "secondary", icon: "delete" },
+        validation: { label: "File policy", message: "Only PDF, JPG, or PNG files under 10 MB are accepted.", state: "warning", live: true },
+        "data-pattern-demo": "file-upload",
+      })}
     </section>
   `;
 }

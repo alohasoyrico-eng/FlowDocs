@@ -5,6 +5,7 @@ import { AvatarMenu } from "./generated/react/patterns/AvatarMenu.js?v=1";
 import { CommandPalette } from "./generated/react/patterns/CommandPalette.js?v=1";
 import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
 import { FilterChipGroup } from "./generated/react/patterns/FilterChipGroup.js?v=1";
+import { FileUpload } from "./generated/react/patterns/FileUpload.js?v=1";
 import { FormSection } from "./generated/react/patterns/FormSection.js?v=1";
 import { MultiSelect } from "./generated/react/patterns/MultiSelect.js?v=1";
 import { NotificationPanel } from "./generated/react/patterns/NotificationPanel.js?v=1";
@@ -12,6 +13,7 @@ import { Search } from "./generated/react/patterns/Search.js?v=1";
 import { SelectOptionLayer } from "./generated/react/patterns/SelectOptionLayer.js?v=1";
 import { Toolbar } from "./generated/react/patterns/Toolbar.js?v=1";
 import { FilterChipGroupIsland } from "./pattern-react-candidate-filter-chip-group-island.js?v=1";
+import { FileUploadIsland } from "./pattern-react-candidate-file-upload-island.js?v=1";
 import { ToolbarIsland } from "./pattern-react-candidate-toolbar-island.js?v=1";
 
 export const candidatePatternReactComponents = {
@@ -21,6 +23,7 @@ export const candidatePatternReactComponents = {
   "command-palette": CommandPalette,
   "confirmation-dialog": ConfirmationDialog,
   "filter-chip-group": FilterChipGroup,
+  "file-upload": FileUpload,
   "form-section": FormSection,
   "multi-select": MultiSelect,
   "notification-panel": NotificationPanel,
@@ -382,6 +385,7 @@ export const candidatePatternReactIslandWrappers = {
   "command-palette": CommandPaletteIsland,
   "confirmation-dialog": ConfirmationDialogIsland,
   "filter-chip-group": FilterChipGroupIsland,
+  "file-upload": FileUploadIsland,
   "form-section": FormSectionIsland,
   "multi-select": MultiSelectIsland,
   "notification-panel": NotificationPanelIsland,
