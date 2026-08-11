@@ -9,6 +9,7 @@ import { CommandPalette } from "./generated/react/patterns/CommandPalette.js?v=1
 import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
 import { DragSortableList } from "./generated/react/patterns/DragSortableList.js?v=1";
 import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1";
+import { NotificationPanel } from "./generated/react/patterns/NotificationPanel.js?v=1";
 import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1";
 import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1";
 import { PullToRefresh } from "./generated/react/patterns/PullToRefresh.js?v=1";
@@ -29,6 +30,7 @@ export const patternReactComponents = {
   "confirmation-dialog": ConfirmationDialog,
   "drag-sortable-list": DragSortableList,
   "gantt-chart": GanttChart,
+  "notification-panel": NotificationPanel,
   "polar-chart": PolarChart,
   "preference-management": PreferenceManagement,
   "pull-to-refresh": PullToRefresh,
@@ -131,6 +133,21 @@ function CommandPaletteIsland({ initialProps }) {
       setFeedback({ label: "Command ready", description: `${command.label ?? "Command"} is ready to run.`, tone: "success" });
       initialProps.onCommandSelect?.(command, event);
     },
+  });
+}
+
+function NotificationPanelIsland({ initialProps }) {
+  const initialItems = initialProps.notifications ?? [{ key: "approval", label: "Approval pending", description: "Fleet ops · 2 min", unread: true }, { key: "sync", label: "Sync issue", description: "Cards service · 12 min", unread: true }, { key: "fuel", label: "Fuel alert", description: "Station 24 · Today", unread: true }];
+  const [notifications, setNotifications] = React.useState(initialItems);
+  const [open, setOpen] = React.useState(Boolean(initialProps.open));
+  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? "");
+  const [feedback, setFeedback] = React.useState(initialProps.feedback);
+  return React.createElement(NotificationPanel, {
+    ...initialProps, open, notifications, selectedKey, feedback,
+    onOpenChange: (nextOpen, event) => { setOpen(Boolean(nextOpen)); initialProps.onOpenChange?.(nextOpen, event); },
+    onSelect: (key, event) => { setSelectedKey(key); setFeedback({ label: "Notification selected", description: "The alert is ready for review.", tone: "info" }); initialProps.onSelect?.(key, event); },
+    onMarkAll: (event) => { setNotifications((items) => items.map((item) => ({ ...item, unread: false }))); setFeedback({ label: "Notifications updated", description: "All items were marked as read.", tone: "success" }); initialProps.onMarkAll?.(event); },
+    onDismiss: (key, event) => { setNotifications((items) => items.filter((item) => item.key !== key)); initialProps.onDismiss?.(key, event); },
   });
 }
 
@@ -371,6 +388,7 @@ export const patternReactIslandWrappers = {
   "command-palette": CommandPaletteIsland,
   "confirmation-dialog": ConfirmationDialogIsland,
   "drag-sortable-list": DragSortableListIsland,
+  "notification-panel": NotificationPanelIsland,
   "pull-to-refresh": PullToRefreshIsland,
   "radio-group": RadioGroupIsland,
   "snackbar-provider": SnackbarProviderIsland,

@@ -1,6 +1,5 @@
 import { html } from "./detail-tabs-core.js?v=3";
 import { avatarMenuMarkup } from "./avatar-menu-slot.js?v=1";
-import { notificationPanelMarkup } from "./notification-panel-slot.js?v=1";
 import { patternPackageDemo as packageDemo, searchSlotMarkup } from "./search-slot.js?v=2";
 
 function escapeAttribute(value) {
@@ -87,7 +86,19 @@ function notificationPanelDemoPanel() {
     <section class="doc-panel wide pattern-notification-demo-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Notification panel</h2>
-      ${notificationPanelMarkup()}
+      ${patternReactDemo("notification-panel", {
+        label: "Notifications",
+        description: "Operational alerts that need review.",
+        density: "md",
+        notifications: [
+          { key: "approval", label: "Approval pending", description: "Fleet ops · 2 min", unread: true },
+          { key: "sync", label: "Sync issue", description: "Cards service · 12 min", unread: true },
+          { key: "fuel", label: "Fuel alert", description: "Station 24 · Today", unread: true },
+        ],
+        markAllAction: { label: "Mark all read", icon: "done_all" },
+        empty: { title: "All clear", description: "No notifications need attention.", icon: "notifications_none" },
+        "data-pattern-demo": "notification-panel",
+      })}
     </section>
   `;
 }

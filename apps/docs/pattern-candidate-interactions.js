@@ -5,15 +5,6 @@ export function setupCandidatePatternInteractions() {
 }
 
 function handleCandidatePatternClick(event) {
-  const notificationOpen = event.target.closest("[data-notification-open]");
-  if (notificationOpen) return openNotificationPanel(notificationOpen.closest("[data-notification-demo]"));
-
-  const notificationRead = event.target.closest("[data-notification-read]");
-  if (notificationRead) return markNotificationsRead(notificationRead.closest("[data-notification-demo]"));
-
-  const notificationClose = event.target.closest("[data-notification-panel] [data-overlay-close], [data-notification-panel] [data-overlay-dismiss]");
-  if (notificationClose) return closeNotificationPanel(notificationClose.closest("[data-notification-demo]"));
-
   const searchResult = event.target.closest("[data-search-result]");
   if (searchResult) return selectSearchResult(searchResult.closest("[data-search-demo]"), searchResult);
 
@@ -57,45 +48,6 @@ function fieldValue(control) {
 
 function handleCandidatePatternKeydown(event) {
   if (event.key !== "Escape") return;
-  document.querySelectorAll("[data-notification-panel]:not([hidden])").forEach((panel) => closeNotificationPanel(panel.closest("[data-notification-demo]")));
-}
-
-function openNotificationPanel(demo) {
-  const panel = demo?.querySelector("[data-notification-panel]");
-  if (!panel) return;
-  panel.hidden = false;
-  demo.dataset.notificationState = "open";
-  demo.querySelector("[data-notification-open]")?.setAttribute("aria-expanded", "true");
-  panel.querySelector("[data-notification-read]")?.focus();
-}
-
-function closeNotificationPanel(demo) {
-  const panel = demo?.querySelector("[data-notification-panel]");
-  if (!panel) return;
-  panel.hidden = true;
-  demo.dataset.notificationState = "closed";
-  const trigger = demo.querySelector("[data-notification-open]");
-  trigger?.setAttribute("aria-expanded", "false");
-  trigger?.focus();
-}
-
-function markNotificationsRead(demo) {
-  if (!demo) return;
-  demo.dataset.count = "0";
-  const badge = demo.querySelector("[data-notification-badge]");
-  if (badge) {
-    const label = badge.querySelector(".badge__label");
-    if (label) label.textContent = "0";
-    badge.setAttribute("aria-label", "0 unread notifications");
-    badge.dataset.state = "hidden";
-    badge.hidden = true;
-  }
-  const list = demo.querySelector("[data-notification-list]");
-  if (list) list.hidden = true;
-  const empty = demo.querySelector("[data-notification-empty]");
-  if (empty) empty.hidden = false;
-  const toast = demo.querySelector("[data-notification-toast]");
-  if (toast) toast.hidden = false;
 }
 
 function filterSearchDemo(demo) {
