@@ -60,28 +60,24 @@ export function candidatePatternOverviewDemo(patternId) {
 }
 
 function commandPaletteDemoPanel() {
-  const commands = [
-    ["fleet", "Open fleet dashboard", "Navigation", "dashboard fleet overview"],
-    ["freeze", "Freeze selected card", "Action", "card security block"],
-    ["support", "Contact support", "Help", "help support ticket"],
-  ];
   return html`
     <section class="doc-panel wide pattern-command-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Command palette</h2>
-      <div class="pattern-command-demo" data-command-demo>
-        ${packageDemo("button", { label: "Open command palette", icon: "keyboard_command_key" }, { "data-command-open": "" })}
-        <div class="pattern-command-demo__surface" data-command-surface hidden>
-          ${packageDemo("dialog", { label: "Command palette", description: "Search routes, actions, entities, and help topics.", trigger: "Command palette", actions: [{ label: "Run command", key: "run" }, { label: "Cancel", variant: "secondary", key: "cancel" }] }, { "data-command-dialog": "" })}
-          ${packageDemo("input", { label: "Search commands", placeholder: "Type route, action, or help" }, { "data-command-search-control": "" })}
-          ${packageDemo("menu", { trigger: "Command scope", label: "Command scope", items: [{ label: "All commands" }, { label: "Navigation" }, { label: "Actions" }, { label: "Help" }] }, { "data-command-group-menu": "" })}
-          <div class="pattern-command-demo__results" data-command-results>
-            ${commands.map(([id, label, group, keywords]) => packageDemo("button", { label: `${label} - ${group}`, variant: "secondary" }, { "data-command-result": id, "data-command-label": label, "data-command-keywords": `${keywords} ${group}` })).join("")}
-          </div>
-          <div data-command-empty hidden>${packageDemo("empty-state", { label: "No commands found", description: "Try a route, entity, or action keyword.", icon: "search_off" })}</div>
-          <div data-command-toast hidden>${packageDemo("toast", { label: "Command ready", description: "Command is ready to run.", tone: "success" }, { "data-pattern-toast": "command" })}</div>
-        </div>
-      </div>
+      ${patternReactDemo("command-palette", {
+        label: "Command palette",
+        description: "Search routes, actions, entities, and help topics.",
+        triggerLabel: "Open command palette",
+        placeholder: "Type route, action, or help",
+        density: "md",
+        commands: [
+          { key: "fleet", label: "Open fleet dashboard", group: "Navigation", icon: "dashboard", shortcut: "G F", reason: "dashboard fleet overview" },
+          { key: "freeze", label: "Freeze selected card", group: "Action", icon: "block", shortcut: "F", reason: "card security block" },
+          { key: "support", label: "Contact support", group: "Help", icon: "support_agent", shortcut: "?", reason: "help support ticket" },
+        ],
+        empty: { title: "No commands found", description: "Try a route, entity, or action keyword.", icon: "search_off" },
+        "data-pattern-demo": "command-palette",
+      })}
     </section>
   `;
 }

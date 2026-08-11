@@ -5,15 +5,6 @@ export function setupCandidatePatternInteractions() {
 }
 
 function handleCandidatePatternClick(event) {
-  const commandOpen = event.target.closest("[data-command-open]");
-  if (commandOpen) return openCommandPalette(commandOpen.closest("[data-command-demo]"));
-
-  const commandResult = event.target.closest("[data-command-result]");
-  if (commandResult) return selectCommandResult(commandResult.closest("[data-command-demo]"), commandResult);
-
-  const commandAction = event.target.closest("[data-command-surface] [data-key], [data-command-surface] [data-overlay-close], [data-command-surface] [data-overlay-dismiss]");
-  if (commandAction) return closeCommandPalette(commandAction.closest("[data-command-demo]"));
-
   const notificationOpen = event.target.closest("[data-notification-open]");
   if (notificationOpen) return openNotificationPanel(notificationOpen.closest("[data-notification-demo]"));
 
@@ -40,9 +31,6 @@ function handleCandidatePatternClick(event) {
 }
 
 function handleCandidatePatternInput(event) {
-  const commandSearch = event.target.closest("[data-command-search-control]");
-  if (commandSearch) filterCommandPalette(commandSearch.closest("[data-command-demo]"));
-
   const searchControl = event.target.closest("[data-search-control]");
   if (searchControl) filterSearchDemo(searchControl.closest("[data-search-demo]"));
 
@@ -69,46 +57,7 @@ function fieldValue(control) {
 
 function handleCandidatePatternKeydown(event) {
   if (event.key !== "Escape") return;
-  document.querySelectorAll("[data-command-surface]:not([hidden])").forEach((surface) => closeCommandPalette(surface.closest("[data-command-demo]")));
   document.querySelectorAll("[data-notification-panel]:not([hidden])").forEach((panel) => closeNotificationPanel(panel.closest("[data-notification-demo]")));
-}
-
-function openCommandPalette(demo) {
-  const surface = demo?.querySelector("[data-command-surface]");
-  if (!surface) return;
-  surface.hidden = false;
-  demo.dataset.commandState = "open";
-  surface.querySelector("[data-command-search-control] input")?.focus();
-}
-
-function closeCommandPalette(demo) {
-  const surface = demo?.querySelector("[data-command-surface]");
-  if (!surface) return;
-  surface.hidden = true;
-  demo.dataset.commandState = "closed";
-  demo.querySelector("[data-command-open]")?.focus();
-}
-
-function filterCommandPalette(demo) {
-  if (!demo) return;
-  const query = demo.querySelector("[data-command-search-control] input")?.value.trim().toLowerCase() ?? "";
-  let visibleCount = 0;
-  demo.querySelectorAll("[data-command-result]").forEach((result) => {
-    const text = `${result.textContent} ${result.dataset.commandKeywords ?? ""}`.toLowerCase();
-    const isVisible = query === "" || text.includes(query);
-    result.hidden = !isVisible;
-    visibleCount += isVisible ? 1 : 0;
-  });
-  const empty = demo.querySelector("[data-command-empty]");
-  if (empty) empty.hidden = visibleCount > 0;
-}
-
-function selectCommandResult(demo, result) {
-  if (!demo || result.hidden) return;
-  const toast = demo.querySelector("[data-command-toast]");
-  const copyNode = toast?.querySelector("[data-pattern-toast] p");
-  if (copyNode) copyNode.textContent = `${result.dataset.commandLabel ?? "Command"} is ready to run.`;
-  if (toast) toast.hidden = false;
 }
 
 function openNotificationPanel(demo) {

@@ -5,6 +5,7 @@ import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { CalendarView } from "./generated/react/patterns/CalendarView.js?v=1";
 import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1";
 import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1";
+import { CommandPalette } from "./generated/react/patterns/CommandPalette.js?v=1";
 import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
 import { DragSortableList } from "./generated/react/patterns/DragSortableList.js?v=1";
 import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1";
@@ -24,6 +25,7 @@ export const patternReactComponents = {
   "calendar-view": CalendarView,
   "chart-legend-item": ChartLegendItem,
   "checkbox-group": CheckboxGroup,
+  "command-palette": CommandPalette,
   "confirmation-dialog": ConfirmationDialog,
   "drag-sortable-list": DragSortableList,
   "gantt-chart": GanttChart,
@@ -103,6 +105,31 @@ function ConfirmationDialogIsland({ initialProps }) {
     onCancel: (event) => {
       setOpen(false);
       initialProps.onCancel?.(event);
+    },
+  });
+}
+
+function CommandPaletteIsland({ initialProps }) {
+  const allCommands = initialProps.commands ?? [
+    { key: "fleet", label: "Open fleet dashboard", group: "Navigation", icon: "dashboard", shortcut: "G F", reason: "dashboard fleet overview" },
+    { key: "freeze", label: "Freeze selected card", group: "Action", icon: "block", shortcut: "F", reason: "card security block" },
+    { key: "support", label: "Contact support", group: "Help", icon: "support_agent", shortcut: "?", reason: "help support ticket" },
+  ];
+  const [open, setOpen] = React.useState(Boolean(initialProps.open));
+  const [query, setQuery] = React.useState(initialProps.query ?? "");
+  const [feedback, setFeedback] = React.useState(initialProps.feedback);
+  const filtered = allCommands.filter((command) => !query || `${command.label} ${command.group ?? ""} ${command.reason ?? ""}`.toLowerCase().includes(query.toLowerCase()));
+  return React.createElement(CommandPalette, {
+    ...initialProps,
+    open,
+    query,
+    commands: filtered,
+    feedback,
+    onOpenChange: (nextOpen, event) => { setOpen(Boolean(nextOpen)); initialProps.onOpenChange?.(nextOpen, event); },
+    onQueryChange: (value, meta, event) => { setQuery(value); initialProps.onQueryChange?.(value, meta, event); },
+    onCommandSelect: (command, event) => {
+      setFeedback({ label: "Command ready", description: `${command.label ?? "Command"} is ready to run.`, tone: "success" });
+      initialProps.onCommandSelect?.(command, event);
     },
   });
 }
@@ -341,6 +368,7 @@ export const patternReactIslandWrappers = {
   "calendar-view": CalendarViewIsland,
   "chart-legend-item": ChartLegendItemIsland,
   "checkbox-group": CheckboxGroupIsland,
+  "command-palette": CommandPaletteIsland,
   "confirmation-dialog": ConfirmationDialogIsland,
   "drag-sortable-list": DragSortableListIsland,
   "pull-to-refresh": PullToRefreshIsland,
