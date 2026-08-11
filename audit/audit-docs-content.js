@@ -335,12 +335,31 @@ function checkComponentDetailTemplateReadiness() {
     .filter((entry) => /renderSimpleGoldSection\(entry,\s*section/.test(entry.text))
     .map((entry) => path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, ""))
     .sort();
+  const customRendererGovernanceFile = path.join(docsAppDir, "component-detail-renderer-governance.json");
+  const customRendererGovernance = readJson(customRendererGovernanceFile) ?? {};
+  const governedCustomRenderers = Object.keys(customRendererGovernance.customRenderers ?? {}).sort();
+  const ungovernedCustomRenderers = customGoldRenderers.filter((id) => !governedCustomRenderers.includes(id));
+  const governanceOnlyCustomRenderers = governedCustomRenderers.filter((id) => !customGoldRenderers.includes(id));
+  const invalidCustomRendererGovernance = governedCustomRenderers.filter((id) => {
+    const entry = customRendererGovernance.customRenderers?.[id] ?? {};
+    return entry.status !== "intentional-custom" || !entry.reason || !entry.migrationRule;
+  });
+  const customRendererBoundaryGaps = componentModules
+    .filter((entry) => customGoldRenderers.includes(path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, "")))
+    .filter((entry) => !entry.text.includes("componentDetailSection(") && !entry.text.includes("component-detail-surface") && !entry.text.includes("renderSimpleGoldSection"))
+    .map((entry) => path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, ""))
+    .sort();
 
   result.inventory.componentDetailTemplateReadiness = {
     componentDetailModules: componentModuleFiles.length,
     simpleGoldRenderers: simpleGoldRenderers.length,
     customGoldRenderers: customGoldRenderers.length,
     customGoldRendererIds: customGoldRenderers,
+    governedCustomGoldRenderers: governedCustomRenderers.length,
+    ungovernedCustomGoldRenderers: ungovernedCustomRenderers,
+    governanceOnlyCustomGoldRenderers: governanceOnlyCustomRenderers,
+    invalidCustomRendererGovernance,
+    customRendererBoundaryGaps,
     sharedSimpleRendererSections: simpleRendererSections,
     rawDocPanelMatches: countMatches(componentRuntime, /doc-panel/g),
     rawInteractiveMatches: countMatches(componentRuntimeWithoutBridges, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g),
@@ -360,8 +379,17 @@ function checkComponentDetailTemplateReadiness() {
   if (simpleRendererSections.length < templateSectionIds.length) {
     add("warnings", path.join(docsAppDir, "gold-simple-component-docs.js"), 1, `Shared component detail renderer is missing expected sections: ${templateSectionIds.filter((section) => !simpleRendererSections.includes(section)).join(", ")}.`);
   }
-  if (customGoldRenderers.length) {
-    add("warnings", docsAppDir, 1, `Component detail migration must account for custom gold renderers outside renderSimpleGoldSection: ${customGoldRenderers.join(", ")}.`);
+  if (ungovernedCustomRenderers.length) {
+    add("warnings", customRendererGovernanceFile, 1, `Component detail custom renderers need explicit governance entries: ${ungovernedCustomRenderers.join(", ")}.`);
+  }
+  if (governanceOnlyCustomRenderers.length) {
+    add("warnings", customRendererGovernanceFile, 1, `Component detail renderer governance contains entries that are no longer custom renderers: ${governanceOnlyCustomRenderers.join(", ")}.`);
+  }
+  if (invalidCustomRendererGovernance.length) {
+    add("warnings", customRendererGovernanceFile, 1, `Component detail renderer governance entries need status, reason, and migrationRule: ${invalidCustomRendererGovernance.join(", ")}.`);
+  }
+  if (customRendererBoundaryGaps.length) {
+    add("warnings", docsAppDir, 1, `Component detail custom renderers must delegate to renderSimpleGoldSection or wrap sections with componentDetailSection: ${customRendererBoundaryGaps.join(", ")}.`);
   }
   if (countMatches(componentRuntime, /doc-panel/g)) {
     add("warnings", docsAppDir, 1, "Component detail still uses doc-panel surfaces; migrate shared and custom renderers to a Flow Surface-backed ComponentDetailTemplate.");

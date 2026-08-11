@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "scope": "component-detail-template",
+  "requiredFlowBoundary": "componentDetailSection",
+  "requiredSharedPanels": [
+    "miel"
+  ],
+  "customRenderers": {
+    "button": {
+      "status": "intentional-custom",
+      "reason": "Button owns spec-derived anatomy, contract, guidelines, state, and responsive examples that predate the shared data renderer.",
+      "migrationRule": "Keep only while each section is wrapped by componentDetailSection and continues using Flow demos for examples."
+    },
+    "card": {
+      "status": "intentional-custom",
+      "reason": "Card documents composition scenarios, reference compositions, and stats/list card layouts that are not equivalent to the shared demo grid.",
+      "migrationRule": "Keep only while section containers use componentDetailSection and nested examples remain Card demos or neutral layout primitives."
+    },
+    "checkbox": {
+      "status": "intentional-custom",
+      "reason": "Checkbox has choice-state matrices and playground wiring that share data conventions but need component-specific demo transforms.",
+      "migrationRule": "Prefer shared panels when parity is possible; custom sections must keep componentDetailSection."
+    },
+    "combobox": {
+      "status": "intentional-custom",
+      "reason": "Combobox combines shared panels with custom operational, accessibility, and playground copy for queryable option behavior.",
+      "migrationRule": "Keep as hybrid only; any new custom section must declare why shared renderSimpleGoldSection is insufficient."
+    },
+    "country-selector": {
+      "status": "intentional-custom",
+      "reason": "Country Selector is a hybrid renderer with component-specific demo transforms and a custom renderer name that maps to existing catalog ids.",
+      "migrationRule": "Keep as hybrid only; sections should delegate to shared panels unless country-specific behavior is required."
+    },
+    "icon-button": {
+      "status": "intentional-custom",
+      "reason": "Icon Button has selected, badged, density, and icon-only state examples that require component-specific transforms.",
+      "migrationRule": "Keep only while examples render through Flow IconButton demos and section containers use componentDetailSection."
+    },
+    "input": {
+      "status": "intentional-custom",
+      "reason": "Input owns field semantics, mono/suffix/icon states, and playground transforms that should not leak into the generic renderer.",
+      "migrationRule": "Keep until Field/Form primitives absorb those transforms; custom sections must stay Flow-surface wrapped."
+    },
+    "radio-button": {
+      "status": "intentional-custom",
+      "reason": "Radio Button owns selected/choice-state examples and transforms distinct from Checkbox despite shared choice foundations.",
+      "migrationRule": "Keep only while sections use componentDetailSection and demos render through Flow RadioButton."
+    },
+    "select": {
+      "status": "intentional-custom",
+      "reason": "Select owns option-layer, trigger/value/helper behavior, and playground transforms that are not identical to Input.",
+      "migrationRule": "Keep until Select Option Layer and Field governance can absorb the custom examples."
+    },
+    "switch": {
+      "status": "intentional-custom",
+      "reason": "Switch owns on/off operational state and density transforms distinct from Checkbox and Radio Button.",
+      "migrationRule": "Keep only while sections use componentDetailSection and demos render through Flow Switch."
+    },
+    "text-area": {
+      "status": "intentional-custom",
+      "reason": "Text Area owns rows, max length, helper, and long-form field examples that require custom demo transforms.",
+      "migrationRule": "Keep until Field/Form governance supports the full text-area contract."
+    }
+  }
+}
