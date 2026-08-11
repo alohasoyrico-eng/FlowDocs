@@ -523,6 +523,25 @@ function checkComponentDetailTemplateReadiness() {
     .filter((entry) => !entry.text.includes("componentDetailSection(") && !entry.text.includes("componentDetailSectionAttrs(") && !entry.text.includes("component-detail-surface") && !entry.text.includes("renderSimpleGoldSection"))
     .map((entry) => path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, ""))
     .sort();
+  const repeatedContentHotspots = componentModules
+    .filter((entry) => path.basename(entry.file) !== "gold-component-core.js")
+    .map((entry) => {
+      const checks = [
+        ["props-table", /props-table/g],
+        ["state-precedence-copy", /State precedence:/g],
+        ["tests-list", /tests\.mustTest/g],
+        ["guidelines-grid-markup", /<div class="guidelines-grid"/g],
+      ];
+      const matches = checks
+        .map(([label, pattern]) => ({ label, count: countMatches(entry.text, pattern) }))
+        .filter((match) => match.count > 0);
+      return {
+        file: path.relative(process.cwd(), entry.file),
+        matches,
+      };
+    })
+    .filter((entry) => entry.matches.length)
+    .sort((a, b) => a.file.localeCompare(b.file));
   const componentDetailAuditFiles = [
     ...componentModuleFiles,
     path.join(docsAppDir, "family-component-docs.js"),
@@ -625,6 +644,7 @@ function checkComponentDetailTemplateReadiness() {
       remaining: customRendererOwnSurfaceIds.length,
       total: customRendererSharedBoundaryIds.length + customRendererOwnSurfaceIds.length,
     },
+    repeatedContentHotspots,
     requiredPilotSharedBoundaryIds,
     pilotSharedBoundaryGaps,
     rendererInventory: componentDetailRendererInventory,
@@ -649,6 +669,9 @@ function checkComponentDetailTemplateReadiness() {
   }
   if (customRendererBoundaryGaps.length) {
     add("warnings", docsAppDir, 1, `Component detail custom renderers must delegate to renderSimpleGoldSection or wrap sections with componentDetailSection: ${customRendererBoundaryGaps.join(", ")}.`);
+  }
+  if (repeatedContentHotspots.length) {
+    add("errors", docsAppDir, 1, `Component detail repeated content must render through gold-component-core helpers: ${repeatedContentHotspots.map((entry) => `${entry.file} (${entry.matches.map((match) => `${match.label}:${match.count}`).join(", ")})`).join("; ")}.`);
   }
   if (countMatches(componentRuntime, /doc-panel/g)) {
     add("warnings", docsAppDir, 1, "Component detail still uses doc-panel surfaces; migrate shared and custom renderers to a Flow Surface-backed ComponentDetailTemplate.");
