@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderSkeletonGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, skeletonDemoFromData); }
 export function skeletonDemo(label = "Wallet card loading", variant = "card", state = "loading", lines = 3, fullWidth = false, columns = 4) { return simpleDemo("skeleton", { label, variant, state, lines, rows: lines, columns, fullWidth }); }

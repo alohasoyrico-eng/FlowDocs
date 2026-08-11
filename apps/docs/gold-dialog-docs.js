@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderDialogGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, dialogDemoFromData); }
 export function dialogDemo(label = "Freeze card?", description = "The driver will not be able to use this card until it is reactivated.", tone = "danger", variant = "confirmation", state = "open", iconName = "warning") { return simpleDemo("dialog", { label, description, tone, variant, state, icon: iconName, open: false }); }

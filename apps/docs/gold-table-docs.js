@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderTableGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, tableDemoFromData); }
 export function tableDemo(label = "Fleet table", variant = "standard", state = "default", dense = false) { return simpleDemo("table", { label, variant, state, dense }); }

@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderStepperGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, stepperDemoFromData); }
 export function stepperDemo(label = "Vehicle setup", current = 1, state = "active", variant = "horizontal", orientation = "horizontal", density = "md") { return simpleDemo("stepper", { label, current, state, variant, orientation, density }); }

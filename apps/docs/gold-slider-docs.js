@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderSliderGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, sliderDemoFromData); }
 export function sliderDemo(label = "Search radius", value = 12, state = "default", variant = "continuous") { return simpleDemo("slider", { label, value, state, variant }); }

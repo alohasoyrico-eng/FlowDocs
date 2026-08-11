@@ -30,11 +30,13 @@
 
 .layer-grid article,
 .doc-panel,
+.docs-section-surface,
 .stack-card {
   padding: var(--sys-frame-padding-container);
 }
 
-.doc-panel {
+.doc-panel,
+.docs-section-surface {
   box-sizing: border-box;
   display: grid;
   gap: var(--sys-frame-gap-component-lg);
@@ -44,9 +46,18 @@
   overflow-wrap: anywhere;
 }
 
+.doc-panel {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
 .doc-panel > h2,
 .doc-panel > h3,
-.doc-panel > p {
+.doc-panel > p,
+.docs-section-surface > h2,
+.docs-section-surface > h3,
+.docs-section-surface > p {
   min-inline-size: 0;
   max-inline-size: 100%;
   margin-block-end: 0;

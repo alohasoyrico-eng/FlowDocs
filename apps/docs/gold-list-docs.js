@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderListGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, listDemoFromData); }
 export function listDemo(label = "Movement ready", meta = "Today · $842", state = "default") { return simpleDemo("list", { label, meta, state }); }

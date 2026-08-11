@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderCardNumberInputGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, cardNumberInputDemoFromData); }
 export function cardNumberInputDemo(label = "Card number", value = "4111 1111 1111 1111", state = "default") { return simpleDemo("card-number-input", { label, value, state }); }

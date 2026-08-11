@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderBreadcrumbsGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, breadcrumbsDemoFromData); }
 export function breadcrumbsDemo(label = "Breadcrumbs", state = "default") { return simpleDemo("breadcrumbs", { label, state }); }

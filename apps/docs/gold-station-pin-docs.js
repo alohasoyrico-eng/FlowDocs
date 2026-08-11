@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=254";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderStationPinGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, stationPinDemoFromData); }
 export function stationPinDemo(label = "Station 24", meta = "Open", state = "default") { return simpleDemo("station-pin", { label, meta, state }); }

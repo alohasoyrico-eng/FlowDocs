@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderChipGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, chipDemoFromData); }
 export function chipDemo(label = "Active filter", variant = "filter", state = "default", icon = "", selected = false, removable = false) { return simpleDemo("chip", { label, variant, state, icon, selected, removable, interactive: true }); }

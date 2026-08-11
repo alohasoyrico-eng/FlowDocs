@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderInlineValidationGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, inlineValidationDemoFromData); }
 export function inlineValidationDemo(label = "Driver email", value = "ana@", message = "Enter a complete email address.", state = "error", fullWidth = false) { return simpleDemo("inline-validation", { label, value, message, state, fullWidth }); }

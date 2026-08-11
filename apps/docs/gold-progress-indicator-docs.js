@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderProgressIndicatorGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, progressIndicatorDemoFromData); }
 export function progressIndicatorDemo(label = "Card import", value = 68, variant = "linear", state = "active", fullWidth = false) { return simpleDemo("progress-indicator", { label, value, variant, state, fullWidth, showValue: true }); }

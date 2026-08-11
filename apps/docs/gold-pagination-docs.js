@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderPaginationGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, paginationDemoFromData); }
 export function paginationDemo(label = "Pagination", state = "default") { return simpleDemo("pagination", { label, state }); }

@@ -36,8 +36,21 @@ function componentDemoData(componentId, sectionId, key = "demos") {
   return componentSectionData(componentId, sectionId)[key] ?? [];
 }
 
+function escapeAttribute(value) {
+  return String(value ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
 export function demoCell(label, content) {
   return `<div class="demo-cell" data-density-context="md"><h3 class="demo-cell__title">${label}</h3><div class="demo-cell__body">${content}</div></div>`;
+}
+
+function componentDetailSection({ component, section, className = "", attrs = "", children = "" } = {}) {
+  const classes = ["surface", "docs-section-surface", "component-detail-surface", "wide", className].filter(Boolean).join(" ");
+  return html`
+    <section class="${classes}" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-id="${escapeAttribute(component)}" data-component-section="${escapeAttribute(section)}" ${attrs}>
+      ${children}
+    </section>
+  `;
 }
 
 export function buttonPrimitive({ label, content = "", className = "docs-primitive-button", iconBefore = "", iconAfter = "", variant = "secondary", state = "default", attrs = "" } = {}) {
@@ -53,8 +66,11 @@ export function componentMielPanel(entry) {
   const miel = componentSectionData(entry.id, "miel");
   const agentSpec = componentAgentSpec(entry, "Component");
   return html`
-      <section class="doc-panel wide">
-        <span class="eyebrow">MIEL</span>
+    ${componentDetailSection({
+      component: entry.id,
+      section: "miel",
+      children: html`
+      <span class="eyebrow">MIEL</span>
       <h2>${ui("miel.title")}</h2>
       <p>${miel.copy}</p>
       <div class="guidelines-grid">
@@ -62,18 +78,27 @@ export function componentMielPanel(entry) {
         <article><h3>${ui("miel.agentMustAsk")}</h3><ul>${(miel.mustAsk ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
         <article><h3>${ui("miel.rejectIf")}</h3><ul>${(miel.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
       </div>
-    </section>
-    <section class="doc-panel wide">
+      `,
+    })}
+    ${componentDetailSection({
+      component: entry.id,
+      section: "miel-handoff",
+      children: html`
       <h2>${ui("miel.handoff")}</h2>
       <div class="fleet-panel-mini">
         ${icon("hive", { tone: "action", fill: true })}
         <p>${miel.handoff ?? ""}</p>
       </div>
-    </section>
-    <section class="doc-panel wide">
+      `,
+    })}
+    ${componentDetailSection({
+      component: entry.id,
+      section: "miel-machine-contract",
+      children: html`
       <h2>${ui("miel.machineContract")}</h2>
       <pre>${JSON.stringify(agentSpec, null, 2)}</pre>
-    </section>
+      `,
+    })}
   `;
 }
 
@@ -83,6 +108,7 @@ export {
   componentApiProps,
   componentCopy,
   componentDemoData,
+  componentDetailSection,
   componentSectionCopy,
   componentSectionData,
   html,

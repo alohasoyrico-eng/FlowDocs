@@ -1,4 +1,4 @@
-import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=211";
+import { componentDetailSection, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=212";
 import { playgroundStaticControls } from "./gold-component-data.js?v=203";
 import { componentDemo } from "./component-demo.js?v=61";
 
@@ -55,8 +55,11 @@ export function simpleOperationalExamplePanel(component, demoFromData) {
         </div>
       `
     : "";
-  return html`
-    <section class="doc-panel wide button-operational-panel">
+  return componentDetailSection({
+    component,
+    section: "operational-example",
+    className: "button-operational-panel",
+    children: html`
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy(component, "operational-example")}</p>
       <div class="${demoLayoutClass(component, "simple-scenario")}">
@@ -70,75 +73,75 @@ export function simpleOperationalExamplePanel(component, demoFromData) {
         </div>
         ${semanticDecision}
       </div>
-    </section>
-  `;
+    `,
+  });
 }
 
 export function simpleAnatomyPanel(component) {
   const anatomy = componentSectionData(component, "anatomy").items ?? [];
-  return html`<section class="doc-panel wide"><h2>${ui("component.anatomy")}</h2><div class="button-anatomy">${anatomy.map((item, index) => `<article><b>${index + 1}</b><div><strong>${item.part}</strong><p>${item.rule}</p><div class="token-list">${(item.tokens ?? []).map((token) => `<code>${token}</code>`).join("")}</div></div></article>`).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "anatomy", children: html`<h2>${ui("component.anatomy")}</h2><div class="button-anatomy">${anatomy.map((item, index) => `<article><b>${index + 1}</b><div><strong>${item.part}</strong><p>${item.rule}</p><div class="token-list">${(item.tokens ?? []).map((token) => `<code>${token}</code>`).join("")}</div></div></article>`).join("")}</div>` });
 }
 
 export function simpleAccessibilityPanel(component) {
   const accessibility = componentSectionData(component, "accessibility");
-  return html`<section class="doc-panel wide"><h2>${ui("component.accessibility")}</h2><p>State precedence: ${accessibility.statePrecedence}.</p><div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "accessibility", children: html`<h2>${ui("component.accessibility")}</h2><p>State precedence: ${accessibility.statePrecedence}.</p><div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div>` });
 }
 
 export function simpleVariantsPanel(component, demoFromData) {
   const variants = componentDemoData(component, "variants");
   const gridClass = demoGridClass(component);
-  return html`<section class="doc-panel wide"><h2>${ui("component.variants")}</h2><p>${componentSectionCopy(component, "variants")}</p><div class="${gridClass}">${variants.map((demo) => demoCell(demo.label, demoFromData(demo))).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "variants", children: html`<h2>${ui("component.variants")}</h2><p>${componentSectionCopy(component, "variants")}</p><div class="${gridClass}">${variants.map((demo) => demoCell(demo.label, demoFromData(demo))).join("")}</div>` });
 }
 
 export function simpleStatesPanel(component, demoFromData) {
   const states = componentDemoData(component, "states");
   const gridClass = demoGridClass(component);
-  return html`<section class="doc-panel wide"><h2>${ui("component.states")}</h2><p>${componentSectionCopy(component, "states")}</p><div class="${gridClass}">${states.map((demo) => demoCell(demo.label, demoFromData(demo))).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "states", children: html`<h2>${ui("component.states")}</h2><p>${componentSectionCopy(component, "states")}</p><div class="${gridClass}">${states.map((demo) => demoCell(demo.label, demoFromData(demo))).join("")}</div>` });
 }
 
 export function simpleStateVariantMatrixPanel(component, demoFromData) {
   const matrix = componentSectionData(component, "variant-state-behavior");
   const gridClass = demoGridClass(component, "matrix");
-  return html`<section class="doc-panel wide"><h2>${ui("component.variantStateBehavior")}</h2><p>${componentSectionCopy(component, "variant-state-behavior")}</p><div class="${gridClass}">${(matrix.rows ?? []).flatMap((row) => (matrix.states ?? []).map((state) => demoCell(`${row.label} · ${state}`, demoFromData({ ...(row.demo ?? {}), state })))).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "variant-state-behavior", children: html`<h2>${ui("component.variantStateBehavior")}</h2><p>${componentSectionCopy(component, "variant-state-behavior")}</p><div class="${gridClass}">${(matrix.rows ?? []).flatMap((row) => (matrix.states ?? []).map((state) => demoCell(`${row.label} · ${state}`, demoFromData({ ...(row.demo ?? {}), state })))).join("")}</div>` });
 }
 
 export function simpleFullWidthPanel(component, demoFromData) {
   const items = componentDemoData(component, "full-width", "items");
   const content = (item) => (item.demos ?? [item.demo]).filter(Boolean).map(demoFromData).join("");
   if (component === "toast") {
-    return html`<section class="doc-panel wide"><h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy(component, "full-width")}</p><div class="responsive-actions-demo toast-full-width-demo">${items.map((item) => `<article><strong>${item.label}</strong><div class="toast-region-demo" data-toast-align="${item.align ?? "end"}">${content(item)}</div></article>`).join("")}</div></section>`;
+    return componentDetailSection({ component, section: "full-width", children: html`<h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy(component, "full-width")}</p><div class="responsive-actions-demo toast-full-width-demo">${items.map((item) => `<article><strong>${item.label}</strong><div class="toast-region-demo" data-toast-align="${item.align ?? "end"}">${content(item)}</div></article>`).join("")}</div>` });
   }
-  return html`<section class="doc-panel wide"><h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy(component, "full-width")}</p><div class="${demoLayoutClass(component, "responsive-actions-demo")}">${items.map((item) => `<article><strong>${item.label}</strong><div class="${demoLayoutClass(component, item.layout === "row" ? "simple-demo-row" : "button-stack")}">${content(item)}</div></article>`).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "full-width", children: html`<h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy(component, "full-width")}</p><div class="${demoLayoutClass(component, "responsive-actions-demo")}">${items.map((item) => `<article><strong>${item.label}</strong><div class="${demoLayoutClass(component, item.layout === "row" ? "simple-demo-row" : "button-stack")}">${content(item)}</div></article>`).join("")}</div>` });
 }
 
 export function simpleResponsivePanel(component, demoFromData) {
   const examples = componentDemoData(component, "responsive-layout-patterns", "examples");
-  return html`<section class="doc-panel wide"><h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy(component, "responsive-layout-patterns")}</p><div class="${demoLayoutClass(component, "responsive-actions-demo")}">${examples.map((example) => `<article data-density-context="${example.density ?? "md"}"><strong>${example.label}</strong><div class="${demoLayoutClass(component, example.layout ?? "simple-demo-row")}">${(example.demos ?? []).map((demo) => demoFromData({ ...demo, density: demo.density ?? example.density })).join("")}</div></article>`).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "responsive-layout-patterns", children: html`<h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy(component, "responsive-layout-patterns")}</p><div class="${demoLayoutClass(component, "responsive-actions-demo")}">${examples.map((example) => `<article data-density-context="${example.density ?? "md"}"><strong>${example.label}</strong><div class="${demoLayoutClass(component, example.layout ?? "simple-demo-row")}">${(example.demos ?? []).map((demo) => demoFromData({ ...demo, density: demo.density ?? example.density })).join("")}</div></article>`).join("")}</div>` });
 }
 
 export function simpleViewportOrganizationPanel(component, demoFromData) {
   const items = componentDemoData(component, "viewport-organization", "items");
-  return html`<section class="doc-panel wide button-viewport-panel"><h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy(component, "viewport-organization")}</p><div class="${demoLayoutClass(component, "viewport-doc-grid")}">${items.map((item) => `<article data-density-context="${item.density}"><header>${icon(item.icon)}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.layout}</code><div class="${demoLayoutClass(component, "simple-viewport-demo")}" data-demo-layout="${item.layout ?? "inline"}">${demoFromData({ ...(item.demo ?? {}), density: item.demo?.density ?? item.density })}</div></article>`).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "viewport-organization", className: "button-viewport-panel", children: html`<h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy(component, "viewport-organization")}</p><div class="${demoLayoutClass(component, "viewport-doc-grid")}">${items.map((item) => `<article data-density-context="${item.density}"><header>${icon(item.icon)}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.layout}</code><div class="${demoLayoutClass(component, "simple-viewport-demo")}" data-demo-layout="${item.layout ?? "inline"}">${demoFromData({ ...(item.demo ?? {}), density: item.demo?.density ?? item.density })}</div></article>`).join("")}</div>` });
 }
 
 export function simplePlaygroundPanel(component, demoFromData) {
   const playground = componentSectionData(component, "playground");
-  return html`<section class="doc-panel wide button-playground" data-component-playground="${component}"><h2>${ui("component.playground")}</h2><p>${componentSectionCopy(component, "playground")}</p><div class="playground-layout"><div class="playground-controls" role="group" aria-label="${ui(`playground.${component.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())}Controls`)}">${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}</div><div class="playground-preview"><div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${demoFromData(playground.preview ?? {})}</div><pre data-component-markup>${playground.snippet ?? ""}</pre></div></div></section>`;
+  return componentDetailSection({ component, section: "playground", className: "button-playground", attrs: `data-component-playground="${component}"`, children: html`<h2>${ui("component.playground")}</h2><p>${componentSectionCopy(component, "playground")}</p><div class="playground-layout"><div class="playground-controls" role="group" aria-label="${ui(`playground.${component.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())}Controls`)}">${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}</div><div class="playground-preview"><div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${demoFromData(playground.preview ?? {})}</div><pre data-component-markup>${playground.snippet ?? ""}</pre></div></div>` });
 }
 
 export function simpleGuidelinesPanel(component) {
   const groups = componentSectionData(component, "guidelines").groups ?? [];
-  return html`<section class="doc-panel wide"><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${(group.items ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "guidelines", children: html`<h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${(group.items ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div>` });
 }
 
 export function simpleContractPanel(component) {
   const props = componentApiProps(component);
-  return html`<section class="doc-panel wide"><h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy(component, "api-foundations")}</p><div class="comparison-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div></section>`;
+  return componentDetailSection({ component, section: "api-foundations", children: html`<h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy(component, "api-foundations")}</p><div class="comparison-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div>` });
 }
 
 export function simpleTestPanel(component) {
   const tests = componentSectionData(component, "tests-rejection-rules");
-  return html`<section class="doc-panel wide"><h2>${ui("tests.title")}</h2><div class="guidelines-grid"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
+  return componentDetailSection({ component, section: "tests-rejection-rules", children: html`<h2>${ui("tests.title")}</h2><div class="guidelines-grid"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div>` });
 }
 
 export function renderSimpleGoldSection(entry, section, demoFromData) {

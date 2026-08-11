@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=254";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderChartPanelGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, chartPanelDemoFromData); }
 export function chartPanelDemo(label = "Fuel trend", value = "84%", state = "default") { return simpleDemo("chart-panel", { label, value, state }); }

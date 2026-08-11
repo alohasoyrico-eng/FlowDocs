@@ -14,8 +14,8 @@ import {
   simpleVariantsPanel,
   simpleViewportOrganizationPanel,
   renderSimpleGoldSection,
-} from "./gold-simple-component-docs.js?v=253";
-import { componentMielPanel } from "./gold-component-core.js?v=211";
+} from "./gold-simple-component-docs.js?v=255";
+import { componentMielPanel } from "./gold-component-core.js?v=212";
 
 export function countrySelectorDemo(value = "MX", state = "default", inline = false) {
   return simpleDemo("country-selector", { value, state, inline });

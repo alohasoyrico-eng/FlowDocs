@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderEmptyStateGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, emptyStateDemoFromData); }
 export function emptyStateDemo(label = "No active vehicles", description = "When a vehicle connects, it will appear here.", variant = "first-use", state = "default", iconName = "inbox", actionLabel = "Add vehicle") { return simpleDemo("empty-state", { label, description, variant, state, icon: iconName, actionLabel }); }

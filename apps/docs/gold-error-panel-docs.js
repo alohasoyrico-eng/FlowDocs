@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderErrorPanelGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, errorPanelDemoFromData); }
 export function errorPanelDemo(label = "Error Panel", state = "default") { return simpleDemo("error-panel", { label, state }); }

@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderPopoverGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, popoverDemoFromData); }
 export function popoverDemo(label = "Station context", state = "open") { return simpleDemo("popover", { label, state }); }

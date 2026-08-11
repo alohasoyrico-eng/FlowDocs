@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderBadgeGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, badgeDemoFromData); }
 export function badgeDemo(label = "8", variant = "count", tone = "info", state = "default", icon = "") { return simpleDemo("badge", { label, variant, tone, state, icon, ariaLabel: `${label} ${tone}` }); }

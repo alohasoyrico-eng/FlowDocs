@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=253";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
 
 export function renderSpinnerGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, spinnerDemoFromData); }
 export function spinnerDemo(label = "Loading", density = "md", tone = "accent", state = "loading", decorative = false) { return simpleDemo("spinner", { label, density, tone, state, decorative }); }

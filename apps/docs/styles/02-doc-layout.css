@@ -24,6 +24,7 @@
 
 .detail-meta,
 .doc-panel,
+.docs-section-surface,
 .artifact-card,
 .stack-card,
 .layer-grid article {
@@ -40,7 +41,8 @@
   box-shadow: var(--sys-depth-elevation-3);
 }
 
-.doc-panel ul {
+.doc-panel ul,
+.docs-section-surface ul {
   margin: 0;
   padding-inline-start: var(--sys-space-4);
 }
@@ -100,6 +102,7 @@ h2 {
 }
 
 .doc-panel h2,
+.docs-section-surface h2,
 .detail-meta h2,
 .stack-card h2 {
   font-size: clamp(var(--sys-voice-size-8), 2.2vw, var(--sys-voice-size-10));
