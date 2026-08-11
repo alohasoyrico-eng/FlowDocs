@@ -1,5 +1,6 @@
 import { html } from "./detail-tabs-core.js?v=3";
 import { componentDemo } from "./component-demo.js?v=60";
+import { mobileReactPatternOverviewDemo } from "./pattern-mobile-react-demos.js?v=1";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -42,6 +43,8 @@ function bottomSheetPatternDemo({
 }
 
 export function mobilePatternOverviewDemo(patternId) {
+  const reactDemo = mobileReactPatternOverviewDemo(patternId);
+  if (reactDemo) return reactDemo;
   if (patternId === "fullscreen-sheet") return fullscreenSheetDemoPanel();
   if (patternId === "swipe-actions") return swipeActionsDemoPanel();
   if (patternId === "quick-actions-grid") return quickActionsGridDemoPanel();

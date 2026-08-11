@@ -2,6 +2,15 @@
   overflow: visible;
 }
 
+.pattern-mobile-panel:has(.docs-react-island) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.pattern-mobile-panel:has(.docs-react-island) > * {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
 .pattern-mobile-demo {
   position: relative;
   display: grid;
@@ -114,6 +123,10 @@
 }
 
 @media (max-width: 420px) {
+  .pattern-mobile-panel:has(.docs-react-island) {
+    padding-inline: var(--sys-space-4);
+  }
+
   .pattern-mobile-demo {
     margin-inline: calc(var(--sys-space-2) * -1);
     border-inline: 0;

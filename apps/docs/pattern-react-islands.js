@@ -1,6 +1,7 @@
 import React from "react";
 import { candidatePatternReactComponents, candidatePatternReactIslandWrappers } from "./pattern-react-candidate-islands.js?v=11";
 import { desktopPatternReactComponents, desktopPatternReactIslandWrappers } from "./pattern-react-desktop-islands.js?v=1";
+import { mobilePatternReactComponents, mobilePatternReactIslandWrappers } from "./pattern-react-mobile-islands.js?v=1";
 import { shellPatternReactComponents, shellPatternReactIslandWrappers } from "./pattern-react-shell-islands.js?v=1";
 import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1";
 import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
@@ -21,6 +22,7 @@ import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1
 export const patternReactComponents = {
   ...candidatePatternReactComponents,
   ...desktopPatternReactComponents,
+  ...mobilePatternReactComponents,
   ...shellPatternReactComponents,
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtp,
   "avatar-group": AvatarGroup,
@@ -288,6 +290,7 @@ function CalendarViewIsland({ initialProps }) {
 export const patternReactIslandWrappers = {
   ...candidatePatternReactIslandWrappers,
   ...desktopPatternReactIslandWrappers,
+  ...mobilePatternReactIslandWrappers,
   ...shellPatternReactIslandWrappers,
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
   "calendar-view": CalendarViewIsland,
