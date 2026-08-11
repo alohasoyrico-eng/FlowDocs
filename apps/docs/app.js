@@ -1,7 +1,7 @@
 import { artifactCard, artifactTypeLabel, cardLink, configureCatalogRenderers, groupCollection, label } from "./catalog-renderers.js";
-import { loadDocsContent } from "./content-sources.js?v=202";
-import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=57";
-import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=293";
+import { loadDocsContent } from "./content-sources.js?v=203";
+import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=58";
+import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=294";
 import { applyLocalizedChrome, configureDocsChrome, setupLanguageToggle } from "./docs-chrome.js?v=2";
 import { renderCollectionContent, renderDetailContent, renderShell } from "./docs-layout.js?v=224";
 import {
@@ -36,7 +36,7 @@ import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDe
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=1";
 import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=3";
 import { collectionIcon, configureIconSystem, icon, iconFor, tabIcon } from "./icon-system.js?v=199";
-import { setupCommand, setupMenu, setupTopNav } from "./navigation.js?v=3";
+import { setupCommand, setupMenu, setupTopNav } from "./navigation.js?v=4";
 import {
   configurePrimitiveReference,
   primitiveApiReferenceSection,
@@ -55,7 +55,7 @@ import {
   referencePeerNav,
   referenceSection,
 } from "./reference-layout.js?v=1";
-import { setupContrastToggle, setupGridOverlay, updateGridOverlay } from "./shell-controls.js";
+import { setupContrastToggle, setupGridOverlay, updateGridOverlay } from "./shell-controls.js?v=1";
 import { escapeHtml, html, interpolateList, referenceTemplate, slug } from "./utils.js";
 import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=2";
 
@@ -72,7 +72,7 @@ function route() {
 function render() {
   configureLocalizedRenderers();
   const current = route();
-  document.body.dataset.navOpen = "";
+  delete document.body.dataset.navOpen;
   $("#menuButton")?.setAttribute("aria-expanded", "false");
   if (current.collection === "home") renderHome();
   else if (current.collection === "stack") renderStack();

@@ -148,7 +148,7 @@ input {
   top: 0;
   z-index: var(--sys-depth-z-sticky);
   display: grid;
-  grid-template-columns: auto minmax(var(--sys-frame-content-search-min), var(--sys-frame-content-menu-max-block)) auto;
+  grid-template-columns: auto minmax(min(26rem, 100%), 1fr) auto;
   gap: var(--sys-frame-gap-component-lg);
   align-items: center;
   padding: var(--sys-space-md) clamp(var(--sys-space-lg), 4vw, var(--sys-frame-gap-component));
@@ -225,6 +225,7 @@ input {
 .topbar__search {
   min-inline-size: 0;
   inline-size: 100%;
+  max-inline-size: min(100%, var(--sys-frame-content-menu-wide));
   justify-self: center;
 }
 

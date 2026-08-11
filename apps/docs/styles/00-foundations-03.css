@@ -101,6 +101,7 @@
   }
 }
 
+:root[data-contrast="quiet"],
 body[data-contrast="quiet"] {
   color-scheme: dark;
   --sys-energy-surface-primary: var(--sys-energy-text-primary);

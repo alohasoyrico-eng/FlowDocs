@@ -10,6 +10,7 @@
 .pattern-stage--real-shell .search-slot--package > [data-doc-component="input"],
 .search-slot.search-slot--package > [data-doc-component="input"] {
   inline-size: 100%;
+  min-inline-size: 0;
 }
 
 .pattern-design-shell-demo .search-slot--package [data-field-label],

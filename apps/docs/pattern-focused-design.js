@@ -2,12 +2,16 @@ import { html, icon } from "./detail-tabs-core.js?v=5";
 import { avatarMenuMarkup, accountMenuSections } from "./avatar-menu-slot.js?v=1";
 import { notificationPanelMarkup } from "./notification-panel-slot.js?v=1";
 import { patternPackageDemo as packageDemo, searchSlotMarkup } from "./search-slot.js?v=2";
+import { collections } from "./docs-state.js";
 
-const sidebarDemoCollections = [
-  { symbol: "bolt", label: "Foundations", count: "11", items: [{ label: "Energy", href: "#/foundations/energy" }, { label: "Voice", href: "#/foundations/voice" }, { label: "Frame", href: "#/foundations/frame" }] },
-  { symbol: "widgets", label: "Components", count: "64", items: [{ label: "Button", href: "#/components/button" }, { label: "Card", href: "#/components/card" }, { label: "Table", href: "#/components/table" }] },
-  { symbol: "account_tree", label: "Patterns", count: "53", items: [{ label: "Topbar", href: "#/patterns/topbar" }, { label: "Sidebar", href: "#/patterns/sidebar" }, { label: "Search", href: "#/patterns/search" }], open: true },
-];
+function sidebarDemoCollections() {
+  const count = (key) => collections[key]?.length ?? 0;
+  return [
+    { symbol: "bolt", label: "Foundations", count: count("foundations"), items: [{ label: "Energy", href: "#/foundations/energy" }, { label: "Voice", href: "#/foundations/voice" }, { label: "Frame", href: "#/foundations/frame" }] },
+    { symbol: "widgets", label: "Components", count: count("components"), items: [{ label: "Button", href: "#/components/button" }, { label: "Card", href: "#/components/card" }, { label: "Table", href: "#/components/table" }] },
+    { symbol: "account_tree", label: "Patterns", count: count("patterns"), items: [{ label: "Topbar", href: "#/patterns/topbar" }, { label: "Sidebar", href: "#/patterns/sidebar" }, { label: "Search", href: "#/patterns/search" }], open: true },
+  ];
+}
 
 const topbarSectionItems = [
   { label: "Foundations", children: [{ label: "Energy", href: "#/foundations/energy" }, { label: "Voice", href: "#/foundations/voice" }, { label: "Frame", href: "#/foundations/frame" }] },
@@ -305,7 +309,7 @@ function sidebarMarkup({ active = "Sidebar", footer = false, logo = false } = {}
   return html`
     <aside class="sidebar" aria-label="Design navigation">
       ${logo ? sidebarLogoSlot() : ""}
-      ${sidebarDemoCollections.map((collection) => sidebarGroup(collection.symbol, collection.label, collection.count, collection.items, active, collection.open)).join("")}
+      ${sidebarDemoCollections().map((collection) => sidebarGroup(collection.symbol, collection.label, collection.count, collection.items, active, collection.open)).join("")}
       <a href="#/stack"><span class="sidebar-label">${icon("layers")}<span>Stack</span></span></a>
       ${footer ? sidebarFooterSlot() : ""}
     </aside>

@@ -99,7 +99,7 @@ export function setupGlobalDocumentInteractions() {
         return;
       }
       document.querySelectorAll(".topnav details[open]").forEach((details) => details.removeAttribute("open"));
-      document.body.dataset.navOpen = "";
+      delete document.body.dataset.navOpen;
       document.querySelector("#menuButton")?.setAttribute("aria-expanded", "false");
     }
     document.querySelectorAll(".topnav details[open]").forEach((details) => {

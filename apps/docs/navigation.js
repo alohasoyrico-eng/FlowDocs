@@ -45,13 +45,14 @@ export function setupMenu() {
   const button = document.querySelector("#menuButton");
   if (!button) return;
   const close = ({ restoreFocus = false } = {}) => {
-    document.body.dataset.navOpen = "";
+    delete document.body.dataset.navOpen;
     button.setAttribute("aria-expanded", "false");
     if (restoreFocus) button.focus();
   };
   button.addEventListener("click", () => {
     const isOpen = document.body.dataset.navOpen === "true";
-    document.body.dataset.navOpen = isOpen ? "" : "true";
+    if (isOpen) delete document.body.dataset.navOpen;
+    else document.body.dataset.navOpen = "true";
     button.setAttribute("aria-expanded", String(!isOpen));
   });
   document.addEventListener("click", (event) => {

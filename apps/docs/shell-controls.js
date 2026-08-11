@@ -8,13 +8,25 @@ function syncBrandLogo() {
   logo.src = isQuiet ? logo.dataset.quietSrc : logo.dataset.defaultSrc;
 }
 
-export function setupContrastToggle() {
+function applyContrastState(isQuiet) {
+  if (isQuiet) {
+    document.body.dataset.contrast = "quiet";
+    document.documentElement.dataset.contrast = "quiet";
+  } else {
+    delete document.body.dataset.contrast;
+    delete document.documentElement.dataset.contrast;
+  }
+  document.querySelector("#themeToggle")?.setAttribute("aria-pressed", String(isQuiet));
   syncBrandLogo();
+}
+
+export function setupContrastToggle() {
+  applyContrastState(localStorage.getItem("system.contrast") === "quiet" || document.body.dataset.contrast === "quiet");
   document.querySelector("#themeToggle")?.addEventListener("click", () => {
     const willQuiet = document.body.dataset.contrast !== "quiet";
-    document.body.dataset.contrast = willQuiet ? "quiet" : "";
-    document.querySelector("#themeToggle")?.setAttribute("aria-pressed", String(willQuiet));
-    syncBrandLogo();
+    if (willQuiet) localStorage.setItem("system.contrast", "quiet");
+    else localStorage.removeItem("system.contrast");
+    applyContrastState(willQuiet);
   });
 }
 

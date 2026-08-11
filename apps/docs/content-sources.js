@@ -1,4 +1,4 @@
-import { loadContentBundle } from "./content-loader.js?v=195";
+import { loadContentBundle } from "./content-loader.js?v=196";
 
 export async function loadDocsContent() {
   return normalizeDocsContent(await loadContentBundle("./generated/docs-content.bundle.json"));

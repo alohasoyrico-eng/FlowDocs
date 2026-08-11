@@ -1,9 +1,10 @@
 import { artifactContract, artifactFoundationTracePanel, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, icon, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=52";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
-import { focusedPatternDesignPanels, topbarMarkup } from "./pattern-focused-design.js?v=24";
+import { focusedPatternDesignPanels, topbarMarkup } from "./pattern-focused-design.js?v=25";
 import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=2";
 import { patternMielTabs } from "./pattern-miel-tabs.js?v=7";
+import { collections } from "./docs-state.js";
 
 export function patternTabs(entry) {
   if (entry.id === "sidebar" || entry.id === "topbar") {
@@ -106,12 +107,13 @@ function sidebarPatternPanel(entry) {
 }
 
 function docsCollections() {
+  const count = (key) => collections[key]?.length ?? 0;
   return [
-    { id: "foundations", label: "Foundations", icon: "bolt", count: 11, items: ["Energy", "Voice", "Frame"] },
-    { id: "primitives", label: "Primitives", icon: "token", count: 18, items: ["Color", "Typography", "Spacing"] },
-    { id: "components", label: "Components", icon: "widgets", count: 64, items: ["Button", "Card", "Table"] },
-    { id: "patterns", label: "Patterns", icon: "account_tree", count: 53, items: ["Topbar", "Sidebar", "Search"] },
-    { id: "templates", label: "Templates", icon: "dashboard", count: 6, items: ["Driver Mobile App", "Fleet Dashboard Suite"] },
+    { id: "foundations", label: "Foundations", icon: "bolt", count: count("foundations"), items: ["Energy", "Voice", "Frame"] },
+    { id: "primitives", label: "Primitives", icon: "token", count: count("primitives"), items: ["Color", "Typography", "Spacing"] },
+    { id: "components", label: "Components", icon: "widgets", count: count("components"), items: ["Button", "Card", "Table"] },
+    { id: "patterns", label: "Patterns", icon: "account_tree", count: count("patterns"), items: ["Topbar", "Sidebar", "Search"] },
+    { id: "templates", label: "Templates", icon: "dashboard", count: count("templates"), items: ["Driver Mobile App", "Fleet Dashboard Suite"] },
   ];
 }
 
