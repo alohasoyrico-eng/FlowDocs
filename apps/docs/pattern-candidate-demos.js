@@ -244,30 +244,26 @@ function selectOptionLayerDemoPanel() {
 }
 
 function multiSelectDemoPanel() {
-  const options = [
-    ["north", "North region", "12 vehicles"],
-    ["central", "Central region", "18 vehicles"],
-    ["airport", "Airport stations", "6 stations"],
-  ];
   return html`
     <section class="doc-panel wide pattern-multi-select-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Multi select filters</h2>
-      <div class="pattern-multi-select-demo" data-multi-select-demo data-max="2">
-        <div class="pattern-multi-select-demo__options">
-          ${options.map(([id, label, description]) => packageDemo("checkbox", { label, description, value: id }, { "data-multi-select-option": id })).join("")}
-        </div>
-        <div class="pattern-multi-select-demo__chips" data-multi-select-chips>
-          ${packageDemo("empty-state", { label: "No filters selected", description: "Select up to two filters to preview the query.", icon: "filter_alt_off" }, { "data-multi-select-empty": "" })}
-          ${options.map(([id, label]) => packageDemo("chip", { label, selected: true }, { "data-multi-select-chip": id, hidden: "" })).join("")}
-        </div>
-        <div data-multi-select-validation hidden>${packageDemo("inline-validation", { label: "Filter limit", message: "Select no more than two filters for this view.", state: "warning" })}</div>
-        <footer>
-          ${packageDemo("badge", { label: "0 selected", tone: "neutral", variant: "standard", live: true, ariaLabel: "0 filters selected" }, { "data-multi-select-count": "" })}
-          ${packageDemo("button", { label: "Apply filters", icon: "check" }, { "data-multi-select-apply": "" })}
-        </footer>
-        <div data-multi-select-toast hidden>${packageDemo("toast", { label: "Filters applied", description: "0 filters are active.", tone: "success" }, { "data-pattern-toast": "multi-select" })}</div>
-      </div>
+      ${patternReactDemo("multi-select", {
+        label: "Fleet filters",
+        helper: "Select up to two filters to preview the query.",
+        placeholder: "Select filters",
+        density: "md",
+        maxVisibleChips: 2,
+        maxSelected: 2,
+        options: [
+          { value: "north", label: "North region", meta: "12 vehicles" },
+          { value: "central", label: "Central region", meta: "18 vehicles" },
+          { value: "airport", label: "Airport stations", meta: "6 stations" },
+        ],
+        empty: { title: "No filters available", description: "Add filters from the toolbar to refine this view.", icon: "filter_alt_off" },
+        clearAction: { label: "Clear filters", icon: "close", variant: "secondary" },
+        "data-pattern-demo": "multi-select",
+      })}
     </section>
   `;
 }

@@ -4,6 +4,7 @@ import { Autocomplete } from "./generated/react/patterns/Autocomplete.js?v=1";
 import { AvatarMenu } from "./generated/react/patterns/AvatarMenu.js?v=1";
 import { CommandPalette } from "./generated/react/patterns/CommandPalette.js?v=1";
 import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
+import { MultiSelect } from "./generated/react/patterns/MultiSelect.js?v=1";
 import { NotificationPanel } from "./generated/react/patterns/NotificationPanel.js?v=1";
 import { Search } from "./generated/react/patterns/Search.js?v=1";
 import { SelectOptionLayer } from "./generated/react/patterns/SelectOptionLayer.js?v=1";
@@ -14,6 +15,7 @@ export const candidatePatternReactComponents = {
   "avatar-menu": AvatarMenu,
   "command-palette": CommandPalette,
   "confirmation-dialog": ConfirmationDialog,
+  "multi-select": MultiSelect,
   "notification-panel": NotificationPanel,
   search: Search,
   "select-option-layer": SelectOptionLayer,
@@ -194,6 +196,40 @@ function NotificationPanelIsland({ initialProps }) {
   });
 }
 
+function MultiSelectIsland({ initialProps }) {
+  const [open, setOpen] = React.useState(Boolean(initialProps.open));
+  const [value, setValue] = React.useState(initialProps.value ?? []);
+  const maxSelected = Number(initialProps.maxSelected ?? 2);
+  const isInvalid = value.length > maxSelected;
+  return React.createElement(MultiSelect, {
+    ...initialProps,
+    open,
+    value,
+    state: isInvalid ? "invalid" : open ? "open" : value.length ? "selected" : "closed",
+    validation: isInvalid
+      ? { label: "Filter limit", message: `Select no more than ${maxSelected} filters for this view.`, state: "warning", live: true }
+      : value.length
+        ? { label: "Selected filters", message: `${value.length} ${value.length === 1 ? "filter is" : "filters are"} active.`, state: "success", live: true }
+        : initialProps.validation,
+    onOpenChange: (nextOpen, event) => {
+      setOpen(Boolean(nextOpen));
+      initialProps.onOpenChange?.(nextOpen, event);
+    },
+    onValueChange: (nextValue, meta, event) => {
+      setValue(nextValue);
+      initialProps.onValueChange?.(nextValue, meta, event);
+    },
+    onRemove: (removedValue, event) => {
+      setValue((current) => current.filter((item) => item !== removedValue));
+      initialProps.onRemove?.(removedValue, event);
+    },
+    onClear: (event) => {
+      setValue([]);
+      initialProps.onClear?.(event);
+    },
+  });
+}
+
 function SearchIsland({ initialProps }) {
   const allResults = initialProps.results ?? [];
   const [query, setQuery] = React.useState(initialProps.query ?? "");
@@ -282,6 +318,7 @@ export const candidatePatternReactIslandWrappers = {
   "avatar-menu": AvatarMenuIsland,
   "command-palette": CommandPaletteIsland,
   "confirmation-dialog": ConfirmationDialogIsland,
+  "multi-select": MultiSelectIsland,
   "notification-panel": NotificationPanelIsland,
   search: SearchIsland,
   "select-option-layer": SelectOptionLayerIsland,
