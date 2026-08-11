@@ -12,9 +12,7 @@
 .pattern-confirmation-demo,
 .pattern-action-sheet-demo,
 .pattern-search-demo,
-.pattern-autocomplete-demo,
-.pattern-select-layer-demo,
-.pattern-multi-select-demo {
+.pattern-autocomplete-demo {
   position: relative;
   display: grid;
   gap: var(--sys-space-4);
@@ -50,9 +48,7 @@
 .pattern-command-demo [data-command-empty][hidden],
 .pattern-command-demo [data-command-toast][hidden],
 .pattern-search-demo [hidden],
-.pattern-autocomplete-demo [hidden],
-.pattern-select-layer-demo [hidden],
-.pattern-multi-select-demo [hidden] {
+.pattern-autocomplete-demo [hidden] {
   display: none;
 }
 
@@ -163,9 +159,7 @@
 }
 
 .pattern-search-demo__results,
-.pattern-autocomplete-demo__suggestions,
-.pattern-multi-select-demo__options,
-.pattern-multi-select-demo__chips {
+.pattern-autocomplete-demo__suggestions {
   display: grid;
   gap: var(--sys-space-2);
 }
@@ -176,40 +170,6 @@
   font-size: var(--sys-voice-size-3);
 }
 
-.pattern-select-layer-demo__options {
-  display: grid;
-  gap: var(--sys-space-3);
-}
-
-.pattern-select-layer-demo__options [data-select-layer-option] {
-  display: grid;
-  gap: var(--sys-space-2);
-  padding: var(--sys-space-3);
-  border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
-  border-radius: var(--sys-frame-radius-container);
-  background: var(--sys-energy-surface-secondary);
-}
-
-.pattern-select-layer-demo__options [data-select-layer-option][data-selected="true"] {
-  border-color: var(--sys-energy-action-primary);
-  box-shadow: inset var(--sys-space-1) 0 0 var(--sys-energy-action-primary);
-}
-
-.pattern-select-layer-demo__options [data-option-blocked="true"] {
-  opacity: 0.82;
-}
-
-.pattern-multi-select-demo footer {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--sys-space-3);
-  align-items: center;
-}
-
-.pattern-multi-select-demo__chips {
-  min-block-size: var(--sys-frame-height-control-lg);
-}
-
 @media (max-width: 640px) {
   .pattern-command-demo,
   .pattern-notification-demo,
@@ -217,8 +177,6 @@
   .pattern-action-sheet-demo,
   .pattern-search-demo,
   .pattern-autocomplete-demo,
-  .pattern-select-layer-demo,
-  .pattern-multi-select-demo,
   .pattern-command-demo__surface,
   .pattern-notification-demo__panel,
   .pattern-action-sheet-demo [data-action-sheet] {
@@ -227,8 +185,7 @@
 
   .pattern-notification-demo__trigger,
   .pattern-notification-demo__panel footer,
-  .pattern-action-sheet-demo [data-action-sheet] footer,
-  .pattern-multi-select-demo footer {
+  .pattern-action-sheet-demo [data-action-sheet] footer {
     align-items: stretch;
     flex-direction: column;
   }
@@ -236,5 +193,4 @@
   .pattern-search-demo__controls {
     grid-template-columns: 1fr;
   }
-
 }

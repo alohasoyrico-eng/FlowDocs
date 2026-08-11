@@ -6,7 +6,6 @@ import { setupMobilePatternInteractions } from "./pattern-mobile-interactions.js
 import { setupUtilityPatternInteractions } from "./pattern-utility-interactions.js?v=6";
 import { setupJourneyPatternInteractions } from "./pattern-journey-interactions.js?v=2";
 import { setupDesktopTemplateInteractions } from "./template-desktop-interactions.js?v=6";
-import { setupProcessPatternInteractions } from "./pattern-process-interactions.js?v=7";
 import { setupReferenceDemos } from "./reference-demo-interactions.js";
 
 export function setupDocumentationInteractions(deps) {
@@ -16,7 +15,7 @@ export function setupDocumentationInteractions(deps) {
 }
 
 export function setupGlobalDocumentInteractions() {
-  setupCandidatePatternInteractions(); setupDesktopPatternInteractions(); setupMobilePatternInteractions(); setupUtilityPatternInteractions(); setupJourneyPatternInteractions(); setupDesktopTemplateInteractions(); setupProcessPatternInteractions();
+  setupCandidatePatternInteractions(); setupDesktopPatternInteractions(); setupMobilePatternInteractions(); setupUtilityPatternInteractions(); setupJourneyPatternInteractions(); setupDesktopTemplateInteractions();
   document.addEventListener("click", (event) => {
     const bulkAction = event.target.closest("[data-bulk-action]");
     if (bulkAction) {
