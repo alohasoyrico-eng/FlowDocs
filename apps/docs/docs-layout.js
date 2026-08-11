@@ -15,7 +15,6 @@ export function renderShell({ active = "", collectionIcon, collections, content,
   return html`
     <div class="app-shell">
       <aside class="sidebar" aria-label="${ui("shell.designNavigation")}">
-        <button class="docs-icon-button sidebar-close" type="button" data-nav-close aria-label="Close navigation">${icon("close")}</button>
         ${drawerGroups}
         <a class="${active === "stack" ? "active" : ""}" href="#/stack"><span class="sidebar-label">${icon(collectionIcon("stack"))}<span>${ui("shell.stack")}</span></span></a>
       </aside>

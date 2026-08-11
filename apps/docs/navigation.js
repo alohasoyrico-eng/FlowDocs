@@ -56,10 +56,6 @@ export function setupMenu() {
     button.setAttribute("aria-expanded", String(!isOpen));
   });
   document.addEventListener("click", (event) => {
-    if (event.target.closest("[data-nav-close]")) {
-      close({ restoreFocus: true });
-      return;
-    }
     if (document.body.dataset.navOpen !== "true") return;
     if (button.contains(event.target) || event.target.closest(".sidebar")) return;
     close();

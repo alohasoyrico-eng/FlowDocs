@@ -3,7 +3,7 @@ import { loadDocsContent } from "./content-sources.js?v=203";
 import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=58";
 import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=294";
 import { applyLocalizedChrome, configureDocsChrome, setupLanguageToggle } from "./docs-chrome.js?v=2";
-import { renderCollectionContent, renderDetailContent, renderShell } from "./docs-layout.js?v=224";
+import { renderCollectionContent, renderDetailContent, renderShell } from "./docs-layout.js?v=225";
 import {
   applyDocsContent,
   artifactContract,
@@ -36,7 +36,7 @@ import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDe
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=1";
 import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=3";
 import { collectionIcon, configureIconSystem, icon, iconFor, tabIcon } from "./icon-system.js?v=199";
-import { setupCommand, setupMenu, setupTopNav } from "./navigation.js?v=4";
+import { setupCommand, setupMenu, setupTopNav } from "./navigation.js?v=5";
 import {
   configurePrimitiveReference,
   primitiveApiReferenceSection,

@@ -84,15 +84,6 @@
     transform: var(--component-transform-y-rest);
   }
 
-  .sidebar-close {
-    position: sticky;
-    inset-block-start: 0;
-    z-index: var(--sys-depth-z-raised);
-    display: grid;
-    margin-inline-start: auto;
-    background: var(--sys-energy-surface-primary);
-  }
-
   .sidebar a {
     min-inline-size: 0;
   }
@@ -264,9 +255,5 @@
     opacity: 1;
     pointer-events: auto;
     transform: var(--component-transform-none);
-  }
-
-  .sidebar .sidebar-close {
-    display: none;
   }
 }

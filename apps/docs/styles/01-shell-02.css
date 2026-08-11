@@ -142,11 +142,6 @@
   backdrop-filter: blur(var(--sys-depth-blur-topbar));
 }
 
-.sidebar-close {
-  display: none;
-  justify-self: end;
-}
-
 .sidebar a {
   display: flex;
   justify-content: space-between;
