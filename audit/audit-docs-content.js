@@ -449,9 +449,12 @@ function checkDemoQualityInventory() {
     .join("\n");
   const reactIslandsFile = path.join(docsAppDir, "react-component-islands.js");
   const reactIslands = fs.existsSync(reactIslandsFile) ? read(reactIslandsFile) : "";
+  const patternReactIslandsFile = path.join(docsAppDir, "pattern-react-islands.js");
+  const patternReactIslands = fs.existsSync(patternReactIslandsFile) ? read(patternReactIslandsFile) : "";
   const reactComponentsBlock = reactIslands.match(/const reactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
+  const patternReactComponentsBlock = patternReactIslands.match(/const patternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const reactComponentKeys = new Set(
-    [...reactComponentsBlock.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
+    [...`${reactComponentsBlock}\n${patternReactComponentsBlock}`.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
   );
 
   const patterns = catalog?.patterns ?? [];

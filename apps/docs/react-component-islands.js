@@ -56,7 +56,7 @@ import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
-import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1"; import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1"; import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1"; import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1"; import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1"; import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1"; import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1"; import { Timeline } from "./generated/react/patterns/Timeline.js?v=1"; import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
+import { patternReactComponents, patternReactIslandWrappers } from "./pattern-react-islands.js?v=1";
 
 const mounted = new WeakMap(); const reactComponents = {
   accordion: Accordion,
@@ -115,11 +115,7 @@ const mounted = new WeakMap(); const reactComponents = {
   tooltip: Tooltip,
   "tree-view": TreeView,
   "text-area": TextArea,
-  "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtp,
-  "chart-legend-item": ChartLegendItem,
-  "checkbox-group": CheckboxGroup, "gantt-chart": GanttChart, "polar-chart": PolarChart, "preference-management": PreferenceManagement, "radio-group": RadioGroup,
-  timeline: Timeline,
-  "waterfall-chart": WaterfallChart,
+  ...patternReactComponents,
 };
 
 function InputIsland({ initialProps }) {
@@ -166,12 +162,6 @@ function CheckboxIsland({ initialProps }) {
     onCheckedChange: setChecked,
   });
 }
-function CheckboxGroupIsland({ initialProps }) { const [value, setValue] = React.useState(initialProps.value ?? initialProps.defaultValue ?? []); return React.createElement(CheckboxGroup, { ...initialProps, value, onValueChange: setValue, onClear: () => setValue([]) }); }
-
-function ChartLegendItemIsland({ initialProps }) { const [hidden, setHidden] = React.useState(Boolean(initialProps.hidden)); return React.createElement(ChartLegendItem, { ...initialProps, hidden, selected: !hidden && Boolean(initialProps.selected ?? true), onToggle: (checked, meta, event) => { setHidden(!checked); initialProps.onToggle?.(checked, meta, event); } }); }
-
-function AuthenticationLoginBiometricsAndOtpIsland({ initialProps }) { const [state, setState] = React.useState(initialProps.state ?? "idle"); const primaryLabel = state === "otp-sent" ? "Verify code" : state === "biometric-prompt" ? "Confirm biometric" : "Send OTP"; return React.createElement(AuthenticationLoginBiometricsAndOtp, { ...initialProps, state, otp: state === "otp-sent" ? { value: "184290", helper: "Code expires in 00:42." } : initialProps.otp, biometric: state === "biometric-prompt" ? { label: "Confirm it is you", description: "Use device biometrics or continue with OTP.", actionLabel: "Confirm biometric", fallback: "Use OTP instead" } : initialProps.biometric, validation: state === "recovered" ? { label: "Authentication status", message: "Sign-in verified.", state: "success" } : initialProps.validation, feedback: state === "recovered" ? { label: "Sign-in verified", description: "The session can continue.", tone: "success" } : initialProps.feedback, primaryAction: { ...(initialProps.primaryAction ?? {}), label: primaryLabel, icon: state === "recovered" ? "check_circle" : "verified_user" }, secondaryAction: state === "idle" ? { label: "Use biometric", variant: "secondary", icon: "fingerprint", onClick: () => setState("biometric-prompt") } : { label: "Reset", variant: "secondary", icon: "refresh", onClick: () => setState("idle") }, onSubmit: () => setState((current) => current === "idle" ? "otp-sent" : "recovered") }); }
-
 function CodeInputIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
   return React.createElement(CodeInput, {
@@ -272,8 +262,6 @@ function RadioButtonIsland({ initialProps }) {
     onCheckedChange: setChecked,
   });
 }
-function RadioGroupIsland({ initialProps }) { const [value, setValue] = React.useState(initialProps.value ?? initialProps.defaultValue ?? ""); return React.createElement(RadioGroup, { ...initialProps, value, onValueChange: setValue, onClear: () => setValue("") }); }
-
 function SwitchIsland({ initialProps }) {
   const [checked, setChecked] = React.useState(Boolean(initialProps.checked));
   return React.createElement(Switch, {
@@ -315,71 +303,17 @@ function TextAreaIsland({ initialProps }) {
   });
 }
 
-function TimelineIsland({ initialProps }) {
-  const allEvents = Array.isArray(initialProps.events) ? initialProps.events : [];
-  const [filter, setFilter] = React.useState(initialProps.initialFilter ?? "all");
-  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? "");
-  const visibleEvents = filter === "warning"
-    ? allEvents.filter((event) => event.state === "warning" || event.status === "warning" || event.tone === "warning")
-    : allEvents;
-  const filters = [
-    {
-      key: "all",
-      label: "All",
-      selected: filter === "all",
-      removable: false,
-      onClick: () => setFilter("all"),
-    },
-    {
-      key: "warning",
-      label: "Warnings",
-      selected: filter === "warning",
-      removable: filter === "warning",
-      onClick: () => setFilter("warning"),
-    },
-  ];
-
-  return React.createElement(Timeline, {
-    ...initialProps,
-    events: visibleEvents,
-    filters,
-    filtered: filter !== "all",
-    selectedKey,
-    status: {
-      label: `${visibleEvents.length} ${visibleEvents.length === 1 ? "event" : "events"}`,
-      tone: filter === "warning" ? "warning" : "neutral",
-      variant: "standard",
-    },
-    recovery: {
-      title: "No events match",
-      description: "Clear filters to restore the timeline.",
-      icon: "timeline",
-    },
-    clearAction: filter !== "all"
-      ? {
-          label: "Clear filters",
-          variant: "secondary",
-        }
-      : undefined,
-    onClear: () => setFilter("all"),
-    onFilterRemove: () => setFilter("all"),
-    onEventSelect: (key) => setSelectedKey(key),
-  });
-}
-
 const reactIslandWrappers = {
   input: InputIsland, "card-expiry-input": CardExpiryInputIsland,
   "card-number-input": CardNumberInputIsland, "card-security-code-input": CardSecurityCodeInputIsland,
-  checkbox: CheckboxIsland, "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
-  "chart-legend-item": ChartLegendItemIsland,
+  checkbox: CheckboxIsland,
   "code-input": CodeInputIsland, combobox: ComboboxIsland,
-  "checkbox-group": CheckboxGroupIsland,
   "country-selector": CountrySelectorIsland, "date-picker": DatePickerIsland, "date-range-picker": DateRangePickerIsland,
   "phone-input": PhoneInputIsland, pagination: PaginationIsland, select: SelectIsland,
   "segmented-control": SegmentedControlIsland, "radio-button": RadioButtonIsland,
-  "radio-group": RadioGroupIsland,
   switch: SwitchIsland, tabs: TabsIsland, slider: SliderIsland,
-  "text-area": TextAreaIsland, timeline: TimelineIsland,
+  "text-area": TextAreaIsland,
+  ...patternReactIslandWrappers,
 };
 
 function parseProps(node) { try { return JSON.parse(node.dataset.reactProps ?? "{}"); } catch { return {}; } }
