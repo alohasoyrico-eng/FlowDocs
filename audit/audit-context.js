@@ -95,6 +95,7 @@ const files = [
   "apps/docs/app.js",
   "apps/docs/button-playground-interactions.js",
   "apps/docs/catalog-renderers.js",
+  "apps/docs/component-foundation-trace.js",
   "apps/docs/component-demo-interactions.js",
   "apps/docs/content-loader.js",
   "apps/docs/content-sources.js",

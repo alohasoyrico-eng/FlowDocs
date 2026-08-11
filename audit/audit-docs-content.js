@@ -353,10 +353,10 @@ function checkArtifactDetailSurfaceReadiness() {
     .filter((entry) => entry.surfaces !== entry.roles);
   const sharedHelperBoundaries = [
     {
-      file: path.join(docsAppDir, "family-component-docs.js"),
+      file: path.join(docsAppDir, "component-foundation-trace.js"),
       helper: "artifactFoundationTracePanel",
       ready: /export function artifactFoundationTracePanel[\s\S]*?<section class="surface docs-section-surface detail-section-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
-        read(path.join(docsAppDir, "family-component-docs.js")),
+        read(path.join(docsAppDir, "component-foundation-trace.js")),
       ),
     },
     {
@@ -533,8 +533,16 @@ function checkComponentDetailTemplateReadiness() {
       const text = read(file);
       const id = componentDetailRendererId(file);
       const kind = componentDetailRendererKind(file, text, simpleGoldRenderers, customGoldRenderers);
-      const migrationCategory = componentDetailMigrationCategory(kind, id, governedCustomRenderers);
       const sectionCoverage = templateSectionIds.filter((section) => text.includes(section));
+      const docPanels = countMatches(text, /doc-panel/g);
+      const rawControls = countComponentDetailRawControls(file, text);
+      const propsTables = countMatches(text, /props-table/g);
+      const demoGrids = countMatches(text, /button-demo-grid|demoCell\(/g);
+      const usesSharedSection = text.includes("componentDetailSection(") || text.includes("renderSimpleGoldSection(");
+      const hasTemplateHotspots = docPanels || rawControls || propsTables || demoGrids;
+      const migrationCategory = (kind === "family-fallback" || kind === "candidate-composition") && usesSharedSection && !hasTemplateHotspots
+        ? "template-ready"
+        : componentDetailMigrationCategory(kind, id, governedCustomRenderers);
       return {
         id,
         file: path.relative(process.cwd(), file),
@@ -543,14 +551,14 @@ function checkComponentDetailTemplateReadiness() {
         sectionCoverage,
         sectionCoverageCount: sectionCoverage.length,
         surfaceSections: countMatches(text, /component-detail-surface/g),
-        docPanels: countMatches(text, /doc-panel/g),
-        rawControls: countComponentDetailRawControls(file, text),
+        docPanels,
+        rawControls,
         playgroundBridges: countMatches(text, /data-doc-control-bridge="component-playground"|data-component-playground|data-button-playground/g),
-        propsTables: countMatches(text, /props-table/g),
-        demoGrids: countMatches(text, /button-demo-grid|demoCell\(/g),
+        propsTables,
+        demoGrids,
         cardLikeMarkup: countMatches(text, /class="card|cardLink\(|card-/g),
         usesFlowDemo: countMatches(text, /Demo(?:FromData)?\(|componentDemo\(/g),
-        usesSharedSection: text.includes("componentDetailSection(") || text.includes("renderSimpleGoldSection("),
+        usesSharedSection,
       };
     })
     .sort((a, b) => a.kind.localeCompare(b.kind) || a.id.localeCompare(b.id));
@@ -808,6 +816,7 @@ function checkI18nReadiness() {
     ...docsDetailTabsModuleFiles.map((file) => read(file)),
     fs.existsSync(docsLayoutFile) ? read(docsLayoutFile) : "",
     fs.existsSync(docsStateFile) ? read(docsStateFile) : "",
+    fs.existsSync(path.join(docsAppDir, "component-foundation-trace.js")) ? read(path.join(docsAppDir, "component-foundation-trace.js")) : "",
     fs.existsSync(docsFamilyComponentDocsFile) ? read(docsFamilyComponentDocsFile) : "",
     fs.existsSync(docsFoundationExplorerFile) ? read(docsFoundationExplorerFile) : "",
     fs.existsSync(docsFoundationReferenceFile) ? read(docsFoundationReferenceFile) : "",

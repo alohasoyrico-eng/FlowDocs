@@ -1,5 +1,9 @@
-import { candidateComponentTabs, configureCandidateComponentDocs, hasCandidateCompositionPlan } from "./candidate-component-docs.js?v=1";
+import { candidateComponentTabs, configureCandidateComponentDocs, hasCandidateCompositionPlan } from "./candidate-component-docs.js?v=2";
+import { artifactFoundationTracePanel, configureComponentFoundationTrace } from "./component-foundation-trace.js?v=1";
 import { componentDemo } from "./component-demo.js?v=60";
+import { componentDetailDemoGrid, componentDetailSection, componentDetailTable } from "./gold-component-core.js?v=213";
+
+export { artifactFoundationTracePanel };
 
 let componentCopy = {};
 let referenceCopy = {};
@@ -9,7 +13,6 @@ let iconFor = () => "";
 let ui = (key) => key;
 let referenceTemplate = (value) => value ?? "";
 let interpolateList = () => [];
-let artifactContract = () => null;
 let selectDemo = () => "";
 let demoCell = (_label, content) => content;
 let threeTabs = (_entry, overviewExtra, designBody, buildBody) => [overviewExtra, designBody, buildBody];
@@ -28,7 +31,6 @@ export function configureFamilyComponentDocs(nextDeps) {
   ui = nextDeps.ui;
   referenceTemplate = nextDeps.referenceTemplate;
   interpolateList = nextDeps.interpolateList;
-  artifactContract = nextDeps.artifactContract;
   selectDemo = nextDeps.selectDemo;
   demoCell = nextDeps.demoCell;
   threeTabs = nextDeps.threeTabs;
@@ -37,6 +39,7 @@ export function configureFamilyComponentDocs(nextDeps) {
   specPanel = nextDeps.specPanel;
   agentPanel = nextDeps.agentPanel;
   listPanel = nextDeps.listPanel;
+  configureComponentFoundationTrace(nextDeps);
   configureCandidateComponentDocs({ ...nextDeps, artifactFoundationTracePanel });
 }
 
@@ -65,7 +68,10 @@ function componentContractFallbackTabs(entry) {
 function componentContractScenarioPanel(entry, copy) {
   const scenario = copy["operational-example"]?.scenario;
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: entry.id,
+      section: "operational-example",
+      children: html`
       <h2>${ui("reference.operationalScenario")}</h2>
       <p>${copy["operational-example"]?.copy ?? entry.summary}</p>
       <div class="component-standard-demo">
@@ -78,7 +84,8 @@ function componentContractScenarioPanel(entry, copy) {
           <div class="component-standard-surface">${componentDemo(entry.id, contractDemoDefaults(entry))}</div>
         </article>
       </div>
-    </section>
+      `,
+    })}
   `;
 }
 
@@ -87,13 +94,20 @@ function componentContractDemoPanel(entry, copy, sectionId) {
   const demos = dedupeDemos(section.demos ?? []).slice(0, sectionId === "states" ? 8 : 6);
   if (!demos.length) return "";
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: entry.id,
+      section: sectionId,
+      children: html`
       <h2>${sectionId === "states" ? ui("reference.stateMatrix") : "Variants"}</h2>
       <p>${section.copy ?? ""}</p>
-      <div class="button-demo-grid states-grid">
-        ${demos.map((demo) => demoCell(demo.label ?? demo.state ?? demo.variant ?? entry.title, componentDemo(entry.id, normalizeContractDemo(entry, demo)))).join("")}
-      </div>
-    </section>
+      ${componentDetailDemoGrid({
+        items: demos.map((demo) => ({
+          label: demo.label ?? demo.state ?? demo.variant ?? entry.title,
+          content: componentDemo(entry.id, normalizeContractDemo(entry, demo)),
+        })),
+      })}
+      `,
+    })}
   `;
 }
 
@@ -101,12 +115,16 @@ function componentContractAnatomyPanel(entry, copy) {
   const anatomy = copy.anatomy?.items ?? [];
   if (!anatomy.length) return "";
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: entry.id,
+      section: "anatomy",
+      children: html`
       <h2>Anatomy</h2>
       <div class="role-grid">
         ${anatomy.map((item) => `<article><span>${icon(iconFor(entry))}</span><strong>${item.part}</strong><p>${item.rule}</p><code>${(item.tokens ?? []).join(", ")}</code></article>`).join("")}
       </div>
-    </section>
+      `,
+    })}
   `;
 }
 
@@ -114,14 +132,18 @@ function componentContractApiPanel(entry, copy) {
   const props = copy["api-foundations"]?.props ?? [];
   if (!props.length) return componentFamilyApiPanel(entry);
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: entry.id,
+      section: "api-foundations",
+      children: html`
       <h2>${entry.title} ${ui("contract.api")}</h2>
       <p>${copy["api-foundations"]?.copy ?? ""}</p>
-      <div class="props-table">
-        <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
-        ${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}
-      </div>
-    </section>
+      ${componentDetailTable({
+        columns: [ui("table.prop"), ui("table.type"), ui("table.required"), ui("table.notes")],
+        rows: props.map((prop) => [prop.name, prop.type, prop.required, prop.notes]),
+      })}
+      `,
+    })}
   `;
 }
 
@@ -167,18 +189,26 @@ function componentFamilyProfile(entry) {
 
 function componentStandardPanel(entry, profile) {
   return html`
-    <section class="doc-panel wide reference-section">
+    ${componentDetailSection({
+      component: entry.id,
+      section: "family-standard",
+      className: "reference-section",
+      children: html`
       <span class="eyebrow">${entry.group} standard</span>
       <h2>${entry.title} documentation standard</h2>
       <p>${entry.summary}</p>
       <p>${referenceTemplate(componentCopy?.familyStandards?.standardCopy, entry, { family: profile.family })}</p>
-    </section>
+      `,
+    })}
   `;
 }
 
 function componentScenarioPanel(entry, profile) {
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: entry.id,
+      section: "operational-example",
+      children: html`
       <h2>${ui("reference.operationalScenario")}</h2>
       <p>${profile.scenario}</p>
       <div class="component-standard-demo">
@@ -192,31 +222,40 @@ function componentScenarioPanel(entry, profile) {
           <ul>${(componentCopy?.familyStandards?.mustProve ?? []).map((item) => `<li>${item}</li>`).join("")}</ul>
         </article>
       </div>
-    </section>
+      `,
+    })}
   `;
 }
 
 function componentFamilyDemoPanel(entry, profile) {
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: entry.id,
+      section: "family-demo",
+      children: html`
       <h2>${ui("reference.groupDemo")}</h2>
       <p>${referenceTemplate(componentCopy?.familyStandards?.demoCopy, entry, { group: entry.group })}</p>
-      <div class="button-demo-grid states-grid">
-        ${profile.states.map((state) => demoCell(state, componentFamilyDemo(entry, state))).join("")}
-      </div>
-    </section>
+      ${componentDetailDemoGrid({
+        items: profile.states.map((state) => ({ label: state, content: componentFamilyDemo(entry, state) })),
+      })}
+      `,
+    })}
   `;
 }
 
 function componentStateMatrixPanel(entry, profile) {
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: entry.id,
+      section: "states",
+      children: html`
       <h2>${ui("reference.stateMatrix")}</h2>
       <p>${componentCopy?.familyStandards?.stateMatrixCopy}</p>
-      <div class="button-demo-grid states-grid">
-        ${profile.states.slice(0, 6).map((state) => demoCell(state, componentFamilyDemo(entry, state))).join("")}
-      </div>
-    </section>
+      ${componentDetailDemoGrid({
+        items: profile.states.slice(0, 6).map((state) => ({ label: state, content: componentFamilyDemo(entry, state) })),
+      })}
+      `,
+    })}
   `;
 }
 
@@ -227,13 +266,17 @@ function componentResponsiveContractPanel(entry) {
 function componentFamilyApiPanel(entry) {
   const props = componentCopy?.familyStandards?.apiRows ?? [];
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: entry.id,
+      section: "api-foundations",
+      children: html`
       <h2>${entry.group} ${ui("contract.api")}</h2>
-      <div class="props-table">
-        <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
-        ${props.map((prop) => `<div><code>${prop[0]}</code><span>${prop[1]}</span><span>${prop[2]}</span><span>${prop[3]}</span></div>`).join("")}
-      </div>
-    </section>
+      ${componentDetailTable({
+        columns: [ui("table.prop"), ui("table.type"), ui("table.required"), ui("table.notes")],
+        rows: props,
+      })}
+      `,
+    })}
   `;
 }
 
@@ -246,15 +289,20 @@ function componentFamilyTestPanel(entry, profile) {
 
 function componentTestingContractPanel(title, rows) {
   return html`
-    <section class="doc-panel wide">
+    ${componentDetailSection({
+      component: title,
+      section: "tests-rejection-rules",
+      children: html`
       <span class="eyebrow">${ui("reference.componentTestingContract")}</span>
       <h2>${ui("tests.required")}</h2>
       <p>${referenceTemplate(componentCopy?.familyStandards?.testingModelCopy, { title })}</p>
-      <div class="props-table testing-contract-table">
-        <div><strong>${ui("table.layer")}</strong><strong>${ui("table.expectation")}</strong><strong>${ui("table.foundation")}</strong><strong>${ui("table.evidence")}</strong></div>
-        ${rows.map(([layer, expectation]) => `<div><code>${layer}</code><span>${expectation}</span><span>${testingFoundationFor(layer)}</span><span>${testingEvidenceFor(layer)}</span></div>`).join("")}
-      </div>
-    </section>
+      ${componentDetailTable({
+        className: "testing-contract-table",
+        columns: [ui("table.layer"), ui("table.expectation"), ui("table.foundation"), ui("table.evidence")],
+        rows: rows.map(([layer, expectation]) => [layer, expectation, testingFoundationFor(layer), testingEvidenceFor(layer)]),
+      })}
+      `,
+    })}
   `;
 }
 
@@ -276,104 +324,6 @@ function testingEvidenceFor(layer) {
   return referenceCopy.testingEvidence?.[layer] ?? referenceCopy.testingEvidence?.fallback;
 }
 
-export function artifactFoundationTracePanel(entry, artifactType) {
-  const rows = artifactFoundationTraceRows(entry, artifactType);
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">${ui("reference.foundationTrace")}</span>
-      <h2>${ui("reference.howFoundationsGovern")} ${entry.title}</h2>
-      <p>${entry.title} must be implemented through foundation decisions before it becomes a component, pattern, or template surface.</p>
-      <div class="role-grid foundation-trace-grid">
-        ${rows
-          .map(
-            (row) => html`
-              <article>
-                <span>${icon(iconFor({ title: row.foundation }))}</span>
-                <strong>${row.foundation}</strong>
-                <p>${row.decision}</p>
-                <code>${row.contract}</code>
-              </article>
-            `,
-          )
-          .join("")}
-      </div>
-    </section>
-  `;
-}
-
-function artifactFoundationTraceRows(entry, artifactType) {
-  const contract = artifactContract(entry);
-  const contractFoundations = contract?.governingFoundations ?? Object.keys(contract?.foundations ?? {});
-  if (contractFoundations.length) {
-    return contractFoundations.slice(0, 8).map((foundation) => ({
-      foundation,
-      decision: foundationTraceDecision(foundation, entry, artifactType),
-      contract: foundationTraceContractFromSpec(foundation, contract) ?? foundationTraceContract(foundation),
-    }));
-  }
-
-  const names = new Set(["Energy", "Voice", "Frame", "State", "Accessibility"]);
-  const text = `${entry.title} ${entry.group ?? ""} ${entry.platform ?? ""} ${entry.summary ?? ""}`.toLowerCase();
-
-  if (artifactType !== "Component") names.add("Growth");
-  if (artifactType === "Template") names.add("Depth");
-  if (artifactType === "Template" || artifactType === "Pattern" || /mobile|map|route|sheet|overlay|dialog|drawer|feedback|motion|loading|auth/.test(text)) names.add("Momentum");
-  if (/overlay|sheet|dialog|drawer|modal|dashboard|map|detail|template|desktop/.test(text)) names.add("Depth");
-  if (/feedback|error|empty|auth|otp|permission|support|content|input|onboarding/.test(text) || artifactType !== "Component") names.add("Tone");
-  if (/icon|quick action|pin|map|status|illustration|symbol|station|vehicle/.test(text)) {
-    names.add("Iconography");
-    names.add("Symbol");
-  }
-
-  return Array.from(names)
-    .slice(0, 8)
-    .map((foundation) => ({
-      foundation,
-      decision: foundationTraceDecision(foundation, entry, artifactType),
-      contract: foundationTraceContract(foundation),
-    }));
-}
-
-function foundationTraceDecision(foundation, entry, artifactType) {
-  const label = `${artifactType.toLowerCase()} ${entry.title}`;
-  const decisions = {
-    Energy: `Defines color roles for ${label}: action, status, surface, border, and feedback cannot use raw values.`,
-    Voice: `Sets type scale, title rhythm, labels, helper copy, captions, and code text for ${label}.`,
-    Frame: `Controls spacing, density, radius, grid, control height, and responsive rhythm for ${label}.`,
-    State: `Owns hover, focus, pressed, selected, loading, disabled, error, and permission precedence for ${label}.`,
-    Accessibility: `Requires keyboard, touch target, focus restoration, names, contrast, reduced motion, and recovery behavior.`,
-    Growth: `Connects ${label} to adoption, maturity, telemetry, deprecation, and validation signals.`,
-    Momentum: `Defines transitions, entrance, exit, loading, route change, and reduced-motion behavior for ${label}.`,
-    Depth: `Defines elevation, overlay, stacking, focus layer, and spatial priority for ${label}.`,
-    Tone: `Controls neutral, assistive, urgent, success, warning, and repair language for ${label}.`,
-    Iconography: `Uses Material Symbols by semantic name, size, weight, label visibility, and accessible name.`,
-    Symbol: `Defines the visual metaphor only when ${label} needs status, domain, or explanatory imagery.`,
-  };
-  return decisions[foundation] ?? `Defines the semantic rule that ${label} must follow.`;
-}
-
-function foundationTraceContract(foundation) {
-  const contracts = {
-    Energy: "--sys-energy-*",
-    Voice: "--sys-voice-*",
-    Frame: "--sys-frame-*",
-    State: "--sys-state-*",
-    Accessibility: "--sys-a11y-*",
-    Growth: "--sys-growth-*",
-    Momentum: "--sys-momentum-*",
-    Depth: "--sys-depth-*",
-    Tone: "--sys-tone-*",
-    Iconography: "--sys-icon-*",
-    Symbol: "--sys-symbol-*",
-  };
-  return contracts[foundation] ?? "foundation contract";
-}
-
-function foundationTraceContractFromSpec(foundation, contract) {
-  const key = foundation.toLowerCase();
-  return contract.tokenDependencies?.find((token) => token.toLowerCase().includes(`.${key}.`)) ?? null;
-}
-
 function componentScenarioCopy(entry) {
   return componentCopy?.familyStandards?.scenarioCopy?.[entry.group] ?? componentCopy?.familyStandards?.scenarioCopy?.fallback ?? "";
 }
@@ -381,7 +331,7 @@ function componentScenarioCopy(entry) {
 function componentFamilyDemo(entry, state) {
   if (entry.group === "Selection" || entry.group === "Inputs") return selectDemo(entry.title, state === "empty" ? "Choose value" : `${entry.title} value`, stateLabel(state), "sm", normalizeDemoState(state));
   if (entry.group === "Feedback") return `<div class="standard-chip ${state}">${icon(iconFor(entry))}<strong>${stateLabel(state)}</strong></div>`;
-  if (entry.group === "Overlay") return `<div class="standard-popover"><button type="button">${entry.title}</button><span>${stateLabel(state)}</span></div>`;
+  if (entry.group === "Overlay") return `<div class="standard-popover"><span class="standard-popover__trigger">${entry.title}</span><span>${stateLabel(state)}</span></div>`;
   if (entry.group === "Dashboards" || entry.group === "Data") return `<div class="standard-metric"><strong>${state === "empty" ? "--" : "24"}</strong><span>${stateLabel(state)}</span></div>`;
   if (entry.group === "Mobile" || entry.group === "Maps") return `<div class="standard-phone-row">${icon(iconFor(entry))}<span>${stateLabel(state)}</span></div>`;
   return `<div class="standard-chip ${state}">${icon(iconFor(entry))}<strong>${stateLabel(state)}</strong></div>`;

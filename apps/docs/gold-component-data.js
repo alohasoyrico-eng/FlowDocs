@@ -1,4 +1,4 @@
-import { componentSectionData, html, icon } from "./gold-component-core.js?v=212";
+import { componentSectionData, html, icon } from "./gold-component-core.js?v=213";
 import { buttonDemo } from "./gold-button-docs.js?v=218";
 import { selectDemo } from "./gold-select-docs.js?v=221";
 import { cardDemo } from "./gold-card-docs.js?v=220";

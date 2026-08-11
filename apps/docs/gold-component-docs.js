@@ -1,4 +1,4 @@
-import { configureGoldComponentContext, ui } from "./gold-component-core.js?v=212";
+import { configureGoldComponentContext, ui } from "./gold-component-core.js?v=213";
 import { buttonDemo, renderButtonGoldSection } from "./gold-button-docs.js?v=218";
 import { selectDemo, renderSelectGoldSection } from "./gold-select-docs.js?v=221";
 import { comboboxDemo, renderComboboxGoldSection } from "./gold-combobox-docs.js?v=3";
@@ -59,7 +59,7 @@ import { animatedMomentDemo, renderAnimatedMomentGoldSection } from "./gold-anim
 let componentDocs = {};
 
 export { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDemo, breadcrumbsDemo, buttonDemo, cardDemo, cardExpiryInputDemo, cardNumberInputDemo, cardSecurityCodeInputDemo, cardSummaryDemo, chartPanelDemo, checkboxDemo, chipDemo, comboboxDemo, countrySelectorDemo, datePickerDemo, dateRangePickerDemo, dialogDemo, drawerDemo, emptyStateDemo, errorPanelDemo, floatingActionButtonDemo, iconButtonDemo, inlineValidationDemo, kpiTileDemo, listDemo, animatedMomentDemo, menuDemo, motionBoundaryDemo, movementRowDemo, codeInputDemo, paginationDemo, phoneInputDemo, popoverDemo, progressIndicatorDemo, quickActionDemo, radioButtonDemo, routeSummaryDemo, segmentedControlDemo, selectDemo, skeletonDemo, spinnerDemo, sliderDemo, stationPinDemo, stepperDemo, switchDemo, tableDemo, tabsDemo, tabsDemoFromData, tagDemo, textAreaDemo, inputDemo, toastDemo, tooltipDemo, treeViewDemo };
-export { demoCell } from "./gold-component-core.js?v=212";
+export { demoCell } from "./gold-component-core.js?v=213";
 
 export function configureGoldComponentDocs(nextDeps) {
   componentDocs = nextDeps.componentDocs;

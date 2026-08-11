@@ -53,6 +53,45 @@ function componentDetailSection({ component, section, className = "", attrs = ""
   `;
 }
 
+function componentDetailTable({ component, section, className = "", columns = [], rows = [] } = {}) {
+  return html`
+    <div class="props-table ${className}">
+      <div>${columns.map((column) => `<strong>${column}</strong>`).join("")}</div>
+      ${rows
+        .map(
+          (row) => html`
+            <div>
+              ${row.map((value, index) => (index === 0 ? `<code>${value}</code>` : `<span>${value}</span>`)).join("")}
+            </div>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+}
+
+function componentDetailDemoGrid({ items = [], className = "button-demo-grid states-grid" } = {}) {
+  return html`
+    <div class="${className}">
+      ${items.map((item) => demoCell(item.label, item.content)).join("")}
+    </div>
+  `;
+}
+
+function componentDetailChecklist(items = []) {
+  return html`
+    <div class="checklist-grid">
+      ${items
+        .map(
+          (item) => html`
+            <article>${icon(item.icon ?? "check_circle", { tone: item.tone ?? "success", fill: true })}<span>${item.copy}</span></article>
+          `,
+        )
+        .join("")}
+    </div>
+  `;
+}
+
 export function componentMielPanel(entry) {
   const miel = componentSectionData(entry.id, "miel");
   const agentSpec = componentAgentSpec(entry, "Component");
@@ -99,7 +138,10 @@ export {
   componentApiProps,
   componentCopy,
   componentDemoData,
+  componentDetailChecklist,
+  componentDetailDemoGrid,
   componentDetailSection,
+  componentDetailTable,
   componentSectionCopy,
   componentSectionData,
   html,
