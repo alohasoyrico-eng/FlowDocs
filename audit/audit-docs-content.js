@@ -236,6 +236,35 @@ function countComponentDetailRawControls(file, text) {
   return countMatches(stripAllowedComponentDetailControlBridges(text), rawControlPattern);
 }
 
+function componentDetailRendererId(file) {
+  const base = path.basename(file);
+  if (base === "family-component-docs.js") return "family-fallback";
+  if (base === "candidate-component-docs.js") return "candidate-composition";
+  return base.replace(/^gold-/, "").replace(/-docs\.js$/, "");
+}
+
+function componentDetailRendererKind(file, text, simpleGoldRenderers, customGoldRenderers) {
+  const base = path.basename(file);
+  const id = componentDetailRendererId(file);
+  if (base === "family-component-docs.js") return "family-fallback";
+  if (base === "candidate-component-docs.js") return "candidate-composition";
+  if (base === "gold-simple-component-docs.js") return "shared-simple-template";
+  if (base === "gold-component-core.js" || base === "gold-component-data.js") return "shared-support";
+  if (simpleGoldRenderers.includes(id)) return "gold-shared";
+  if (customGoldRenderers.includes(id)) return "gold-custom";
+  if (/^gold-.*-docs\.js$/.test(base)) return "gold-unclassified";
+  return text.includes("componentDetailSection(") ? "shared-support" : "support";
+}
+
+function componentDetailMigrationCategory(kind, id, governedCustomRenderers) {
+  if (kind === "gold-shared" || kind === "shared-simple-template") return "template-ready";
+  if (kind === "gold-custom" && governedCustomRenderers.includes(id)) return "custom-slot-governed";
+  if (kind === "gold-custom") return "custom-slot-needs-governance";
+  if (kind === "family-fallback" || kind === "candidate-composition") return "template-gap";
+  if (kind === "shared-support") return "support";
+  return "needs-classification";
+}
+
 function checkDetailShellTemplateReadiness() {
   const docsLayout = read(docsLayoutFile);
   const appRuntime = read(docsAppFile);
@@ -494,6 +523,57 @@ function checkComponentDetailTemplateReadiness() {
     .filter((entry) => !entry.text.includes("componentDetailSection(") && !entry.text.includes("component-detail-surface") && !entry.text.includes("renderSimpleGoldSection"))
     .map((entry) => path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, ""))
     .sort();
+  const componentDetailAuditFiles = [
+    ...componentModuleFiles,
+    path.join(docsAppDir, "family-component-docs.js"),
+    path.join(docsAppDir, "candidate-component-docs.js"),
+  ].filter((file) => fs.existsSync(file));
+  const componentDetailRendererInventory = componentDetailAuditFiles
+    .map((file) => {
+      const text = read(file);
+      const id = componentDetailRendererId(file);
+      const kind = componentDetailRendererKind(file, text, simpleGoldRenderers, customGoldRenderers);
+      const migrationCategory = componentDetailMigrationCategory(kind, id, governedCustomRenderers);
+      const sectionCoverage = templateSectionIds.filter((section) => text.includes(section));
+      return {
+        id,
+        file: path.relative(process.cwd(), file),
+        kind,
+        migrationCategory,
+        sectionCoverage,
+        sectionCoverageCount: sectionCoverage.length,
+        surfaceSections: countMatches(text, /component-detail-surface/g),
+        docPanels: countMatches(text, /doc-panel/g),
+        rawControls: countComponentDetailRawControls(file, text),
+        playgroundBridges: countMatches(text, /data-doc-control-bridge="component-playground"|data-component-playground|data-button-playground/g),
+        propsTables: countMatches(text, /props-table/g),
+        demoGrids: countMatches(text, /button-demo-grid|demoCell\(/g),
+        cardLikeMarkup: countMatches(text, /class="card|cardLink\(|card-/g),
+        usesFlowDemo: countMatches(text, /Demo(?:FromData)?\(|componentDemo\(/g),
+        usesSharedSection: text.includes("componentDetailSection(") || text.includes("renderSimpleGoldSection("),
+      };
+    })
+    .sort((a, b) => a.kind.localeCompare(b.kind) || a.id.localeCompare(b.id));
+  const templateGaps = componentDetailRendererInventory
+    .filter((entry) => entry.migrationCategory === "template-gap" || entry.docPanels || entry.rawControls)
+    .map(({ id, file, kind, migrationCategory, docPanels, rawControls, propsTables, demoGrids }) => ({
+      id,
+      file,
+      kind,
+      migrationCategory,
+      docPanels,
+      rawControls,
+      propsTables,
+      demoGrids,
+    }));
+  const rendererKindSummary = componentDetailRendererInventory.reduce((summary, entry) => {
+    summary[entry.kind] = (summary[entry.kind] ?? 0) + 1;
+    return summary;
+  }, {});
+  const migrationCategorySummary = componentDetailRendererInventory.reduce((summary, entry) => {
+    summary[entry.migrationCategory] = (summary[entry.migrationCategory] ?? 0) + 1;
+    return summary;
+  }, {});
 
   result.inventory.componentDetailTemplateReadiness = {
     componentDetailModules: componentModuleFiles.length,
@@ -515,6 +595,10 @@ function checkComponentDetailTemplateReadiness() {
     componentDocPanelHotspots: componentDocPanelMatches,
     componentRawControlHotspots: componentRawControlMatches,
     componentSurfaceHotspots: componentOwnSurfaceMatches,
+    rendererKindSummary,
+    migrationCategorySummary,
+    rendererInventory: componentDetailRendererInventory,
+    templateGaps,
     requiredFlowBuildingBlocks: ["Surface", "Card", "Tabs", "Table", "Button", "IconButton", "Input", "Select", "Switch"],
   };
 
