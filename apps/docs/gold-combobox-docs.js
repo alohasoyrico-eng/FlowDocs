@@ -64,16 +64,7 @@ export function comboboxOperationalExamplePanel() {
   `;
 }
 export function comboboxAnatomyPanel() { return simpleAnatomyPanel("combobox"); }
-export function comboboxAccessibilityPanel() {
-  const accessibility = componentSectionData("combobox", "accessibility");
-  return html`
-    <section ${comboboxSurfaceAttrs("accessibility")}>
-      <h2>${ui("component.accessibility")}</h2>
-      <p>State precedence: ${accessibility.statePrecedence}.</p>
-      <div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div>
-    </section>
-  `;
-}
+export function comboboxAccessibilityPanel() { return simpleAccessibilityPanel("combobox"); }
 export function comboboxVariantsPanel() { return simpleVariantsPanel("combobox", comboboxDemoFromData); }
 export function comboboxStatesPanel() { return simpleStatesPanel("combobox", comboboxDemoFromData); }
 export function comboboxStateVariantMatrixPanel() { return simpleStateVariantMatrixPanel("combobox", comboboxDemoFromData); }
