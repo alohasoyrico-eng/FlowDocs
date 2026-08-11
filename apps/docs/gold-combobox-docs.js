@@ -14,7 +14,7 @@ import {
   simpleVariantsPanel,
   simpleViewportOrganizationPanel,
 } from "./gold-simple-component-docs.js?v=255";
-import { componentMielPanel, componentSectionCopy, componentSectionData, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, html, icon, ui } from "./gold-component-core.js?v=214";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
 export function comboboxDemo(label = "Vehicle", value = "MX-4821 - Ana Gomez", state = "filled") { return simpleDemo("combobox", { label, value, state }); }
@@ -40,10 +40,14 @@ export function renderComboboxGoldSection(entry, section) {
   return renderers[section]?.() ?? "";
 }
 
+function comboboxSurfaceAttrs(section, className = "", attrs = "") {
+  return componentDetailSectionAttrs({ component: "combobox", section, className, attrs });
+}
+
 export function comboboxOperationalExamplePanel() {
   const scenario = componentSectionData("combobox", "operational-example").scenario;
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-operational-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${comboboxSurfaceAttrs("operational-example", "button-operational-panel")}>
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("combobox", "operational-example")}</p>
       <div class="simple-scenario">
@@ -63,7 +67,7 @@ export function comboboxAnatomyPanel() { return simpleAnatomyPanel("combobox"); 
 export function comboboxAccessibilityPanel() {
   const accessibility = componentSectionData("combobox", "accessibility");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${comboboxSurfaceAttrs("accessibility")}>
       <h2>${ui("component.accessibility")}</h2>
       <p>State precedence: ${accessibility.statePrecedence}.</p>
       <div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div>
@@ -79,7 +83,7 @@ export function comboboxViewportOrganizationPanel() { return simpleViewportOrgan
 export function comboboxPlaygroundPanel() {
   const playground = componentSectionData("combobox", "playground");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-playground" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-playground="combobox" data-ready="false">
+    <section ${comboboxSurfaceAttrs("playground", "button-playground", 'data-component-playground="combobox" data-ready="false"')}>
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("combobox", "playground")}</p>
       <div class="playground-layout">

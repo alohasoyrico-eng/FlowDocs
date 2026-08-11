@@ -1,4 +1,4 @@
-import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { cardDemoFromData, playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -22,10 +22,14 @@ export function renderCardGoldSection(entry, section) {
   return renderers[section]?.() ?? "";
 }
 
+function cardSurfaceAttrs(section, className = "", attrs = "") {
+  return componentDetailSectionAttrs({ component: "card", section, className, attrs });
+}
+
 function cardOperationalExamplePanel() {
   const scenario = componentSectionData("card", "operational-example").scenario;
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-operational-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("operational-example", "button-operational-panel")}>
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("card", "operational-example")}</p>
       <div class="card-scenario">
@@ -44,7 +48,7 @@ function cardOperationalExamplePanel() {
 function cardAnatomyPanel() {
   const anatomy = componentSectionData("card", "anatomy").items ?? [];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("anatomy")}>
       <h2>${ui("component.anatomy")}</h2>
       <div class="button-anatomy">
         ${anatomy
@@ -70,7 +74,7 @@ function cardAccessibilityPanel() {
   const accessibility = componentSectionData("card", "accessibility");
   const items = accessibility.items ?? [];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("accessibility")}>
       <h2>${ui("component.accessibility")}</h2>
       <p>State precedence: ${accessibility.statePrecedence ?? "disabled, loading, error, selected, focus, hover, default"}.</p>
       <div class="checklist-grid">
@@ -83,7 +87,7 @@ function cardAccessibilityPanel() {
 function cardViewportOrganizationPanel() {
   const items = componentDemoData("card", "viewport-organization", "items");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-viewport-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("viewport-organization", "button-viewport-panel")}>
       <h2>${ui("component.viewportOrganization")}</h2>
       <p>${componentSectionCopy("card", "viewport-organization")}</p>
       <div class="viewport-doc-grid">
@@ -115,7 +119,7 @@ function cardVariantsPanel() {
     ...compositions
   ];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("variants")}>
       <h2>${ui("component.variants")}</h2>
       <p>${componentSectionCopy("card", "variants")}</p>
       <div class="card-reference-compositions">
@@ -173,7 +177,7 @@ function cardGhostContextDemo(demo = {}) {
 function cardStatesPanel() {
   const states = componentDemoData("card", "states");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("states")}>
       <h2>${ui("component.states")}</h2>
       <p>${componentSectionCopy("card", "states")}</p>
       <div class="button-demo-grid states-grid">
@@ -187,7 +191,7 @@ function cardStateVariantMatrixPanel() {
   const rows = componentDemoData("card", "variant-state-behavior", "rows");
   const states = componentDemoData("card", "variant-state-behavior", "states");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("variant-state-behavior")}>
       <h2>${ui("component.variantStateBehavior")}</h2>
       <p>${componentSectionCopy("card", "variant-state-behavior")}</p>
       <div class="button-demo-grid state-behavior-grid">
@@ -215,7 +219,7 @@ function cardStateVariantMatrixPanel() {
 function cardFullWidthPanel() {
   const items = componentDemoData("card", "full-width", "items");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("full-width")}>
       <h2>${ui("component.fullWidth")}</h2>
       <p>${componentSectionCopy("card", "full-width")}</p>
       <div class="full-width-demo">
@@ -235,7 +239,7 @@ function cardFullWidthPanel() {
 function cardResponsivePanel() {
   const examples = componentDemoData("card", "responsive-layout-patterns", "examples");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("responsive-layout-patterns")}>
       <h2>${ui("component.responsiveLayoutPatterns")}</h2>
       <p>${componentSectionCopy("card", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
@@ -255,7 +259,7 @@ function cardResponsivePanel() {
 function cardPlaygroundPanel() {
   const playground = componentSectionData("card", "playground");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-playground" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-playground="card" data-ready="false">
+    <section ${cardSurfaceAttrs("playground", "button-playground", 'data-component-playground="card" data-ready="false"')}>
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("card", "playground")}</p>
       <div class="playground-layout">
@@ -274,7 +278,7 @@ function cardPlaygroundPanel() {
 function cardContractPanel() {
   const props = componentApiProps("card");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("api-foundations")}>
       <h2>${ui("build.apiAndFoundations")}</h2>
       <p>${componentSectionCopy("card", "api-foundations")}</p>
       <div class="props-table">
@@ -288,7 +292,7 @@ function cardContractPanel() {
 function cardGuidelinesPanel() {
   const groups = componentSectionData("card", "guidelines").groups ?? [];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("guidelines")}>
       <h2>${ui("guidelines.title")}</h2>
       <div class="guidelines-grid">
         ${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}
@@ -302,7 +306,7 @@ function cardTestPanel() {
   const mustTest = tests.mustTest ?? [];
   const rejectIf = tests.rejectIf ?? [];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${cardSurfaceAttrs("tests-rejection-rules")}>
       <h2>${ui("tests.title")}</h2>
       <div class="two-column-list">
         <article><h3>${ui("tests.mustTest")}</h3><ul>${mustTest.map((item) => `<li>${item}</li>`).join("")}</ul></article>
