@@ -1,6 +1,7 @@
 import React from "react";
 import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1";
 import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
+import { CalendarView } from "./generated/react/patterns/CalendarView.js?v=1";
 import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1";
 import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1";
 import { DragSortableList } from "./generated/react/patterns/DragSortableList.js?v=1";
@@ -17,6 +18,7 @@ import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1
 export const patternReactComponents = {
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtp,
   "avatar-group": AvatarGroup,
+  "calendar-view": CalendarView,
   "chart-legend-item": ChartLegendItem,
   "checkbox-group": CheckboxGroup,
   "drag-sortable-list": DragSortableList,
@@ -221,8 +223,65 @@ function DragSortableListIsland({ initialProps }) {
   });
 }
 
+function CalendarViewIsland({ initialProps }) {
+  const initialEvents = initialProps.events ?? [
+    { key: "brake", label: "Brake inspection", description: "JMX-214-B · 09:00", time: "09:00", owner: "Ana Sosa", icon: "event", status: "warning", statusLabel: "Due" },
+    { key: "policy", label: "Policy renewal", description: "Fleet North · 14:00", time: "14:00", owner: "Luis Vera", icon: "event_available", status: "success", statusLabel: "Review" },
+  ];
+  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? initialEvents[0]?.key ?? "");
+  const [range, setRange] = React.useState(initialProps.dateControl?.value ?? { from: initialProps.selectedDate ?? "2026-07-18", to: initialProps.selectedDate ?? "2026-07-18" });
+  const [state, setState] = React.useState(initialProps.state ?? "selected");
+  const [detailOpen, setDetailOpen] = React.useState(Boolean(initialProps.detail?.open));
+  const selectedEvent = initialEvents.find((event) => event.key === selectedKey);
+
+  const setNextWindow = () => {
+    setState("range-changing");
+    window.setTimeout(() => {
+      setRange({ from: "2026-07-19", to: "2026-07-20" });
+      setState("selected");
+    }, 220);
+  };
+
+  return React.createElement(CalendarView, {
+    ...initialProps,
+    state,
+    events: initialEvents,
+    selectedKey,
+    selectedDate: range.from,
+    rangeLabel: range.from === range.to ? "Jul 18" : "Jul 19-20",
+    dateControl: {
+      ...(initialProps.dateControl ?? {}),
+      value: range,
+      helper: "America/Mexico_City",
+    },
+    detail: {
+      ...(initialProps.detail ?? {}),
+      open: detailOpen,
+      title: selectedEvent?.label ?? initialProps.detail?.title,
+      description: selectedEvent?.description ?? initialProps.detail?.description,
+      triggerLabel: "Review schedule",
+      actions: [{ label: "Open route plan", icon: "open_in_new" }],
+    },
+    actions: [
+      ...(initialProps.actions ?? []),
+      { key: "next-window", label: "Next window", icon: "calendar_month", onClick: setNextWindow },
+    ],
+    onDateChange: (value, event) => {
+      setRange(value);
+      setState("selected");
+      initialProps.onDateChange?.(value, event);
+    },
+    onEventSelect: (key, event) => {
+      setSelectedKey(key);
+      setDetailOpen(true);
+      initialProps.onEventSelect?.(key, event);
+    },
+  });
+}
+
 export const patternReactIslandWrappers = {
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
+  "calendar-view": CalendarViewIsland,
   "chart-legend-item": ChartLegendItemIsland,
   "checkbox-group": CheckboxGroupIsland,
   "drag-sortable-list": DragSortableListIsland,

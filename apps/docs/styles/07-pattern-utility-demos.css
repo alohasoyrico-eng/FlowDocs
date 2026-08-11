@@ -60,9 +60,7 @@
   gap: var(--sys-space-3);
 }
 
-.pattern-transfer-list-demo__panes > div,
-.pattern-calendar-demo__events,
-.pattern-sortable-demo__list {
+.pattern-transfer-list-demo__panes > div {
   display: grid;
   gap: var(--sys-space-2);
   padding: var(--sys-space-3);
@@ -74,18 +72,6 @@
 .pattern-transfer-list-demo__panes h3 {
   margin: 0;
   font-size: var(--sys-voice-size-3);
-}
-
-.pattern-sortable-demo__list {
-  margin: 0;
-  padding-inline-start: calc(var(--sys-space-5) + var(--sys-space-2));
-}
-
-.pattern-sortable-demo__list li {
-  display: flex;
-  gap: var(--sys-space-2);
-  align-items: center;
-  justify-content: space-between;
 }
 
 .pattern-utility-demo [hidden],

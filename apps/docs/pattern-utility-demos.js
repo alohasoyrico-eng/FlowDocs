@@ -388,12 +388,12 @@ function dragSortableListDemoPanel() {
 function calendarViewDemoPanel() {
   return html`
     <section class="doc-panel wide pattern-utility-panel"><span class="eyebrow">Interactive demo</span><h2>Maintenance calendar</h2>
-      <div class="pattern-calendar-demo pattern-utility-demo" data-calendar-demo>
-        ${packageDemo("date-picker", { label: "Selected date", value: "2026-07-18" }, { "data-calendar-date": "" })}
-        <div class="pattern-calendar-demo__events" data-calendar-events>
-          ${packageDemo("list", { label: "Scheduled events", items: [{ label: "Brake inspection", meta: "JMX-214-B - 09:00", value: "Due", icon: "event" }, { label: "Policy renewal", meta: "Fleet North - 14:00", value: "Review", icon: "event_available" }] })}
-        </div>
-        ${packageDemo("button", { label: "Review schedule", icon: "calendar_month" }, { "data-calendar-review": "" })}
-      </div>
+      ${patternReactDemo("calendar-view", {
+        label: "Maintenance calendar",
+        density: "md", selectedDate: "2026-07-18", timezoneLabel: "America/Mexico_City",
+        dateControl: { label: "Selected range", value: { from: "2026-07-18", to: "2026-07-18" } },
+        events: [{ key: "brake", label: "Brake inspection", description: "JMX-214-B · 09:00", time: "09:00", owner: "Ana Sosa", icon: "event", status: "warning", statusLabel: "Due" }, { key: "policy", label: "Policy renewal", description: "Fleet North · 14:00", time: "14:00", owner: "Luis Vera", icon: "event_available", status: "success", statusLabel: "Review" }],
+        detail: { triggerLabel: "Review schedule", placement: "bottom" }, "data-pattern-demo": "calendar-view",
+      })}
     </section>`;
 }
