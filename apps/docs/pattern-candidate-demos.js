@@ -200,28 +200,23 @@ function searchDemoPanel() {
 }
 
 function autocompleteDemoPanel() {
-  const suggestions = [
-    ["jmx", "JMX-214-B", "Vehicle - Ana Sosa", "jmx vehicle ana"],
-    ["kld", "KLD-901-C", "Vehicle - Luis Vera", "kld vehicle luis"],
-    ["station", "Station 24", "Preferred fuel station", "station fuel"],
-  ];
   return html`
     <section class="doc-panel wide pattern-autocomplete-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Entity autocomplete</h2>
-      <div class="pattern-autocomplete-demo" data-autocomplete-demo>
-        ${packageDemo("combobox", {
-          label: "Assign vehicle or station",
-          placeholder: "Start typing an entity",
-          helper: "Choose a valid operational entity.",
-          icon: "search",
-          state: "open",
-          options: suggestions.map(([id, label, meta]) => ({ label, value: id, meta })),
-        }, { "data-autocomplete-control": "" })}
-        <div data-autocomplete-loading hidden>${packageDemo("skeleton", { label: "Loading suggestions", rows: 3 })}</div>
-        <div data-autocomplete-empty hidden>${packageDemo("empty-state", { label: "No suggestions", description: "Check spelling or create a support request.", icon: "search_off" })}</div>
-        <div data-autocomplete-validation hidden>${packageDemo("inline-validation", { label: "Selected entity", message: "Choose a valid suggestion before continuing.", state: "warning" })}</div>
-      </div>
+      ${patternReactDemo("autocomplete", {
+        label: "Assign vehicle or station",
+        placeholder: "Start typing an entity",
+        helper: "Choose a valid operational entity.",
+        density: "md",
+        suggestions: [
+          { key: "jmx", value: "jmx", label: "JMX-214-B", meta: "Vehicle - Ana Sosa", keywords: "jmx vehicle ana" },
+          { key: "kld", value: "kld", label: "KLD-901-C", meta: "Vehicle - Luis Vera", keywords: "kld vehicle luis" },
+          { key: "station", value: "station", label: "Station 24", meta: "Preferred fuel station", keywords: "station fuel" },
+        ],
+        empty: { title: "No suggestions", description: "Check spelling or create a support request.", icon: "search_off" },
+        "data-pattern-demo": "autocomplete",
+      })}
     </section>
   `;
 }

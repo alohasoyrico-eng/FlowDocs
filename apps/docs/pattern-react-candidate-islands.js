@@ -1,5 +1,6 @@
 import React from "react";
 import { ActionSheet } from "./generated/react/patterns/ActionSheet.js?v=1";
+import { Autocomplete } from "./generated/react/patterns/Autocomplete.js?v=1";
 import { AvatarMenu } from "./generated/react/patterns/AvatarMenu.js?v=1";
 import { CommandPalette } from "./generated/react/patterns/CommandPalette.js?v=1";
 import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
@@ -8,6 +9,7 @@ import { Search } from "./generated/react/patterns/Search.js?v=1";
 
 export const candidatePatternReactComponents = {
   "action-sheet": ActionSheet,
+  autocomplete: Autocomplete,
   "avatar-menu": AvatarMenu,
   "command-palette": CommandPalette,
   "confirmation-dialog": ConfirmationDialog,
@@ -37,6 +39,58 @@ function ActionSheetIsland({ initialProps }) {
         setOpen(false);
         initialProps.cancelAction?.onClick?.(event);
       },
+    },
+  });
+}
+
+function AutocompleteIsland({ initialProps }) {
+  const allSuggestions = initialProps.suggestions ?? [];
+  const [query, setQuery] = React.useState(initialProps.value ?? "");
+  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? "");
+  const [loading, setLoading] = React.useState(Boolean(initialProps.loading));
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredSuggestions = allSuggestions.filter((suggestion) => {
+    const haystack = `${suggestion.label} ${suggestion.meta ?? ""} ${suggestion.keywords ?? ""}`.toLowerCase();
+    return !normalizedQuery || haystack.includes(normalizedQuery);
+  });
+  const visibleSuggestions = normalizedQuery ? filteredSuggestions : allSuggestions.slice(0, 3);
+  const resolvedState = loading
+    ? "loading"
+    : selectedKey
+      ? "selected"
+      : normalizedQuery && !filteredSuggestions.length
+        ? "empty"
+        : normalizedQuery
+          ? "suggesting"
+          : "idle";
+
+  const queueLoadingPreview = (value) => {
+    if (value.trim().length !== 1) return;
+    setLoading(true);
+    window.setTimeout(() => setLoading(false), 280);
+  };
+
+  return React.createElement(Autocomplete, {
+    ...initialProps,
+    value: query,
+    selectedKey,
+    loading,
+    state: resolvedState,
+    suggestions: loading ? [] : visibleSuggestions,
+    "aria-busy": loading ? "true" : undefined,
+    validation: selectedKey
+      ? { label: "Selected entity", message: `${visibleSuggestions.find((suggestion) => suggestion.value === selectedKey || suggestion.key === selectedKey)?.label ?? "Entity"} selected.`, state: "success", live: true }
+      : initialProps.validation,
+    onValueChange: (value, meta, event) => {
+      setQuery(value);
+      setSelectedKey("");
+      queueLoadingPreview(value);
+      initialProps.onValueChange?.(value, meta, event);
+    },
+    onSuggestionSelect: (key, event) => {
+      setSelectedKey(key);
+      setQuery(allSuggestions.find((suggestion) => suggestion.value === key || suggestion.key === key)?.label ?? key);
+      initialProps.onSuggestionSelect?.(key, event);
     },
   });
 }
@@ -195,6 +249,7 @@ function SearchIsland({ initialProps }) {
 
 export const candidatePatternReactIslandWrappers = {
   "action-sheet": ActionSheetIsland,
+  autocomplete: AutocompleteIsland,
   "avatar-menu": AvatarMenuIsland,
   "command-palette": CommandPaletteIsland,
   "confirmation-dialog": ConfirmationDialogIsland,

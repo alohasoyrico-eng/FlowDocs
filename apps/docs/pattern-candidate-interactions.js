@@ -1,6 +1,5 @@
 export function setupCandidatePatternInteractions() {
   document.addEventListener("click", handleCandidatePatternClick);
-  document.addEventListener("input", handleCandidatePatternInput);
 }
 
 function handleCandidatePatternClick(event) {
@@ -14,42 +13,10 @@ function handleCandidatePatternClick(event) {
   if (multiSelectApply) return applyMultiSelect(multiSelectApply.closest("[data-multi-select-demo]"));
 }
 
-function handleCandidatePatternInput(event) {
-  const autocompleteControl = event.target.closest("[data-autocomplete-control]");
-  if (autocompleteControl) filterAutocompleteDemo(autocompleteControl.closest("[data-autocomplete-demo]"));
-}
-
 document.addEventListener("change", (event) => {
   const multiSelectOption = event.target.closest("[data-multi-select-option]");
   if (multiSelectOption) return updateMultiSelect(multiSelectOption.closest("[data-multi-select-demo]"));
 });
-
-function fieldValue(control) {
-  const nativeField = control?.querySelector("input, select");
-  if (nativeField) return nativeField.value?.trim() ?? "";
-  const selectControl = control?.querySelector("[data-select-control]");
-  if (selectControl?.dataset?.value) return selectControl.dataset.value.trim();
-  const selectedOption = control?.querySelector("[data-select-option][aria-selected='true']");
-  return selectedOption?.dataset?.value?.trim() ?? selectedOption?.textContent?.trim() ?? "";
-}
-
-function filterAutocompleteDemo(demo) {
-  if (!demo) return;
-  const query = fieldValue(demo.querySelector("[data-autocomplete-control]")).toLowerCase();
-  const loading = demo.querySelector("[data-autocomplete-loading]");
-  const isLoadingPreview = query.length === 1;
-  if (loading) loading.hidden = !isLoadingPreview;
-  let visibleCount = 0;
-  demo.querySelectorAll("[data-autocomplete-control] [data-combobox-option]").forEach((option) => {
-    if (!option.hidden) visibleCount += 1;
-  });
-  const comboboxEmpty = demo.querySelector("[data-autocomplete-control] [data-combobox-empty]");
-  if (comboboxEmpty) comboboxEmpty.hidden = true;
-  const empty = demo.querySelector("[data-autocomplete-empty]");
-  if (empty) empty.hidden = query.length === 0 || isLoadingPreview || visibleCount > 0;
-  const validation = demo.querySelector("[data-autocomplete-validation]");
-  if (validation) validation.hidden = true;
-}
 
 function chooseSelectLayerOption(demo, key) {
   if (!demo) return;
