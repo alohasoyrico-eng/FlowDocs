@@ -1,4 +1,4 @@
-import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -49,8 +49,7 @@ function radioButtonAnatomyPanel() {
 }
 
 function radioButtonAccessibilityPanel() {
-  const accessibility = componentSectionData("radio-button", "accessibility");
-  return html`<section ${radioButtonSurfaceAttrs("accessibility")}><h2>${ui("component.accessibility")}</h2><p>State precedence: ${accessibility.statePrecedence}.</p><div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div></section>`;
+  return html`<section ${radioButtonSurfaceAttrs("accessibility")}>${componentDetailAccessibilityContent("radio-button")}</section>`;
 }
 
 function radioButtonVariantsPanel() {
@@ -90,18 +89,15 @@ function radioButtonPlaygroundPanel() {
 }
 
 function radioButtonContractPanel() {
-  const props = componentApiProps("radio-button");
-  return html`<section ${radioButtonSurfaceAttrs("api-foundations")}><h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy("radio-button", "api-foundations")}</p><div class="props-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div></section>`;
+  return html`<section ${radioButtonSurfaceAttrs("api-foundations")}><h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy("radio-button", "api-foundations")}</p>${componentDetailApiPropsTable("radio-button")}</section>`;
 }
 
 function radioButtonGuidelinesPanel() {
-  const groups = componentSectionData("radio-button", "guidelines").groups ?? [];
-  return html`<section ${radioButtonSurfaceAttrs("guidelines")}><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
+  return html`<section ${radioButtonSurfaceAttrs("guidelines")}>${componentDetailGuidelinesContent("radio-button")}</section>`;
 }
 
 function radioButtonTestPanel() {
-  const tests = componentSectionData("radio-button", "tests-rejection-rules");
-  return html`<section ${radioButtonSurfaceAttrs("tests-rejection-rules")}><h2>${ui("tests.title")}</h2><div class="two-column-list"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
+  return html`<section ${radioButtonSurfaceAttrs("tests-rejection-rules")}>${componentDetailTestsContent("radio-button")}</section>`;
 }
 
 function radioButtonDemoFromData(demo) {
