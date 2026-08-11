@@ -23,16 +23,6 @@ function handleCandidatePatternClick(event) {
   const notificationClose = event.target.closest("[data-notification-panel] [data-overlay-close], [data-notification-panel] [data-overlay-dismiss]");
   if (notificationClose) return closeNotificationPanel(notificationClose.closest("[data-notification-demo]"));
 
-  const confirmationOpen = event.target.closest("[data-confirmation-open]");
-  if (confirmationOpen) return openConfirmationDialog(confirmationOpen.closest("[data-confirmation-demo]"));
-
-  const confirmationAction = event.target.closest("[data-confirmation-dialog] [data-key], [data-confirmation-dialog] [data-overlay-close], [data-confirmation-dialog] [data-overlay-dismiss]");
-  if (confirmationAction) {
-    const demo = confirmationAction.closest("[data-confirmation-demo]");
-    if (confirmationAction.dataset.key === "confirm") return confirmConfirmationDialog(demo);
-    return closeConfirmationDialog(demo);
-  }
-
   const searchResult = event.target.closest("[data-search-result]");
   if (searchResult) return selectSearchResult(searchResult.closest("[data-search-demo]"), searchResult);
 
@@ -81,7 +71,6 @@ function handleCandidatePatternKeydown(event) {
   if (event.key !== "Escape") return;
   document.querySelectorAll("[data-command-surface]:not([hidden])").forEach((surface) => closeCommandPalette(surface.closest("[data-command-demo]")));
   document.querySelectorAll("[data-notification-panel]:not([hidden])").forEach((panel) => closeNotificationPanel(panel.closest("[data-notification-demo]")));
-  document.querySelectorAll("[data-confirmation-dialog]:not([hidden])").forEach((dialog) => closeConfirmationDialog(dialog.closest("[data-confirmation-demo]")));
 }
 
 function openCommandPalette(demo) {
@@ -157,27 +146,6 @@ function markNotificationsRead(demo) {
   const empty = demo.querySelector("[data-notification-empty]");
   if (empty) empty.hidden = false;
   const toast = demo.querySelector("[data-notification-toast]");
-  if (toast) toast.hidden = false;
-}
-
-function openConfirmationDialog(demo) {
-  const validation = demo?.querySelector("[data-confirmation-validation]");
-  const dialog = demo?.querySelector("[data-confirmation-dialog]");
-  if (validation) validation.hidden = false;
-  if (!dialog) return;
-  dialog.hidden = false;
-  dialog.querySelector("[data-key='confirm']")?.focus();
-}
-
-function closeConfirmationDialog(demo) {
-  const dialog = demo?.querySelector("[data-confirmation-dialog]");
-  if (dialog) dialog.hidden = true;
-  demo?.querySelector("[data-confirmation-open]")?.focus();
-}
-
-function confirmConfirmationDialog(demo) {
-  closeConfirmationDialog(demo);
-  const toast = demo?.querySelector("[data-confirmation-toast]");
   if (toast) toast.hidden = false;
 }
 

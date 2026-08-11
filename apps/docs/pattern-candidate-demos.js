@@ -113,14 +113,18 @@ function confirmationDialogDemoPanel() {
     <section class="doc-panel wide pattern-confirmation-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Destructive confirmation</h2>
-      <div class="pattern-confirmation-demo" data-confirmation-demo>
-        ${packageDemo("button", { label: "Freeze card", intent: "danger", icon: "block" }, { "data-confirmation-open": "" })}
-        <div data-confirmation-validation hidden>${packageDemo("inline-validation", { label: "Freeze card", value: "JMX-214-B", message: "This action creates an audit event.", state: "warning" })}</div>
-        <div data-confirmation-dialog hidden>
-          ${packageDemo("dialog", { label: "Freeze JMX-214-B?", description: "The assigned driver cannot use this card until it is reactivated.", trigger: "Freeze card", tone: "danger", actions: [{ label: "Freeze card", intent: "danger", key: "confirm" }, { label: "Cancel", variant: "secondary", key: "cancel" }] }, { "data-pattern-dialog": "confirmation" })}
-        </div>
-        <div data-confirmation-toast hidden>${packageDemo("toast", { label: "Card frozen", description: "JMX-214-B was frozen and logged.", tone: "success" }, { "data-pattern-toast": "confirmation" })}</div>
-      </div>
+      ${patternReactDemo("confirmation-dialog", {
+        label: "Freeze JMX-214-B?",
+        description: "The assigned driver cannot use this card until it is reactivated.",
+        triggerLabel: "Freeze card",
+        closeLabel: "Cancel",
+        density: "md",
+        destructive: true,
+        confirm: { key: "confirm", label: "Freeze card", icon: "block" },
+        cancel: { key: "cancel", label: "Cancel", variant: "secondary" },
+        validation: { label: "Freeze card", message: "This action creates an audit event.", state: "warning" },
+        "data-pattern-demo": "confirmation-dialog",
+      })}
     </section>
   `;
 }

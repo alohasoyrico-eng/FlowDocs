@@ -5,6 +5,7 @@ import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { CalendarView } from "./generated/react/patterns/CalendarView.js?v=1";
 import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1";
 import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1";
+import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
 import { DragSortableList } from "./generated/react/patterns/DragSortableList.js?v=1";
 import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1";
 import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1";
@@ -23,6 +24,7 @@ export const patternReactComponents = {
   "calendar-view": CalendarView,
   "chart-legend-item": ChartLegendItem,
   "checkbox-group": CheckboxGroup,
+  "confirmation-dialog": ConfirmationDialog,
   "drag-sortable-list": DragSortableList,
   "gantt-chart": GanttChart,
   "polar-chart": PolarChart,
@@ -75,6 +77,32 @@ function ActionSheetIsland({ initialProps }) {
         setOpen(false);
         initialProps.cancelAction?.onClick?.(event);
       },
+    },
+  });
+}
+
+function ConfirmationDialogIsland({ initialProps }) {
+  const [open, setOpen] = React.useState(Boolean(initialProps.open));
+  const [feedback, setFeedback] = React.useState(initialProps.feedback);
+  const [validation, setValidation] = React.useState(initialProps.validation);
+  return React.createElement(ConfirmationDialog, {
+    ...initialProps,
+    open,
+    validation,
+    feedback,
+    onOpenChange: (nextOpen, event) => {
+      setOpen(Boolean(nextOpen));
+      if (nextOpen) setValidation(initialProps.validation);
+      initialProps.onOpenChange?.(nextOpen, event);
+    },
+    onConfirm: (event) => {
+      setOpen(false);
+      setFeedback({ label: "Card frozen", description: "JMX-214-B was frozen and logged.", tone: "success" });
+      initialProps.onConfirm?.(event);
+    },
+    onCancel: (event) => {
+      setOpen(false);
+      initialProps.onCancel?.(event);
     },
   });
 }
@@ -313,6 +341,7 @@ export const patternReactIslandWrappers = {
   "calendar-view": CalendarViewIsland,
   "chart-legend-item": ChartLegendItemIsland,
   "checkbox-group": CheckboxGroupIsland,
+  "confirmation-dialog": ConfirmationDialogIsland,
   "drag-sortable-list": DragSortableListIsland,
   "pull-to-refresh": PullToRefreshIsland,
   "radio-group": RadioGroupIsland,
