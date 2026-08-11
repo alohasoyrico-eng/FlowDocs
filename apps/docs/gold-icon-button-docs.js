@@ -1,4 +1,4 @@
-import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -24,68 +24,72 @@ export function renderIconButtonGoldSection(entry, section) {
 
 function iconButtonOperationalExamplePanel() {
   const scenario = componentSectionData("icon-button", "operational-example").scenario;
-  return html`<section class="surface docs-section-surface component-detail-surface wide button-operational-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("icon-button", "operational-example")}</p><div class="icon-button-scenario"><div class="icon-button-console"><header>${icon("touch_app", { tone: "action", fill: true })}<div><strong>Topbar utilities</strong><small>Language, grid, and contrast</small></div></header><div class="icon-button-toolbar">${(scenario.items ?? []).map(iconButtonDemoFromData).join("")}</div></div><div class="fleet-panel-mini"><strong>${scenario.rationaleTitle}</strong><ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></div></div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("operational-example", "button-operational-panel")}><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("icon-button", "operational-example")}</p><div class="icon-button-scenario"><div class="icon-button-console"><header>${icon("touch_app", { tone: "action", fill: true })}<div><strong>Topbar utilities</strong><small>Language, grid, and contrast</small></div></header><div class="icon-button-toolbar">${(scenario.items ?? []).map(iconButtonDemoFromData).join("")}</div></div><div class="fleet-panel-mini"><strong>${scenario.rationaleTitle}</strong><ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></div></div></section>`;
 }
 
 function iconButtonAnatomyPanel() {
   const anatomy = componentSectionData("icon-button", "anatomy").items ?? [];
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.anatomy")}</h2><div class="button-anatomy">${anatomy.map((item, index) => `<article><b>${index + 1}</b><div><strong>${item.part}</strong><p>${item.rule}</p><div class="token-list">${item.tokens.map((token) => `<code>${token}</code>`).join("")}</div></div></article>`).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("anatomy")}><h2>${ui("component.anatomy")}</h2><div class="button-anatomy">${anatomy.map((item, index) => `<article><b>${index + 1}</b><div><strong>${item.part}</strong><p>${item.rule}</p><div class="token-list">${item.tokens.map((token) => `<code>${token}</code>`).join("")}</div></div></article>`).join("")}</div></section>`;
 }
 
 function iconButtonAccessibilityPanel() {
   const accessibility = componentSectionData("icon-button", "accessibility");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.accessibility")}</h2><p>State precedence: ${accessibility.statePrecedence}.</p><div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("accessibility")}><h2>${ui("component.accessibility")}</h2><p>State precedence: ${accessibility.statePrecedence}.</p><div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div></section>`;
 }
 
 function iconButtonVariantsPanel() {
   const variants = componentDemoData("icon-button", "variants");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.variants")}</h2><p>${componentSectionCopy("icon-button", "variants")}</p><div class="button-demo-grid states-grid">${variants.map((demo) => demoCell(demo.label, iconButtonDemoFromData(demo))).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("variants")}><h2>${ui("component.variants")}</h2><p>${componentSectionCopy("icon-button", "variants")}</p><div class="button-demo-grid states-grid">${variants.map((demo) => demoCell(demo.label, iconButtonDemoFromData(demo))).join("")}</div></section>`;
 }
 
 function iconButtonStatesPanel() {
   const states = componentDemoData("icon-button", "states");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.states")}</h2><p>${componentSectionCopy("icon-button", "states")}</p><div class="button-demo-grid states-grid">${states.map((demo) => demoCell(demo.label, iconButtonDemoFromData(demo))).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("states")}><h2>${ui("component.states")}</h2><p>${componentSectionCopy("icon-button", "states")}</p><div class="button-demo-grid states-grid">${states.map((demo) => demoCell(demo.label, iconButtonDemoFromData(demo))).join("")}</div></section>`;
 }
 
 function iconButtonStateVariantMatrixPanel() {
   const rows = componentDemoData("icon-button", "variant-state-behavior", "rows");
   const states = componentDemoData("icon-button", "variant-state-behavior", "states");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.variantStateBehavior")}</h2><p>${componentSectionCopy("icon-button", "variant-state-behavior")}</p><div class="button-demo-grid state-behavior-grid">${rows.flatMap((row) => states.map((state) => demoCell(`${row.label} · ${state}`, iconButtonDemoFromData(stateDemo(row.button, state))))).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("variant-state-behavior")}><h2>${ui("component.variantStateBehavior")}</h2><p>${componentSectionCopy("icon-button", "variant-state-behavior")}</p><div class="button-demo-grid state-behavior-grid">${rows.flatMap((row) => states.map((state) => demoCell(`${row.label} · ${state}`, iconButtonDemoFromData(stateDemo(row.button, state))))).join("")}</div></section>`;
 }
 
 function iconButtonFullWidthPanel() {
   const items = componentDemoData("icon-button", "full-width", "items");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy("icon-button", "full-width")}</p><div class="full-width-demo">${items.map((item) => `<div><span class="overline">${item.label}</span>${item.layout === "container" ? `<div class="container-demo">${item.demos.map((demo) => `<div data-span="${demo.span}"><div class="icon-button-toolbar">${iconButtonDemoFromData(demo)}</div></div>`).join("")}</div>` : `<div class="icon-button-toolbar">${(item.demos ?? [item.demo]).map(iconButtonDemoFromData).join("")}</div>`}</div>`).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("full-width")}><h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy("icon-button", "full-width")}</p><div class="full-width-demo">${items.map((item) => `<div><span class="overline">${item.label}</span>${item.layout === "container" ? `<div class="container-demo">${item.demos.map((demo) => `<div data-span="${demo.span}"><div class="icon-button-toolbar">${iconButtonDemoFromData(demo)}</div></div>`).join("")}</div>` : `<div class="icon-button-toolbar">${(item.demos ?? [item.demo]).map(iconButtonDemoFromData).join("")}</div>`}</div>`).join("")}</div></section>`;
 }
 
 function iconButtonResponsivePanel() {
   const examples = componentDemoData("icon-button", "responsive-layout-patterns", "examples");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy("icon-button", "responsive-layout-patterns")}</p><div class="responsive-actions-demo">${examples.map((example) => `<article><span class="overline">${example.label}</span><div class="${example.layout}" data-density-context="${example.density}">${(example.demos ?? []).map((demo) => iconButtonDemoFromData({ ...demo, density: example.density })).join("")}</div></article>`).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("responsive-layout-patterns")}><h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy("icon-button", "responsive-layout-patterns")}</p><div class="responsive-actions-demo">${examples.map((example) => `<article><span class="overline">${example.label}</span><div class="${example.layout}" data-density-context="${example.density}">${(example.demos ?? []).map((demo) => iconButtonDemoFromData({ ...demo, density: example.density })).join("")}</div></article>`).join("")}</div></section>`;
 }
 
 function iconButtonViewportOrganizationPanel() {
   const items = componentDemoData("icon-button", "viewport-organization", "items");
-  return html`<section class="surface docs-section-surface component-detail-surface wide button-viewport-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy("icon-button", "viewport-organization")}</p><div class="viewport-doc-grid">${items.map((item) => `<article data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code><div class="icon-button-toolbar">${iconButtonDemoFromData({ ...item.demo, density: item.density })}</div></article>`).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("viewport-organization", "button-viewport-panel")}><h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy("icon-button", "viewport-organization")}</p><div class="viewport-doc-grid">${items.map((item) => `<article data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code><div class="icon-button-toolbar">${iconButtonDemoFromData({ ...item.demo, density: item.density })}</div></article>`).join("")}</div></section>`;
 }
 
 function iconButtonPlaygroundPanel() {
   const playground = componentSectionData("icon-button", "playground");
-  return html`<section class="surface docs-section-surface component-detail-surface wide button-playground" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-playground="icon-button" data-ready="false"><h2>${ui("component.playground")}</h2><p>${componentSectionCopy("icon-button", "playground")}</p><div class="playground-layout"><div class="playground-controls" aria-label="${ui("playground.iconButtonControls")}">${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}</div><div class="playground-preview"><div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${iconButtonDemoFromData(playground.preview ?? {})}</div><pre data-component-markup>${playground.snippet ?? ""}</pre></div></div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("playground", "button-playground", `data-component-playground="icon-button" data-ready="false"`)}><h2>${ui("component.playground")}</h2><p>${componentSectionCopy("icon-button", "playground")}</p><div class="playground-layout"><div class="playground-controls" aria-label="${ui("playground.iconButtonControls")}">${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}</div><div class="playground-preview"><div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${iconButtonDemoFromData(playground.preview ?? {})}</div><pre data-component-markup>${playground.snippet ?? ""}</pre></div></div></section>`;
 }
 
 function iconButtonContractPanel() {
   const props = componentApiProps("icon-button");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy("icon-button", "api-foundations")}</p><div class="props-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("api-foundations")}><h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy("icon-button", "api-foundations")}</p><div class="props-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div></section>`;
 }
 
 function iconButtonGuidelinesPanel() {
   const groups = componentSectionData("icon-button", "guidelines").groups ?? [];
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("guidelines")}><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
 }
 
 function iconButtonTestPanel() {
   const tests = componentSectionData("icon-button", "tests-rejection-rules");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("tests.title")}</h2><div class="two-column-list"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("tests-rejection-rules")}><h2>${ui("tests.title")}</h2><div class="two-column-list"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
+}
+
+function iconButtonSurfaceAttrs(section, className = "", attrs = "") {
+  return componentDetailSectionAttrs({ component: "icon-button", section, className, attrs });
 }
 
 function iconButtonDemoFromData(demo) {
