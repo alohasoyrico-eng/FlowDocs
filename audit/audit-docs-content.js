@@ -520,7 +520,7 @@ function checkComponentDetailTemplateReadiness() {
   });
   const customRendererBoundaryGaps = componentModules
     .filter((entry) => customGoldRenderers.includes(path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, "")))
-    .filter((entry) => !entry.text.includes("componentDetailSection(") && !entry.text.includes("component-detail-surface") && !entry.text.includes("renderSimpleGoldSection"))
+    .filter((entry) => !entry.text.includes("componentDetailSection(") && !entry.text.includes("componentDetailSectionAttrs(") && !entry.text.includes("component-detail-surface") && !entry.text.includes("renderSimpleGoldSection"))
     .map((entry) => path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, ""))
     .sort();
   const componentDetailAuditFiles = [
@@ -538,7 +538,7 @@ function checkComponentDetailTemplateReadiness() {
       const rawControls = countComponentDetailRawControls(file, text);
       const propsTables = countMatches(text, /props-table/g);
       const demoGrids = countMatches(text, /button-demo-grid|demoCell\(/g);
-      const usesSharedSection = text.includes("componentDetailSection(") || text.includes("renderSimpleGoldSection(");
+      const usesSharedSection = text.includes("componentDetailSection(") || text.includes("componentDetailSectionAttrs(") || text.includes("renderSimpleGoldSection(");
       const hasTemplateHotspots = docPanels || rawControls || propsTables || demoGrids;
       const migrationCategory = (kind === "family-fallback" || kind === "candidate-composition") && usesSharedSection && !hasTemplateHotspots
         ? "template-ready"

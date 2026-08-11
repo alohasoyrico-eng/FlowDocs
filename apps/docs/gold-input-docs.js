@@ -1,4 +1,4 @@
-import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=213";
+import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js";
 
@@ -25,7 +25,7 @@ export function renderInputGoldSection(entry, section) {
 function inputOperationalExamplePanel() {
   const scenario = componentSectionData("input", "operational-example").scenario;
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-operational-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("operational-example", "button-operational-panel")}>
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("input", "operational-example")}</p>
       <div class="input-scenario">
@@ -45,7 +45,7 @@ function inputOperationalExamplePanel() {
 function inputAnatomyPanel() {
   const anatomy = componentSectionData("input", "anatomy").items ?? [];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("anatomy")}>
       <h2>${ui("component.anatomy")}</h2>
       <div class="button-anatomy">
         ${anatomy.map((item, index) => html`
@@ -59,7 +59,7 @@ function inputAnatomyPanel() {
 function inputAccessibilityPanel() {
   const accessibility = componentSectionData("input", "accessibility");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("accessibility")}>
       <h2>${ui("component.accessibility")}</h2>
       <p>State precedence: ${accessibility.statePrecedence}.</p>
       <div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div>
@@ -70,7 +70,7 @@ function inputAccessibilityPanel() {
 function inputVariantsPanel() {
   const variants = componentDemoData("input", "variants");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("variants")}>
       <h2>${ui("component.variants")}</h2>
       <p>${componentSectionCopy("input", "variants")}</p>
       <div class="button-demo-grid states-grid">${variants.map((demo) => demoCell(demo.label, inputDemoFromData(demo))).join("")}</div>
@@ -81,7 +81,7 @@ function inputVariantsPanel() {
 function inputStatesPanel() {
   const states = componentDemoData("input", "states");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("states")}>
       <h2>${ui("component.states")}</h2>
       <p>${componentSectionCopy("input", "states")}</p>
       <div class="button-demo-grid states-grid">${states.map((demo) => demoCell(demo.label, inputDemoFromData(demo))).join("")}</div>
@@ -93,7 +93,7 @@ function inputStateVariantMatrixPanel() {
   const rows = componentDemoData("input", "variant-state-behavior", "rows");
   const states = componentDemoData("input", "variant-state-behavior", "states");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("variant-state-behavior")}>
       <h2>${ui("component.variantStateBehavior")}</h2>
       <p>${componentSectionCopy("input", "variant-state-behavior")}</p>
       <div class="button-demo-grid state-behavior-grid">
@@ -106,7 +106,7 @@ function inputStateVariantMatrixPanel() {
 function inputFullWidthPanel() {
   const items = componentDemoData("input", "full-width", "items");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("full-width")}>
       <h2>${ui("component.fullWidth")}</h2>
       <p>${componentSectionCopy("input", "full-width")}</p>
       <div class="full-width-demo">
@@ -123,7 +123,7 @@ function inputFullWidthPanel() {
 function inputResponsivePanel() {
   const examples = componentDemoData("input", "responsive-layout-patterns", "examples");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("responsive-layout-patterns")}>
       <h2>${ui("component.responsiveLayoutPatterns")}</h2>
       <p>${componentSectionCopy("input", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
@@ -140,7 +140,7 @@ function inputResponsivePanel() {
 function inputViewportOrganizationPanel() {
   const items = componentDemoData("input", "viewport-organization", "items");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-viewport-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("viewport-organization", "button-viewport-panel")}>
       <h2>${ui("component.viewportOrganization")}</h2>
       <p>${componentSectionCopy("input", "viewport-organization")}</p>
       <div class="viewport-doc-grid">
@@ -155,7 +155,7 @@ function inputViewportOrganizationPanel() {
 function inputPlaygroundPanel() {
   const playground = componentSectionData("input", "playground");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-playground" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-playground="input" data-ready="false">
+    <section ${inputSurfaceAttrs("playground", "button-playground", `data-component-playground="input" data-ready="false"`)}>
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("input", "playground")}</p>
       <div class="playground-layout">
@@ -169,7 +169,7 @@ function inputPlaygroundPanel() {
 function inputContractPanel() {
   const props = componentApiProps("input");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${inputSurfaceAttrs("api-foundations")}>
       <h2>${ui("build.apiAndFoundations")}</h2>
       <p>${componentSectionCopy("input", "api-foundations")}</p>
       <div class="props-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div>
@@ -179,12 +179,16 @@ function inputContractPanel() {
 
 function inputGuidelinesPanel() {
   const groups = componentSectionData("input", "guidelines").groups ?? [];
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
+  return html`<section ${inputSurfaceAttrs("guidelines")}><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
 }
 
 function inputTestPanel() {
   const tests = componentSectionData("input", "tests-rejection-rules");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("tests.title")}</h2><div class="two-column-list"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
+  return html`<section ${inputSurfaceAttrs("tests-rejection-rules")}><h2>${ui("tests.title")}</h2><div class="two-column-list"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
+}
+
+function inputSurfaceAttrs(section, className = "", attrs = "") {
+  return componentDetailSectionAttrs({ component: "input", section, className, attrs });
 }
 
 function inputDemoFromData(demo) {

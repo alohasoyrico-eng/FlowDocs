@@ -1,4 +1,4 @@
-import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=213";
+import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 

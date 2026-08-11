@@ -45,12 +45,17 @@ export function demoCell(label, content) {
 }
 
 function componentDetailSection({ component, section, className = "", attrs = "", children = "" } = {}) {
-  const classes = ["surface", "docs-section-surface", "component-detail-surface", "wide", className].filter(Boolean).join(" ");
+  const surfaceAttrs = componentDetailSectionAttrs({ component, section, className, attrs });
   return html`
-    <section class="${classes}" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-id="${escapeAttribute(component)}" data-component-section="${escapeAttribute(section)}" ${attrs}>
+    <section ${surfaceAttrs}>
       ${children}
     </section>
   `;
+}
+
+function componentDetailSectionAttrs({ component, section, className = "", attrs = "" } = {}) {
+  const classes = ["surface", "docs-section-surface", "component-detail-surface", "wide", className].filter(Boolean).join(" ");
+  return `class="${classes}" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-id="${escapeAttribute(component)}" data-component-section="${escapeAttribute(section)}" ${attrs}`;
 }
 
 function componentDetailTable({ component, section, className = "", columns = [], rows = [] } = {}) {
@@ -141,6 +146,7 @@ export {
   componentDetailChecklist,
   componentDetailDemoGrid,
   componentDetailSection,
+  componentDetailSectionAttrs,
   componentDetailTable,
   componentSectionCopy,
   componentSectionData,
