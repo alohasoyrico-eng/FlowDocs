@@ -1,5 +1,5 @@
 import { artifactContract, artifactFoundationTracePanel, cardLink, examplePanel, findPattern, html, icon, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=3";
-import { desktopTemplateDemo } from "./template-desktop-demos.js?v=15";
+import { desktopTemplateDemo } from "./template-desktop-demos.js?v=16";
 
 export function templateTabs(entry) {
   const blueprint = templateBlueprints[entry.title];

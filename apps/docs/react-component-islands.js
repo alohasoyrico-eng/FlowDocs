@@ -61,6 +61,7 @@ import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
 import { patternReactComponents, patternReactIslandWrappers } from "./pattern-react-islands.js?v=29";
+import { templateReactComponents, templateReactIslandWrappers } from "./template-react-islands.js?v=1";
 
 const mounted = new WeakMap(); const reactComponents = {
   accordion: Accordion,
@@ -124,6 +125,7 @@ const mounted = new WeakMap(); const reactComponents = {
   "tree-view": TreeView,
   "text-area": TextArea,
   ...patternReactComponents,
+  ...templateReactComponents,
 };
 
 function InputIsland({ initialProps }) {
@@ -350,6 +352,7 @@ const reactIslandWrappers = {
   "text-area": TextAreaIsland,
   "chat-composer": ChatComposerIsland,
   ...patternReactIslandWrappers,
+  ...templateReactIslandWrappers,
 };
 
 function parseProps(node) { try { return JSON.parse(node.dataset.reactProps ?? "{}"); } catch { return {}; } }

@@ -25,6 +25,14 @@
   overflow-x: auto;
 }
 
+.docs-template-demo {
+  display: block;
+  max-inline-size: 100%;
+  min-inline-size: 0;
+  overflow-x: auto;
+  padding-block-start: var(--sys-space-4);
+}
+
 .template-desktop-demo {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);

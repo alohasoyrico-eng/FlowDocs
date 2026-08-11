@@ -447,7 +447,7 @@ function checkDemoQualityInventory() {
     .filter((file) => fs.existsSync(file))
     .map((file) => read(file))
     .join("\n");
-  const templateDesktopDemoFiles = ["template-desktop-demos.js", "template-domain-demos.js"].map((file) => path.join(docsAppDir, file));
+  const templateDesktopDemoFiles = ["template-desktop-demos.js", "template-domain-demos.js", "template-react-demos.js"].map((file) => path.join(docsAppDir, file));
   const templateDesktopDemos = templateDesktopDemoFiles
     .filter((file) => fs.existsSync(file))
     .map((file) => read(file))
@@ -458,6 +458,8 @@ function checkDemoQualityInventory() {
   const reactIslands = fs.existsSync(reactIslandsFile) ? read(reactIslandsFile) : "";
   const patternReactIslandsFile = path.join(docsAppDir, "pattern-react-islands.js");
   const patternReactIslands = fs.existsSync(patternReactIslandsFile) ? read(patternReactIslandsFile) : "";
+  const templateReactIslandsFile = path.join(docsAppDir, "template-react-islands.js");
+  const templateReactIslands = fs.existsSync(templateReactIslandsFile) ? read(templateReactIslandsFile) : "";
   const desktopPatternReactIslandsFile = path.join(docsAppDir, "pattern-react-desktop-islands.js");
   const desktopPatternReactIslands = fs.existsSync(desktopPatternReactIslandsFile) ? read(desktopPatternReactIslandsFile) : "";
   const journeyPatternReactIslandsFile = path.join(docsAppDir, "pattern-react-journey-islands.js");
@@ -472,6 +474,7 @@ function checkDemoQualityInventory() {
   const candidatePatternReactIslands = fs.existsSync(candidatePatternReactIslandsFile) ? read(candidatePatternReactIslandsFile) : "";
   const reactComponentsBlock = reactIslands.match(/const reactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const patternReactComponentsBlock = patternReactIslands.match(/const patternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
+  const templateReactComponentsBlock = templateReactIslands.match(/const templateReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const desktopPatternReactComponentsBlock = desktopPatternReactIslands.match(/const desktopPatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const journeyPatternReactComponentsBlock = journeyPatternReactIslands.match(/const journeyPatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const mobilePatternReactComponentsBlock = mobilePatternReactIslands.match(/const mobilePatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
@@ -479,7 +482,7 @@ function checkDemoQualityInventory() {
   const shellPatternReactComponentsBlock = shellPatternReactIslands.match(/const shellPatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const candidatePatternReactComponentsBlock = candidatePatternReactIslands.match(/const candidatePatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const reactComponentKeys = new Set(
-    [...`${reactComponentsBlock}\n${patternReactComponentsBlock}\n${desktopPatternReactComponentsBlock}\n${journeyPatternReactComponentsBlock}\n${mobilePatternReactComponentsBlock}\n${operationalPatternReactComponentsBlock}\n${shellPatternReactComponentsBlock}\n${candidatePatternReactComponentsBlock}`.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
+    [...`${reactComponentsBlock}\n${patternReactComponentsBlock}\n${templateReactComponentsBlock}\n${desktopPatternReactComponentsBlock}\n${journeyPatternReactComponentsBlock}\n${mobilePatternReactComponentsBlock}\n${operationalPatternReactComponentsBlock}\n${shellPatternReactComponentsBlock}\n${candidatePatternReactComponentsBlock}`.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
   );
 
   const components = catalog?.components ?? [];
@@ -499,6 +502,11 @@ function checkDemoQualityInventory() {
   const templatesMissingSpec = templates.filter((entry) => !templateSpecIds.has(entry.id)).map((entry) => entry.id);
   const reactPatternDemoIds = [...new Set([...patternDemoRuntime.matchAll(/patternReactDemo\("([a-z0-9-]+)"/g)].map((match) => match[1]))].sort();
   const reactPatternDemosMissingRegistration = reactPatternDemoIds.filter((id) => !reactComponentKeys.has(id));
+  const reactTemplateDemoIds = [...new Set([
+    ...[...templateDesktopDemos.matchAll(/templateReactDemo\("([a-z0-9-]+)"/g)].map((match) => match[1]),
+    ...[...templateDesktopDemos.matchAll(/component:\s*"([a-z0-9-]+)"/g)].map((match) => match[1]),
+  ])].sort();
+  const reactTemplateDemosMissingRegistration = reactTemplateDemoIds.filter((id) => !reactComponentKeys.has(id));
   const patternsMissingDedicatedDemo = patterns
     .filter((entry) => !patternDemoRuntime.includes(`"${entry.id}"`) && !patternDemoRuntime.includes(`'${entry.id}'`))
     .map((entry) => entry.id);
@@ -521,6 +529,8 @@ function checkDemoQualityInventory() {
     patternsMissingDedicatedDemo,
     reactPatternDemoIds,
     reactPatternDemosMissingRegistration,
+    reactTemplateDemoIds,
+    reactTemplateDemosMissingRegistration,
     templatesMissingSpec,
     templatesMissingDesktopDemo,
   };
@@ -545,6 +555,9 @@ function checkDemoQualityInventory() {
   }
   if (reactPatternDemosMissingRegistration.length) {
     add("errors", reactIslandsFile, 1, `React pattern demos must mount through react-component-islands.js: ${reactPatternDemosMissingRegistration.join(", ")}.`);
+  }
+  if (reactTemplateDemosMissingRegistration.length) {
+    add("errors", reactIslandsFile, 1, `React template demos must mount through react-component-islands.js: ${reactTemplateDemosMissingRegistration.join(", ")}.`);
   }
   if (templatesMissingSpec.length) {
     add("warnings", specFile, 1, `Template catalog entries missing machine-readable specs: ${templatesMissingSpec.join(", ")}.`);

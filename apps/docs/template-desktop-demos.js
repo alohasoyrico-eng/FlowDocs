@@ -3,6 +3,7 @@ import { componentDemo } from "./component-demo.js?v=60";
 import { renderSidebarPattern, renderTopbarPattern } from "./pattern-shell-renderers.js?v=6";
 import { renderAdminRiskReviewPattern, renderDriverVehicleAdministrationPattern, renderRolesAndPermissionsPattern, renderRolesAndPermissionsToolbar } from "./pattern-business-renderers.js?v=5";
 import { domainDesktopTemplateDemo } from "./template-domain-demos.js?v=1";
+import { reactTemplateDemo } from "./template-react-demos.js?v=1";
 
 const templateFoundations = "energy frame voice depth momentum state tone growth symbol iconography accessibility";
 
@@ -67,6 +68,8 @@ function navPatternFor(item) {
 }
 
 export function desktopTemplateDemo(entry, blueprint) {
+  const reactDemo = reactTemplateDemo(entry, blueprint);
+  if (reactDemo) return reactDemo;
   if (entry.id === "fleet-manager-desktop") return fleetManagerDesktopDemo(entry, blueprint);
   if (entry.id === "fleet-dashboard-suite") return dashboardSuiteDemo(entry, blueprint);
   if (entry.id === "configuration-console") return configurationConsoleDemo(entry, blueprint);
