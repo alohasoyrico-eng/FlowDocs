@@ -1,5 +1,6 @@
 import { html } from "./detail-tabs-core.js?v=3";
 import { componentDemo } from "./component-demo.js?v=60";
+import { desktopReactPatternOverviewDemo } from "./pattern-desktop-react-demos.js?v=1";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -11,6 +12,8 @@ function packageDemo(component, demo = {}, attrs = {}) {
 }
 
 export function desktopPatternOverviewDemo(patternId) {
+  const reactDemo = desktopReactPatternOverviewDemo(patternId);
+  if (reactDemo) return reactDemo;
   if (patternId === "kpi-card") return kpiCardDemoPanel();
   if (patternId === "chart-wrapper") return chartWrapperDemoPanel();
   if (patternId === "virtual-data-table") return virtualDataTableDemoPanel();
