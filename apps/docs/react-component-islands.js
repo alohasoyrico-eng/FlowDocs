@@ -56,10 +56,9 @@ import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
-import { Timeline } from "./generated/react/patterns/Timeline.js?v=1";
+import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1"; import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1"; import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1"; import { PreferenceManagement } from "./generated/react/patterns/PreferenceManagement.js?v=1"; import { RadioGroup } from "./generated/react/patterns/RadioGroup.js?v=1"; import { Timeline } from "./generated/react/patterns/Timeline.js?v=1"; import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
 
-const mounted = new WeakMap();
-const reactComponents = {
+const mounted = new WeakMap(); const reactComponents = {
   accordion: Accordion,
   "animated-moment": AnimatedMoment,
   "audit-event": AuditEvent,
@@ -116,7 +115,9 @@ const reactComponents = {
   tooltip: Tooltip,
   "tree-view": TreeView,
   "text-area": TextArea,
+  "checkbox-group": CheckboxGroup, "gantt-chart": GanttChart, "polar-chart": PolarChart, "preference-management": PreferenceManagement, "radio-group": RadioGroup,
   timeline: Timeline,
+  "waterfall-chart": WaterfallChart,
 };
 
 function InputIsland({ initialProps }) {
@@ -163,6 +164,7 @@ function CheckboxIsland({ initialProps }) {
     onCheckedChange: setChecked,
   });
 }
+function CheckboxGroupIsland({ initialProps }) { const [value, setValue] = React.useState(initialProps.value ?? initialProps.defaultValue ?? []); return React.createElement(CheckboxGroup, { ...initialProps, value, onValueChange: setValue, onClear: () => setValue([]) }); }
 
 function CodeInputIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
@@ -264,6 +266,7 @@ function RadioButtonIsland({ initialProps }) {
     onCheckedChange: setChecked,
   });
 }
+function RadioGroupIsland({ initialProps }) { const [value, setValue] = React.useState(initialProps.value ?? initialProps.defaultValue ?? ""); return React.createElement(RadioGroup, { ...initialProps, value, onValueChange: setValue, onClear: () => setValue("") }); }
 
 function SwitchIsland({ initialProps }) {
   const [checked, setChecked] = React.useState(Boolean(initialProps.checked));
@@ -362,9 +365,11 @@ const reactIslandWrappers = {
   input: InputIsland, "card-expiry-input": CardExpiryInputIsland,
   "card-number-input": CardNumberInputIsland, "card-security-code-input": CardSecurityCodeInputIsland,
   checkbox: CheckboxIsland, "code-input": CodeInputIsland, combobox: ComboboxIsland,
+  "checkbox-group": CheckboxGroupIsland,
   "country-selector": CountrySelectorIsland, "date-picker": DatePickerIsland, "date-range-picker": DateRangePickerIsland,
   "phone-input": PhoneInputIsland, pagination: PaginationIsland, select: SelectIsland,
   "segmented-control": SegmentedControlIsland, "radio-button": RadioButtonIsland,
+  "radio-group": RadioGroupIsland,
   switch: SwitchIsland, tabs: TabsIsland, slider: SliderIsland,
   "text-area": TextAreaIsland, timeline: TimelineIsland,
 };

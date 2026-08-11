@@ -19,6 +19,12 @@ function patternReactDemo(pattern, props, state = "default", variant = "standard
 }
 
 export function utilityPatternOverviewDemo(patternId) {
+  if (patternId === "checkbox-group") return checkboxGroupDemoPanel();
+  if (patternId === "radio-group") return radioGroupDemoPanel();
+  if (patternId === "gantt-chart") return ganttChartDemoPanel();
+  if (patternId === "waterfall-chart") return waterfallChartDemoPanel();
+  if (patternId === "polar-chart") return polarChartDemoPanel();
+  if (patternId === "preference-management") return preferenceManagementDemoPanel();
   if (patternId === "snackbar-provider") return snackbarProviderDemoPanel();
   if (patternId === "timeline") return timelineDemoPanel();
   if (patternId === "section-header") return sectionHeaderDemoPanel();
@@ -28,6 +34,195 @@ export function utilityPatternOverviewDemo(patternId) {
   if (patternId === "drag-sortable-list") return dragSortableListDemoPanel();
   if (patternId === "calendar-view") return calendarViewDemoPanel();
   return "";
+}
+
+function checkboxGroupDemoPanel() {
+  return html`
+    <section class="doc-panel wide pattern-utility-panel">
+      <span class="eyebrow">React pattern demo</span>
+      <h2>Policy scope selection</h2>
+      ${patternReactDemo("checkbox-group", {
+        label: "Apply policy to",
+        helper: "Surface owns the group boundary; Checkbox owns each binary option.",
+        density: "md",
+        selectAllLabel: "Select all active scopes",
+        clearLabel: "Clear",
+        applyAction: { label: "Apply scope", icon: "rule" },
+        defaultValue: ["fuel", "cards"],
+        options: [
+          { label: "Fuel limits", value: "fuel", description: "Monthly spend, station rules, and exceptions.", variant: "descriptive" },
+          { label: "Card controls", value: "cards", description: "Freeze, replace, and approval routing.", variant: "descriptive" },
+          { label: "Driver onboarding", value: "drivers", description: "Identity, documents, and verification steps.", variant: "descriptive" },
+          { label: "Finance export", value: "finance", description: "Restricted by permission review.", disabled: true, variant: "descriptive" },
+        ],
+        validation: { label: "Policy scope", message: "At least one active scope is required before saving.", state: "warning" },
+        "data-pattern-demo": "checkbox-group",
+      })}
+    </section>
+  `;
+}
+
+function radioGroupDemoPanel() {
+  return html`
+    <section class="doc-panel wide pattern-utility-panel">
+      <span class="eyebrow">React pattern demo</span>
+      <h2>Approval routing choice</h2>
+      ${patternReactDemo("radio-group", {
+        label: "Route high-risk changes to",
+        helper: "Radio Group owns one decision; Radio Button owns each choice.",
+        density: "md",
+        name: "docs-approval-routing",
+        defaultValue: "owner",
+        clearLabel: "Clear",
+        applyAction: { label: "Save route", icon: "approval" },
+        options: [
+          { label: "Workspace owner", value: "owner", description: "Fastest route for low-risk operations.", variant: "descriptive" },
+          { label: "Finance reviewer", value: "finance", description: "Required for export, card limits, and billing changes.", variant: "descriptive" },
+          { label: "Security admin", value: "security", description: "Required for permission and access changes.", variant: "critical" },
+        ],
+        validation: { label: "Approval route", message: "Pick one route before publishing the change.", state: "warning" },
+        "data-pattern-demo": "radio-group",
+      })}
+    </section>
+  `;
+}
+
+function ganttChartDemoPanel() {
+  return html`
+    <section class="doc-panel wide pattern-utility-panel">
+      <span class="eyebrow">React pattern demo</span>
+      <h2>Rollout schedule</h2>
+      ${patternReactDemo("gantt-chart", {
+        label: "Fleet migration rollout",
+        description: "Tasks, milestones, dependencies, chart summary, and table evidence share one chart wrapper boundary.",
+        selectedTaskKey: "pilot",
+        metrics: [
+          { label: "4 tasks", tone: "neutral" },
+          { label: "2 dependencies", tone: "info" },
+        ],
+        tasks: [
+          { key: "audit", label: "Policy audit", owner: "Operations", start: "2026-08-12", end: "2026-08-15", progress: 90, status: "Ready" },
+          { key: "pilot", label: "North fleet pilot", owner: "Fleet admin", start: "2026-08-16", end: "2026-08-23", progress: 48, status: "Active" },
+          { key: "finance", label: "Finance review", owner: "Finance", start: "2026-08-24", end: "2026-08-28", progress: 15, status: "Queued" },
+          { key: "rollout", label: "Full rollout", owner: "Program", start: "2026-08-29", end: "2026-09-05", progress: 0, status: "Blocked" },
+        ],
+        milestones: [
+          { key: "pilot-close", label: "Pilot close", date: "2026-08-23" },
+          { key: "launch", label: "Launch review", date: "2026-09-05" },
+        ],
+        dependencies: [
+          { from: "audit", to: "pilot" },
+          { from: "finance", to: "rollout" },
+        ],
+        primaryAction: { label: "Review schedule", icon: "calendar_month" },
+        "data-pattern-demo": "gantt-chart",
+      })}
+    </section>
+  `;
+}
+
+function waterfallChartDemoPanel() {
+  return html`
+    <section class="doc-panel wide pattern-utility-panel">
+      <span class="eyebrow">React pattern demo</span>
+      <h2>Spend bridge</h2>
+      ${patternReactDemo("waterfall-chart", {
+        label: "Monthly spend bridge",
+        description: "Variance analysis keeps deltas, totals, summary badges, and table rows in one chart pattern.",
+        selectedStepKey: "fuel",
+        metrics: [
+          { label: "$1.8M total", tone: "info" },
+          { label: "+7% variance", tone: "warning" },
+        ],
+        steps: [
+          { key: "base", label: "Base spend", value: 1280, formattedValue: "$1.28M", kind: "total", direction: "total", note: "Previous month baseline" },
+          { key: "fuel", label: "Fuel increase", value: 240, formattedValue: "+$240k", direction: "increase", note: "Station and volume changes" },
+          { key: "maintenance", label: "Maintenance savings", value: -80, formattedValue: "-$80k", direction: "decrease", note: "Recovered warranty work" },
+          { key: "total", label: "Current spend", value: 1440, formattedValue: "$1.44M", kind: "total", direction: "total", note: "Current month" },
+        ],
+        primaryAction: { label: "Export bridge", icon: "download" },
+        "data-pattern-demo": "waterfall-chart",
+      })}
+    </section>
+  `;
+}
+
+function polarChartDemoPanel() {
+  return html`
+    <section class="doc-panel wide pattern-utility-panel">
+      <span class="eyebrow">React pattern demo</span>
+      <h2>Fleet mix by risk</h2>
+      ${patternReactDemo("polar-chart", {
+        label: "Risk distribution",
+        description: "Segment summaries, table evidence, and recovery states stay inside the chart pattern.",
+        selectedSegmentKey: "review",
+        metrics: [
+          { label: "128 vehicles", tone: "neutral" },
+          { label: "14 need review", tone: "warning" },
+        ],
+        segments: [
+          { key: "active", label: "Active", value: 92, formattedValue: "92", share: "72%", status: "Healthy" },
+          { key: "review", label: "Needs review", value: 24, formattedValue: "24", share: "19%", status: "Review" },
+          { key: "blocked", label: "Blocked", value: 12, formattedValue: "12", share: "9%", status: "Blocked" },
+        ],
+        primaryAction: { label: "Inspect segment", icon: "pie_chart" },
+        "data-pattern-demo": "polar-chart",
+      })}
+    </section>
+  `;
+}
+
+function preferenceManagementDemoPanel() {
+  return html`
+    <section class="doc-panel wide pattern-utility-panel">
+      <span class="eyebrow">React pattern demo</span>
+      <h2>Workspace preferences</h2>
+      ${patternReactDemo("preference-management", {
+        label: "Workspace preferences",
+        description: "Preference Management composes Settings, Form Section, and Confirmation Dialog without owning local controls.",
+        state: "dirty",
+        dirty: true,
+        summary: { label: "Unsaved", tone: "warning" },
+        settings: {
+          label: "Notification preferences",
+          description: "Immediate controls announce state while the pattern owns save and reset.",
+          dirty: true,
+          groups: [
+            {
+              title: "Alerts",
+              controls: [
+                { key: "fuel-alerts", kind: "switch", label: "Fuel alerts", description: "Notify managers when spend exceeds policy.", checked: true },
+                { key: "weekly-summary", kind: "switch", label: "Weekly summary", description: "Send a Monday digest to fleet owners.", checked: false },
+              ],
+            },
+          ],
+          saveAction: { label: "Save preferences", icon: "save" },
+          resetAction: { label: "Reset", variant: "secondary" },
+        },
+        sections: [
+          {
+            key: "owner-copy",
+            title: "Owner message",
+            description: "A Form Section keeps local copy and validation bounded.",
+            fields: [
+              { key: "title", label: "Message title", value: "Policy update" },
+              { key: "detail", label: "Message detail", value: "Explain what changed for operators.", kind: "text-area" },
+            ],
+            secondaryAction: { key: "preview", label: "Preview", variant: "secondary" },
+          },
+        ],
+        dangerZone: {
+          label: "Archive preferences",
+          description: "Archiving requires confirmation and creates an audit event.",
+          triggerLabel: "Archive preferences",
+          confirm: { label: "Archive" },
+          cancel: { label: "Cancel", variant: "secondary" },
+          destructive: true,
+        },
+        "data-pattern-demo": "preference-management",
+      })}
+    </section>
+  `;
 }
 
 function snackbarProviderDemoPanel() {

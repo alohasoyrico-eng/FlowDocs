@@ -433,6 +433,7 @@ function checkDemoQualityInventory() {
     "pattern-mobile-demos.js",
     "pattern-utility-demos.js",
     "pattern-journey-demos.js",
+    "pattern-operational-demos.js",
     "pattern-contract-tabs.js",
     "pattern-focused-design.js",
     "pattern-business-renderers.js",
@@ -441,9 +442,11 @@ function checkDemoQualityInventory() {
     .filter((file) => fs.existsSync(file))
     .map((file) => read(file))
     .join("\n");
-  const templateDesktopDemos = fs.existsSync(path.join(docsAppDir, "template-desktop-demos.js"))
-    ? read(path.join(docsAppDir, "template-desktop-demos.js"))
-    : "";
+  const templateDesktopDemoFiles = ["template-desktop-demos.js", "template-domain-demos.js"].map((file) => path.join(docsAppDir, file));
+  const templateDesktopDemos = templateDesktopDemoFiles
+    .filter((file) => fs.existsSync(file))
+    .map((file) => read(file))
+    .join("\n");
 
   const patterns = catalog?.patterns ?? [];
   const templates = catalog?.templates ?? [];

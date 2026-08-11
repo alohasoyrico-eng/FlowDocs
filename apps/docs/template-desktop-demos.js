@@ -2,6 +2,7 @@ import { html, slug } from "./detail-tabs-core.js?v=3";
 import { componentDemo } from "./component-demo.js?v=60";
 import { renderSidebarPattern, renderTopbarPattern } from "./pattern-shell-renderers.js?v=6";
 import { renderAdminRiskReviewPattern, renderDriverVehicleAdministrationPattern, renderRolesAndPermissionsPattern, renderRolesAndPermissionsToolbar } from "./pattern-business-renderers.js?v=5";
+import { domainDesktopTemplateDemo } from "./template-domain-demos.js?v=1";
 
 const templateFoundations = "energy frame voice depth momentum state tone growth symbol iconography accessibility";
 
@@ -69,6 +70,8 @@ export function desktopTemplateDemo(entry, blueprint) {
   if (entry.id === "fleet-manager-desktop") return fleetManagerDesktopDemo(entry, blueprint);
   if (entry.id === "fleet-dashboard-suite") return dashboardSuiteDemo(entry, blueprint);
   if (entry.id === "configuration-console") return configurationConsoleDemo(entry, blueprint);
+  const domainDemo = domainDesktopTemplateDemo(entry, blueprint);
+  if (domainDemo) return domainDemo;
   return "";
 }
 

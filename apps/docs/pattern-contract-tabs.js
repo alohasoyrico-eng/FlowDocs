@@ -7,6 +7,7 @@ import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=5";
 import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=6";
 import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=2";
 import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=1";
+import { operationalPatternOverviewDemo } from "./pattern-operational-demos.js?v=1";
 
 export function hasPatternSource(entry) {
   return Boolean(patternSource(entry));
@@ -48,7 +49,7 @@ function patternOverviewDemo(patternId) {
   if (patternId === "multi-step-form") return multiStepFormDemoPanel();
   if (patternId === "settings") return settingsDemoPanel();
   if (patternId === "help-center") return helpCenterDemoPanel();
-  return candidatePatternOverviewDemo(patternId) || desktopPatternOverviewDemo(patternId) || utilityPatternOverviewDemo(patternId) || mobilePatternOverviewDemo(patternId) || journeyPatternOverviewDemo(patternId);
+  return candidatePatternOverviewDemo(patternId) || desktopPatternOverviewDemo(patternId) || utilityPatternOverviewDemo(patternId) || operationalPatternOverviewDemo(patternId) || mobilePatternOverviewDemo(patternId) || journeyPatternOverviewDemo(patternId);
 }
 
 function packageDemo(component, demo = {}, attrs = {}) {
