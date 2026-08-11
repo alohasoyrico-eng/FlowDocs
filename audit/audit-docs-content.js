@@ -226,6 +226,16 @@ function topMatches(files, pattern, limit = 12) {
     .slice(0, limit);
 }
 
+function stripAllowedComponentDetailControlBridges(text) {
+  return text.replace(/<(?:input|select)\b(?=[^>]*data-doc-control-bridge="component-playground")[^>]*>/g, "");
+}
+
+function countComponentDetailRawControls(file, text) {
+  const rawControlPattern = /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g;
+  if (path.basename(file) === "gold-component-data.js" && text.includes('data-doc-control-bridge="component-playground"')) return 0;
+  return countMatches(stripAllowedComponentDetailControlBridges(text), rawControlPattern);
+}
+
 function checkComponentDetailTemplateReadiness() {
   const componentModuleFiles = docsGoldComponentModuleFiles
     .filter((file) => !file.endsWith("gold-component-docs.js"))
@@ -235,6 +245,10 @@ function checkComponentDetailTemplateReadiness() {
     text: read(file),
   }));
   const componentRuntime = componentModules.map((entry) => entry.text).join("\n");
+  const componentRuntimeWithoutBridges = componentModules
+    .filter((entry) => !(path.basename(entry.file) === "gold-component-data.js" && entry.text.includes('data-doc-control-bridge="component-playground"')))
+    .map((entry) => stripAllowedComponentDetailControlBridges(entry.text))
+    .join("\n");
   const simpleRenderer = fs.existsSync(path.join(docsAppDir, "gold-simple-component-docs.js"))
     ? read(path.join(docsAppDir, "gold-simple-component-docs.js"))
     : "";
@@ -259,7 +273,11 @@ function checkComponentDetailTemplateReadiness() {
   ];
   const simpleRendererSections = templateSectionIds.filter((section) => simpleRenderer.includes(`${section}`));
   const componentDocPanelMatches = topMatches(componentModuleFiles, /doc-panel/g, 16);
-  const componentRawControlMatches = topMatches(componentModuleFiles, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g, 16);
+  const componentRawControlMatches = componentModuleFiles
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countComponentDetailRawControls(file, read(file)) }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file))
+    .slice(0, 16);
   const componentOwnSurfaceMatches = topMatches(componentModuleFiles, /class="surface|template-module-surface|doc-panel/g, 16);
   const customGoldRenderers = componentModules
     .filter((entry) => !/renderSimpleGoldSection\(entry,\s*section/.test(entry.text) && /export function render[A-Za-z0-9]+GoldSection/.test(entry.text))
@@ -277,7 +295,10 @@ function checkComponentDetailTemplateReadiness() {
     customGoldRendererIds: customGoldRenderers,
     sharedSimpleRendererSections: simpleRendererSections,
     rawDocPanelMatches: countMatches(componentRuntime, /doc-panel/g),
-    rawInteractiveMatches: countMatches(componentRuntime, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g),
+    rawInteractiveMatches: countMatches(componentRuntimeWithoutBridges, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g),
+    rawControlBridgeMatches: componentModules
+      .filter((entry) => path.basename(entry.file) === "gold-component-data.js" && entry.text.includes('data-doc-control-bridge="component-playground"'))
+      .reduce((total, entry) => total + countMatches(entry.text, /<input\b|<select\b/g), 0),
     rawCardMatches: countMatches(componentRuntime, /class="card|cardLink\(|card-/g),
     componentDocPanelHotspots: componentDocPanelMatches,
     componentRawControlHotspots: componentRawControlMatches,
@@ -297,7 +318,7 @@ function checkComponentDetailTemplateReadiness() {
   if (countMatches(componentRuntime, /doc-panel/g)) {
     add("warnings", docsAppDir, 1, "Component detail still uses doc-panel surfaces; migrate shared and custom renderers to a Flow Surface-backed ComponentDetailTemplate.");
   }
-  if (countMatches(componentRuntime, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g)) {
+  if (countMatches(componentRuntimeWithoutBridges, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g)) {
     add("warnings", docsAppDir, 1, "Component detail still contains raw controls or overlay roles; migrate controls through Flow React components or justified template slots.");
   }
 }

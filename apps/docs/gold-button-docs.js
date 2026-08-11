@@ -1,7 +1,7 @@
 import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, artifactContract, componentApiProps, ui } from "./gold-component-core.js?v=212";
 import { componentDemo } from "./component-demo.js?v=60";
 
-import { buttonDemoFromData, playgroundControl } from "./gold-component-data.js?v=204";
+import { buttonDemoFromData, playgroundControl } from "./gold-component-data.js?v=230";
 
 export function renderButtonGoldSection(entry, section) {
   const renderers = {

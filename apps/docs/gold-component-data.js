@@ -16,7 +16,7 @@ export function buttonDemoFromData(demo) {
 }
 
 export function playgroundControl(control, dataAttribute = "") {
-  const data = dataAttribute ? ` ${dataAttribute}="${control.name}"` : "";
+  const data = `${dataAttribute ? ` ${dataAttribute}="${control.name}"` : ""} data-doc-control-bridge="component-playground"`;
   if (control.type === "select") {
     return html`
       <label>

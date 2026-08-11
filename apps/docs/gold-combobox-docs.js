@@ -15,7 +15,7 @@ import {
   simpleViewportOrganizationPanel,
 } from "./gold-simple-component-docs.js?v=255";
 import { componentMielPanel, componentSectionCopy, componentSectionData, html, icon, ui } from "./gold-component-core.js?v=212";
-import { playgroundStaticControls } from "./gold-component-data.js?v=206";
+import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
 export function comboboxDemo(label = "Vehicle", value = "MX-4821 - Ana Gomez", state = "filled") { return simpleDemo("combobox", { label, value, state }); }
 export function comboboxDemoFromData(demo = {}) { return simpleDemo("combobox", demo); }

@@ -53,15 +53,6 @@ function componentDetailSection({ component, section, className = "", attrs = ""
   `;
 }
 
-export function buttonPrimitive({ label, content = "", className = "docs-primitive-button", iconBefore = "", iconAfter = "", variant = "secondary", state = "default", attrs = "" } = {}) {
-  const body = content || `${iconBefore}<span>${label ?? "Action"}</span>${iconAfter}`;
-  return html`<button class="${className}" data-docs-primitive="button" data-variant="${variant}" data-state="${state}" type="button" ${attrs}>${body}</button>`;
-}
-
-export function inputPrimitive({ value = "", className = "", state = "default", attrs = "" } = {}) {
-  return html`<input class="${className}" data-docs-primitive="input" data-state="${state}" value="${value}" ${attrs} />`;
-}
-
 export function componentMielPanel(entry) {
   const miel = componentSectionData(entry.id, "miel");
   const agentSpec = componentAgentSpec(entry, "Component");
