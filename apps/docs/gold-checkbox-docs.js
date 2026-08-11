@@ -1,4 +1,4 @@
-import { componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentApiProps, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -22,10 +22,14 @@ export function renderCheckboxGoldSection(entry, section) {
   return renderers[section]?.() ?? "";
 }
 
+function checkboxSurfaceAttrs(section, className = "", attrs = "") {
+  return componentDetailSectionAttrs({ component: "checkbox", section, className, attrs });
+}
+
 function checkboxOperationalExamplePanel() {
   const scenario = componentSectionData("checkbox", "operational-example").scenario;
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-operational-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("operational-example", "button-operational-panel")}>
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("checkbox", "operational-example")}</p>
       <div class="checkbox-scenario">
@@ -45,7 +49,7 @@ function checkboxOperationalExamplePanel() {
 function checkboxAnatomyPanel() {
   const anatomy = componentSectionData("checkbox", "anatomy").items ?? [];
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("anatomy")}>
       <h2>${ui("component.anatomy")}</h2>
       <div class="button-anatomy">
         ${anatomy.map((item, index) => html`
@@ -59,7 +63,7 @@ function checkboxAnatomyPanel() {
 function checkboxAccessibilityPanel() {
   const accessibility = componentSectionData("checkbox", "accessibility");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("accessibility")}>
       <h2>${ui("component.accessibility")}</h2>
       <p>State precedence: ${accessibility.statePrecedence}.</p>
       <div class="checklist-grid">${(accessibility.items ?? []).map((item) => `<article>${icon("check_circle", { tone: "success", fill: true })}<span>${item}</span></article>`).join("")}</div>
@@ -70,7 +74,7 @@ function checkboxAccessibilityPanel() {
 function checkboxVariantsPanel() {
   const variants = componentDemoData("checkbox", "variants");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("variants")}>
       <h2>${ui("component.variants")}</h2>
       <p>${componentSectionCopy("checkbox", "variants")}</p>
       <div class="button-demo-grid states-grid">${variants.map((demo) => demoCell(demo.label, checkboxDemoFromData(demo))).join("")}</div>
@@ -81,7 +85,7 @@ function checkboxVariantsPanel() {
 function checkboxStatesPanel() {
   const states = componentDemoData("checkbox", "states");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("states")}>
       <h2>${ui("component.states")}</h2>
       <p>${componentSectionCopy("checkbox", "states")}</p>
       <div class="button-demo-grid states-grid">${states.map((demo) => demoCell(demo.label, checkboxDemoFromData(demo))).join("")}</div>
@@ -93,7 +97,7 @@ function checkboxStateVariantMatrixPanel() {
   const rows = componentDemoData("checkbox", "variant-state-behavior", "rows");
   const states = componentDemoData("checkbox", "variant-state-behavior", "states");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("variant-state-behavior")}>
       <h2>${ui("component.variantStateBehavior")}</h2>
       <p>${componentSectionCopy("checkbox", "variant-state-behavior")}</p>
       <div class="button-demo-grid state-behavior-grid">
@@ -106,7 +110,7 @@ function checkboxStateVariantMatrixPanel() {
 function checkboxFullWidthPanel() {
   const items = componentDemoData("checkbox", "full-width", "items");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("full-width")}>
       <h2>${ui("component.fullWidth")}</h2>
       <p>${componentSectionCopy("checkbox", "full-width")}</p>
       <div class="full-width-demo">
@@ -123,7 +127,7 @@ function checkboxFullWidthPanel() {
 function checkboxResponsivePanel() {
   const examples = componentDemoData("checkbox", "responsive-layout-patterns", "examples");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("responsive-layout-patterns")}>
       <h2>${ui("component.responsiveLayoutPatterns")}</h2>
       <p>${componentSectionCopy("checkbox", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
@@ -140,7 +144,7 @@ function checkboxResponsivePanel() {
 function checkboxViewportOrganizationPanel() {
   const items = componentDemoData("checkbox", "viewport-organization", "items");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-viewport-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("viewport-organization", "button-viewport-panel")}>
       <h2>${ui("component.viewportOrganization")}</h2>
       <p>${componentSectionCopy("checkbox", "viewport-organization")}</p>
       <div class="viewport-doc-grid">
@@ -155,7 +159,7 @@ function checkboxViewportOrganizationPanel() {
 function checkboxPlaygroundPanel() {
   const playground = componentSectionData("checkbox", "playground");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide button-playground" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-playground="checkbox" data-ready="false">
+    <section ${checkboxSurfaceAttrs("playground", "button-playground", 'data-component-playground="checkbox" data-ready="false"')}>
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("checkbox", "playground")}</p>
       <div class="playground-layout">
@@ -169,7 +173,7 @@ function checkboxPlaygroundPanel() {
 function checkboxContractPanel() {
   const props = componentApiProps("checkbox");
   return html`
-    <section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail">
+    <section ${checkboxSurfaceAttrs("api-foundations")}>
       <h2>${ui("build.apiAndFoundations")}</h2>
       <p>${componentSectionCopy("checkbox", "api-foundations")}</p>
       <div class="props-table"><div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${props.map((prop) => `<div><code>${prop.name}</code><span>${prop.type}</span><span>${prop.required}</span><span>${prop.notes}</span></div>`).join("")}</div>
@@ -179,12 +183,12 @@ function checkboxContractPanel() {
 
 function checkboxGuidelinesPanel() {
   const groups = componentSectionData("checkbox", "guidelines").groups ?? [];
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
+  return html`<section ${checkboxSurfaceAttrs("guidelines")}><h2>${ui("guidelines.title")}</h2><div class="guidelines-grid">${groups.map((group) => `<article><h3>${group.title}</h3><ul>${group.items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}</div></section>`;
 }
 
 function checkboxTestPanel() {
   const tests = componentSectionData("checkbox", "tests-rejection-rules");
-  return html`<section class="surface docs-section-surface component-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail"><h2>${ui("tests.title")}</h2><div class="two-column-list"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
+  return html`<section ${checkboxSurfaceAttrs("tests-rejection-rules")}><h2>${ui("tests.title")}</h2><div class="two-column-list"><article><h3>${ui("tests.mustTest")}</h3><ul>${(tests.mustTest ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article><article><h3>${ui("tests.rejectIf")}</h3><ul>${(tests.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article></div></section>`;
 }
 
 function checkboxDemoFromData(demo) {
