@@ -1,13 +1,9 @@
 export function setupProcessPatternInteractions() {
   document.addEventListener("click", handleProcessPatternClick);
   document.addEventListener("click", syncFilterChipAfterSystemClick, true);
-  document.addEventListener("input", handleProcessPatternInput);
 }
 
 function handleProcessPatternClick(event) {
-  const formSave = event.target.closest("[data-form-section-save]");
-  if (formSave) return saveFormSection(formSave.closest("[data-form-section-demo]"));
-
   const toolbarExport = event.target.closest("[data-toolbar-export]");
   if (toolbarExport) return showProcessToast(toolbarExport.closest("[data-toolbar-demo]"), "[data-toolbar-toast]");
 
@@ -24,37 +20,11 @@ function handleProcessPatternClick(event) {
   if (fileRemove) return removeUploadFile(fileRemove.closest("[data-file-upload-demo]"));
 }
 
-function handleProcessPatternInput(event) {
-  const formField = event.target.closest("[data-form-section-field]");
-  if (!formField) return;
-  const demo = formField.closest("[data-form-section-demo]");
-  if (demo) demo.dataset.formState = "dirty";
-  const validation = demo?.querySelector("[data-form-section-validation]");
-  if (validation) validation.hidden = true;
-  const feedback = demo?.querySelector("[data-form-section-feedback]");
-  if (feedback) feedback.hidden = true;
-}
-
 function syncFilterChipAfterSystemClick(event) {
   const chip = event.target.closest("[data-filter-chip]");
   if (!chip) return;
   const demo = chip.closest("[data-filter-chip-demo]");
   window.setTimeout(() => updateFilterChipCount(demo), 0);
-}
-
-function saveFormSection(demo) {
-  if (!demo) return;
-  const name = demo.querySelector('[data-form-section-field="name"] input')?.value.trim() ?? "";
-  const validation = demo.querySelector("[data-form-section-validation]");
-  if (!name) {
-    if (validation) validation.hidden = false;
-    demo.querySelector('[data-form-section-field="name"] input')?.focus();
-    return;
-  }
-  if (validation) validation.hidden = true;
-  demo.dataset.formState = "saved";
-  const feedback = demo.querySelector("[data-form-section-feedback]");
-  if (feedback) feedback.hidden = false;
 }
 
 function removeFilterChip(demo, chip) {

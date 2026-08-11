@@ -273,26 +273,21 @@ function formSectionDemoPanel() {
     <section class="doc-panel wide pattern-form-section-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Editable form section</h2>
-      <div class="pattern-form-section-demo" data-form-section-demo data-pattern-primitive="surface" data-form-state="default">
-        <header class="pattern-form-section-demo__header">
-          <div>
-            <h3>Driver profile</h3>
-            <p>Update the operational details used by dispatch, compliance, and support.</p>
-          </div>
-          ${packageDemo("icon-button", { ariaLabel: "Review section settings", icon: "tune", variant: "ghost" }, { "data-form-section-settings": "" })}
-        </header>
-        <div class="pattern-form-section-demo__fields">
-          ${packageDemo("input", { label: "Driver name", value: "Ana Sosa" }, { "data-form-section-field": "name" })}
-          ${packageDemo("select", { label: "Region", value: "north", options: [{ label: "North Region", value: "north" }, { label: "South Region", value: "south" }, { label: "Maintenance", value: "maintenance" }] }, { "data-form-section-field": "region" })}
-          ${packageDemo("checkbox", { label: "Can approve fuel overrides", description: "Requires supervisor review.", checked: true }, { "data-form-section-field": "approval" })}
-          ${packageDemo("switch", { label: "Send route alerts", description: "Notify driver and dispatcher.", checked: true }, { "data-form-section-field": "alerts" })}
-          ${packageDemo("radio-button", { label: "Day shift", name: "driver-shift", checked: true }, { "data-form-section-field": "shift-day" })}
-          ${packageDemo("text-area", { label: "Operational notes", value: "Authorized for city routes." }, { "data-form-section-field": "notes" })}
-        </div>
-        <p class="pattern-form-section-demo__validation" data-form-section-validation role="alert" hidden>Driver name is required before saving.</p>
-        <footer>${packageDemo("button", { label: "Save section", icon: "save" }, { "data-form-section-save": "" })}</footer>
-        <p class="pattern-form-section-demo__feedback" data-form-section-feedback role="status" hidden>Driver profile changes were saved.</p>
-      </div>
+      ${patternReactDemo("form-section", {
+        title: "Driver profile",
+        description: "Update the operational details used by dispatch, compliance, and support.",
+        density: "md",
+        state: "idle",
+        fields: [
+          { key: "name", name: "driver-name", label: "Driver name", value: "Ana Sosa", required: true, icon: "person" },
+          { key: "region", name: "driver-region", label: "Region", value: "North Region", helper: "Use an operational region name until Select fields are part of the pattern contract.", icon: "map" },
+          { key: "authorization", name: "driver-authorization", label: "Authorization scope", value: "Fuel overrides with supervisor review", icon: "verified_user" },
+          { key: "notes", name: "driver-notes", kind: "text-area", label: "Operational notes", value: "Authorized for city routes.", rows: 3 },
+        ],
+        primaryAction: { key: "save", label: "Save section", icon: "save" },
+        secondaryAction: { key: "reset", label: "Reset", icon: "refresh", variant: "secondary" },
+        "data-pattern-demo": "form-section",
+      })}
     </section>
   `;
 }

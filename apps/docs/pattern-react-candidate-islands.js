@@ -4,6 +4,7 @@ import { Autocomplete } from "./generated/react/patterns/Autocomplete.js?v=1";
 import { AvatarMenu } from "./generated/react/patterns/AvatarMenu.js?v=1";
 import { CommandPalette } from "./generated/react/patterns/CommandPalette.js?v=1";
 import { ConfirmationDialog } from "./generated/react/patterns/ConfirmationDialog.js?v=1";
+import { FormSection } from "./generated/react/patterns/FormSection.js?v=1";
 import { MultiSelect } from "./generated/react/patterns/MultiSelect.js?v=1";
 import { NotificationPanel } from "./generated/react/patterns/NotificationPanel.js?v=1";
 import { Search } from "./generated/react/patterns/Search.js?v=1";
@@ -15,6 +16,7 @@ export const candidatePatternReactComponents = {
   "avatar-menu": AvatarMenu,
   "command-palette": CommandPalette,
   "confirmation-dialog": ConfirmationDialog,
+  "form-section": FormSection,
   "multi-select": MultiSelect,
   "notification-panel": NotificationPanel,
   search: Search,
@@ -196,6 +198,61 @@ function NotificationPanelIsland({ initialProps }) {
   });
 }
 
+function FormSectionIsland({ initialProps }) {
+  const initialFields = initialProps.fields ?? [];
+  const [fields, setFields] = React.useState(initialFields);
+  const [state, setState] = React.useState(initialProps.state ?? "idle");
+  const [feedback, setFeedback] = React.useState(initialProps.feedback);
+  const [validation, setValidation] = React.useState(initialProps.validation);
+
+  const updateFieldValue = (key, value) => {
+    setFields((currentFields) => currentFields.map((field) => {
+      if ((field.key ?? field.name ?? field.label) !== key) return field;
+      return { ...field, value, error: undefined };
+    }));
+    setState("dirty");
+    setFeedback(undefined);
+    setValidation(undefined);
+  };
+
+  const saveSection = () => {
+    const nameField = fields.find((field) => (field.key ?? field.name) === "name");
+    if (!nameField?.value?.trim()) {
+      setState("invalid");
+      setValidation({ label: "Driver profile", message: "Driver name is required before saving.", state: "error", live: true });
+      setFields((currentFields) => currentFields.map((field) => (field.key ?? field.name) === "name" ? { ...field, error: "Required" } : field));
+      return;
+    }
+    setState("saving");
+    window.setTimeout(() => {
+      setState("saved");
+      setFeedback({ label: "Driver profile saved", description: "Dispatch, compliance, and support can use the updated details.", tone: "success", state: "visible" });
+    }, 350);
+  };
+
+  return React.createElement(FormSection, {
+    ...initialProps,
+    fields,
+    state,
+    feedback,
+    validation,
+    onFieldValueChange: (key, value, meta, event) => {
+      updateFieldValue(key, value);
+      initialProps.onFieldValueChange?.(key, value, meta, event);
+    },
+    onAction: (key, event) => {
+      if (key === "save") saveSection();
+      if (key === "reset") {
+        setFields(initialFields);
+        setState("idle");
+        setFeedback(undefined);
+        setValidation(initialProps.validation);
+      }
+      initialProps.onAction?.(key, event);
+    },
+  });
+}
+
 function MultiSelectIsland({ initialProps }) {
   const [open, setOpen] = React.useState(Boolean(initialProps.open));
   const [value, setValue] = React.useState(initialProps.value ?? []);
@@ -318,6 +375,7 @@ export const candidatePatternReactIslandWrappers = {
   "avatar-menu": AvatarMenuIsland,
   "command-palette": CommandPaletteIsland,
   "confirmation-dialog": ConfirmationDialogIsland,
+  "form-section": FormSectionIsland,
   "multi-select": MultiSelectIsland,
   "notification-panel": NotificationPanelIsland,
   search: SearchIsland,

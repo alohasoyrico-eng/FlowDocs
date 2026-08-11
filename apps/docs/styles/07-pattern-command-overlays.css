@@ -15,7 +15,6 @@
 .pattern-autocomplete-demo,
 .pattern-select-layer-demo,
 .pattern-multi-select-demo,
-.pattern-form-section-demo,
 .pattern-toolbar-demo,
 .pattern-filter-chip-demo,
 .pattern-file-upload-demo {
@@ -57,7 +56,6 @@
 .pattern-autocomplete-demo [hidden],
 .pattern-select-layer-demo [hidden],
 .pattern-multi-select-demo [hidden],
-.pattern-form-section-demo [hidden],
 .pattern-toolbar-demo [hidden],
 .pattern-filter-chip-demo [hidden],
 .pattern-file-upload-demo [hidden] {
@@ -218,53 +216,6 @@
   min-block-size: var(--sys-frame-height-control-lg);
 }
 
-.pattern-form-section-demo__fields {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--sys-space-3);
-}
-
-.pattern-form-section-demo__header {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--sys-space-3);
-  align-items: start;
-}
-
-.pattern-form-section-demo__header h3 {
-  margin: 0;
-  font-family: var(--sys-voice-family-title);
-  font-size: var(--sys-voice-size-6);
-  font-weight: var(--sys-voice-weight-black);
-  line-height: var(--sys-voice-line-height-tight);
-  color: var(--sys-energy-text-primary);
-}
-
-.pattern-form-section-demo__header p,
-.pattern-form-section-demo__validation,
-.pattern-form-section-demo__feedback {
-  margin: var(--sys-space-1) 0 0;
-  font-family: var(--sys-voice-family-body);
-  font-size: var(--sys-voice-size-3);
-  line-height: var(--sys-voice-line-height-normal);
-}
-
-.pattern-form-section-demo__header p {
-  color: var(--sys-energy-text-secondary);
-}
-
-.pattern-form-section-demo__validation {
-  color: var(--sys-energy-status-warning);
-}
-
-.pattern-form-section-demo__feedback {
-  color: var(--sys-energy-status-success);
-}
-
-.pattern-form-section-demo__fields [data-form-section-field="notes"] {
-  grid-column: 1 / -1;
-}
-
 .pattern-toolbar-demo {
   grid-template-columns: minmax(16rem, 1fr) auto;
   align-items: end;
@@ -273,8 +224,7 @@
 .pattern-toolbar-demo__actions,
 .pattern-toolbar-demo__status,
 .pattern-file-upload-demo__actions,
-.pattern-filter-chip-demo footer,
-.pattern-form-section-demo footer {
+.pattern-filter-chip-demo footer {
   display: flex;
   flex-wrap: wrap;
   gap: var(--sys-space-2);
@@ -282,8 +232,7 @@
 }
 
 .pattern-toolbar-demo__actions,
-.pattern-filter-chip-demo footer,
-.pattern-form-section-demo footer {
+.pattern-filter-chip-demo footer {
   justify-content: flex-end;
 }
 
@@ -310,7 +259,6 @@
   .pattern-autocomplete-demo,
   .pattern-select-layer-demo,
   .pattern-multi-select-demo,
-  .pattern-form-section-demo,
   .pattern-toolbar-demo,
   .pattern-filter-chip-demo,
   .pattern-file-upload-demo,
@@ -332,7 +280,6 @@
     grid-template-columns: 1fr;
   }
 
-  .pattern-form-section-demo__fields,
   .pattern-toolbar-demo {
     grid-template-columns: 1fr;
   }
@@ -340,8 +287,7 @@
   .pattern-toolbar-demo__actions,
   .pattern-toolbar-demo__status,
   .pattern-file-upload-demo__actions,
-  .pattern-filter-chip-demo footer,
-  .pattern-form-section-demo footer {
+  .pattern-filter-chip-demo footer {
     align-items: stretch;
     flex-direction: column;
   }
