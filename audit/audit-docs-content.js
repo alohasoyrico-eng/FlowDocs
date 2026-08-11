@@ -451,10 +451,13 @@ function checkDemoQualityInventory() {
   const reactIslands = fs.existsSync(reactIslandsFile) ? read(reactIslandsFile) : "";
   const patternReactIslandsFile = path.join(docsAppDir, "pattern-react-islands.js");
   const patternReactIslands = fs.existsSync(patternReactIslandsFile) ? read(patternReactIslandsFile) : "";
+  const candidatePatternReactIslandsFile = path.join(docsAppDir, "pattern-react-candidate-islands.js");
+  const candidatePatternReactIslands = fs.existsSync(candidatePatternReactIslandsFile) ? read(candidatePatternReactIslandsFile) : "";
   const reactComponentsBlock = reactIslands.match(/const reactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const patternReactComponentsBlock = patternReactIslands.match(/const patternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
+  const candidatePatternReactComponentsBlock = candidatePatternReactIslands.match(/const candidatePatternReactComponents = \{([\s\S]*?)\n\};/)?.[1] ?? "";
   const reactComponentKeys = new Set(
-    [...`${reactComponentsBlock}\n${patternReactComponentsBlock}`.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
+    [...`${reactComponentsBlock}\n${patternReactComponentsBlock}\n${candidatePatternReactComponentsBlock}`.matchAll(/(?:"([a-z0-9-]+)"|\b([a-z][a-z0-9-]*))\s*:/g)].map((match) => match[1] ?? match[2]),
   );
 
   const patterns = catalog?.patterns ?? [];

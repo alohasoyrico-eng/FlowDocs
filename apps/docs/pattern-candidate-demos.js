@@ -1,6 +1,6 @@
 import { html } from "./detail-tabs-core.js?v=3";
 import { avatarMenuMarkup } from "./avatar-menu-slot.js?v=1";
-import { patternPackageDemo as packageDemo, searchSlotMarkup } from "./search-slot.js?v=2";
+import { patternPackageDemo as packageDemo } from "./search-slot.js?v=2";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -160,35 +160,32 @@ function actionSheetDemoPanel() {
 }
 
 function searchDemoPanel() {
-  const results = [
-    ["vehicle", "JMX-214-B", "Vehicle - Active card", "vehicle card active jmx"],
-    ["driver", "Ana Sosa", "Driver - Fleet operations", "driver ana fleet"],
-    ["station", "Station 24", "Station - Preferred fuel", "station fuel preferred"],
-    ["card", "Corporate card 4821", "Card - Pending review", "card payment corporate 4821"],
-  ];
   return html`
     <section class="doc-panel wide pattern-search-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Scoped search</h2>
-      <div class="pattern-search-demo" data-search-demo data-search-state="idle">
-        <div class="pattern-search-demo__controls">
-          ${searchSlotMarkup({
-            label: "Search fleet records",
-            placeholder: "Search vehicle, driver, card, or station",
-            attrs: { "data-search-control": "" },
-            ariaLabel: "Search fleet records",
-          })}
-          ${packageDemo("select", { label: "Scope", value: "all", options: [{ label: "All entities", value: "all" }, { label: "Vehicles", value: "vehicle" }, { label: "Drivers", value: "driver" }, { label: "Stations", value: "station" }, { label: "Cards", value: "card" }] }, { "data-search-scope": "" })}
-        </div>
-        <p data-search-status aria-live="polite">Recent entities</p>
-        ${packageDemo("list", { label: "Recent searchable entities", items: results.map(([id, label, meta]) => ({ label, meta, value: "Open", icon: id === "driver" ? "person" : id === "station" ? "local_gas_station" : id === "card" ? "credit_card" : "directions_car" })) }, { "data-search-list": "" })}
-        <div class="pattern-search-demo__results" data-search-results hidden>
-          ${results.map(([id, label, meta, keywords]) => packageDemo("button", { label: `${label} - ${meta}`, variant: "secondary", trailingIcon: "arrow_forward" }, { "data-search-result": id, "data-search-type": id, "data-search-label": label, "data-search-keywords": keywords, hidden: "" })).join("")}
-        </div>
-        <div data-search-empty hidden>${packageDemo("empty-state", { label: "No records found", description: "Try a broader scope or another keyword.", icon: "search_off" })}</div>
-        <div data-search-validation hidden>${packageDemo("inline-validation", { label: "Search query", message: "Type at least two characters to search.", state: "warning" })}</div>
-        <div data-search-selected hidden>${packageDemo("inline-validation", { label: "Selected result", message: "Result selected.", state: "success" })}</div>
-      </div>
+      ${patternReactDemo("search", {
+        label: "Search fleet records",
+        placeholder: "Search vehicle, driver, card, or station",
+        density: "md",
+        scopeValue: "all",
+        scopes: [
+          { label: "All entities", value: "all" },
+          { label: "Vehicles", value: "vehicle" },
+          { label: "Drivers", value: "driver" },
+          { label: "Stations", value: "station" },
+          { label: "Cards", value: "card" },
+        ],
+        results: [
+          { key: "vehicle", scope: "vehicle", label: "JMX-214-B", meta: "Vehicle - Active card", valueLabel: "Open", icon: "directions_car", keywords: "vehicle card active jmx" },
+          { key: "driver", scope: "driver", label: "Ana Sosa", meta: "Driver - Fleet operations", valueLabel: "Open", icon: "person", keywords: "driver ana fleet" },
+          { key: "station", scope: "station", label: "Station 24", meta: "Station - Preferred fuel", valueLabel: "Open", icon: "local_gas_station", keywords: "station fuel preferred" },
+          { key: "card", scope: "card", label: "Corporate card 4821", meta: "Card - Pending review", valueLabel: "Open", icon: "credit_card", keywords: "card payment corporate 4821" },
+        ],
+        empty: { title: "No records found", description: "Try a broader scope or another keyword.", icon: "search_off" },
+        clearAction: { label: "Clear search", icon: "close" },
+        "data-pattern-demo": "search",
+      })}
     </section>
   `;
 }

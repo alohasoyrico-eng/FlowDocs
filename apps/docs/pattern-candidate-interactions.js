@@ -1,16 +1,9 @@
 export function setupCandidatePatternInteractions() {
   document.addEventListener("click", handleCandidatePatternClick);
   document.addEventListener("input", handleCandidatePatternInput);
-  document.addEventListener("keydown", handleCandidatePatternKeydown);
 }
 
 function handleCandidatePatternClick(event) {
-  const searchResult = event.target.closest("[data-search-result]");
-  if (searchResult) return selectSearchResult(searchResult.closest("[data-search-demo]"), searchResult);
-
-  const searchScopeOption = event.target.closest("[data-search-scope] [data-select-option]");
-  if (searchScopeOption) return filterSearchDemo(searchScopeOption.closest("[data-search-demo]"));
-
   const selectLayerChoose = event.target.closest("[data-select-layer-choose]");
   if (selectLayerChoose) return chooseSelectLayerOption(selectLayerChoose.closest("[data-select-layer-demo]"), selectLayerChoose.dataset.selectLayerChoose);
 
@@ -22,17 +15,11 @@ function handleCandidatePatternClick(event) {
 }
 
 function handleCandidatePatternInput(event) {
-  const searchControl = event.target.closest("[data-search-control]");
-  if (searchControl) filterSearchDemo(searchControl.closest("[data-search-demo]"));
-
   const autocompleteControl = event.target.closest("[data-autocomplete-control]");
   if (autocompleteControl) filterAutocompleteDemo(autocompleteControl.closest("[data-autocomplete-demo]"));
 }
 
 document.addEventListener("change", (event) => {
-  const searchScope = event.target.closest("[data-search-scope]");
-  if (searchScope) return filterSearchDemo(searchScope.closest("[data-search-demo]"));
-
   const multiSelectOption = event.target.closest("[data-multi-select-option]");
   if (multiSelectOption) return updateMultiSelect(multiSelectOption.closest("[data-multi-select-demo]"));
 });
@@ -44,61 +31,6 @@ function fieldValue(control) {
   if (selectControl?.dataset?.value) return selectControl.dataset.value.trim();
   const selectedOption = control?.querySelector("[data-select-option][aria-selected='true']");
   return selectedOption?.dataset?.value?.trim() ?? selectedOption?.textContent?.trim() ?? "";
-}
-
-function handleCandidatePatternKeydown(event) {
-  if (event.key !== "Escape") return;
-}
-
-function filterSearchDemo(demo) {
-  if (!demo) return;
-  const query = fieldValue(demo.querySelector("[data-search-control]")).toLowerCase();
-  const scope = fieldValue(demo.querySelector("[data-search-scope]")) || "all";
-  const validation = demo.querySelector("[data-search-validation]");
-  const selected = demo.querySelector("[data-search-selected]");
-  if (selected) selected.hidden = true;
-  const isIdle = query.length === 0 && scope === "all";
-  const isInvalid = query.length === 1;
-  if (validation) validation.hidden = !isInvalid;
-  let visibleCount = 0;
-  demo.querySelectorAll("[data-search-result]").forEach((result) => {
-    const text = `${result.textContent} ${result.dataset.searchKeywords ?? ""}`.toLowerCase();
-    const matchesScope = scope === "all" || result.dataset.searchType === scope;
-    const matchesQuery = query.length === 0 || text.includes(query);
-    const isVisible = !isIdle && !isInvalid && matchesScope && matchesQuery;
-    result.hidden = !isVisible;
-    visibleCount += isVisible ? 1 : 0;
-  });
-  const list = demo.querySelector("[data-search-list]");
-  if (list) list.hidden = !isIdle;
-  const results = demo.querySelector("[data-search-results]");
-  if (results) results.hidden = isIdle || isInvalid || visibleCount === 0;
-  const empty = demo.querySelector("[data-search-empty]");
-  if (empty) empty.hidden = isIdle || isInvalid || visibleCount > 0;
-  const status = demo.querySelector("[data-search-status]");
-  if (isIdle) {
-    demo.dataset.searchState = "idle";
-    if (status) status.textContent = "Recent entities";
-    return;
-  }
-  if (isInvalid) {
-    demo.dataset.searchState = "invalid";
-    if (status) status.textContent = "Type at least 2 characters";
-    return;
-  }
-  demo.dataset.searchState = visibleCount > 0 ? "results" : "empty";
-  if (status) status.textContent = `${visibleCount} ${visibleCount === 1 ? "result" : "results"}`;
-}
-
-function selectSearchResult(demo, result) {
-  if (!demo || result.hidden) return;
-  const selected = demo.querySelector("[data-search-selected]");
-  const message = selected?.querySelector(".inline-validation__message");
-  if (message) message.textContent = `${result.dataset.searchLabel ?? "Result"} selected.`;
-  if (selected) selected.hidden = false;
-  demo.dataset.searchState = "selected";
-  const status = demo.querySelector("[data-search-status]");
-  if (status) status.textContent = `${result.dataset.searchLabel ?? "Result"} selected`;
 }
 
 function filterAutocompleteDemo(demo) {
