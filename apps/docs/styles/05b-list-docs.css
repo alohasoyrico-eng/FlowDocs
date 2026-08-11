@@ -5,6 +5,6 @@
   inline-size: 100%;
 }
 
-.docs-demo-layout--list .list.docs-package-demo {
+.docs-demo-layout--list [data-doc-component="list"] {
   inline-size: 100%;
 }

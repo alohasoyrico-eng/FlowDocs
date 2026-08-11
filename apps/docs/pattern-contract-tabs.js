@@ -1,11 +1,11 @@
-import { artifactFoundationTracePanel, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=3";
+import { artifactContract, artifactFoundationTracePanel, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=3";
 import { componentDemo } from "./component-demo.js?v=60";
 import { patternCopy } from "./docs-state.js";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=3";
 import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=12";
 import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=5";
 import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=6";
-import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=1";
+import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=2";
 import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=1";
 
 export function hasPatternSource(entry) {
@@ -243,15 +243,55 @@ function patternInfoCard(title, items = []) {
 }
 
 function patternDependencyPanel(entry, source) {
-  const components = source.componentsUsed ?? entry.componentsUsed ?? [];
+  const contract = artifactContract(entry);
+  const foundations = contract?.governingFoundations ?? Object.keys(contract?.foundations ?? {});
+  const primitives = contract?.primitiveDependencies ?? [];
+  const components = contract?.componentDependencies ?? source.componentsUsed ?? entry.componentsUsed ?? [];
+  const patterns = contract?.patternDependencies ?? [];
+  const tokens = contract?.tokenDependencies ?? entry.tokens ?? [];
+  const primitiveSlots = (source.slots ?? []).filter((row) => primitives.includes(row[1]));
   return html`
     <section class="doc-panel wide">
       <h2>Design System dependencies</h2>
-      <div class="relation-grid">
-        ${components.map((name) => cardLink("components", slug(name), "widgets", name, findComponent(name)?.summary ?? "Package component dependency.")).join("")}
-      </div>
+      ${dependencyGroup("Foundations", foundations, (name) =>
+        cardLink("foundations", slug(name), "foundation", name, "Governing foundation consumed by this pattern contract."),
+      )}
+      ${dependencyGroup("Primitives", primitives, (name) =>
+        cardLink("primitives", slug(name), "category", name, primitiveDependencySummary(name, primitiveSlots)),
+      )}
+      ${dependencyGroup("Components", components, (name) =>
+        cardLink("components", slug(name), "widgets", name, findComponent(name)?.summary ?? "Package component dependency."),
+      )}
+      ${dependencyGroup("Pattern dependencies", patterns, (name) =>
+        cardLink("patterns", slug(name), "account_tree", name, "Composed pattern dependency declared by the contract."),
+      )}
+      ${tokens.length ? html`
+        <div class="pattern-dependency-group">
+          <h3>Token contract</h3>
+          <div class="token-list">${tokens.map((token) => `<code>${token}</code>`).join("")}</div>
+        </div>
+      ` : ""}
     </section>
   `;
+}
+
+function dependencyGroup(title, items, renderItem) {
+  const uniqueItems = [...new Set(items ?? [])].filter(Boolean);
+  if (!uniqueItems.length) return "";
+  return html`
+    <div class="pattern-dependency-group">
+      <h3>${title}</h3>
+      <div class="relation-grid">
+        ${uniqueItems.map(renderItem).join("")}
+      </div>
+    </div>
+  `;
+}
+
+function primitiveDependencySummary(name, primitiveSlots) {
+  const slots = primitiveSlots.filter((row) => row[1] === name).map((row) => row[0]);
+  if (slots.length) return `Primitive dependency owning structural slot(s): ${slots.join(", ")}.`;
+  return "Primitive dependency declared by this pattern contract.";
 }
 
 function patternContractDesign(entry) {

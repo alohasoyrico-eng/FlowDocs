@@ -80,7 +80,7 @@ function commandPaletteDemoPanel() {
 
 function notificationPanelDemoPanel() {
   return html`
-    <section class="doc-panel wide pattern-notification-panel">
+    <section class="doc-panel wide pattern-notification-demo-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Notification panel</h2>
       ${notificationPanelMarkup()}

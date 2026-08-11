@@ -211,6 +211,26 @@ function reactTextAreaDemo(demo = {}) {
   return reactIsland("text-area", props, state, "default", props.fullWidth);
 }
 
+function reactChatComposerDemo(demo = {}) {
+  const props = componentDemoProps("chat-composer", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard";
+  return reactIsland("chat-composer", props, state, variant, props.fullWidth);
+}
+
+function reactChatMessageDemo(demo = {}) {
+  const props = componentDemoProps("chat-message", demo), state = props.state ?? demo.state ?? "default", variant = props.author ?? demo.author ?? "agent";
+  return reactIsland("chat-message", props, state, variant, props.fullWidth);
+}
+
+function reactChatThreadDemo(demo = {}) {
+  const props = componentDemoProps("chat-thread", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "standard";
+  return reactIsland("chat-thread", props, state, variant, props.fullWidth);
+}
+
+function reactInputAmountDemo(demo = {}) {
+  const props = componentDemoProps("input-amount", demo), state = props.state ?? demo.state ?? "default", variant = props.currency ?? demo.currency ?? "MXN";
+  return reactIsland("input-amount", props, state, variant, props.fullWidth);
+}
+
 function reactTooltipDemo(demo = {}) {
   const props = componentDemoProps("tooltip", demo), state = props.state ?? demo.state ?? "default", variant = props.variant ?? demo.variant ?? "default";
   return reactIsland("tooltip", props, state, variant);
@@ -235,6 +255,9 @@ export function componentDemo(component, demo = {}) {
   if (component === "card-summary") return reactCardSummaryDemo(demo);
   if (component === "chart-panel") return reactChartPanelDemo(demo);
   if (component === "checkbox") return reactCheckboxDemo(demo);
+  if (component === "chat-composer") return reactChatComposerDemo(demo);
+  if (component === "chat-message") return reactChatMessageDemo(demo);
+  if (component === "chat-thread") return reactChatThreadDemo(demo);
   if (component === "chip") return reactChipDemo(demo);
   if (component === "code-input") return reactCodeInputDemo(demo);
   if (component === "combobox") return reactComboboxDemo(demo);
@@ -249,6 +272,7 @@ export function componentDemo(component, demo = {}) {
   if (component === "icon-button") return reactIconButtonDemo(demo);
   if (component === "inline-validation") return reactInlineValidationDemo(demo);
   if (component === "input") return reactInputDemo(demo);
+  if (component === "input-amount") return reactInputAmountDemo(demo);
   if (component === "kpi-tile") return reactKpiTileDemo(demo);
   if (component === "list") return reactListDemo(demo);
   if (component === "menu") return reactMenuDemo(demo);

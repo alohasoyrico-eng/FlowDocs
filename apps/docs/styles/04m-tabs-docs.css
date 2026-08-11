@@ -20,8 +20,6 @@
   --docs-detail-tabs-focus-ring: var(--sys-a11y-focus-ring);
   --docs-detail-tabs-focus-offset: var(--sys-a11y-focus-offset);
   --docs-detail-tabs-badge-gap: var(--sys-space-1);
-  --docs-detail-tabs-indicator-left: 0;
-  --docs-detail-tabs-indicator-width: 0;
   --docs-detail-tabs-indicator-block: calc(100% - (var(--docs-detail-tabs-padding) * 2));
   --docs-detail-tabs-indicator-transition: left var(--sys-duration-base) var(--sys-motion-curve-touch), width var(--sys-duration-base) var(--sys-motion-curve-touch);
 }
@@ -57,8 +55,8 @@
   position: absolute;
   z-index: var(--sys-depth-z-base);
   inset-block-start: var(--docs-detail-tabs-padding);
-  inset-inline-start: var(--docs-detail-tabs-indicator-left);
-  inline-size: var(--docs-detail-tabs-indicator-width);
+  inset-inline-start: var(--comp-tabs-indicator-left, var(--component-space-xs));
+  inline-size: var(--comp-tabs-indicator-width, var(--component-inline-size-zero));
   block-size: var(--docs-detail-tabs-indicator-block);
   border-radius: var(--docs-detail-tabs-tab-radius);
   background: var(--docs-detail-tabs-tab-bg-selected);
@@ -168,9 +166,9 @@
   overflow: visible;
 }
 
-.simple-viewport-demo[data-demo-layout~="contained"] > .tabs,
-.simple-viewport-demo[data-demo-layout~="scrollable"] > .tabs,
-.simple-viewport-demo[data-demo-layout~="underline"] > .tabs {
+.simple-viewport-demo[data-demo-layout~="contained"] > [data-doc-component="tabs"],
+.simple-viewport-demo[data-demo-layout~="scrollable"] > [data-doc-component="tabs"],
+.simple-viewport-demo[data-demo-layout~="underline"] > [data-doc-component="tabs"] {
   inline-size: 100%;
   min-inline-size: 0;
 }
@@ -188,7 +186,7 @@
   max-inline-size: 100%;
 }
 
-.button-viewport-panel:has(.tabs) .viewport-doc-grid {
+.button-viewport-panel:has([data-doc-component="tabs"]) .viewport-doc-grid {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
 }
 
@@ -202,7 +200,7 @@
   padding-inline: var(--sys-frame-padding-container);
 }
 
-.tabs-doc-demo-grid .tabs {
+.tabs-doc-demo-grid [data-doc-component="tabs"] {
   justify-self: center;
   width: max-content;
   min-width: 0;
@@ -212,7 +210,7 @@
   overflow-x: auto;
 }
 
-.button-viewport-panel:has(.tabs) .simple-viewport-demo > .tabs {
+.button-viewport-panel:has([data-doc-component="tabs"]) .simple-viewport-demo > [data-doc-component="tabs"] {
   justify-self: center;
   width: max-content;
   min-width: 0;

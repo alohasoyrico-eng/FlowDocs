@@ -10,6 +10,14 @@ function packageDemo(component, demo = {}, attrs = {}) {
   return markup.replace(/^<([a-z0-9-]+)/i, `<$1 ${attrText}`);
 }
 
+function escapeAttribute(value) {
+  return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
+  return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
 export function utilityPatternOverviewDemo(patternId) {
   if (patternId === "snackbar-provider") return snackbarProviderDemoPanel();
   if (patternId === "timeline") return timelineDemoPanel();
@@ -44,23 +52,47 @@ function snackbarProviderDemoPanel() {
 }
 
 function timelineDemoPanel() {
+  const events = [
+    {
+      key: "fuel-limit",
+      label: "Fuel limit changed",
+      description: "Ana Sosa updated JMX-214-B policy.",
+      meta: "Today 09:42 - Operations",
+      status: "logged",
+      statusLabel: "Logged",
+      icon: "manage_history",
+    },
+    {
+      key: "sync-warning",
+      label: "Sync warning",
+      description: "Vehicle KLD-901-C needs document refresh.",
+      meta: "Today 08:10 - System",
+      status: "warning",
+      statusLabel: "Warning",
+      icon: "warning",
+    },
+    {
+      key: "route-completed",
+      label: "Route completed",
+      description: "Station 24 route closed with receipt attached.",
+      meta: "Yesterday 18:22 - Driver",
+      status: "success",
+      statusLabel: "Verified",
+      icon: "route",
+    },
+  ];
   return html`
     <section class="doc-panel wide pattern-utility-panel">
       <span class="eyebrow">Interactive demo</span>
       <h2>Fleet activity timeline</h2>
-      <div class="pattern-timeline-demo pattern-utility-demo" data-timeline-demo>
-        <div class="pattern-timeline-demo__filters">
-          ${packageDemo("chip", { label: "All", selected: true }, { "data-timeline-filter": "all" })}
-          ${packageDemo("chip", { label: "Warnings", removable: true }, { "data-timeline-filter": "warning" })}
-          ${packageDemo("badge", { label: "3 events", tone: "neutral", variant: "standard" }, { "data-timeline-count": "" })}
-        </div>
-        <div class="pattern-timeline-demo__events" data-timeline-events>
-          ${packageDemo("audit-event", { label: "Fuel limit changed", description: "Ana Sosa updated JMX-214-B policy.", meta: "Today 09:42 - Operations", status: "Logged", icon: "manage_history" }, { "data-timeline-event": "default" })}
-          ${packageDemo("audit-event", { label: "Sync warning", description: "Vehicle KLD-901-C needs document refresh.", meta: "Today 08:10 - System", status: "Warning", icon: "warning" }, { "data-timeline-event": "warning" })}
-          ${packageDemo("audit-event", { label: "Route completed", description: "Station 24 route closed with receipt attached.", meta: "Yesterday 18:22 - Driver", status: "Verified", icon: "route" }, { "data-timeline-event": "default" })}
-        </div>
-        <div data-timeline-empty hidden>${packageDemo("empty-state", { label: "No events match", description: "Clear filters to restore the timeline.", icon: "timeline" })}</div>
-      </div>
+      ${patternReactDemo("timeline", {
+        label: "Fleet activity timeline",
+        description: "Filter operational events without creating a second timeline structure in Docs.",
+        className: "pattern-timeline-demo pattern-utility-demo",
+        density: "md",
+        events,
+        "data-timeline-demo": "react",
+      })}
     </section>
   `;
 }

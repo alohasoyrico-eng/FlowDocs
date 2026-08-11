@@ -9,7 +9,7 @@
   min-block-size: var(--sys-frame-doc-panel-min-sm);
 }
 
-.table-doc-demo-grid .table.docs-package-demo {
+.table-doc-demo-grid [data-doc-component="table"] {
   inline-size: 100%;
 }
 
@@ -25,6 +25,6 @@
 }
 
 .docs-demo-layout--table .simple-console,
-.docs-demo-layout--table .table.docs-package-demo {
+.docs-demo-layout--table [data-doc-component="table"] {
   inline-size: 100%;
 }

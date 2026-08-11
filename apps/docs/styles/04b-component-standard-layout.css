@@ -211,8 +211,8 @@
   font-size: var(--sys-voice-size-3);
 }
 
-.button-matrix .button,
-.button-state-matrix .button {
+.button-matrix [data-doc-component="button"],
+.button-state-matrix [data-doc-component="button"] {
   inline-size: 100%;
 }
 

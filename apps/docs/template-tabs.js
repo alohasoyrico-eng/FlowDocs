@@ -83,7 +83,8 @@ export function templateContractPanel(entry) {
       <div class="props-table">
         <div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
         ${[
-          ["patternsUsed", "PatternRef[]", "yes", (entry.patternsUsed ?? []).join(", ")],
+          ["patternsUsed", "PatternRef[]", "yes", (entry.patternsUsed ?? []).join(", ") || "None"],
+          ["templateModulesUsed", "TemplateModuleRef[]", "yes", (entry.templateModulesUsed ?? []).join(", ") || "None"],
           ["dataSources", "DataSource[]", "yes", blueprint?.data?.join(", ") ?? templateBlueprintFallbacks.dataSources],
           ["permissions", "PermissionRole[]", "yes", blueprint?.permissions?.join(", ") ?? templateBlueprintFallbacks.permissions],
           ["states", "StateMatrix", "yes", blueprint?.states?.join(", ") ?? templateBlueprintFallbacks.states],
@@ -96,6 +97,7 @@ export function templateContractPanel(entry) {
 
 export function iaPanel(entry) {
   const patternsUsed = entry.patternsUsed ?? [];
+  const templateModulesUsed = entry.templateModulesUsed ?? [];
   const blueprint = templateBlueprints[entry.title];
   return html`
     <section class="doc-panel wide">
@@ -104,6 +106,7 @@ export function iaPanel(entry) {
       ${blueprint ? `<div class="nav-model">${blueprint.nav.map((item) => `<span>${item}</span>`).join("")}</div>` : ""}
       <div class="relation-grid">
         ${patternsUsed.map((name) => cardLink("patterns", slug(name), "account_tree", name, findPattern(name)?.summary ?? "Pattern contract.")).join("")}
+        ${templateModulesUsed.map((name) => cardLink("templates", entry.id, "view_module", name, blueprint?.templateModuleDetails?.[name] ?? templateBlueprintFallbacks.moduleDetail)).join("")}
       </div>
     </section>
   `;
@@ -111,10 +114,11 @@ export function iaPanel(entry) {
 
 export function flowsPanel(entry) {
   const blueprint = templateBlueprints[entry.title];
-  const flows = (entry.patternsUsed ?? []).map((patternName) => `${patternName}: ${blueprint?.processDetails?.[patternName] ?? templateBlueprintFallbacks.processDetail}`);
+  const flows = (entry.patternsUsed ?? []).map((patternName) => `${patternName}: ${blueprint?.patternDetails?.[patternName] ?? templateBlueprintFallbacks.processDetail}`);
+  const modules = (entry.templateModulesUsed ?? []).map((moduleName) => `${moduleName}: ${blueprint?.templateModuleDetails?.[moduleName] ?? templateBlueprintFallbacks.moduleDetail}`);
   return html`
     ${listPanel(ui("reference.coreProcesses"), flows)}
-    ${blueprint ? listPanel(ui("reference.templateModules"), blueprint.modules) : ""}
+    ${modules.length ? listPanel(ui("reference.templateModules"), modules) : blueprint ? listPanel(ui("reference.templateModules"), blueprint.modules) : ""}
   `;
 }
 

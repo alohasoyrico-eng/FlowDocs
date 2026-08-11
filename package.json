@@ -30,7 +30,9 @@
     "#design-system/content/i18n-ui": "flow/content/i18n-ui",
     "#design-system/specs/system": "flow/specs/system",
     "#design-system/specs/foundations/*": "flow/specs/foundations/*",
-    "#design-system/specs/primitives/*": "flow/specs/primitives/*"
+    "#design-system/specs/primitives/*": "flow/specs/primitives/*",
+    "#design-system/specs/patterns/*": "flow/specs/patterns/*",
+    "#design-system/specs/templates/*": "flow/specs/templates/*"
   },
   "scripts": {
     "build:docs-content": "node scripts/build-docs-content.mjs",

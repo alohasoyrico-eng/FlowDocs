@@ -1,5 +1,5 @@
 .pattern-command-panel,
-.pattern-notification-panel,
+.pattern-notification-demo-panel,
 .pattern-avatar-menu-panel,
 .pattern-confirmation-panel,
 .pattern-action-sheet-panel {
@@ -156,7 +156,7 @@
   align-items: end;
 }
 
-.pattern-search-demo [data-search-control] .field__label {
+.pattern-search-demo [data-search-control] [data-field-label] {
   position: absolute;
   inline-size: var(--sys-frame-border-thin);
   block-size: var(--sys-frame-border-thin);
@@ -166,7 +166,7 @@
   white-space: nowrap;
 }
 
-.pattern-search-demo [data-search-control] .field__helper {
+.pattern-search-demo [data-search-control] [data-field-helper] {
   display: none;
 }
 

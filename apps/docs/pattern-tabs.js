@@ -1,5 +1,5 @@
 import { artifactContract, artifactFoundationTracePanel, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, icon, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=3";
-import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=28";
+import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=30";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=3";
 import { focusedPatternDesignPanels, topbarMarkup } from "./pattern-focused-design.js?v=23";
 import { patternMielTabs } from "./pattern-miel-tabs.js?v=6";

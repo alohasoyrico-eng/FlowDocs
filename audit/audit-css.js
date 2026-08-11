@@ -113,6 +113,7 @@ function checkMissingFoundationTokenReferences() {
     tokenCssFile,
     docsCssFile,
     path.join(docsAppDir, "generated/tokens.css"),
+    path.join(docsAppDir, "generated/components.css"),
     ...docsStyleModuleFiles,
   ].filter((file) => fs.existsSync(file));
   const defined = new Map();

@@ -1,7 +1,7 @@
-body[data-contrast="quiet"] .slider.docs-package-demo .slider__value,
-body[data-contrast="quiet"] .slider.docs-package-demo[data-state="focus"] .slider__value,
-body[data-contrast="quiet"] .slider.docs-package-demo[data-state="dragging"] .slider__value,
-body[data-contrast="quiet"] .slider.docs-package-demo[data-state="complete"] .slider__value {
+body[data-contrast="quiet"] [data-doc-component="slider"] [data-slider-output],
+body[data-contrast="quiet"] [data-doc-component="slider"][data-state="focus"] [data-slider-output],
+body[data-contrast="quiet"] [data-doc-component="slider"][data-state="dragging"] [data-slider-output],
+body[data-contrast="quiet"] [data-doc-component="slider"][data-state="complete"] [data-slider-output] {
   color: var(--sys-color-text);
 }
 
@@ -13,6 +13,6 @@ body[data-contrast="quiet"] .slider.docs-package-demo[data-state="complete"] .sl
   padding-inline: var(--docs-slider-demo-edge-padding);
 }
 
-.docs-demo-layout--slider.simple-demo-row .slider.docs-package-demo {
+.docs-demo-layout--slider.simple-demo-row [data-doc-component="slider"] {
   inline-size: 100%;
 }

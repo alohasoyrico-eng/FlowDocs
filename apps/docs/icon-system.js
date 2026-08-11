@@ -1,3 +1,5 @@
+import { iconGlyph as primitiveIconGlyph } from "#design-system/components";
+
 let collectionIcons = {};
 
 export function configureIconSystem(options = {}) {
@@ -14,7 +16,7 @@ export function icon(name, options = {}) {
 }
 
 export function iconGlyph(name) {
-  return materialSymbolName(name);
+  return primitiveIconGlyph(materialSymbolName(name));
 }
 
 function escapeAttribute(value) {

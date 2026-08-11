@@ -1,8 +1,24 @@
 import { html, slug } from "./detail-tabs-core.js?v=3";
 
-function renderTemplateModuleCard({ packageDemo, title, detail, status = "", attrs = {}, body = "" }) {
-  return packageDemo("card", { title, detail, status }, { "data-template-module-card": "", ...attrs })
-    .replace("</article>", `<div class="template-module-content">${body}</div></article>`);
+function attrText(attrs = {}) {
+  return Object.entries(attrs)
+    .map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`)
+    .join(" ");
+}
+
+function renderTemplateModuleSurface({ title, detail, status = "", attrs = {}, body = "" }) {
+  return html`
+    <section ${attrText({ class: "surface template-module-surface", "data-flow-primitive": "surface", "data-surface-role": "section", "data-state": status ? "raised" : "default", "data-template-module-surface": "", ...attrs })}>
+      <header class="template-module-header">
+        <div>
+          <strong>${title}</strong>
+          <p>${detail}</p>
+        </div>
+        ${status ? `<span>${status}</span>` : ""}
+      </header>
+      <div class="template-module-content">${body}</div>
+    </section>
+  `;
 }
 
 export function renderRolesAndPermissionsToolbar({ packageDemo }) {
@@ -17,8 +33,7 @@ export function renderRolesAndPermissionsToolbar({ packageDemo }) {
 }
 
 export function renderRolesAndPermissionsPattern({ packageDemo, rows = [] }) {
-  return renderTemplateModuleCard({
-    packageDemo,
+  return renderTemplateModuleSurface({
     title: "Permission matrix",
     detail: "Role capabilities, dependency warnings, approval requirements, and risky changes before save.",
     status: "2 warnings",
@@ -35,8 +50,7 @@ export function renderRolesAndPermissionsPattern({ packageDemo, rows = [] }) {
 
 export function renderDriverVehicleAdministrationPattern({ packageDemo, driverRows = [], vehicleRows = [] }) {
   return html`
-    ${renderTemplateModuleCard({
-      packageDemo,
+    ${renderTemplateModuleSurface({
       title: "Driver lifecycle",
       detail: "Driver creation, suspension, recovery, ownership, and evidence states.",
       status: "3 records",
@@ -49,8 +63,7 @@ export function renderDriverVehicleAdministrationPattern({ packageDemo, driverRo
       </footer>
       `,
     })}
-    ${renderTemplateModuleCard({
-      packageDemo,
+    ${renderTemplateModuleSurface({
       title: "Vehicle lifecycle",
       detail: "Vehicle status, assignment, eligibility, documents, and operational blockers.",
       status: "1 blocked",
@@ -67,8 +80,7 @@ export function renderDriverVehicleAdministrationPattern({ packageDemo, driverRo
 }
 
 export function renderAdminRiskReviewPattern({ packageDemo }) {
-  return renderTemplateModuleCard({
-    packageDemo,
+  return renderTemplateModuleSurface({
     title: "Audit trail",
     detail: "Who changed what, when, why, and what downstream object was affected.",
     status: "Protected",

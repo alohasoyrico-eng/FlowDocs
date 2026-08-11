@@ -1,5 +1,7 @@
 const {
   fs,
+  path,
+  docsAppDir,
   docsAppFile,
   docsCatalogRenderersFile,
   docsChromeFile,
@@ -24,6 +26,8 @@ const {
   docsRuntimeAuditFile,
   docsShellControlsFile,
   docsVisualExamplesFile,
+  patternCopyFile,
+  specFile,
   templateBlueprintsFile,
   uiI18nFile,
   catalogFile,
@@ -32,6 +36,54 @@ const {
   readSpec,
   add,
 } = require("./audit-context.js");
+
+function checkPatternDependencyLayering() {
+  const patternContractTabsFile = path.join(docsAppDir, "pattern-contract-tabs.js");
+  const patternTabsFile = path.join(docsAppDir, "pattern-tabs.js");
+  const spec = readSpec();
+  const patternCopy = readJson(patternCopyFile);
+  const patternContractTabs = fs.existsSync(patternContractTabsFile) ? read(patternContractTabsFile) : "";
+  const patternTabs = fs.existsSync(patternTabsFile) ? read(patternTabsFile) : "";
+  const patterns = Object.keys(patternCopy?.patterns ?? {});
+
+  if (!patterns.length) {
+    add("errors", patternCopyFile, 1, "Pattern copy must declare pattern contracts for FlowDocs.");
+  }
+  for (const id of patterns) {
+    const contract = spec?.artifacts?.patterns?.[id];
+    if (!contract) {
+      add("errors", patternCopyFile, 1, `Pattern copy ${id} is missing a machine-readable spec contract.`);
+      continue;
+    }
+    for (const field of ["governingFoundations", "primitiveDependencies", "componentDependencies", "patternDependencies", "tokenDependencies"]) {
+      if (!Array.isArray(contract[field])) {
+        add("errors", specFile, 1, `Pattern contract ${id} must expose ${field} as an array for layered dependency rendering.`);
+      }
+    }
+  }
+
+  const requiredRuntimeGuards = [
+    "const contract = artifactContract(entry)",
+    "contract?.governingFoundations",
+    "contract?.primitiveDependencies",
+    "contract?.componentDependencies",
+    "contract?.patternDependencies",
+    "contract?.tokenDependencies",
+    'dependencyGroup("Foundations"',
+    'dependencyGroup("Primitives"',
+    'dependencyGroup("Components"',
+    "primitiveDependencySummary",
+    "Primitive dependency owning structural slot",
+  ];
+  for (const guard of requiredRuntimeGuards) {
+    if (!patternContractTabs.includes(guard)) {
+      add("errors", patternContractTabsFile, 1, `Pattern dependency panel must render layered contract data, missing guard: ${guard}.`);
+    }
+  }
+  if (!patternTabs.includes("pattern-contract-tabs.js?v=")) {
+    add("errors", patternTabsFile, 1, "Pattern tabs must import the contract renderer with an explicit cache-busted module URL.");
+  }
+}
 
 function checkTemplateBlueprints() {
   const appFile = docsAppFile;
@@ -52,13 +104,12 @@ function checkTemplateBlueprints() {
 
   let blueprintContent = null;
   let blueprints = null;
-  try {
-    blueprintContent = JSON.parse(read(templateBlueprintsFile));
-    blueprints = blueprintContent.templates;
-  } catch (error) {
-    add("errors", templateBlueprintsFile, 1, `Template blueprints JSON is invalid: ${error.message}`);
+  blueprintContent = readJson(templateBlueprintsFile);
+  if (!blueprintContent) {
+    add("errors", templateBlueprintsFile, 1, "Template blueprints JSON is invalid or unreadable.");
     return;
   }
+  blueprints = blueprintContent.templates;
   for (const field of ["primary", "standard", "screenSystem", "informationArchitecture", "processDetail", "moduleDetail", "dataSources", "permissions", "states", "telemetry", "surfaces", "modules", "patternDependencies", "stateMatrixCopy", "dataPermissions"]) {
     if (!blueprintContent.fallbacks?.[field]) add("errors", templateBlueprintsFile, 1, `Template blueprint fallback missing field: ${field}.`);
   }
@@ -88,7 +139,7 @@ function checkTemplateBlueprints() {
     if (contract.layer !== "Template") {
       add("errors", specFile, 1, `Template contract ${templateId} must declare layer Template.`);
     }
-    for (const field of ["nav", "metrics", "modules", "moduleDetails", "processDetails", "standard", "screenSystem", "informationArchitecture", "primary", "permissions", "data", "states", "surfaces", "telemetry", "qualityGates"]) {
+    for (const field of ["nav", "metrics", "modules", "moduleDetails", "standard", "screenSystem", "informationArchitecture", "primary", "permissions", "data", "states", "surfaces", "telemetry", "qualityGates"]) {
       const value = blueprint[field];
       const isEmptyArray = Array.isArray(value) && value.length === 0;
       const isEmptyObject = value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === 0;
@@ -96,17 +147,29 @@ function checkTemplateBlueprints() {
         add("errors", templateBlueprintsFile, 1, `Template blueprint ${title} missing ${field}.`);
       }
     }
+    if (blueprint.processDetails) {
+      add("errors", templateBlueprintsFile, 1, `Template blueprint ${title} must separate patternDetails and templateModuleDetails; processDetails is ambiguous.`);
+    }
     for (const moduleName of blueprint.modules ?? []) {
       const detail = blueprint.moduleDetails?.[moduleName];
       if (!detail?.copy || !detail?.icon) {
         add("errors", templateBlueprintsFile, 1, `Template blueprint ${title} module missing detail: ${moduleName}.`);
       }
     }
-    const appTemplateMatch = app.match(new RegExp(`template\\("${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"[\\s\\S]*?\\[(.*?)\\]\\)`, "m"));
-    const patternNames = appTemplateMatch?.[1]?.match(/"([^"]+)"/g)?.map((item) => item.slice(1, -1)) ?? [];
+    const catalogTemplate = readJson(catalogFile)?.templates?.find((entry) => entry.id === templateId);
+    const patternNames = catalogTemplate?.patternsUsed ?? [];
+    const templateModuleNames = catalogTemplate?.templateModulesUsed ?? [];
+    if (patternNames.length && (!blueprint.patternDetails || !Object.keys(blueprint.patternDetails).length)) {
+      add("errors", templateBlueprintsFile, 1, `Template blueprint ${title} missing patternDetails for consumed patterns.`);
+    }
     for (const patternName of patternNames) {
-      if (!blueprint.processDetails?.[patternName]) {
-        add("errors", templateBlueprintsFile, 1, `Template blueprint ${title} system missing detail: ${patternName}.`);
+      if (!blueprint.patternDetails?.[patternName]) {
+        add("errors", templateBlueprintsFile, 1, `Template blueprint ${title} pattern missing detail: ${patternName}.`);
+      }
+    }
+    for (const moduleName of templateModuleNames) {
+      if (!blueprint.templateModuleDetails?.[moduleName]) {
+        add("errors", templateBlueprintsFile, 1, `Template blueprint ${title} template module missing detail: ${moduleName}.`);
       }
     }
     const syncChecks = [
@@ -118,6 +181,7 @@ function checkTemplateBlueprints() {
       ["telemetry", blueprint.telemetry, contract.telemetry],
       ["qualityGates", blueprint.qualityGates, contract.qualityGates],
       ["patternDependencies", patternNames, contract.patternDependencies],
+      ["templateModuleDependencies", templateModuleNames, contract.templateModuleDependencies ?? []],
     ];
     for (const [field, sourceValue, contractValue] of syncChecks) {
       if (JSON.stringify(sourceValue ?? []) !== JSON.stringify(contractValue ?? [])) {
@@ -356,6 +420,7 @@ function checkI18nReadiness() {
 }
 
 module.exports = {
+  checkPatternDependencyLayering,
   checkTemplateBlueprints,
   checkI18nReadiness,
 };

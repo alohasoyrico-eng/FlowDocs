@@ -8,10 +8,13 @@ const templateFoundations = "energy frame voice depth momentum state tone growth
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
   if (!markup) return "";
-  const attrText = Object.entries({ "data-template-component": component, ...attrs })
+  return markup.replace(/^<([a-z0-9-]+)/i, `<$1 ${attrText({ "data-template-component": component, ...attrs })}`);
+}
+
+function attrText(attrs = {}) {
+  return Object.entries(attrs)
     .map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`)
     .join(" ");
-  return markup.replace(/^<([a-z0-9-]+)/i, `<$1 ${attrText}`);
 }
 
 function patternAttr(name) {
@@ -26,9 +29,19 @@ function patternBadges(patterns = []) {
   `;
 }
 
-function templateModuleCard({ title, detail, status = "", pattern, attrs = {}, body = "" }) {
-  return packageDemo("card", { title, detail, status }, { "data-template-module-card": "", "data-template-pattern": slug(pattern), ...attrs })
-    .replace("</article>", `<div class="template-module-content">${body}</div></article>`);
+function templateModuleSurface({ title, detail, status = "", pattern, attrs = {}, body = "" }) {
+  return html`
+    <section ${attrText({ class: "surface template-module-surface", "data-flow-primitive": "surface", "data-surface-role": "section", "data-state": status ? "raised" : "default", "data-template-module-surface": "", "data-template-pattern": slug(pattern), ...attrs })}>
+      <header class="template-module-header">
+        <div>
+          <strong>${title}</strong>
+          <p>${detail}</p>
+        </div>
+        ${status ? `<span>${status}</span>` : ""}
+      </header>
+      <div class="template-module-content">${body}</div>
+    </section>
+  `;
 }
 
 function navPatternFor(item) {
@@ -120,7 +133,7 @@ function fleetManagerDesktopDemo(entry, blueprint) {
       ${packageDemo("kpi-tile", { label: "Vehicles ready", value: "128", delta: "4 need review", tone: "success", icon: "directions_car" })}
     </section>
     <section class="template-desktop-demo__grid">
-      ${templateModuleCard({
+      ${templateModuleSurface({
         title: "Exception inbox",
         detail: "Open operational exceptions with owner, severity, and age.",
         status: "3 open",
@@ -129,7 +142,7 @@ function fleetManagerDesktopDemo(entry, blueprint) {
         ${packageDemo("table", { label: "Open exceptions", rows, columns: [{ key: "exception", label: "Exception" }, { key: "owner", label: "Owner" }, { key: "severity", label: "Severity" }, { key: "age", label: "Age" }] }, { "data-template-table": "" })}
         `,
       })}
-      ${templateModuleCard({
+      ${templateModuleSurface({
         title: "Activity timeline",
         detail: "Recent configuration and exception actions with auditable evidence.",
         status: "Logged",
@@ -166,7 +179,7 @@ function dashboardSuiteDemo(entry, blueprint) {
       ${packageDemo("kpi-tile", { label: "Exports ready", value: "6", delta: "Finance visible", tone: "success", icon: "download_done" })}
     </section>
     <section class="template-desktop-demo__grid">
-      ${templateModuleCard({
+      ${templateModuleSurface({
         title: "Overview drill-down",
         detail: "Current domain trend with accessible summary and shared dashboard scope.",
         status: "Live",
@@ -177,7 +190,7 @@ function dashboardSuiteDemo(entry, blueprint) {
         ${packageDemo("chart-panel", { label: "Domain trend", value: "$1.8M", caption: "Current filters apply to every dashboard.", values: [42, 48, 62, 56, 78, 84] })}
         `,
       })}
-      ${templateModuleCard({
+      ${templateModuleSurface({
         title: "Evidence table",
         detail: "Dashboard evidence for finance review and export readiness.",
         status: "Finance",

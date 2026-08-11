@@ -11,6 +11,7 @@ const {
   checkPrimitiveRoutesAndContent,
 } = require("./audit-routes.js");
 const {
+  checkPatternDependencyLayering,
   checkTemplateBlueprints,
   checkI18nReadiness,
 } = require("./audit-docs-content.js");
@@ -37,6 +38,7 @@ checkCssBalance();
 checkFrameLayoutContract();
 checkFoundationRoutesAndContent();
 checkPrimitiveRoutesAndContent();
+checkPatternDependencyLayering();
 checkTemplateBlueprints();
 checkI18nReadiness();
 checkHomeContentOwnership();

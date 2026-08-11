@@ -108,7 +108,7 @@
   max-inline-size: 100%;
 }
 
-.docs-react-island.docs-package-demo[data-doc-component="card-summary"] > .card-summary {
+.docs-react-island.docs-package-demo[data-doc-component="card-summary"] > * {
   inline-size: 100%;
 }
 
@@ -118,7 +118,7 @@
   max-inline-size: 100%;
 }
 
-.docs-react-island.docs-package-demo[data-doc-component="movement-row"] > .movement-row {
+.docs-react-island.docs-package-demo[data-doc-component="movement-row"] > * {
   inline-size: 100%;
 }
 
@@ -126,13 +126,13 @@
   align-items: flex-start;
 }
 
-.docs-demo-layout--popover .popover.docs-package-demo[data-open="true"] .popover__panel {
+.docs-demo-layout--popover [data-doc-component="popover"][data-open="true"] [role="dialog"] {
   inset: auto;
   margin-block-start: var(--popover-panel-offset);
   position: relative;
 }
 
-.fab.docs-package-demo[data-full-width="true"] {
+.docs-package-demo[data-doc-component="floating-action-button"][data-full-width="true"] {
   inline-size: auto;
   max-inline-size: none;
 }

@@ -236,7 +236,7 @@
 }
 
 @media (min-width: 861px) and (max-width: 1180px) {
-  .icon-button.menu-button {
+  .menu-button {
     display: none;
   }
 

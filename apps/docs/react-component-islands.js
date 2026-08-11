@@ -56,6 +56,7 @@ import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
+import { Timeline } from "./generated/react/patterns/Timeline.js?v=1";
 
 const mounted = new WeakMap();
 const reactComponents = {
@@ -115,6 +116,7 @@ const reactComponents = {
   tooltip: Tooltip,
   "tree-view": TreeView,
   "text-area": TextArea,
+  timeline: Timeline,
 };
 
 function InputIsland({ initialProps }) {
@@ -304,6 +306,69 @@ function TextAreaIsland({ initialProps }) {
   });
 }
 
+function TimelineIsland({ initialProps }) {
+  const allEvents = Array.isArray(initialProps.events) ? initialProps.events : [];
+  const [filter, setFilter] = React.useState(initialProps.initialFilter ?? "all");
+  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? "");
+  const visibleEvents = filter === "warning"
+    ? allEvents.filter((event) => event.state === "warning" || event.status === "warning" || event.tone === "warning")
+    : allEvents;
+  const filters = [
+    {
+      key: "all",
+      label: "All",
+      selected: filter === "all",
+      removable: false,
+      onClick: () => setFilter("all"),
+    },
+    {
+      key: "warning",
+      label: "Warnings",
+      selected: filter === "warning",
+      removable: filter === "warning",
+      onClick: () => setFilter("warning"),
+    },
+  ];
+
+  return React.createElement(Timeline, {
+    ...initialProps,
+    events: visibleEvents,
+    filters,
+    filtered: filter !== "all",
+    selectedKey,
+    status: {
+      label: `${visibleEvents.length} ${visibleEvents.length === 1 ? "event" : "events"}`,
+      tone: filter === "warning" ? "warning" : "neutral",
+      variant: "standard",
+    },
+    recovery: {
+      title: "No events match",
+      description: "Clear filters to restore the timeline.",
+      icon: "timeline",
+    },
+    clearAction: filter !== "all"
+      ? {
+          label: "Clear filters",
+          variant: "secondary",
+        }
+      : undefined,
+    onClear: () => setFilter("all"),
+    onFilterRemove: () => setFilter("all"),
+    onEventSelect: (key) => setSelectedKey(key),
+  });
+}
+
+const reactIslandWrappers = {
+  input: InputIsland, "card-expiry-input": CardExpiryInputIsland,
+  "card-number-input": CardNumberInputIsland, "card-security-code-input": CardSecurityCodeInputIsland,
+  checkbox: CheckboxIsland, "code-input": CodeInputIsland, combobox: ComboboxIsland,
+  "country-selector": CountrySelectorIsland, "date-picker": DatePickerIsland, "date-range-picker": DateRangePickerIsland,
+  "phone-input": PhoneInputIsland, pagination: PaginationIsland, select: SelectIsland,
+  "segmented-control": SegmentedControlIsland, "radio-button": RadioButtonIsland,
+  switch: SwitchIsland, tabs: TabsIsland, slider: SliderIsland,
+  "text-area": TextAreaIsland, timeline: TimelineIsland,
+};
+
 function parseProps(node) {
   try {
     return JSON.parse(node.dataset.reactProps ?? "{}");
@@ -320,46 +385,9 @@ export function setupReactComponentIslands(root = document) {
     mounted.set(node, reactRoot);
     node.dataset.reactMounted = "true";
     const props = parseProps(node);
-    reactRoot.render(
-      node.dataset.reactComponent === "input"
-        ? React.createElement(InputIsland, { initialProps: props })
-        : node.dataset.reactComponent === "card-expiry-input"
-          ? React.createElement(CardExpiryInputIsland, { initialProps: props })
-        : node.dataset.reactComponent === "card-number-input"
-          ? React.createElement(CardNumberInputIsland, { initialProps: props })
-        : node.dataset.reactComponent === "card-security-code-input"
-          ? React.createElement(CardSecurityCodeInputIsland, { initialProps: props })
-        : node.dataset.reactComponent === "checkbox"
-          ? React.createElement(CheckboxIsland, { initialProps: props })
-        : node.dataset.reactComponent === "code-input"
-          ? React.createElement(CodeInputIsland, { initialProps: props })
-        : node.dataset.reactComponent === "combobox"
-          ? React.createElement(ComboboxIsland, { initialProps: props })
-        : node.dataset.reactComponent === "country-selector"
-          ? React.createElement(CountrySelectorIsland, { initialProps: props })
-        : node.dataset.reactComponent === "date-picker"
-          ? React.createElement(DatePickerIsland, { initialProps: props })
-        : node.dataset.reactComponent === "date-range-picker"
-          ? React.createElement(DateRangePickerIsland, { initialProps: props })
-        : node.dataset.reactComponent === "phone-input"
-          ? React.createElement(PhoneInputIsland, { initialProps: props })
-        : node.dataset.reactComponent === "pagination"
-          ? React.createElement(PaginationIsland, { initialProps: props })
-        : node.dataset.reactComponent === "select"
-          ? React.createElement(SelectIsland, { initialProps: props })
-        : node.dataset.reactComponent === "segmented-control"
-          ? React.createElement(SegmentedControlIsland, { initialProps: props })
-        : node.dataset.reactComponent === "radio-button"
-          ? React.createElement(RadioButtonIsland, { initialProps: props })
-        : node.dataset.reactComponent === "switch"
-          ? React.createElement(SwitchIsland, { initialProps: props })
-        : node.dataset.reactComponent === "tabs"
-          ? React.createElement(TabsIsland, { initialProps: props })
-        : node.dataset.reactComponent === "slider"
-          ? React.createElement(SliderIsland, { initialProps: props })
-        : node.dataset.reactComponent === "text-area"
-          ? React.createElement(TextAreaIsland, { initialProps: props })
-        : React.createElement(Component, props),
-    );
+    const Island = reactIslandWrappers[node.dataset.reactComponent];
+    reactRoot.render(Island
+      ? React.createElement(Island, { initialProps: props })
+      : React.createElement(Component, props));
   }
 }

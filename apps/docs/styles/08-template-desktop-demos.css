@@ -129,7 +129,28 @@
   overflow-x: auto;
 }
 
-[data-template-module-card] {
+.template-module-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sys-space-3);
+  margin-block-end: var(--sys-space-3);
+}
+
+.template-module-header p {
+  margin: var(--sys-space-1) 0 0;
+  color: var(--sys-color-text-muted);
+  font-size: var(--component-font-size-small);
+}
+
+.template-module-header span {
+  border: var(--sys-border-width-thin) solid var(--sys-color-border);
+  border-radius: var(--sys-radius-pill);
+  padding: var(--sys-space-1) var(--sys-space-2);
+  white-space: nowrap;
+}
+
+[data-template-module-surface] {
   min-inline-size: 0;
 }
 
