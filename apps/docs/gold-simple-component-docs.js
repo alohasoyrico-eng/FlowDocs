@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 import { componentDemo } from "./component-demo.js?v=61";
 
@@ -79,7 +79,7 @@ export function simpleOperationalExamplePanel(component, demoFromData) {
 
 export function simpleAnatomyPanel(component) {
   const anatomy = componentSectionData(component, "anatomy").items ?? [];
-  return componentDetailSection({ component, section: "anatomy", children: html`<h2>${ui("component.anatomy")}</h2><div class="button-anatomy">${anatomy.map((item, index) => `<article><b>${index + 1}</b><div><strong>${item.part}</strong><p>${item.rule}</p><div class="token-list">${(item.tokens ?? []).map((token) => `<code>${token}</code>`).join("")}</div></div></article>`).join("")}</div>` });
+  return componentDetailSection({ component, section: "anatomy", children: html`<h2>${ui("component.anatomy")}</h2>${componentDetailAnatomyGrid({ items: anatomy })}` });
 }
 
 export function simpleAccessibilityPanel(component) {
