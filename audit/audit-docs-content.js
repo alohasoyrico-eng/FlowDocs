@@ -236,6 +236,18 @@ function countComponentDetailRawControls(file, text) {
   return countMatches(stripAllowedComponentDetailControlBridges(text), rawControlPattern);
 }
 
+function countComponentDetailCardDebt(file, text) {
+  const base = path.basename(file);
+  const visualCardMarkupPattern = /class="[^"]*\bcard(?:-|")|cardLink\(/g;
+  if (base === "gold-card-docs.js") return 0;
+  return countMatches(text, visualCardMarkupPattern);
+}
+
+function countGovernedCardCompositionMarkup(file, text) {
+  if (path.basename(file) !== "gold-card-docs.js") return 0;
+  return countMatches(text, /class="[^"]*\bcard(?:-|")/g);
+}
+
 function componentDetailRendererId(file) {
   const base = path.basename(file);
   if (base === "family-component-docs.js") return "family-fallback";
@@ -546,6 +558,14 @@ function checkComponentDetailTemplateReadiness() {
     path.join(docsAppDir, "family-component-docs.js"),
     path.join(docsAppDir, "candidate-component-docs.js"),
   ].filter((file) => fs.existsSync(file));
+  const componentCardDebtMatches = componentDetailAuditFiles
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countComponentDetailCardDebt(file, read(file)) }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
+  const componentGovernedCardCompositionMatches = componentDetailAuditFiles
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countGovernedCardCompositionMarkup(file, read(file)) }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
   const componentDetailRendererInventory = componentDetailAuditFiles
     .map((file) => {
       const text = read(file);
@@ -574,7 +594,8 @@ function checkComponentDetailTemplateReadiness() {
         playgroundBridges: countMatches(text, /data-doc-control-bridge="component-playground"|data-component-playground|data-button-playground/g),
         propsTables,
         demoGrids,
-        cardLikeMarkup: countMatches(text, /class="card|cardLink\(|card-/g),
+        cardLikeMarkup: countComponentDetailCardDebt(file, text),
+        governedCardCompositionMarkup: countGovernedCardCompositionMarkup(file, text),
         usesFlowDemo: countMatches(text, /Demo(?:FromData)?\(|componentDemo\(/g),
         usesSharedSection,
       };
@@ -630,9 +651,12 @@ function checkComponentDetailTemplateReadiness() {
     rawControlBridgeMatches: componentModules
       .filter((entry) => path.basename(entry.file) === "gold-component-data.js" && entry.text.includes('data-doc-control-bridge="component-playground"'))
       .reduce((total, entry) => total + countMatches(entry.text, /<input\b|<select\b/g), 0),
-    rawCardMatches: countMatches(componentRuntime, /class="card|cardLink\(|card-/g),
+    rawCardMatches: componentCardDebtMatches.reduce((total, entry) => total + entry.count, 0),
+    governedCardCompositionMatches: componentGovernedCardCompositionMatches.reduce((total, entry) => total + entry.count, 0),
     componentDocPanelHotspots: componentDocPanelMatches,
     componentRawControlHotspots: componentRawControlMatches,
+    componentCardDebtHotspots: componentCardDebtMatches,
+    componentGovernedCardCompositionHotspots: componentGovernedCardCompositionMatches,
     componentSurfaceHotspots: componentOwnSurfaceMatches,
     rendererKindSummary,
     migrationCategorySummary,
