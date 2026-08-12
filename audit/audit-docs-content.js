@@ -335,7 +335,6 @@ function checkArtifactDetailSurfaceReadiness() {
     path.join(docsAppDir, "pattern-shell-react-demos.js"),
     path.join(docsAppDir, "pattern-utility-demos.js"),
     path.join(docsAppDir, "template-desktop-demos.js"),
-    path.join(docsAppDir, "template-domain-demos.js"),
     path.join(docsAppDir, "template-react-demos.js"),
   ].filter((file) => fs.existsSync(file));
   const panelHotspots = artifactDetailFiles
@@ -921,7 +920,7 @@ function checkDemoQualityInventory() {
     .filter((file) => fs.existsSync(file))
     .map((file) => read(file))
     .join("\n");
-  const templateDesktopDemoFiles = ["template-desktop-demos.js", "template-domain-demos.js", "template-react-demos.js"].map((file) => path.join(docsAppDir, file));
+  const templateDesktopDemoFiles = ["template-desktop-demos.js", "template-react-demos.js"].map((file) => path.join(docsAppDir, file));
   const templateDesktopDemos = templateDesktopDemoFiles
     .filter((file) => fs.existsSync(file))
     .map((file) => read(file))
@@ -985,7 +984,7 @@ function checkDemoQualityInventory() {
     .filter((entry) => !patternDemoRuntime.includes(`"${entry.id}"`) && !patternDemoRuntime.includes(`'${entry.id}'`))
     .map((entry) => entry.id);
   const templatesMissingDesktopDemo = templates
-    .filter((entry) => !templateDesktopDemos.includes(`entry.id === "${entry.id}"`))
+    .filter((entry) => !templateDesktopDemos.includes(`"${entry.id}"`))
     .map((entry) => entry.id);
 
   result.inventory.demoQuality = {

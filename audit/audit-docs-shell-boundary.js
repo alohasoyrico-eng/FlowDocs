@@ -40,8 +40,13 @@ function checkDocsShellBoundary() {
   const patternTabsFile = path.join(docsAppDir, "pattern-tabs.js");
   const patternFocusedDesignFile = path.join(docsAppDir, "pattern-focused-design.js");
   const patternShellReactDemosFile = path.join(docsAppDir, "pattern-shell-react-demos.js");
+  const patternShellRenderersFile = path.join(docsAppDir, "pattern-shell-renderers.js");
+  const templateDesktopDemosFile = path.join(docsAppDir, "template-desktop-demos.js");
   if (fs.existsSync(navigationFile)) {
     add("errors", navigationFile, 1, "Legacy navigation.js must not exist; docs shell navigation is owned by docs-shell-react.js and Flow React Topbar/Sidebar.");
+  }
+  if (fs.existsSync(patternShellRenderersFile)) {
+    add("errors", patternShellRenderersFile, 1, "Manual shell renderers must not exist; templates and pattern pages must consume Flow React Topbar/Sidebar or template islands.");
   }
 
   const index = read(docsIndexFile);
@@ -137,6 +142,24 @@ function checkDocsShellBoundary() {
     if (!reactPatternDemos.includes(required)) {
       add("errors", patternShellReactDemosFile, 1, `Shell pattern demos must consume generated Flow React patterns: ${required}.`);
     }
+  }
+
+  const templateDesktopDemos = read(templateDesktopDemosFile);
+  for (const forbidden of [
+    "renderSidebarPattern",
+    "renderTopbarPattern",
+    "./pattern-shell-renderers.js",
+    'class="sidebar"',
+    'class="topbar"',
+    "sidebar-group",
+    "top-actions",
+  ]) {
+    if (templateDesktopDemos.includes(forbidden)) {
+      add("errors", templateDesktopDemosFile, lineOf(templateDesktopDemos, forbidden), `Template demos must not render shell patterns manually: ${forbidden}. Use React template islands.`);
+    }
+  }
+  if (!templateDesktopDemos.includes("reactTemplateDemo(entry, blueprint)")) {
+    add("errors", templateDesktopDemosFile, 1, "Template desktop demo entry point must delegate to React template islands.");
   }
 }
 
