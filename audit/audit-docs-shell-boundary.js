@@ -53,6 +53,11 @@ function checkDocsShellBoundary() {
     "styles/07-pattern-focused-demos.css",
     "styles/07-pattern-sidebar-slots.css",
     "styles/07-pattern-topbar-sections.css",
+    "styles/07-pattern-sidebar-demo.css",
+    "styles/07-pattern-foundations.css",
+    "styles/07-pattern-motion.css",
+    "styles/07-pattern-topbar.css",
+    "styles/07-pattern-demo-responsive.css",
   ].map((file) => path.join(docsAppDir, file));
   const legacyDocsSelectors = [
     ".search-slot",
@@ -90,6 +95,11 @@ function checkDocsShellBoundary() {
     "07-pattern-sidebar-slots.css",
     "07-pattern-topbar-sections.css",
     "07-pattern-topbar-package-slots.css",
+    "07-pattern-sidebar-demo.css",
+    "07-pattern-foundations.css",
+    "07-pattern-motion.css",
+    "07-pattern-topbar.css",
+    "07-pattern-demo-responsive.css",
   ]) {
     if (docsStyles.includes(forbiddenImport)) {
       add("errors", docsStylesFile, lineOf(docsStyles, forbiddenImport), `Docs styles must not import legacy shell demo CSS: ${forbiddenImport}.`);
