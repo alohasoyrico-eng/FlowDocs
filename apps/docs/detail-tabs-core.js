@@ -219,7 +219,7 @@ export function artifactRoleGrid({ className = "", items = [] } = {}) {
   return html`
     <div class="${classes}" data-doc-primitive="artifact-role-grid">
       ${items
-        .map(({ icon: iconName, title, copy }) => componentDemo("card", { title, detail: copy, icon: icon(iconName), variant: "minimal", composition: "standard", fullWidth: true }))
+        .map(({ icon: iconName, title, copy }) => artifactCard({ title, detail: copy, iconName }))
         .join("")}
     </div>
   `;
@@ -230,10 +230,18 @@ export function artifactVariantGrid({ className = "", items = [] } = {}) {
   return html`
     <div class="${classes}" data-doc-primitive="artifact-variant-grid">
       ${items
-        .map(({ title, status, copy }) => componentDemo("card", { title, detail: copy, status, variant: "minimal", composition: "standard", fullWidth: true }))
+        .map(({ title, status, copy }) => artifactCard({ title, detail: copy, status }))
         .join("")}
     </div>
   `;
+}
+
+function artifactCard({ title, detail, status, iconName } = {}) {
+  return componentDemo("card", { title, detail, status, icon: iconName ? icon(iconName) : undefined, variant: "minimal", composition: "standard", fullWidth: true });
+}
+
+function artifactListCard(title, items) {
+  return artifactCard({ title, detail: (items ?? []).join(" ") });
 }
 
 export function specProps(entry) {
@@ -270,18 +278,8 @@ export function guidelinesPanel(entry) {
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("guidelines.title")}</h2>
       <div class="guidelines-grid">
-        <article>
-          <h3>${ui("guidelines.do")}</h3>
-          <ul>
-            ${doItems.map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </article>
-        <article>
-          <h3>${ui("guidelines.doNot")}</h3>
-          <ul>
-            ${dontItems.map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </article>
+        ${artifactListCard(ui("guidelines.do"), doItems)}
+        ${artifactListCard(ui("guidelines.doNot"), dontItems)}
       </div>
     </section>
   `;
@@ -314,15 +312,15 @@ export function agentPanel(entry, layerName) {
         <h2>${ui("miel.title")}</h2>
         <p>${ui("miel.intro")}</p>
         <div class="guidelines-grid">
-          <article><h3>${ui("miel.briefAgent")}</h3><ul>${briefExamples.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-          <article><h3>${ui("miel.agentCanDecide")}</h3><ul>${canDecide.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-          <article><h3>${ui("miel.agentMustAsk")}</h3><ul>${mustAsk.map((item) => `<li>${item}</li>`).join("")}</ul></article>
+          ${artifactListCard(ui("miel.briefAgent"), briefExamples)}
+          ${artifactListCard(ui("miel.agentCanDecide"), canDecide)}
+          ${artifactListCard(ui("miel.agentMustAsk"), mustAsk)}
         </div>
       </section>
       <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
         <h2>${ui("miel.humanReview")}</h2>
         <div class="checklist-grid">
-          ${preserve.map((item) => `<article>${icon("check_circle")}<span>${item}</span></article>`).join("")}
+          ${preserve.map((item) => artifactCard({ title: item, iconName: "check_circle" })).join("")}
         </div>
       </section>
       <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
@@ -337,15 +335,15 @@ export function agentPanel(entry, layerName) {
       <h2>${ui("miel.title")}</h2>
       <p>${ui("miel.intro")}</p>
       <div class="guidelines-grid">
-        <article><h3>${ui("miel.briefAgent")}</h3><ul>${briefExamples.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-        <article><h3>${ui("miel.agentCanDecide")}</h3><ul>${canDecide.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-        <article><h3>${ui("miel.agentMustAsk")}</h3><ul>${mustAsk.map((item) => `<li>${item}</li>`).join("")}</ul></article>
+        ${artifactListCard(ui("miel.briefAgent"), briefExamples)}
+        ${artifactListCard(ui("miel.agentCanDecide"), canDecide)}
+        ${artifactListCard(ui("miel.agentMustAsk"), mustAsk)}
       </div>
     </section>
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("miel.humanReview")}</h2>
       <div class="checklist-grid">
-        ${preserve.map((item) => `<article>${icon("check_circle")}<span>${item}</span></article>`).join("")}
+        ${preserve.map((item) => artifactCard({ title: item, iconName: "check_circle" })).join("")}
       </div>
     </section>
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
