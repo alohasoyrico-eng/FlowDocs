@@ -9,12 +9,7 @@ html {
 body {
   position: relative;
   margin: 0;
-  background:
-    radial-gradient(circle at 20% 0%, color-mix(in srgb, color-mix(in srgb, var(--sys-energy-status-error) 12%, var(--sys-energy-surface-primary)) 72%, transparent), transparent 32rem),
-    radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--sys-energy-surface-accent) 74%, transparent), transparent 34rem),
-    var(--sys-energy-surface-secondary);
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background: var(--sys-energy-surface-secondary);
   color: var(--sys-energy-text-primary);
   font-family: var(--sys-voice-family-body);
   font-size: var(--sys-voice-size-6);
@@ -22,18 +17,7 @@ body {
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: var(--sys-depth-z-underlay);
-  pointer-events: none;
-  background-image:
-    linear-gradient(var(--sys-energy-border-default) var(--sys-frame-border-thin), transparent var(--sys-frame-border-thin)),
-    linear-gradient(90deg, var(--sys-energy-border-default) var(--sys-frame-border-thin), transparent var(--sys-frame-border-thin));
-  background-position: center top;
-  background-size: var(--sys-frame-doc-grid-lg) var(--sys-frame-doc-grid-lg);
-  mask-image: radial-gradient(ellipse at 50% 20%, black, transparent 76%);
-  opacity: calc(var(--sys-state-muted-opacity) * 0.7);
+  content: none;
 }
 
 #app:focus {
