@@ -40,6 +40,12 @@ function checkDocsShellBoundary() {
   const patternTabsFile = path.join(docsAppDir, "pattern-tabs.js");
   const patternFocusedDesignFile = path.join(docsAppDir, "pattern-focused-design.js");
   const patternShellReactDemosFile = path.join(docsAppDir, "pattern-shell-react-demos.js");
+  const docsOnlySlotFiles = [
+    "search-slot.js",
+    "notification-panel-slot.js",
+    "avatar-menu-slot.js",
+    "styles/07-pattern-topbar-package-slots.css",
+  ].map((file) => path.join(docsAppDir, file));
   const patternShellRenderersFile = path.join(docsAppDir, "pattern-shell-renderers.js");
   const templateDesktopDemosFile = path.join(docsAppDir, "template-desktop-demos.js");
   const docsStylesFile = path.join(docsAppDir, "styles.css");
@@ -54,6 +60,11 @@ function checkDocsShellBoundary() {
   if (fs.existsSync(patternShellRenderersFile)) {
     add("errors", patternShellRenderersFile, 1, "Manual shell renderers must not exist; templates and pattern pages must consume Flow React Topbar/Sidebar or template islands.");
   }
+  for (const file of docsOnlySlotFiles) {
+    if (fs.existsSync(file)) {
+      add("errors", file, 1, "Docs-only slot helpers must not exist for Search, Notification Panel, or Avatar Menu; use Flow React patterns or pattern-package-demo.js for component snippets.");
+    }
+  }
   for (const file of legacyShellStyleFiles) {
     if (fs.existsSync(file)) {
       add("errors", file, 1, "Legacy shell demo CSS must not exist without a Flow React owner.");
@@ -65,6 +76,7 @@ function checkDocsShellBoundary() {
     "07-pattern-focused-demos.css",
     "07-pattern-sidebar-slots.css",
     "07-pattern-topbar-sections.css",
+    "07-pattern-topbar-package-slots.css",
   ]) {
     if (docsStyles.includes(forbiddenImport)) {
       add("errors", docsStylesFile, lineOf(docsStyles, forbiddenImport), `Docs styles must not import legacy shell demo CSS: ${forbiddenImport}.`);
@@ -182,18 +194,6 @@ function checkDocsShellBoundary() {
   }
   if (!templateDesktopDemos.includes("reactTemplateDemo(entry, blueprint)")) {
     add("errors", templateDesktopDemosFile, 1, "Template desktop demo entry point must delegate to React template islands.");
-  }
-
-  const searchSlotStylesFile = path.join(docsAppDir, "styles/07-pattern-topbar-package-slots.css");
-  const searchSlotStyles = read(searchSlotStylesFile);
-  for (const forbidden of [
-    ".pattern-design-shell-demo",
-    ".pattern-stage--real-shell",
-    ".pattern-topbar-action",
-  ]) {
-    if (searchSlotStyles.includes(forbidden)) {
-      add("errors", searchSlotStylesFile, lineOf(searchSlotStyles, forbidden), `Search slot CSS must not target removed manual shell demos: ${forbidden}.`);
-    }
   }
 }
 

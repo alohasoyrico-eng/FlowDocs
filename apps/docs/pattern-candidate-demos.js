@@ -1,5 +1,5 @@
 import { html } from "./detail-tabs-core.js?v=5";
-import { patternPackageDemo as packageDemo } from "./search-slot.js?v=2";
+import { patternPackageDemo as packageDemo } from "./pattern-package-demo.js?v=1";
 import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=2";
 
 function escapeAttribute(value) {
