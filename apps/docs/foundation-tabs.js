@@ -1,4 +1,4 @@
-import { artifactDetailTable, examplePanel, foundationExample, foundationRoles, html, icon, referenceCopy, referenceTemplate, threeTabs, ui, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { artifactDetailTable, artifactRoleGrid, examplePanel, foundationExample, foundationRoles, html, referenceCopy, referenceTemplate, threeTabs, ui, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 
 export function foundationTabs(entry) {
   return threeTabs(entry, `${foundationOverviewPanel(entry)}${foundationRoleGrid(entry)}${examplePanel(entry)}`, `${foundationArchitecturePanel(entry)}${foundationVisualExplanationPanel(entry)}${guidelinesPanel(entry)}`, `${foundationContractPanel(entry)}${specPanel(entry)}${agentPanel(entry, "Foundation")}`);
@@ -21,9 +21,9 @@ export function foundationRoleGrid(entry) {
     <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.semanticRoleGroups")}</h2>
       <p>${referenceCopy.foundation?.roleGridCopy}</p>
-      <div class="role-grid">
-        ${roles.map((role) => `<article><span>${icon(role.icon)}</span><strong>${role.name}</strong><p>${role.copy}</p></article>`).join("")}
-      </div>
+      ${artifactRoleGrid({
+        items: roles.map((role) => ({ icon: role.icon, title: role.name, copy: role.copy })),
+      })}
     </section>
   `;
 }

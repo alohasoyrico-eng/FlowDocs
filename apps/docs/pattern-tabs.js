@@ -1,4 +1,4 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, icon, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactRoleGrid, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=52";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
 import { focusedPatternDesignPanels } from "./pattern-focused-design.js?v=25";
@@ -108,7 +108,7 @@ function topbarVariantsPanel() {
     ["Account-aware", "Avatar opens Menu with settings, workspace, profile, and logout."],
     ["Notification-aware", "Unread Badge and notification menu/panel use state and tone without hijacking navigation."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar variants</h2><div class="role-grid">${variants.map(([name, rule]) => `<article><span>${icon("web_asset")}</span><strong>${name}</strong><p>${rule}</p></article>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar variants</h2>${artifactRoleGrid({ items: variants.map(([name, rule]) => ({ icon: "web_asset", title: name, copy: rule })) })}</section>`;
 }
 
 function sidebarLayoutPanel() {
@@ -137,7 +137,7 @@ function sidebarVariantsPanel() {
     ["Drawer", "Mobile behavior opened from Topbar/Menu, with focus trap and close affordance."],
     ["With Footer", "Optional utility region for help, version, workspace, account, or environment status."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Sidebar variants</h2><div class="role-grid">${variants.map(([name, rule]) => `<article><span>${icon("view_sidebar")}</span><strong>${name}</strong><p>${rule}</p></article>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Sidebar variants</h2>${artifactRoleGrid({ items: variants.map(([name, rule]) => ({ icon: "view_sidebar", title: name, copy: rule })) })}</section>`;
 }
 
 function sidebarContractPanel() {

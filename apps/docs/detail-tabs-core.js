@@ -212,6 +212,17 @@ export function artifactDetailTable({ className = "", columns = [], rows = [], f
   `;
 }
 
+export function artifactRoleGrid({ className = "", items = [] } = {}) {
+  const classes = ["role-grid", className].filter(Boolean).join(" ");
+  return html`
+    <div class="${classes}" data-doc-primitive="artifact-role-grid">
+      ${items
+        .map(({ icon: iconName, title, copy }) => `<article><span>${icon(iconName)}</span><strong>${title}</strong><p>${copy}</p></article>`)
+        .join("")}
+    </div>
+  `;
+}
+
 export function specProps(entry) {
   const contract = artifactContract(entry);
   const blueprint = entry.type === "template" ? templateBlueprints[entry.title] : null;

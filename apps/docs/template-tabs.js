@@ -1,4 +1,4 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, cardLink, examplePanel, findPattern, html, icon, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactRoleGrid, cardLink, examplePanel, findPattern, html, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { desktopTemplateDemo } from "./template-desktop-demos.js?v=17";
 
@@ -47,9 +47,9 @@ export function templateScreenSystemPanel(entry) {
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.screenSystem")}</h2>
       <p>${blueprint?.screenSystem ?? templateBlueprintFallbacks.screenSystem}</p>
-      <div class="role-grid">
-        ${modules.map((module) => `<article><span>${icon(moduleBlueprintIcon(blueprint, module))}</span><strong>${module}</strong><p>${moduleBlueprintCopy(blueprint, module)}</p></article>`).join("")}
-      </div>
+      ${artifactRoleGrid({
+        items: modules.map((module) => ({ icon: moduleBlueprintIcon(blueprint, module), title: module, copy: moduleBlueprintCopy(blueprint, module) })),
+      })}
     </section>
   `;
 }
