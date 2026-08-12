@@ -14,11 +14,11 @@
 }
 
 .docs-pattern-demo[data-doc-pattern="sidebar"],
-.pattern-sidebar[data-pattern-demo="sidebar"] {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] {
   min-inline-size: 0;
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] {
   display: grid;
   align-content: start;
   gap: var(--sys-space-md);
@@ -29,46 +29,46 @@
   background: color-mix(in srgb, var(--sys-energy-surface-secondary) 72%, transparent);
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] > .drawer[data-open="false"] {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] > [data-open="false"] {
   display: none;
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] > .breadcrumbs {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] > nav {
   min-inline-size: 0;
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] > .icon-button {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] > button[aria-label] {
   justify-self: end;
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] .pattern-sidebar__groups {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] > section[aria-label$=" groups"] {
   min-inline-size: 0;
   padding: var(--sys-space-sm);
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] .accordion {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] [data-multiple] {
   display: grid;
   gap: var(--sys-space-xs);
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] .accordion__trigger {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] [data-accordion-trigger] {
   min-inline-size: 0;
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] .accordion__panel-body {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] [data-accordion-panel] > div > div {
   display: grid;
   gap: var(--sys-space-xs);
   padding-block-start: var(--sys-space-xs);
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] [data-sidebar-group] {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] [data-sidebar-group] {
   display: grid;
   gap: var(--sys-space-micro);
   min-inline-size: 0;
   padding-inline-start: var(--sys-space-2);
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] .sidebar-route {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] [data-sidebar-route] {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -76,27 +76,25 @@
   min-inline-size: 0;
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] .sidebar-route__control {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] [data-sidebar-route] > button {
   justify-content: flex-start;
   min-inline-size: 0;
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"] .sidebar-route__control .button__label {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"] [data-sidebar-route] > button > span:last-child {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"][data-collapsed="true"] {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"][data-collapsed="true"] {
   max-inline-size: calc(var(--sys-frame-height-control-md) + (var(--sys-space-md) * 2));
 }
 
-.pattern-sidebar[data-pattern-demo="sidebar"][data-collapsed="true"] .breadcrumbs,
-.pattern-sidebar[data-pattern-demo="sidebar"][data-collapsed="true"] .accordion__title,
-.pattern-sidebar[data-pattern-demo="sidebar"][data-collapsed="true"] .accordion__meta,
-.pattern-sidebar[data-pattern-demo="sidebar"][data-collapsed="true"] .accordion__chevron,
-.pattern-sidebar[data-pattern-demo="sidebar"][data-collapsed="true"] .sidebar-route__control .button__label,
-.pattern-sidebar[data-pattern-demo="sidebar"][data-collapsed="true"] .sidebar-route > .badge {
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"][data-collapsed="true"] > nav,
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"][data-collapsed="true"] [data-accordion-trigger] > span:not(:first-child),
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"][data-collapsed="true"] [data-sidebar-route] > button > span:last-child,
+.docs-pattern-demo[data-doc-pattern="sidebar"] > [role="navigation"][data-collapsed="true"] [data-sidebar-route] > span {
   position: absolute;
   inline-size: var(--sys-frame-border-thin);
   block-size: var(--sys-frame-border-thin);

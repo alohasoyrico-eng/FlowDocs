@@ -1836,6 +1836,7 @@
           "Accordion",
           "Badge",
           "Breadcrumbs",
+          "Button",
           "Drawer",
           "Icon Button"
         ],
@@ -1938,6 +1939,8 @@
           "Content Designers"
         ],
         "componentsUsed": [
+          "Badge",
+          "Card",
           "Select",
           "Button",
           "Inline Validation",
@@ -2314,8 +2317,13 @@
         ],
         "componentsUsed": [
           "Button",
+          "Checkbox",
+          "Icon Button",
           "Inline Validation",
           "Input",
+          "Radio Button",
+          "Select",
+          "Switch",
           "Text Area",
           "Toast"
         ],
@@ -37247,8 +37255,13 @@
           ],
           "componentDependencies": [
             "Button",
+            "Checkbox",
+            "Icon Button",
             "Inline Validation",
             "Input",
+            "Radio Button",
+            "Select",
+            "Switch",
             "Text Area",
             "Toast"
           ],
@@ -37257,8 +37270,13 @@
           ],
           "tokenDependencies": [
             "comp.button.*",
+            "comp.checkbox.*",
+            "comp.icon-button.*",
             "comp.inline-validation.*",
             "comp.input.*",
+            "comp.radio-button.*",
+            "comp.select.*",
+            "comp.switch.*",
             "comp.text-area.*",
             "comp.toast.*",
             "sys.accessibility.*",
@@ -37314,7 +37332,12 @@
               "name": "fields",
               "owner": "component",
               "uses": [
+                "Checkbox",
+                "Icon Button",
                 "Input",
+                "Radio Button",
+                "Select",
+                "Switch",
                 "Text Area",
                 "Inline Validation"
               ]
@@ -37334,7 +37357,7 @@
             "Keep save/cancel controls keyboard reachable."
           ],
           "tests": [
-            "Composes Surface, Input, Text Area, Inline Validation, Button, and Toast.",
+            "Composes Surface, Input, Select, Checkbox, Radio Button, Switch, Icon Button, Text Area, Inline Validation, Button, and Toast.",
             "Covers dirty, validating, invalid, saving, saved, and disabled states.",
             "Keeps Search as optional boundary only."
           ],
@@ -40228,14 +40251,18 @@
           ],
           "componentDependencies": [
             "Select",
+            "Badge",
             "Button",
+            "Card",
             "Inline Validation",
             "Empty State"
           ],
           "patternDependencies": [],
           "tokenDependencies": [
             "comp.select.*",
+            "comp.badge.*",
             "comp.button.*",
+            "comp.card.*",
             "comp.inline-validation.*",
             "comp.empty-state.*",
             "sys.energy.*",
@@ -40282,7 +40309,9 @@
               "name": "field",
               "owner": "component",
               "uses": [
-                "Select"
+                "Select",
+                "Card",
+                "Badge"
               ],
               "required": true,
               "purpose": "Owns selected value, trigger, labelled field semantics, and value cascade."
@@ -40948,6 +40977,7 @@
             "Accordion",
             "Badge",
             "Breadcrumbs",
+            "Button",
             "Drawer",
             "Icon Button"
           ],
@@ -40964,6 +40994,7 @@
             "comp.accordion.*",
             "comp.badge.*",
             "comp.breadcrumbs.*",
+            "comp.button.*",
             "comp.drawer.*",
             "comp.icon-button.*",
             "sys.accessibility.*",
@@ -41041,6 +41072,7 @@
               "uses": [
                 "Accordion",
                 "Badge",
+                "Button",
                 "Icon Button"
               ]
             }
@@ -41051,7 +41083,7 @@
             "Do not hide permission-filtered routes without a template policy."
           ],
           "tests": [
-            "Composes Accordion, Badge, Breadcrumbs, Drawer, and Icon Button.",
+            "Composes Accordion, Badge, Breadcrumbs, Button, Drawer, and Icon Button.",
             "Covers expanded, collapsed, mobile, active, loading, and permission-filtered states.",
             "Keeps Topbar and templates as boundaries."
           ],
@@ -76501,6 +76533,7 @@
         "componentsUsed": [
           "Accordion",
           "Icon Button",
+          "Button",
           "Badge",
           "Breadcrumbs",
           "Drawer"
@@ -78442,13 +78475,13 @@
           ],
           [
             "groups",
-            "OptionGroup[]",
+            "Card[]",
             "conditional",
             "Groups related choices."
           ],
           [
             "option",
-            "Option",
+            "Option + Badge",
             "yes",
             "Label, value, metadata, selected, disabled, and reason."
           ],
@@ -78467,6 +78500,8 @@
         ],
         "componentsUsed": [
           "Select",
+          "Card",
+          "Badge",
           "Inline Validation",
           "Button",
           "Empty State"
@@ -79067,7 +79102,7 @@
           ],
           [
             "fields",
-            "Input | TextArea[]",
+            "Input | Select | Checkbox | RadioButton | Switch | TextArea[]",
             "yes",
             "Related form controls."
           ],
@@ -79092,6 +79127,11 @@
         ],
         "componentsUsed": [
           "Input",
+          "Select",
+          "Checkbox",
+          "Radio Button",
+          "Switch",
+          "Icon Button",
           "Text Area",
           "Inline Validation",
           "Button",
