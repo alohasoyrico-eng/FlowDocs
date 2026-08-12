@@ -130,10 +130,8 @@ function multiStepFormDemoPanel() {
             ${packageDemo("input", { label: "Policy owner", value: "Fleet ops" }, { "data-step-field": "owner" })}
           </form>
           <div class="pattern-multi-step__review" data-step-panel="2" hidden>
-            <article><span>Vehicle</span><strong data-step-summary="plate">JMX-214-B</strong></article>
-            <article><span>Driver</span><strong data-step-summary="driver">Ana Sosa</strong></article>
-            <article><span>Monthly limit</span><strong data-step-summary="limit">$850</strong></article>
-            <article><span>Owner</span><strong data-step-summary="owner">Fleet ops</strong></article>
+            ${stepSummaryCard("Vehicle", "JMX-214-B", "plate")}${stepSummaryCard("Driver", "Ana Sosa", "driver")}
+            ${stepSummaryCard("Monthly limit", "$850", "limit")}${stepSummaryCard("Owner", "Fleet ops", "owner")}
           </div>
           <p class="pattern-multi-step__error" data-step-error hidden role="alert">Complete the current step before continuing.</p>
         </div>
@@ -151,6 +149,8 @@ function multiStepFormDemoPanel() {
     </section>
   `;
 }
+
+function stepSummaryCard(title, value, key) { return packageDemo("card", { title, value, variant: "minimal", composition: "stats", fullWidth: true }, { "data-step-summary-card": key, "data-step-summary": key }); }
 
 function settingsDemoPanel() {
   return html`
