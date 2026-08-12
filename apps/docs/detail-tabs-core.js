@@ -1,3 +1,5 @@
+import { componentDemo } from "./component-demo.js?v=60";
+
 export let html = String.raw;
 export let icon = () => "";
 export let iconFor = () => "";
@@ -228,7 +230,7 @@ export function artifactVariantGrid({ className = "", items = [] } = {}) {
   return html`
     <div class="${classes}" data-doc-primitive="artifact-variant-grid">
       ${items
-        .map(({ title, status, copy }) => `<article class="pattern-variant-card" data-status="${String(status ?? "").toLowerCase().replaceAll(" ", "-")}"><strong>${title}</strong><span>${status}</span><p>${copy}</p></article>`)
+        .map(({ title, status, copy }) => componentDemo("card", { title, detail: copy, status, variant: "minimal", composition: "standard", fullWidth: true }))
         .join("")}
     </div>
   `;
