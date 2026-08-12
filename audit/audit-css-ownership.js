@@ -1,4 +1,4 @@
-const { fs, path, docsAppDir, docsCssFile, resolveBoundaryPath, read, readDocsCss, add } = require("./audit-context.js");
+const { fs, path, docsAppDir, docsCssFile, resolveBoundaryPath, read, readDocsCss, add, result } = require("./audit-context.js");
 
 const docsAllowedComponentMarkupAuthors = new Set([
   "apps/docs/component-demo.js",
@@ -202,6 +202,11 @@ function lineForIndex(text, index) {
   return text.slice(0, index).split("\n").length;
 }
 
+function countMatches(text, pattern) {
+  pattern.lastIndex = 0;
+  return [...text.matchAll(pattern)].length;
+}
+
 function checkPublicClassNamespaceOwnership() {
   const sourceFiles = [
     ...walkFiles(docsAppDir, (file) => /\.(css|html|js)$/.test(file)),
@@ -325,4 +330,68 @@ function checkDocsPackageImportBoundary() {
   }
 }
 
-module.exports = { checkDocsComponentCssOwnership, checkDocsPackageMarkupOwnership, checkPatternComponentBoundaryOwnership, checkPublicClassNamespaceOwnership, checkDocsPackageImportBoundary };
+function checkDocsVisualDebtInventory() {
+  const jsFiles = walkFiles(docsAppDir, (file) => /\.js$/.test(file));
+  const cssFiles = walkFiles(path.join(docsAppDir, "styles"), (file) => /\.css$/.test(file));
+  const trackedFamilies = [
+    {
+      id: "decorative-backgrounds",
+      description: "Gradients, masks, and page textures authored in FlowDocs CSS instead of a governed Flow primitive/foundation.",
+      pattern: /(?:radial-gradient|linear-gradient|mask-image|background-size:\s*var\(--sys-frame-doc-grid)/g,
+      files: cssFiles,
+    },
+    {
+      id: "standard-chip",
+      description: "Docs-owned chip-like markup that should be evaluated against Chip/Badge/Tag or an editorial primitive.",
+      pattern: /standard-chip/g,
+      files: [...jsFiles, ...cssFiles],
+    },
+    {
+      id: "role-grid",
+      description: "Docs-owned repeated card grid used across detail pages; candidate for governed docs/template primitive.",
+      pattern: /role-grid/g,
+      files: [...jsFiles, ...cssFiles],
+    },
+    {
+      id: "props-table",
+      description: "Docs-owned property table layout used as contract/API table; candidate for Table or docs data primitive boundary.",
+      pattern: /props-table/g,
+      files: [...jsFiles, ...cssFiles],
+    },
+    {
+      id: "card-like-doc-markup",
+      description: "Docs-authored article/cardLink/card class patterns that need ownership review against Card/Surface.",
+      pattern: /<article\b|cardLink\(|class="[^"]*(?:doc-card|docs-card|info-card|variant-card|card-like)/g,
+      files: jsFiles,
+    },
+  ];
+
+  result.inventory.docsVisualDebt = trackedFamilies.map((family) => {
+    const hotspots = family.files
+      .map((file) => {
+        const text = read(file);
+        return {
+          file: normalize(path.relative(process.cwd(), file)),
+          count: countMatches(text, family.pattern),
+        };
+      })
+      .filter((entry) => entry.count > 0)
+      .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
+    return {
+      id: family.id,
+      description: family.description,
+      total: hotspots.reduce((sum, entry) => sum + entry.count, 0),
+      files: hotspots.length,
+      hotspots: hotspots.slice(0, 12),
+    };
+  });
+}
+
+module.exports = {
+  checkDocsComponentCssOwnership,
+  checkDocsPackageMarkupOwnership,
+  checkPatternComponentBoundaryOwnership,
+  checkPublicClassNamespaceOwnership,
+  checkDocsPackageImportBoundary,
+  checkDocsVisualDebtInventory,
+};
