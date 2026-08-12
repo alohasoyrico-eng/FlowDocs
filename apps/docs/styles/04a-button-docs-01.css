@@ -38,7 +38,6 @@
 }
 
 .driver-sheet,
-.fleet-panel-mini,
 .responsive-actions-demo article {
   display: grid;
   gap: var(--sys-frame-gap-component);
@@ -230,7 +229,6 @@
 :is(.detail-page, .reference-doc) .viewport-doc-grid > article,
 :is(.detail-page, .reference-doc) .playground-preview,
 :is(.detail-page, .reference-doc) .driver-sheet,
-:is(.detail-page, .reference-doc) .fleet-panel-mini,
 :is(.detail-page, .reference-doc) .filter-console,
 :is(.detail-page, .reference-doc) .component-standard-demo article,
 :is(.detail-page, .reference-doc) .component-standard-surface,
@@ -272,7 +270,6 @@
 :is(.detail-page, .reference-doc) .reference-role-card strong,
 :is(.detail-page, .reference-doc) .guidelines-grid article h3,
 :is(.detail-page, .reference-doc) .driver-sheet strong,
-:is(.detail-page, .reference-doc) .fleet-panel-mini strong,
 :is(.detail-page, .reference-doc) .filter-console strong,
 :is(.detail-page, .reference-doc) .component-standard-demo article strong {
   font-size: var(--density-doc-card-title-size);
@@ -290,7 +287,6 @@
 :is(.detail-page, .reference-doc) .reference-role-card p,
 :is(.detail-page, .reference-doc) .guidelines-grid article li,
 :is(.detail-page, .reference-doc) .driver-sheet p,
-:is(.detail-page, .reference-doc) .fleet-panel-mini li,
 :is(.detail-page, .reference-doc) .filter-console p,
 :is(.detail-page, .reference-doc) .component-standard-demo article p,
 :is(.detail-page, .reference-doc) .button-decision-list article span {
