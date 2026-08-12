@@ -1,4 +1,5 @@
 import { referenceSection, referenceSummaryGrid } from "./reference-layout.js?v=1";
+import { componentDemo } from "./component-demo.js?v=61";
 
 let foundationCopy = {};
 let html = String.raw;
@@ -258,28 +259,21 @@ function voiceTypeSample(style, label, size, copy) {
 }
 
 function voiceTokenCard(label, count, tokens) {
-  return html`
-    <article class="voice-token-card">
-      <header>
-        <strong>${label}</strong>
-        <span>${count} tokens</span>
-      </header>
-      <ul class="voice-token-list">
-        ${tokens.map(([name, value]) => `<li><code>${name}</code><span>${value}</span></li>`).join("")}
-      </ul>
-    </article>
-  `;
+  return foundationVisualCard({
+    title: label,
+    detail: tokens.map(([name, value]) => `${name}: ${value}`).join(" "),
+    status: `${count} tokens`,
+  });
 }
 
 function frameTokenCard(label, count, description, chips) {
-  return html`
-    <article class="frame-token-card">
-      <header>
-        <strong>${label}</strong>
-        <span>${count} tokens</span>
-      </header>
-      <p>${description}</p>
-      <div>${chips.map((chip) => `<code>${chip}</code>`).join("")}</div>
-    </article>
-  `;
+  return foundationVisualCard({
+    title: label,
+    detail: `${description} ${(chips ?? []).join(", ")}`,
+    status: `${count} tokens`,
+  });
+}
+
+function foundationVisualCard({ title, detail, status } = {}) {
+  return componentDemo("card", { title, detail, status, variant: "minimal", composition: "standard", fullWidth: true });
 }
