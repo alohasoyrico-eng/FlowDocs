@@ -17,12 +17,12 @@
   min-width: 0;
 }
 
-.docs-react-shell-topbar > .field {
+.docs-react-shell-topbar > [data-doc-shell-slot="search-field"] {
   flex: 1 1 min(48rem, 100%);
   min-width: min(18rem, 100%);
 }
 
-.docs-react-shell-topbar > .field > .field__label {
+.docs-react-shell-topbar > [data-doc-shell-slot="search-field"] > [data-field-label] {
   block-size: var(--component-visually-hidden-size);
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
@@ -48,15 +48,15 @@
   z-index: 40;
 }
 
-.docs-react-shell-topbar > .docs-react-shell-search-results > .field {
+.docs-react-shell-topbar > .docs-react-shell-search-results > label {
   display: none;
 }
 
-.docs-react-shell-topbar > .docs-react-shell-search-results > .inline-validation {
+.docs-react-shell-topbar > .docs-react-shell-search-results > [data-full-width][data-field] {
   display: none;
 }
 
-.docs-react-shell-topbar > .icon-button:first-of-type {
+.docs-react-shell-topbar > [data-doc-shell-slot="navigation-action"] {
   display: none;
 }
 
@@ -72,13 +72,7 @@
   min-block-size: 0;
 }
 
-.docs-react-shell-sidebar-mount > [data-doc-shell-consumer="react-sidebar"] > .drawer,
-.docs-react-shell-topbar > .drawer {
-  display: none;
-}
-
-.docs-react-shell-sidebar-mount .breadcrumbs,
-.docs-react-shell-sidebar-mount > [data-doc-shell-consumer="react-sidebar"] > .icon-button {
+.docs-react-shell-sidebar-mount > [data-doc-shell-consumer="react-sidebar"] > [data-doc-shell-slot="collapse-action"] {
   display: none;
 }
 
@@ -91,12 +85,12 @@
   padding: 0;
 }
 
-.docs-react-shell-sidebar-mount .accordion {
+.docs-react-shell-sidebar-mount [aria-label$="groups"] > div {
   display: grid;
   gap: var(--space-2);
 }
 
-.docs-react-shell-sidebar-mount .accordion__content {
+.docs-react-shell-sidebar-mount [data-accordion-panel] > :first-child > :first-child {
   display: grid;
   gap: var(--space-1);
   padding-block: var(--space-1) var(--space-2);
@@ -109,11 +103,11 @@
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
-.docs-react-shell-sidebar-mount [data-sidebar-route] .badge {
+.docs-react-shell-sidebar-mount [data-sidebar-route] > span {
   justify-self: end;
 }
 
-.docs-react-shell-sidebar-mount .button {
+.docs-react-shell-sidebar-mount [data-sidebar-route] > button {
   justify-content: flex-start;
 }
 
@@ -122,11 +116,11 @@
     z-index: calc(var(--sys-depth-z-overlay) + 1);
   }
 
-  .docs-react-shell-topbar > .icon-button:first-of-type {
+  .docs-react-shell-topbar > [data-doc-shell-slot="navigation-action"] {
     display: inline-flex;
   }
 
-  .docs-react-shell-topbar > .field {
+  .docs-react-shell-topbar > [data-doc-shell-slot="search-field"] {
     min-width: 0;
   }
 

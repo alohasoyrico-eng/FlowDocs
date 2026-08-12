@@ -71,6 +71,7 @@ function topbarProps(current) {
       icon: navigationOpen ? "close" : "menu",
       "aria-expanded": String(navigationOpen),
       "aria-controls": "docsReactShellSidebar",
+      "data-doc-shell-slot": "navigation-action",
       onClick: () => toggleNavigation(),
     },
     search: {
@@ -79,6 +80,7 @@ function topbarProps(current) {
       placeholder: ui("shell.searchPlaceholder"),
       query: state.searchQuery,
       active: state.searchOpen,
+      "data-doc-shell-slot": "search-field",
       onQueryChange: (value) => {
         state.searchQuery = value;
         state.searchOpen = Boolean(value);
@@ -152,7 +154,7 @@ function sidebarProps(current) {
     density: "md",
     activeKey: activeRouteKey(current),
     groups: sidebarGroups(current),
-    collapseAction: { label: ui("shell.designNavigation"), ariaLabel: ui("shell.designNavigation") },
+    collapseAction: { label: ui("shell.designNavigation"), ariaLabel: ui("shell.designNavigation"), "data-doc-shell-slot": "collapse-action" },
     drawer: false,
     onRouteSelect: (key, route) => {
       if (!route?.href) return;

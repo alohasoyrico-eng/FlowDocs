@@ -28,6 +28,9 @@ export function docsLinkCard(collection, id, symbol, title, summary, meta = "") 
         composition: "standard",
         fullWidth: true,
       })}
+      ${metaItems.length
+        ? `<span class="card-meta-row" aria-label="Card metadata">${metaItems.map((item) => componentDemo("tag", { label: item, variant: "metadata", tone: "neutral" })).join("")}</span>`
+        : ""}
     </a>
   `;
 }
