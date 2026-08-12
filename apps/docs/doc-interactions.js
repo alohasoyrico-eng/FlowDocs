@@ -100,7 +100,6 @@ export function setupGlobalDocumentInteractions() {
       }
       document.querySelectorAll(".topnav details[open]").forEach((details) => details.removeAttribute("open"));
       delete document.body.dataset.navOpen;
-      document.querySelector("#menuButton")?.setAttribute("aria-expanded", "false");
     }
     document.querySelectorAll(".topnav details[open]").forEach((details) => {
       if (!details.contains(event.target)) details.removeAttribute("open");

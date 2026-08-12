@@ -31,6 +31,7 @@ const docsDetailTabsModuleFiles = fs.existsSync(docsAppDir)
       .map((file) => path.join(docsAppDir, file))
   : [];
 const docsLayoutFile = path.join(docsAppDir, "docs-layout.js");
+const docsShellReactFile = path.join(docsAppDir, "docs-shell-react.js");
 const docsStateFile = path.join(docsAppDir, "docs-state.js");
 const docsFamilyComponentDocsFile = path.join(docsAppDir, "family-component-docs.js");
 const docsHomeStackRenderersFile = path.join(docsAppDir, "home-stack-renderers.js");
@@ -50,7 +51,6 @@ const docsGoldComponentModuleFiles = fs.existsSync(docsAppDir)
       .filter((file) => /^gold-.*\.js$/.test(file))
       .map((file) => path.join(docsAppDir, file))
   : [];
-const docsNavigationFile = path.join(docsAppDir, "navigation.js");
 const docsPrimitiveReferenceFile = path.join(docsAppDir, "primitive-reference.js");
 const docsReferenceLayoutFile = path.join(docsAppDir, "reference-layout.js");
 const docsShellControlsFile = path.join(docsAppDir, "shell-controls.js");
@@ -136,7 +136,7 @@ const files = [
   "apps/docs/gold-icon-button-docs.js",
   "apps/docs/home-stack-renderers.js",
   "apps/docs/icon-system.js",
-  "apps/docs/navigation.js",
+  "apps/docs/docs-shell-react.js",
   "apps/docs/pattern-tabs.js",
   "apps/docs/pattern-contract-tabs.js",
   "apps/docs/primitive-reference.js",
@@ -319,6 +319,7 @@ module.exports = {
   docsDetailTabsFile,
   docsDetailTabsModuleFiles,
   docsLayoutFile,
+  docsShellReactFile,
   docsStateFile,
   docsFamilyComponentDocsFile,
   docsHomeStackRenderersFile,
@@ -330,7 +331,6 @@ module.exports = {
   docsFoundationVisualSectionsFile,
   docsGoldComponentDocsFile,
   docsGoldComponentModuleFiles,
-  docsNavigationFile,
   docsPrimitiveReferenceFile,
   docsReferenceLayoutFile,
   docsShellControlsFile,

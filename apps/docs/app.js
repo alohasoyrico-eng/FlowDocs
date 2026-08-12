@@ -73,7 +73,6 @@ function render() {
   configureLocalizedRenderers();
   const current = route();
   delete document.body.dataset.navOpen;
-  $("#menuButton")?.setAttribute("aria-expanded", "false");
   if (current.collection === "home") renderHome();
   else if (current.collection === "stack") renderStack();
   else if (current.collection === "foundations" && !current.id) {

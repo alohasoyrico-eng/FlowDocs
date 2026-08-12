@@ -35,6 +35,7 @@ const {
   checkPublicClassNamespaceOwnership,
 } = require("./audit-css-ownership.js");
 const { checkFoundationCascadeContracts } = require("./audit-foundation-cascade-contracts.js");
+const { checkDocsShellBoundary } = require("./audit-docs-shell-boundary.js");
 const { finishAudit } = require("./audit-result.js");
 
 checkStaticHygiene();
@@ -57,6 +58,7 @@ checkPrimitiveCopyOwnership();
 checkReferenceCopyOwnership();
 checkDocsContentOwnership();
 checkFoundationCascadeContracts();
+checkDocsShellBoundary();
 checkDocsComponentCssOwnership();
 checkDocsPackageMarkupOwnership();
 checkPatternComponentBoundaryOwnership();

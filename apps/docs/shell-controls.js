@@ -16,7 +16,6 @@ function applyContrastState(isQuiet) {
     delete document.body.dataset.contrast;
     delete document.documentElement.dataset.contrast;
   }
-  document.querySelector("#themeToggle")?.setAttribute("aria-pressed", String(isQuiet));
   syncBrandLogo();
 }
 
@@ -30,9 +29,6 @@ export function toggleContrastState() {
 
 export function setupContrastToggle() {
   applyContrastState(localStorage.getItem("system.contrast") === "quiet" || document.body.dataset.contrast === "quiet");
-  document.querySelector("#themeToggle")?.addEventListener("click", () => {
-    toggleContrastState();
-  });
 }
 
 function activeFrameTier() {
@@ -110,21 +106,6 @@ export function updateGridOverlay() {
 
 export function setupGridOverlay(options = {}) {
   translate = options.ui ?? translate;
-  document.querySelector("#gridToggle")?.addEventListener("click", (event) => {
-    const overlay = document.querySelector("#layoutGridOverlay");
-    if (!overlay) return;
-    const willShow = overlay.hidden;
-    overlay.hidden = !willShow;
-    event.currentTarget.setAttribute("aria-pressed", String(willShow));
-    event.currentTarget.setAttribute("aria-label", willShow ? translate("shell.hideGrid") : translate("shell.showGrid"));
-    const iconNode = event.currentTarget.querySelector(".material-symbol");
-    if (iconNode) {
-      const iconName = willShow ? "grid_on" : "grid_off";
-      iconNode.textContent = iconName;
-      iconNode.dataset.icon = iconName;
-    }
-    updateGridOverlay();
-  });
   window.addEventListener("resize", () => requestAnimationFrame(updateGridOverlay));
   window.addEventListener("hashchange", () => requestAnimationFrame(() => requestAnimationFrame(updateGridOverlay)));
 }
