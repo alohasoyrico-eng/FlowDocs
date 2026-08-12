@@ -1,4 +1,5 @@
 import { referenceCallout, referenceCodeBlock, referenceMatrixGrid, referenceRuleGrid, referenceSection } from "./reference-layout.js?v=1";
+import { componentDemo } from "./component-demo.js?v=61";
 
 let primitiveCopy = {};
 let html = String.raw;
@@ -122,13 +123,22 @@ function primitiveReferenceDemo(entry) {
     return html`<div class="primitive-demo map-demo" data-map-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-map-choice")}</div><div class="map-stage"><span class="map-pin">${icon("local_gas_station")}</span><span class="route-line"></span><article data-map-label>${demo.states?.[initial] ?? ""}</article></div></div>`;
   }
   if (demo.type === "message") {
-    return html`<div class="primitive-demo message-demo">${(demo.cards ?? []).map((card) => `<article><span class="overline">${card.eyebrow}</span><strong>${card.title}</strong><p>${card.copy}</p>${card.actions ? `<div class="button-row">${card.actions.map(([label, variant, intent, size, iconName]) => buttonDemo(label, variant, intent, size, iconName)).join("")}</div>` : ""}</article>`).join("")}</div>`;
+    return html`<div class="primitive-demo message-demo">${(demo.cards ?? []).map((card) => primitiveDemoCard({
+      title: card.title,
+      detail: card.copy,
+      status: card.eyebrow,
+      actions: (card.actions ?? []).map(([label, variant, intent, size, iconName]) => ({ label, variant, intent, size, icon: iconName, key: label })),
+    })).join("")}</div>`;
   }
   if (demo.type === "statGrid") {
-    return html`<div class="primitive-demo ${demo.className ?? ""}">${(demo.rows ?? []).map(([label, value]) => `<article><span>${label}</span><strong>${value}</strong></article>`).join("")}</div>`;
+    return html`<div class="primitive-demo ${demo.className ?? ""}">${(demo.rows ?? []).map(([label, value]) => primitiveDemoCard({ title: label, value, composition: "stats" })).join("")}</div>`;
   }
   const roles = demo.roles ?? [];
   return html`<div class="primitive-demo surface-demo">${roles.map((role) => `<article class="${role === "inverse" ? "inverse" : ""}"><span>${role}</span></article>`).join("")}</div>`;
+}
+
+function primitiveDemoCard({ title, detail, value, status, actions, composition = "standard" } = {}) {
+  return componentDemo("card", { title, detail, value, status, actions, variant: "minimal", composition, fullWidth: true });
 }
 
 export function primitiveResponsibilitiesReferenceSection(entry) {
