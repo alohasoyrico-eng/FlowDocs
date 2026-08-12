@@ -1,4 +1,4 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactVariantGrid, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { patternCopy } from "./docs-state.js";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
@@ -335,9 +335,9 @@ function patternVariantPanel(source) {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Variants and states</h2>
-      <div class="pattern-variant-grid">
-        ${(source.variants ?? []).map(([name, status, rule]) => `<article class="pattern-variant-card"><strong>${name}</strong><span>${status}</span><p>${rule}</p></article>`).join("")}
-      </div>
+      ${artifactVariantGrid({
+        items: (source.variants ?? []).map(([title, status, copy]) => ({ title, status, copy })),
+      })}
     </section>
   `;
 }

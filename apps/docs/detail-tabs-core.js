@@ -223,6 +223,17 @@ export function artifactRoleGrid({ className = "", items = [] } = {}) {
   `;
 }
 
+export function artifactVariantGrid({ className = "", items = [] } = {}) {
+  const classes = ["pattern-variant-grid", className].filter(Boolean).join(" ");
+  return html`
+    <div class="${classes}" data-doc-primitive="artifact-variant-grid">
+      ${items
+        .map(({ title, status, copy }) => `<article class="pattern-variant-card" data-status="${String(status ?? "").toLowerCase().replaceAll(" ", "-")}"><strong>${title}</strong><span>${status}</span><p>${copy}</p></article>`)
+        .join("")}
+    </div>
+  `;
+}
+
 export function specProps(entry) {
   const contract = artifactContract(entry);
   const blueprint = entry.type === "template" ? templateBlueprints[entry.title] : null;

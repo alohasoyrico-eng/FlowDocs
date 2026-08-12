@@ -1,4 +1,4 @@
-import { artifactDetailTable, html } from "./detail-tabs-core.js?v=5";
+import { artifactDetailTable, artifactVariantGrid, html } from "./detail-tabs-core.js?v=5";
 
 export function focusedPatternDesignPanels(entry) {
   if (entry.id === "sidebar") return sidebarDesignPanels();
@@ -51,9 +51,9 @@ function designMatrixPanel(title, rows) {
     <section class="surface docs-section-surface detail-section-surface wide pattern-design-section" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <span class="eyebrow">Design</span>
       <h2>${title}</h2>
-      <div class="pattern-variant-grid">
-        ${rows.map(([name, status, copy]) => variantCard(name, status, copy)).join("")}
-      </div>
+      ${artifactVariantGrid({
+        items: rows.map(([title, status, copy]) => ({ title, status, copy })),
+      })}
     </section>
   `;
 }
@@ -62,11 +62,13 @@ function sidebarVariantStatusPanel() {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Variant status</h2>
-      <div class="pattern-variant-grid">
-        ${variantCard("Persistent", "Current", "Desktop and wide tablet use the real sidebar beside content.")}
-        ${variantCard("Drawer", "Current", "Small viewports open the same sidebar from the docs menu button.")}
-        ${variantCard("Logo + footer", "Candidate", "Useful when a product shell needs its own brand slot plus help, version, or workspace metadata at the bottom.")}
-      </div>
+      ${artifactVariantGrid({
+        items: [
+          { title: "Persistent", status: "Current", copy: "Desktop and wide tablet use the real sidebar beside content." },
+          { title: "Drawer", status: "Current", copy: "Small viewports open the same sidebar from the docs menu button." },
+          { title: "Logo + footer", status: "Candidate", copy: "Useful when a product shell needs its own brand slot plus help, version, or workspace metadata at the bottom." },
+        ],
+      })}
     </section>
   `;
 }
@@ -75,12 +77,14 @@ function topbarVariantStatusPanel() {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Variant status</h2>
-      <div class="pattern-variant-grid">
-        ${variantCard("Docs shell", "Current", "Brand, search, language, grid, and theme actions use the real topbar.")}
-        ${variantCard("Compact menu", "Current", "The menu button appears for the responsive sidebar drawer.")}
-        ${variantCard("Brand slot", "Candidate", "Logo swaps and co-branding need a product rule before becoming a documented variant.")}
-        ${variantCard("Sections + account", "Candidate", "Documented as parent/child section navigation before search, plus Badge, Avatar, and account menu actions.")}
-      </div>
+      ${artifactVariantGrid({
+        items: [
+          { title: "Docs shell", status: "Current", copy: "Brand, search, language, grid, and theme actions use the real topbar." },
+          { title: "Compact menu", status: "Current", copy: "The menu button appears for the responsive sidebar drawer." },
+          { title: "Brand slot", status: "Candidate", copy: "Logo swaps and co-branding need a product rule before becoming a documented variant." },
+          { title: "Sections + account", status: "Candidate", copy: "Documented as parent/child section navigation before search, plus Badge, Avatar, and account menu actions." },
+        ],
+      })}
     </section>
   `;
 }
@@ -118,8 +122,4 @@ function slotContractPanel(title, rows) {
       })}
     </section>
   `;
-}
-
-function variantCard(title, status, copy) {
-  return html`<article class="pattern-variant-card" data-status="${status.toLowerCase().replaceAll(" ", "-")}"><strong>${title}</strong><span>${status}</span><p>${copy}</p></article>`;
 }
