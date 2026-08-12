@@ -122,9 +122,7 @@
 }
 
 .chart-demo[data-chart-demo="threshold"] .chart-bars {
-  background:
-    linear-gradient(to top, transparent 0 58%, color-mix(in srgb, var(--sys-energy-status-warning) 20%, transparent) 58% 100%),
-    var(--sys-energy-surface-primary);
+  background: var(--sys-energy-surface-primary);
 }
 
 .chart-demo[data-chart-demo="empty"] .chart-bars i {
@@ -137,11 +135,7 @@
   overflow: hidden;
   border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
   border-radius: var(--sys-frame-radius-container);
-  background:
-    linear-gradient(var(--sys-energy-border-default) var(--sys-frame-border-thin), transparent var(--sys-frame-border-thin)),
-    linear-gradient(90deg, var(--sys-energy-border-default) var(--sys-frame-border-thin), transparent var(--sys-frame-border-thin)),
-    var(--sys-energy-surface-accent);
-  background-size: var(--sys-frame-doc-grid-md) var(--sys-frame-doc-grid-md);
+  background: var(--sys-energy-surface-accent);
 }
 
 .map-pin {
@@ -300,9 +294,7 @@
 }
 
 .reference-section {
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--sys-energy-surface-accent) 72%, transparent), transparent 70%),
-    var(--sys-energy-surface-primary);
+  background: var(--sys-energy-surface-primary);
 }
 
 .architecture-chain {

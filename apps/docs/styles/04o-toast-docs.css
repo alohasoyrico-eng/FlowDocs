@@ -18,9 +18,7 @@
   padding: var(--sys-space-4);
   border: var(--sys-frame-border-thin) dashed var(--sys-energy-border-default);
   border-radius: var(--sys-frame-radius-container);
-  background:
-    linear-gradient(90deg, color-mix(in srgb, var(--sys-energy-action-primary) 6%, transparent), transparent 46%),
-    var(--sys-energy-surface-secondary);
+  background: var(--sys-energy-surface-secondary);
 }
 
 .toast-region-demo[data-toast-align="start"] {

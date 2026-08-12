@@ -265,11 +265,7 @@
   min-block-size: var(--sys-frame-content-search-min);
   margin-block-start: var(--sys-frame-gap-component-lg);
   border-radius: var(--sys-frame-radius-container);
-  background:
-    linear-gradient(var(--sys-energy-border-default) var(--sys-frame-border-thin), transparent var(--sys-frame-border-thin)),
-    linear-gradient(90deg, var(--sys-energy-border-default) var(--sys-frame-border-thin), transparent var(--sys-frame-border-thin)),
-    var(--sys-energy-surface-secondary);
-  background-size: var(--sys-frame-doc-grid-sm) var(--sys-frame-doc-grid-sm);
+  background: var(--sys-energy-surface-secondary);
 }
 
 .depth-surface,
@@ -303,9 +299,7 @@
 }
 
 .depth-explorer[data-depth-demo="3"] .depth-stage {
-  background:
-    linear-gradient(color-mix(in srgb, var(--sys-energy-text-primary) 22%, transparent), color-mix(in srgb, var(--sys-energy-text-primary) 22%, transparent)),
-    var(--sys-energy-surface-secondary);
+  background: var(--sys-energy-surface-secondary);
 }
 
 .depth-explorer[data-depth-demo="3"] .depth-surface,
