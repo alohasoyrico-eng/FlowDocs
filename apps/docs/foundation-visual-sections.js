@@ -182,37 +182,15 @@ export function frameTokenSection() {
 
 export function frameSystemSection() {
   const section = foundationCopy?.visualSections?.frameSystem ?? {};
+  const densityDetail = (section.densities ?? []).map(([name, use, padding, gap]) => `${name}: ${use} (${padding} / ${gap})`).join(" ");
+  const gridDetail = (section.grids ?? []).map(([name, columns, margin, gutter]) => `${name}: ${columns} (${margin} / ${gutter})`).join(" ");
   return referenceSection(
     section.title ?? "",
     section.description ?? "",
     html`
       <div class="frame-system-grid">
-        <article>
-          <header>
-            <strong>${section.densityTitle ?? ""}</strong>
-            <span>${section.densityMeta ?? ""}</span>
-          </header>
-          ${(section.densities ?? []).map(([name, use, padding, gap]) => `
-            <div>
-              <b>${name}</b>
-              <p>${use}</p>
-              <code>${padding} · ${gap}</code>
-            </div>
-          `).join("")}
-        </article>
-        <article>
-          <header>
-            <strong>${section.gridTitle ?? ""}</strong>
-            <span>${section.gridMeta ?? ""}</span>
-          </header>
-          ${(section.grids ?? []).map(([name, columns, margin, gutter]) => `
-            <div>
-              <b>${name}</b>
-              <p>${columns}</p>
-              <code>${margin} · ${gutter}</code>
-            </div>
-          `).join("")}
-        </article>
+        ${foundationVisualCard({ title: section.densityTitle ?? "", detail: densityDetail, status: section.densityMeta ?? "" })}
+        ${foundationVisualCard({ title: section.gridTitle ?? "", detail: gridDetail, status: section.gridMeta ?? "" })}
       </div>
     `,
   );
