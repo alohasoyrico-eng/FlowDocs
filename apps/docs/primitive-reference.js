@@ -89,28 +89,28 @@ function primitiveReferenceDemo(entry) {
     return html`<div class="primitive-demo stack-demo" data-density-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-density-choice")}</div>${(demo.items ?? []).map((item) => `<div>${item}</div>`).join("")}</div>`;
   }
   if (demo.type === "icon") {
-    return html`<div class="primitive-demo icon-demo" data-icon-size-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-icon-size-choice")}</div>${(demo.icons ?? []).map((name) => `<article>${icon(name)}<span>${name}</span></article>`).join("")}</div>`;
+    return html`<div class="primitive-demo icon-demo" data-icon-size-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-icon-size-choice")}</div>${(demo.icons ?? []).map((name) => `<article data-doc-primitive="primitive-icon-demo-item">${icon(name)}<span>${name}</span></article>`).join("")}</div>`;
   }
   if (demo.type === "swatch") {
-    return html`<div class="primitive-demo swatch-demo" data-color-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-color-choice")}</div>${(demo.roles ?? []).map((role) => `<article><i></i><span>${role}</span></article>`).join("")}</div>`;
+    return html`<div class="primitive-demo swatch-demo" data-color-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-color-choice")}</div>${(demo.roles ?? []).map((role) => `<article data-doc-primitive="primitive-color-swatch-demo"><i></i><span>${role}</span></article>`).join("")}</div>`;
   }
   if (demo.type === "radius") {
-    return html`<div class="primitive-demo radius-demo" data-radius-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-radius-choice")}</div><article><span>${demo.targetLabel ?? ""}</span><strong data-radius-label>${initial}</strong></article></div>`;
+    return html`<div class="primitive-demo radius-demo" data-radius-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-radius-choice")}</div><article data-doc-primitive="primitive-radius-demo"><span>${demo.targetLabel ?? ""}</span><strong data-radius-label>${initial}</strong></article></div>`;
   }
   if (demo.type === "elevation") {
-    return html`<div class="primitive-demo depth-explorer" data-depth-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-depth-choice")}</div><div class="depth-stage"><article class="depth-surface"><span data-depth-label>${demo.labels?.[initial] ?? ""}</span><strong>${demo.title ?? ""}</strong><p>${demo.copy ?? ""}</p></article></div></div>`;
+    return html`<div class="primitive-demo depth-explorer" data-depth-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-depth-choice")}</div><div class="depth-stage"><article class="depth-surface" data-doc-primitive="primitive-depth-demo"><span data-depth-label>${demo.labels?.[initial] ?? ""}</span><strong>${demo.title ?? ""}</strong><p>${demo.copy ?? ""}</p></article></div></div>`;
   }
   if (demo.type === "motionToken") {
     return html`<div class="primitive-demo motion-primitive-demo" data-motion-token-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-motion-token-choice")}</div><div class="motion-token-track"><i></i></div><code data-motion-token-label>${demo.initialLabel ?? demo.labels?.[initial] ?? ""}</code></div>`;
   }
   if (demo.type === "breakpoint") {
-    return html`<div class="primitive-demo breakpoint-demo" data-breakpoint-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-breakpoint-choice")}</div><div class="breakpoint-stage"><article><b data-breakpoint-label>${demo.labels?.[initial] ?? ""}</b><i></i><i></i><i></i></article></div></div>`;
+    return html`<div class="primitive-demo breakpoint-demo" data-breakpoint-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-breakpoint-choice")}</div><div class="breakpoint-stage"><article data-doc-primitive="primitive-breakpoint-demo"><b data-breakpoint-label>${demo.labels?.[initial] ?? ""}</b><i></i><i></i><i></i></article></div></div>`;
   }
   if (demo.type === "focus") {
     return html`<div class="primitive-demo focus-demo" data-focus-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-focus-choice")}</div><button type="button" data-focus-target>${demo.action ?? ""}</button><p data-focus-copy>${demo.states?.[initial] ?? ""}</p></div>`;
   }
   if (demo.type === "loading") {
-    return html`<div class="primitive-demo loading-demo" data-loading-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-loading-choice")}</div><article><b data-loading-title>${demo.states?.[initial] ?? ""}</b><i></i><i></i><i></i></article></div>`;
+    return html`<div class="primitive-demo loading-demo" data-loading-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-loading-choice")}</div><article data-doc-primitive="primitive-loading-demo"><b data-loading-title>${demo.states?.[initial] ?? ""}</b><i></i><i></i><i></i></article></div>`;
   }
   if (demo.type === "disabled") {
     const [action, copy] = demo.states?.[initial] ?? [];
@@ -120,7 +120,7 @@ function primitiveReferenceDemo(entry) {
     return html`<div class="primitive-demo chart-demo" data-chart-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-chart-choice")}</div><div class="chart-bars"><i></i><i></i><i></i><i></i></div><p data-chart-copy>${demo.states?.[initial] ?? ""}</p></div>`;
   }
   if (demo.type === "map") {
-    return html`<div class="primitive-demo map-demo" data-map-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-map-choice")}</div><div class="map-stage"><span class="map-pin">${icon("local_gas_station")}</span><span class="route-line"></span><article data-map-label>${demo.states?.[initial] ?? ""}</article></div></div>`;
+    return html`<div class="primitive-demo map-demo" data-map-demo="${initial}"><div class="density-switch" aria-label="${primitiveDemoAria(demo, entry)}">${primitiveChoiceButtons(demo.choices, initial, "data-map-choice")}</div><div class="map-stage"><span class="map-pin">${icon("local_gas_station")}</span><span class="route-line"></span><article data-doc-primitive="primitive-map-label" data-map-label>${demo.states?.[initial] ?? ""}</article></div></div>`;
   }
   if (demo.type === "message") {
     return html`<div class="primitive-demo message-demo">${(demo.cards ?? []).map((card) => primitiveDemoCard({
@@ -134,7 +134,7 @@ function primitiveReferenceDemo(entry) {
     return html`<div class="primitive-demo ${demo.className ?? ""}">${(demo.rows ?? []).map(([label, value]) => primitiveDemoCard({ title: label, value, composition: "stats" })).join("")}</div>`;
   }
   const roles = demo.roles ?? [];
-  return html`<div class="primitive-demo surface-demo">${roles.map((role) => `<article class="${role === "inverse" ? "inverse" : ""}"><span>${role}</span></article>`).join("")}</div>`;
+  return html`<div class="primitive-demo surface-demo">${roles.map((role) => `<article data-doc-primitive="primitive-surface-role-demo" class="${role === "inverse" ? "inverse" : ""}"><span>${role}</span></article>`).join("")}</div>`;
 }
 
 function primitiveDemoCard({ title, detail, value, status, actions, composition = "standard" } = {}) {

@@ -33,7 +33,7 @@ export function energyFilledStatusSection() {
     html`
       <div class="energy-status-contract">
         ${(section.rows ?? []).map(({ tone, title, scale, foreground, use }) => `
-          <article data-status-tone="${tone}">
+          <article data-doc-primitive="foundation-status-tone-demo" data-status-tone="${tone}">
             <div class="energy-status-samples" aria-label="${title} state colors">
               <span>${labels.default ?? ""}</span>
               <span>${labels.hover ?? ""}</span>
@@ -91,7 +91,7 @@ export function frameSpacingSection() {
     html`
       <div class="frame-spacing-demo">
         ${(section.rows ?? []).map(([step, value, token, useCase]) => `
-          <article data-space="${step}">
+          <article data-doc-primitive="foundation-spacing-demo" data-space="${step}">
             <strong>${step}</strong>
             <span>${value}</span>
             <i></i>
@@ -112,7 +112,7 @@ export function frameGridSection() {
     html`
       <div class="frame-grid-demo">
         ${(section.tiers ?? []).map(([name, columns, margin, gutter, count, tokenTier]) => `
-          <article data-columns="${count}">
+          <article data-doc-primitive="foundation-grid-demo" data-columns="${count}">
             <header>
               <strong>${name}</strong>
               <span>${columns} · ${margin} · ${gutter}</span>
@@ -148,7 +148,7 @@ export function frameDensitySection() {
         </div>
         <div class="frame-density-cards">
           ${(section.cards ?? []).map(({ density, label }) => `
-            <article data-density-demo="${density}">
+            <article data-doc-primitive="foundation-density-demo" data-density-demo="${density}">
               <header>
                 <strong>${density}</strong>
                 <span>${label}</span>
@@ -198,7 +198,7 @@ export function frameSystemSection() {
 
 function energyPaletteFamily(label, family, steps) {
   return html`
-    <article class="energy-palette-family">
+    <article class="energy-palette-family" data-doc-primitive="foundation-energy-palette-demo">
       <header>
         <strong>${label}</strong>
         <span>${steps.length} tokens</span>
@@ -215,7 +215,7 @@ function energyPaletteFamily(label, family, steps) {
 
 function voiceTypeRow(name, meta, variants) {
   return html`
-    <article class="voice-type-row">
+    <article class="voice-type-row" data-doc-primitive="foundation-voice-type-row-demo">
       <header>
         <strong>${name}</strong>
         <span>${meta}</span>
@@ -229,7 +229,7 @@ function voiceTypeRow(name, meta, variants) {
 
 function voiceTypeSample(style, label, size, copy) {
   return html`
-    <article class="voice-type-sample" data-style="${style}">
+    <article class="voice-type-sample" data-doc-primitive="foundation-voice-type-sample-demo" data-style="${style}">
       <p>${copy}</p>
       <code>sys.voice.${style.replace("-", ".")} · ${size}</code>
     </article>

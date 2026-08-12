@@ -35,7 +35,7 @@ function foundationChoiceButtons(choices, active, dataAttribute) {
 }
 
 function foundationIconGallery(names) {
-  return (names ?? []).map((name) => `<article>${icon(name)}<span>${name}</span></article>`).join("");
+  return (names ?? []).map((name) => `<article data-doc-primitive="foundation-symbol-gallery-item">${icon(name)}<span>${name}</span></article>`).join("");
 }
 
 function foundationExplorer(entry, explorer = foundationExplorerCopy(entry)) {
@@ -52,7 +52,7 @@ function foundationExplorer(entry, explorer = foundationExplorerCopy(entry)) {
   }
   if (explorer.type === "frame") {
     const initial = explorer.initial ?? explorer.choices?.[0]?.[0] ?? "";
-    return html`<div class="foundation-explorer frame-explorer" data-density-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-density-choice")}</div><div class="frame-demo-columns">${(explorer.columns ?? []).map((item, index) => `<article><b>${item}</b><i></i><i></i><i></i><small>gap ${index + 2} · panel pad ${index + 3}</small></article>`).join("")}</div></div>`;
+    return html`<div class="foundation-explorer frame-explorer" data-density-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-density-choice")}</div><div class="frame-demo-columns">${(explorer.columns ?? []).map((item, index) => `<article data-doc-primitive="foundation-frame-demo-column"><b>${item}</b><i></i><i></i><i></i><small>gap ${index + 2} · panel pad ${index + 3}</small></article>`).join("")}</div></div>`;
   }
   if (explorer.type === "voice") {
     const initial = explorer.initial ?? explorer.choices?.[0]?.[0] ?? "";
@@ -61,12 +61,12 @@ function foundationExplorer(entry, explorer = foundationExplorerCopy(entry)) {
   }
   if (explorer.type === "depth") {
     const initial = explorer.initial ?? explorer.choices?.[0]?.[0] ?? "";
-    return html`<div class="foundation-explorer depth-explorer" data-depth-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-depth-choice")}</div><div class="depth-stage"><article class="depth-surface"><span data-depth-label>${explorer.labels?.[initial] ?? ""}</span><strong>${explorer.title ?? ""}</strong><p>${explorer.copy ?? ""}</p></article></div></div>`;
+    return html`<div class="foundation-explorer depth-explorer" data-depth-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-depth-choice")}</div><div class="depth-stage"><article class="depth-surface" data-doc-primitive="foundation-depth-demo"><span data-depth-label>${explorer.labels?.[initial] ?? ""}</span><strong>${explorer.title ?? ""}</strong><p>${explorer.copy ?? ""}</p></article></div></div>`;
   }
   if (explorer.type === "motion") {
     const initial = explorer.initial ?? explorer.choices?.[0]?.[0] ?? "";
     const [title, copy] = explorer.states?.[initial] ?? [];
-    return html`<div class="foundation-explorer motion-explorer" data-motion-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-motion-choice")}</div><div class="motion-doc-demo"><div class="motion-doc-head"><span>${icon("animation")}</span><div><strong data-motion-title>${title ?? ""}</strong><p data-motion-copy>${copy ?? ""}</p></div></div><div class="motion-duration-list" aria-label="${explorer.durationListAria ?? ""}">${(explorer.durationList ?? []).map(([name, ms, copy]) => `<article><b>${name}</b><span>${copy}</span><code>${ms}</code><i></i></article>`).join("")}</div><div class="motion-easing-list" aria-label="${explorer.easingListAria ?? ""}">${(explorer.easingList ?? []).map(([name, value]) => `<article><b>${name}</b><div><i></i></div><code>${value}</code></article>`).join("")}</div><div class="motion-stagger-grid" aria-label="${explorer.staggerAria ?? ""}">${(explorer.staggerList ?? []).map(([name, ms]) => `<article><b>${name}</b><code>${ms}</code>${(explorer.staggerItems ?? []).map((item) => `<span>${item}</span>`).join("")}</article>`).join("")}</div><div class="motion-token-reference" aria-label="${explorer.tokenReferenceAria ?? ""}">${(explorer.tokenReference ?? []).map(([token, value]) => `<article><code>${token}</code><span>${value}</span></article>`).join("")}</div><div class="motion-reduced-note"><strong>${explorer.reducedTitle ?? ""}</strong><p>${explorer.reducedCopy ?? ""}</p></div></div></div>`;
+    return html`<div class="foundation-explorer motion-explorer" data-motion-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-motion-choice")}</div><div class="motion-doc-demo"><div class="motion-doc-head"><span>${icon("animation")}</span><div><strong data-motion-title>${title ?? ""}</strong><p data-motion-copy>${copy ?? ""}</p></div></div><div class="motion-duration-list" aria-label="${explorer.durationListAria ?? ""}">${(explorer.durationList ?? []).map(([name, ms, copy]) => `<article data-doc-primitive="foundation-motion-duration-demo"><b>${name}</b><span>${copy}</span><code>${ms}</code><i></i></article>`).join("")}</div><div class="motion-easing-list" aria-label="${explorer.easingListAria ?? ""}">${(explorer.easingList ?? []).map(([name, value]) => `<article data-doc-primitive="foundation-motion-easing-demo"><b>${name}</b><div><i></i></div><code>${value}</code></article>`).join("")}</div><div class="motion-stagger-grid" aria-label="${explorer.staggerAria ?? ""}">${(explorer.staggerList ?? []).map(([name, ms]) => `<article data-doc-primitive="foundation-motion-stagger-demo"><b>${name}</b><code>${ms}</code>${(explorer.staggerItems ?? []).map((item) => `<span>${item}</span>`).join("")}</article>`).join("")}</div><div class="motion-token-reference" aria-label="${explorer.tokenReferenceAria ?? ""}">${(explorer.tokenReference ?? []).map(([token, value]) => `<article data-doc-primitive="foundation-motion-token-reference"><code>${token}</code><span>${value}</span></article>`).join("")}</div><div class="motion-reduced-note"><strong>${explorer.reducedTitle ?? ""}</strong><p>${explorer.reducedCopy ?? ""}</p></div></div></div>`;
   }
   if (explorer.type === "symbol") {
     const initial = explorer.initial ?? explorer.choices?.[0]?.[0] ?? "";
@@ -75,17 +75,17 @@ function foundationExplorer(entry, explorer = foundationExplorerCopy(entry)) {
   if (explorer.type === "tone") {
     const initial = explorer.initial ?? explorer.choices?.[0]?.[0] ?? "";
     const [labelText, title, copy] = explorer.states?.[initial] ?? [];
-    return html`<div class="foundation-explorer tone-explorer" data-tone-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-tone-choice")}</div><article class="tone-message"><span data-tone-label>${labelText ?? ""}</span><strong data-tone-title>${title ?? ""}</strong><p data-tone-copy>${copy ?? ""}</p></article></div>`;
+    return html`<div class="foundation-explorer tone-explorer" data-tone-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-tone-choice")}</div><article class="tone-message" data-doc-primitive="foundation-tone-message-demo"><span data-tone-label>${labelText ?? ""}</span><strong data-tone-title>${title ?? ""}</strong><p data-tone-copy>${copy ?? ""}</p></article></div>`;
   }
   if (explorer.type === "growth") {
     const initial = explorer.initial ?? explorer.choices?.[0]?.[0] ?? "";
     const [title, copy, eventName] = explorer.states?.[initial] ?? [];
-    return html`<div class="foundation-explorer growth-explorer" data-growth-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-growth-choice")}</div><div class="growth-meter"><i></i><i></i><i></i><i></i></div><article><strong data-growth-title>${title ?? ""}</strong><p data-growth-copy>${copy ?? ""}</p><code data-growth-event>${eventName ?? ""}</code></article></div>`;
+    return html`<div class="foundation-explorer growth-explorer" data-growth-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-growth-choice")}</div><div class="growth-meter"><i></i><i></i><i></i><i></i></div><article data-doc-primitive="foundation-growth-demo"><strong data-growth-title>${title ?? ""}</strong><p data-growth-copy>${copy ?? ""}</p><code data-growth-event>${eventName ?? ""}</code></article></div>`;
   }
   if (explorer.type === "accessibility") {
     const initial = explorer.initial ?? explorer.choices?.[0]?.[0] ?? "";
     const [title, copy, action] = explorer.states?.[initial] ?? [];
-    return html`<div class="foundation-explorer accessibility-explorer" data-a11y-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-a11y-choice")}</div><article class="a11y-check"><span>${icon("accessibility_new")}</span><strong data-a11y-title>${title ?? ""}</strong><p data-a11y-copy>${copy ?? ""}</p><button type="button" data-a11y-action>${action ?? ""}</button></article></div>`;
+    return html`<div class="foundation-explorer accessibility-explorer" data-a11y-demo="${initial}"><div class="density-switch" aria-label="${explorer.ariaLabel ?? ""}">${foundationChoiceButtons(explorer.choices, initial, "data-a11y-choice")}</div><article class="a11y-check" data-doc-primitive="foundation-a11y-demo"><span>${icon("accessibility_new")}</span><strong data-a11y-title>${title ?? ""}</strong><p data-a11y-copy>${copy ?? ""}</p><button type="button" data-a11y-action>${action ?? ""}</button></article></div>`;
   }
   return html`<div class="foundation-explorer operational-explorer"><aside><span>${icon(iconFor(entry))}</span><strong>${entry.title}</strong><p>${entry.summary}</p></aside><main><div class="product-alert"><b>${foundationExample(entry).includes("Card declined") ? "Card declined" : explorer.alertFallback ?? ""}</b><span>${entry.tokens[0]}</span></div><div class="product-line strong"></div><div class="product-line"></div><button type="button">${explorer.action ?? ""}</button></main></div>`;
 }
