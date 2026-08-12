@@ -225,7 +225,7 @@ function helpCenterDemoPanel() {
               ${packageDemo("card", { title, detail: summary, status: category }, { "data-help-article": id, "data-help-category-name": category, "data-help-keywords": keywords, role: "button", "aria-selected": "false", tabindex: "0" })}
             `).join("")}
           </div>
-          <article class="pattern-help-demo__article" data-help-article-panel tabindex="-1">
+          <article class="pattern-help-demo__article" data-doc-primitive="pattern-help-article-demo" data-help-article-panel tabindex="-1">
             <span class="eyebrow" data-help-article-category>Billing</span>
             <h3 data-help-article-title>Card limits</h3>
             <p data-help-article-copy>Learn how monthly limits and owner approvals work.</p>

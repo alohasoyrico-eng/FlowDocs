@@ -154,7 +154,7 @@ function renderDetail(collection, id) {
 function renderFoundationDetail(entry) {
   app.innerHTML = shell(
     html`
-      <article class="reference-doc foundation-deep-dive" data-detail="foundations:${entry.id}">
+      <article class="reference-doc foundation-deep-dive" data-doc-primitive="foundation-reference-page" data-detail="foundations:${entry.id}">
         <div class="reference-main">
           ${referenceHeader("foundations", entry, { chapter: "Foundation Deep Dive", subtitle: foundationSubtitle(entry) })}
           ${referenceDivider()}
@@ -172,7 +172,7 @@ function renderFoundationDetail(entry) {
 function renderPrimitiveDetail(entry) {
   app.innerHTML = shell(
     html`
-      <article class="reference-doc primitive-deep-dive" data-detail="primitives:${entry.id}">
+      <article class="reference-doc primitive-deep-dive" data-doc-primitive="primitive-reference-page" data-detail="primitives:${entry.id}">
         <div class="reference-main">
           ${referenceHeader("primitives", entry, { chapter: "Primitive Deep Dive", subtitle: "L2 implementation primitive" })}
           ${referenceDivider()}

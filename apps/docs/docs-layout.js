@@ -61,7 +61,7 @@ function detailShellTabsIsland({ entry, tabs, ui }) {
 export function renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }) {
   const implementationLabel = componentImplementationLabel(collection, entry, componentImplementationStatus);
   return html`
-    <article class="detail-page" data-detail="${collection}:${id}">
+    <article class="detail-page" data-doc-primitive="detail-page-shell" data-detail="${collection}:${id}">
       <header class="detail-hero">
         <div class="detail-hero-content">
           <nav class="docs-breadcrumbs" aria-label="${ui("shell.breadcrumbs")}">
