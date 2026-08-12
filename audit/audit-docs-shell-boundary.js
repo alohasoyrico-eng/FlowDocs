@@ -158,8 +158,20 @@ function checkDocsShellBoundary() {
     'from "./generated/react/patterns/Sidebar.js',
     '"data-doc-shell-consumer": "react-topbar"',
     '"data-doc-shell-consumer": "react-sidebar"',
+    '"aria-expanded": String(navigationOpen)',
+    '"aria-controls": "docsReactShellSidebar"',
+    "drawer: false",
   ]) {
     if (!shell.includes(required)) add("errors", docsShellReactFile, 1, `Docs shell React boundary is missing Flow shell contract: ${required}.`);
+  }
+  for (const forbidden of [
+    'drawer: { label: ui("shell.designNavigation")',
+    'closeLabel: ui("shell.designNavigation")',
+    '"aria-controls": "docs-shell-navigation"',
+  ]) {
+    if (shell.includes(forbidden)) {
+      add("errors", docsShellReactFile, lineOf(shell, forbidden), `Docs shell must use the real sidebar mount and the topbar hamburger as the only mobile navigation control: ${forbidden}.`);
+    }
   }
 
   for (const file of [docsIndexFile, docsChromeFile, docsLayoutFile, docsAppFile]) {
@@ -209,9 +221,29 @@ function checkDocsShellBoundary() {
     'patternReactDemo("topbar"',
     'patternReactDemo("sidebar"',
     'data-component-source="react-pattern"',
+    "drawer: false",
   ]) {
     if (!reactPatternDemos.includes(required)) {
       add("errors", patternShellReactDemosFile, 1, `Shell pattern demos must consume generated Flow React patterns: ${required}.`);
+    }
+  }
+  if (/patternReactDemo\("sidebar"[\s\S]*drawer:\s*\{/.test(reactPatternDemos)) {
+    add("errors", patternShellReactDemosFile, lineOf(reactPatternDemos, 'patternReactDemo("sidebar"'), "Sidebar pattern demo must not mount a hidden Drawer; it must demonstrate the persistent Sidebar contract and leave responsive shell toggling to docs-shell-react.js.");
+  }
+
+  const generatedSidebar = read(path.join(docsAppDir, "generated/react/patterns/Sidebar.js"));
+  const generatedTopbar = read(path.join(docsAppDir, "generated/react/patterns/Topbar.js"));
+  const generatedDrawer = read(path.join(docsAppDir, "generated/react/Drawer.js"));
+  for (const [file, text, required] of [
+    [path.join(docsAppDir, "generated/react/patterns/Sidebar.js"), generatedSidebar, "const shouldRenderDrawer = drawer !== false"],
+    [path.join(docsAppDir, "generated/react/patterns/Topbar.js"), generatedTopbar, "const shouldRenderDrawer = Boolean(sidebar) && sidebar?.drawer !== false"],
+    [path.join(docsAppDir, "generated/react/patterns/Topbar.js"), generatedTopbar, '"aria-expanded": navigationAction?.["aria-expanded"]'],
+    [path.join(docsAppDir, "generated/react/patterns/Topbar.js"), generatedTopbar, '"aria-controls": navigationAction?.["aria-controls"]'],
+    [path.join(docsAppDir, "generated/react/Drawer.js"), generatedDrawer, "showCloseButton = true"],
+    [path.join(docsAppDir, "generated/react/Drawer.js"), generatedDrawer, "showCloseButton && closeLabel"],
+  ]) {
+    if (!text.includes(required)) {
+      add("errors", file, 1, `Generated Flow shell bridge must preserve governed drawer behavior: ${required}.`);
     }
   }
 
