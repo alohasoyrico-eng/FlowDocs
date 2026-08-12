@@ -1,0 +1,35 @@
+name: FlowDocs CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout FlowDocs
+        uses: actions/checkout@v4
+        with:
+          path: FlowDocs
+
+      - name: Checkout Flow
+        uses: actions/checkout@v4
+        with:
+          repository: alohasoyrico-eng/Flow3.0
+          path: Flow3.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: FlowDocs
+        run: npm install
+
+      - name: Validate docs
+        working-directory: FlowDocs
+        run: npm run validate:docs
