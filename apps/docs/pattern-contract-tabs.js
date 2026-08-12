@@ -347,7 +347,14 @@ function patternMotionPanel(source) {
     <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Motion contract</h2>
       <div class="architecture-chain">
-        ${(source.motion ?? []).map(([name, rule], index) => `<article><b>${index + 1}</b><strong>${name}</strong><span>${rule}</span></article>`).join("")}
+        ${(source.motion ?? []).map(([name, rule], index) => packageDemo("card", {
+          title: name,
+          detail: rule,
+          status: String(index + 1),
+          variant: "minimal",
+          composition: "standard",
+          fullWidth: true,
+        })).join("")}
       </div>
     </section>
   `;
