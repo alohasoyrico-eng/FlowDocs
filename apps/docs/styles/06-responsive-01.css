@@ -22,7 +22,6 @@
     gap: var(--sys-space-md);
   }
 
-  .search-slot,
   .topbar__search {
     grid-column: 3;
     grid-row: 1;

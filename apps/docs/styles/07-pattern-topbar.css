@@ -136,8 +136,7 @@
     grid-template-columns: auto minmax(0, 1fr) auto;
   }
 
-  .pattern-stage--docs-topbar .pattern-doc-topnav,
-  .pattern-stage--docs-topbar .search-slot {
+  .pattern-stage--docs-topbar .pattern-doc-topnav {
     grid-column: 1 / -1;
   }
 }

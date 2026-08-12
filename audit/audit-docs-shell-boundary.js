@@ -54,6 +54,19 @@ function checkDocsShellBoundary() {
     "styles/07-pattern-sidebar-slots.css",
     "styles/07-pattern-topbar-sections.css",
   ].map((file) => path.join(docsAppDir, file));
+  const legacyDocsSelectors = [
+    ".search-slot",
+    ".pattern-command-demo,",
+    ".pattern-command-demo__",
+    ".pattern-notification-demo,",
+    ".pattern-notification-demo__",
+    ".pattern-notification-slot",
+    ".pattern-avatar-menu-demo",
+    ".pattern-confirmation-demo",
+    ".pattern-action-sheet-demo",
+    ".pattern-search-demo",
+    ".pattern-autocomplete-demo",
+  ];
   if (fs.existsSync(navigationFile)) {
     add("errors", navigationFile, 1, "Legacy navigation.js must not exist; docs shell navigation is owned by docs-shell-react.js and Flow React Topbar/Sidebar.");
   }
@@ -80,6 +93,20 @@ function checkDocsShellBoundary() {
   ]) {
     if (docsStyles.includes(forbiddenImport)) {
       add("errors", docsStylesFile, lineOf(docsStyles, forbiddenImport), `Docs styles must not import legacy shell demo CSS: ${forbiddenImport}.`);
+    }
+  }
+  const styleFiles = [
+    docsStylesFile,
+    ...fs.readdirSync(path.join(docsAppDir, "styles"))
+      .filter((file) => file.endsWith(".css"))
+      .map((file) => path.join(docsAppDir, "styles", file)),
+  ];
+  for (const file of styleFiles) {
+    const text = read(file);
+    for (const selector of legacyDocsSelectors) {
+      if (text.includes(selector)) {
+        add("errors", file, lineOf(text, selector), `Docs CSS must not keep legacy shell/pattern selector ${selector}; demos must consume Flow React boundaries.`);
+      }
     }
   }
 

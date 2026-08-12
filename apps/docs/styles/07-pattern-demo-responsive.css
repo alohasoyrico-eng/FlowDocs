@@ -73,8 +73,7 @@
     display: none;
   }
 
-  .pattern-stage--docs-topbar .pattern-doc-topnav,
-  .pattern-stage--docs-topbar .search-slot {
+  .pattern-stage--docs-topbar .pattern-doc-topnav {
     grid-column: 1 / -1;
   }
 
@@ -142,10 +141,6 @@
 }
 
 @media (max-width: 480px) {
-  .pattern-stage--docs-topbar .search-slot {
-    min-block-size: var(--sys-frame-height-control-sm);
-  }
-
   .pattern-stage--docs-sidebar .pattern-doc-sidebar-label > span:not(.material-symbol) {
     position: absolute;
     inline-size: var(--sys-frame-border-thin);

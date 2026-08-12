@@ -43,15 +43,6 @@
     inline-size: clamp(var(--sys-frame-brand-logo-mobile-min), 22vw, var(--sys-frame-brand-logo-mobile-max));
   }
 
-  .search-slot {
-    min-block-size: var(--sys-frame-doc-icon-md);
-    padding-inline: var(--sys-space-sm);
-  }
-
-  .search-slot input {
-    font-size: var(--sys-voice-size-2);
-  }
-
   h1,
   .page-hero h1,
   .detail-hero h1 {
@@ -216,7 +207,6 @@
     inline-size: clamp(var(--sys-frame-brand-logo-mobile-min), 28vw, var(--sys-frame-brand-logo-mobile-max));
   }
 
-  .search-slot,
   .topbar__search {
     grid-area: search;
     min-block-size: var(--sys-frame-doc-icon-md);
