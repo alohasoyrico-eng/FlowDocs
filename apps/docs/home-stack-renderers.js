@@ -1,3 +1,5 @@
+import { componentDemo } from "./component-demo.js?v=61";
+
 export function renderHomeContent({ cardLink, collections, findAny, homeContent, html, icon, slug, stack, ui }) {
   const home = homeContent ?? {};
   const collectionCount = (collection) => (collection === "stack" ? stack.length : collections[collection]?.length ?? 0);
@@ -30,16 +32,7 @@ export function renderHomeContent({ cardLink, collections, findAny, homeContent,
       </div>
       <div class="coverage-grid">
         ${(home.coverage?.items ?? [])
-          .map(
-            (item) => html`
-              <article>
-                <span>${item.status}</span>
-                <strong>${collectionCount(item.collection)}</strong>
-                <h3>${item.label}</h3>
-                <p>${item.reference}</p>
-              </article>
-            `,
-          )
+          .map((item) => homeCard({ title: item.label, value: String(collectionCount(item.collection)), detail: item.reference, status: item.status, composition: "stats" }))
           .join("")}
       </div>
     </section>
@@ -51,15 +44,7 @@ export function renderHomeContent({ cardLink, collections, findAny, homeContent,
       </div>
       <div class="doc-status-grid">
         ${(home.documentationStatus?.items ?? [])
-          .map(
-            (item) => html`
-              <article>
-                <span>${item.layer}</span>
-                <strong>${item.status}</strong>
-                <p>${item.detail}</p>
-              </article>
-            `,
-          )
+          .map((item) => homeCard({ title: item.status, detail: item.detail, status: item.layer }))
           .join("")}
       </div>
     </section>
@@ -71,15 +56,7 @@ export function renderHomeContent({ cardLink, collections, findAny, homeContent,
       </div>
       <div class="doc-status-grid">
         ${(home.visualMigration?.items ?? [])
-          .map(
-            (item) => html`
-              <article>
-                <span>${item.status}</span>
-                <strong>${item.label}</strong>
-                <p>${item.detail}</p>
-              </article>
-            `,
-          )
+          .map((item) => homeCard({ title: item.label, detail: item.detail, status: item.status }))
           .join("")}
       </div>
     </section>
@@ -91,7 +68,7 @@ export function renderHomeContent({ cardLink, collections, findAny, homeContent,
       </div>
       <div class="layer-grid">
         ${(home.architecture?.layers ?? [])
-          .map((layer, index) => `<article><b>${index + 1}</b><h3>${layer.name}</h3><p>${layer.copy}</p></article>`)
+          .map((layer, index) => homeCard({ title: layer.name, detail: layer.copy, status: String(index + 1) }))
           .join("")}
       </div>
     </section>
@@ -120,19 +97,13 @@ export function renderStackContent({ html, referenceCopy, stack }) {
     <section class="section tight">
       <div class="stack-grid">
         ${stack
-          .map(
-            (entry) => html`
-              <article class="stack-card">
-                <span class="eyebrow">${entry.category}</span>
-                <h2>${entry.title}</h2>
-                <p>${entry.summary}</p>
-                <div class="rule"><strong>${page.ruleLabel ?? ""}</strong><span>${entry.rule}</span></div>
-                <div class="token-list">${entry.tokens.map((token) => `<code>${token}</code>`).join("")}</div>
-              </article>
-            `,
-          )
+          .map((entry) => homeCard({ title: entry.title, detail: `${entry.summary} ${page.ruleLabel ?? ""}: ${entry.rule} ${(entry.tokens ?? []).join(", ")}`, status: entry.category }))
           .join("")}
       </div>
     </section>
   `;
+}
+
+function homeCard({ title, value, detail, status, composition = "standard" } = {}) {
+  return componentDemo("card", { title, value, detail, status, variant: "minimal", composition, fullWidth: true });
 }
