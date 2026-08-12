@@ -75,10 +75,7 @@ function componentContractScenarioPanel(entry, copy) {
       <h2>${ui("reference.operationalScenario")}</h2>
       <p>${copy["operational-example"]?.copy ?? entry.summary}</p>
       <div class="component-standard-demo">
-        <article>
-          <header><span>${icon(iconFor(entry))}</span><strong>${scenario?.rationaleTitle ?? entry.title}</strong></header>
-          <ul>${(scenario?.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul>
-        </article>
+        ${componentDemo("card", { title: scenario?.rationaleTitle ?? entry.title, detail: (scenario?.rationale ?? []).join(" "), icon: icon(iconFor(entry)), variant: "minimal", composition: "standard", fullWidth: true })}
         <article>
           <strong>${ui("reference.mustProve")}</strong>
           <div class="component-standard-surface">${componentDemo(entry.id, contractDemoDefaults(entry))}</div>
@@ -215,10 +212,7 @@ function componentScenarioPanel(entry, profile) {
           <p>${componentScenarioCopy(entry)}</p>
           <div class="component-standard-surface">${componentFamilyDemo(entry, "default")}</div>
         </article>
-        <article>
-          <strong>${ui("reference.mustProve")}</strong>
-          <ul>${(componentCopy?.familyStandards?.mustProve ?? []).map((item) => `<li>${item}</li>`).join("")}</ul>
-        </article>
+        ${componentDemo("card", { title: ui("reference.mustProve"), detail: (componentCopy?.familyStandards?.mustProve ?? []).join(" "), variant: "minimal", composition: "standard", fullWidth: true })}
       </div>
       `,
     })}
