@@ -1,4 +1,5 @@
 import { html, ui } from "./detail-tabs-core.js?v=5";
+import { componentDemo } from "./component-demo.js?v=61";
 
 export function patternMielTabs(entry) {
   if (entry.id === "sidebar") return sidebarMielPanel();
@@ -64,19 +65,17 @@ function patternMielPanel(title, canDecide, mustAsk, rejectIf, handoff, machineC
         ${mielRuleCard(ui("miel.rejectIf"), rejectIf)}
       </div>
       <div class="pattern-miel-bottom">
-        <article class="pattern-miel-handoff">
-          <h3>${ui("miel.handoff")}</h3>
-          <p>${handoff}</p>
-        </article>
-        <article class="pattern-miel-contract">
-          <h3>${ui("miel.machineContract")}</h3>
-          <ul>${Object.entries(machineContract).map(([key, value]) => `<li><strong>${key}</strong><span>${value}</span></li>`).join("")}</ul>
-        </article>
+        ${mielCard(ui("miel.handoff"), handoff)}
+        ${mielCard(ui("miel.machineContract"), Object.entries(machineContract).map(([key, value]) => `${key}: ${value}`).join(" "))}
       </div>
     </section>
   `;
 }
 
 function mielRuleCard(title, items) {
-  return `<article class="pattern-miel-card"><h3>${title}</h3><ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`;
+  return mielCard(title, items.join(" "));
+}
+
+function mielCard(title, detail) {
+  return componentDemo("card", { title, detail, variant: "minimal", composition: "standard", fullWidth: true });
 }
