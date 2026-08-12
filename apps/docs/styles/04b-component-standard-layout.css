@@ -9,8 +9,7 @@
 .component-standard-surface,
 .standard-popover,
 .standard-metric,
-.standard-phone-row,
-.standard-chip {
+.standard-phone-row {
   border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
   border-radius: var(--sys-frame-radius-container);
   background: var(--sys-energy-surface-secondary);
@@ -56,7 +55,6 @@
   padding: var(--sys-frame-gap-component);
 }
 
-.standard-chip,
 .standard-phone-row,
 .standard-popover,
 .standard-metric {
@@ -89,16 +87,6 @@
   font-size: var(--sys-voice-size-9);
   font-weight: var(--sys-voice-numeral-weight);
   line-height: var(--sys-voice-numeral-line-height);
-}
-
-.standard-chip.error,
-.standard-chip.permission,
-.standard-chip.offline {
-  background: color-mix(in srgb, color-mix(in srgb, var(--sys-energy-status-error) 12%, var(--sys-energy-surface-primary)) 45%, var(--sys-energy-surface-secondary));
-}
-
-.standard-chip.loading {
-  background: color-mix(in srgb, var(--sys-energy-surface-accent) 70%, var(--sys-energy-surface-secondary));
 }
 
 .candidate-composition-grid {

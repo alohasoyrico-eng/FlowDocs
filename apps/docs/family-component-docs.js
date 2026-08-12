@@ -330,11 +330,28 @@ function componentScenarioCopy(entry) {
 
 function componentFamilyDemo(entry, state) {
   if (entry.group === "Selection" || entry.group === "Inputs") return selectDemo(entry.title, state === "empty" ? "Choose value" : `${entry.title} value`, stateLabel(state), "sm", normalizeDemoState(state));
-  if (entry.group === "Feedback") return `<div class="standard-chip ${state}">${icon(iconFor(entry))}<strong>${stateLabel(state)}</strong></div>`;
+  if (entry.group === "Feedback") return componentDemo("tag", stateChipDemo(entry, state));
   if (entry.group === "Overlay") return `<div class="standard-popover"><span class="standard-popover__trigger">${entry.title}</span><span>${stateLabel(state)}</span></div>`;
   if (entry.group === "Dashboards" || entry.group === "Data") return `<div class="standard-metric"><strong>${state === "empty" ? "--" : "24"}</strong><span>${stateLabel(state)}</span></div>`;
   if (entry.group === "Mobile" || entry.group === "Maps") return `<div class="standard-phone-row">${icon(iconFor(entry))}<span>${stateLabel(state)}</span></div>`;
-  return `<div class="standard-chip ${state}">${icon(iconFor(entry))}<strong>${stateLabel(state)}</strong></div>`;
+  return componentDemo("tag", stateChipDemo(entry, state));
+}
+
+function stateChipDemo(entry, state) {
+  return {
+    label: stateLabel(state),
+    variant: "status",
+    tone: tagToneForState(state),
+    state: normalizeDemoState(state),
+    icon: iconFor(entry),
+  };
+}
+
+function tagToneForState(state) {
+  if (["error", "offline", "permission"].includes(state)) return "danger";
+  if (state === "loading") return "info";
+  if (state === "selected" || state === "filled") return "success";
+  return "neutral";
 }
 
 function normalizeDemoState(state) {

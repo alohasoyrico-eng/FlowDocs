@@ -1,4 +1,5 @@
 import { artifactContract, artifactFoundationTracePanel, cardLink, examplePanel, findPattern, html, icon, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=5";
+import { componentDemo } from "./component-demo.js?v=60";
 import { desktopTemplateDemo } from "./template-desktop-demos.js?v=17";
 
 export function templateTabs(entry) {
@@ -64,10 +65,23 @@ export function templateStateMatrixPanel(entry) {
       <div class="button-matrix">
         <span></span>
         ${surfaces.map((surface) => `<strong>${surface}</strong>`).join("")}
-        ${states.map((state) => `<b>${state}</b>${surfaces.map((surface) => `<div class="standard-chip ${state}"><strong>${surface}</strong><span>${stateLabel(state)}</span></div>`).join("")}`).join("")}
+        ${states.map((state) => `<b>${state}</b>${surfaces.map((surface) => componentDemo("tag", { label: `${surface}: ${stateLabel(state)}`, variant: "status", tone: tagToneForState(state), state: normalizeDemoState(state) })).join("")}`).join("")}
       </div>
     </section>
   `;
+}
+
+function tagToneForState(state) {
+  if (["error", "offline", "permission"].includes(state)) return "danger";
+  if (state === "loading") return "info";
+  if (state === "loaded") return "success";
+  return "neutral";
+}
+
+function normalizeDemoState(state) {
+  if (["loading", "error", "disabled"].includes(state)) return state;
+  if (state === "loaded") return "default";
+  return "";
 }
 
 export function stateLabel(state) {
