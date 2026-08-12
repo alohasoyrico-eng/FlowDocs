@@ -1,20 +1,14 @@
-.pattern-design-shell-demo .search-slot--package,
-.pattern-stage--real-shell .search-slot--package,
 .search-slot.search-slot--package {
   padding: 0;
   border: 0;
   background: transparent;
 }
 
-.pattern-design-shell-demo .search-slot--package > [data-doc-component="input"],
-.pattern-stage--real-shell .search-slot--package > [data-doc-component="input"],
 .search-slot.search-slot--package > [data-doc-component="input"] {
   inline-size: 100%;
   min-inline-size: 0;
 }
 
-.pattern-design-shell-demo .search-slot--package [data-field-label],
-.pattern-stage--real-shell .search-slot--package [data-field-label],
 .search-slot.search-slot--package [data-field-label] {
   position: absolute;
   inline-size: var(--sys-frame-border-thin);
@@ -25,15 +19,6 @@
   white-space: nowrap;
 }
 
-.pattern-design-shell-demo .search-slot--package [data-field-helper],
-.pattern-stage--real-shell .search-slot--package [data-field-helper],
 .search-slot.search-slot--package [data-field-helper] {
   display: none;
-}
-
-.pattern-design-shell-demo .pattern-topbar-action,
-.pattern-stage--real-shell .pattern-topbar-action {
-  position: relative;
-  display: inline-grid;
-  place-items: center;
 }

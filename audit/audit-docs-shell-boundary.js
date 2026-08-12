@@ -42,11 +42,33 @@ function checkDocsShellBoundary() {
   const patternShellReactDemosFile = path.join(docsAppDir, "pattern-shell-react-demos.js");
   const patternShellRenderersFile = path.join(docsAppDir, "pattern-shell-renderers.js");
   const templateDesktopDemosFile = path.join(docsAppDir, "template-desktop-demos.js");
+  const docsStylesFile = path.join(docsAppDir, "styles.css");
+  const legacyShellStyleFiles = [
+    "styles/07-pattern-focused-demos.css",
+    "styles/07-pattern-sidebar-slots.css",
+    "styles/07-pattern-topbar-sections.css",
+  ].map((file) => path.join(docsAppDir, file));
   if (fs.existsSync(navigationFile)) {
     add("errors", navigationFile, 1, "Legacy navigation.js must not exist; docs shell navigation is owned by docs-shell-react.js and Flow React Topbar/Sidebar.");
   }
   if (fs.existsSync(patternShellRenderersFile)) {
     add("errors", patternShellRenderersFile, 1, "Manual shell renderers must not exist; templates and pattern pages must consume Flow React Topbar/Sidebar or template islands.");
+  }
+  for (const file of legacyShellStyleFiles) {
+    if (fs.existsSync(file)) {
+      add("errors", file, 1, "Legacy shell demo CSS must not exist without a Flow React owner.");
+    }
+  }
+
+  const docsStyles = read(docsStylesFile);
+  for (const forbiddenImport of [
+    "07-pattern-focused-demos.css",
+    "07-pattern-sidebar-slots.css",
+    "07-pattern-topbar-sections.css",
+  ]) {
+    if (docsStyles.includes(forbiddenImport)) {
+      add("errors", docsStylesFile, lineOf(docsStyles, forbiddenImport), `Docs styles must not import legacy shell demo CSS: ${forbiddenImport}.`);
+    }
   }
 
   const index = read(docsIndexFile);
@@ -160,6 +182,18 @@ function checkDocsShellBoundary() {
   }
   if (!templateDesktopDemos.includes("reactTemplateDemo(entry, blueprint)")) {
     add("errors", templateDesktopDemosFile, 1, "Template desktop demo entry point must delegate to React template islands.");
+  }
+
+  const searchSlotStylesFile = path.join(docsAppDir, "styles/07-pattern-topbar-package-slots.css");
+  const searchSlotStyles = read(searchSlotStylesFile);
+  for (const forbidden of [
+    ".pattern-design-shell-demo",
+    ".pattern-stage--real-shell",
+    ".pattern-topbar-action",
+  ]) {
+    if (searchSlotStyles.includes(forbidden)) {
+      add("errors", searchSlotStylesFile, lineOf(searchSlotStyles, forbidden), `Search slot CSS must not target removed manual shell demos: ${forbidden}.`);
+    }
   }
 }
 
