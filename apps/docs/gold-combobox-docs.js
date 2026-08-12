@@ -14,7 +14,7 @@ import {
   simpleVariantsPanel,
   simpleViewportOrganizationPanel,
 } from "./gold-simple-component-docs.js?v=255";
-import { componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailRationaleCard, componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, html, icon, ui } from "./gold-component-core.js?v=214";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
 export function comboboxDemo(label = "Vehicle", value = "MX-4821 - Ana Gomez", state = "filled") { return simpleDemo("combobox", { label, value, state }); }
@@ -55,10 +55,7 @@ export function comboboxOperationalExamplePanel() {
           <header>${icon(scenario.icon, { tone: "action", fill: true })}<div><strong>${scenario.title}</strong><small>${scenario.meta}</small></div></header>
           <div class="simple-demo-row">${(scenario.items ?? []).map(comboboxDemoFromData).join("")}</div>
         </div>
-        <div class="fleet-panel-mini">
-          <strong>${scenario.rationaleTitle}</strong>
-          <ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul>
-        </div>
+        ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
       </div>
     </section>
   `;

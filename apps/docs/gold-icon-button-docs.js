@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -24,7 +24,7 @@ export function renderIconButtonGoldSection(entry, section) {
 
 function iconButtonOperationalExamplePanel() {
   const scenario = componentSectionData("icon-button", "operational-example").scenario;
-  return html`<section ${iconButtonSurfaceAttrs("operational-example", "button-operational-panel")}><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("icon-button", "operational-example")}</p><div class="icon-button-scenario"><div class="icon-button-console"><header>${icon("touch_app", { tone: "action", fill: true })}<div><strong>Topbar utilities</strong><small>Language, grid, and contrast</small></div></header><div class="icon-button-toolbar">${(scenario.items ?? []).map(iconButtonDemoFromData).join("")}</div></div><div class="fleet-panel-mini"><strong>${scenario.rationaleTitle}</strong><ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></div></div></section>`;
+  return html`<section ${iconButtonSurfaceAttrs("operational-example", "button-operational-panel")}><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("icon-button", "operational-example")}</p><div class="icon-button-scenario"><div class="icon-button-console"><header>${icon("touch_app", { tone: "action", fill: true })}<div><strong>Topbar utilities</strong><small>Language, grid, and contrast</small></div></header><div class="icon-button-toolbar">${(scenario.items ?? []).map(iconButtonDemoFromData).join("")}</div></div>${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}</div></section>`;
 }
 
 function iconButtonAnatomyPanel() {

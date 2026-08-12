@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -24,7 +24,7 @@ export function renderTextAreaGoldSection(entry, section) {
 
 function textAreaOperationalExamplePanel() {
   const scenario = componentSectionData("text-area", "operational-example").scenario;
-  return html`<section ${textAreaSurfaceAttrs("operational-example", "button-operational-panel")}><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("text-area", "operational-example")}</p><div class="text-area-scenario"><div class="filter-console"><header>${icon("edit_note", { tone: "action", fill: true })}<div><strong>Operational notes</strong><small>Multiline values with review context</small></div></header><div class="text-area-stack">${(scenario.fields ?? []).map(textAreaDemoFromData).join("")}</div></div><div class="fleet-panel-mini"><strong>${scenario.rationaleTitle}</strong><ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></div></div></section>`;
+  return html`<section ${textAreaSurfaceAttrs("operational-example", "button-operational-panel")}><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("text-area", "operational-example")}</p><div class="text-area-scenario"><div class="filter-console"><header>${icon("edit_note", { tone: "action", fill: true })}<div><strong>Operational notes</strong><small>Multiline values with review context</small></div></header><div class="text-area-stack">${(scenario.fields ?? []).map(textAreaDemoFromData).join("")}</div></div>${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}</div></section>`;
 }
 
 function textAreaAnatomyPanel() {

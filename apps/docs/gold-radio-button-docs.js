@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -37,7 +37,7 @@ function radioButtonOperationalExamplePanel() {
           <header>${icon("radio_button_checked", { tone: "action", fill: true })}<div><strong>Route preference</strong><small>Atomic exclusive-choice options</small></div></header>
           <div class="radio-stack">${(scenario.items ?? []).map((demo) => radioButtonDemoFromData({ ...demo, name: "route-preference-demo" })).join("")}</div>
         </div>
-        <div class="fleet-panel-mini"><strong>${scenario.rationaleTitle}</strong><ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></div>
+        ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
       </div>
     </section>
   `;

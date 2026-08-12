@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js";
 
@@ -33,10 +33,7 @@ function inputOperationalExamplePanel() {
           <header>${icon("edit", { tone: "action", fill: true })}<div><strong>Driver profile</strong><small>Editable operational values</small></div></header>
           <div class="input-stack">${scenario.fields.map(inputDemoFromData).join("")}</div>
         </div>
-        <div class="fleet-panel-mini">
-          <strong>${scenario.rationaleTitle}</strong>
-          <ul>${scenario.rationale.map((item) => `<li>${item}</li>`).join("")}</ul>
-        </div>
+        ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
       </div>
     </section>
   `;

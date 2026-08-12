@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { cardDemoFromData, playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -36,10 +36,7 @@ function cardOperationalExamplePanel() {
         <div class="card-scenario-grid">
           ${scenario.cards.map(cardDemoFromData).join("")}
         </div>
-        <div class="fleet-panel-mini">
-          <strong>${scenario.rationaleTitle}</strong>
-          <ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul>
-        </div>
+        ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
       </div>
     </section>
   `;

@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui, slug } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 
@@ -24,7 +24,7 @@ export function renderSwitchGoldSection(entry, section) {
 
 function switchOperationalExamplePanel() {
   const scenario = componentSectionData("switch", "operational-example").scenario;
-  return html`<section ${switchSurfaceAttrs("operational-example", "button-operational-panel")}><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("switch", "operational-example")}</p><div class="switch-scenario"><div class="switch-console"><header>${icon("toggle_on", { tone: "action", fill: true })}<div><strong>Driver settings</strong><small>Persistent on/off controls</small></div></header><div class="switch-stack">${(scenario.items ?? []).map(switchDemoFromData).join("")}</div></div><div class="fleet-panel-mini"><strong>${scenario.rationaleTitle}</strong><ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></div></div></section>`;
+  return html`<section ${switchSurfaceAttrs("operational-example", "button-operational-panel")}><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("switch", "operational-example")}</p><div class="switch-scenario"><div class="switch-console"><header>${icon("toggle_on", { tone: "action", fill: true })}<div><strong>Driver settings</strong><small>Persistent on/off controls</small></div></header><div class="switch-stack">${(scenario.items ?? []).map(switchDemoFromData).join("")}</div></div>${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}</div></section>`;
 }
 
 function switchAnatomyPanel() {

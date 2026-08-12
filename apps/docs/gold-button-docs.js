@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailFoundationCompactList, componentDetailGuidelineGroupsContent, componentDetailPropsRowsTable, componentDetailSectionAttrs, componentDetailTestsListContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, artifactContract, referenceCopy, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailFoundationCompactList, componentDetailGuidelineGroupsContent, componentDetailPropsRowsTable, componentDetailRationaleCard, componentDetailSectionAttrs, componentDetailTestsListContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, artifactContract, referenceCopy, ui } from "./gold-component-core.js?v=214";
 import { componentDemo } from "./component-demo.js?v=60";
 
 import { buttonDemoFromData, playgroundControl } from "./gold-component-data.js?v=230";
@@ -48,12 +48,7 @@ function buttonOperationalExamplePanel() {
             ${scenario.sheet.actions.map(buttonDemoFromData).join("")}
           </div>
         </div>
-        <div class="fleet-panel-mini">
-          <strong>${scenario.rationaleTitle ?? "Why Button"}</strong>
-          <ul>
-            ${(scenario.rationale ?? scenario.decisions?.map((row) => row.note) ?? []).map((item) => `<li>${item}</li>`).join("")}
-          </ul>
-        </div>
+        ${componentDetailRationaleCard(scenario.rationaleTitle ?? "Why Button", scenario.rationale ?? scenario.decisions?.map((row) => row.note) ?? [], "rule")}
       </div>
     </section>
   `;

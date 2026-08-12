@@ -115,6 +115,10 @@ function componentDocListCard(title, items) {
   return componentDocCard({ title, detail: (items ?? []).join(" ") });
 }
 
+function componentDetailRationaleCard(title, items, iconName = "rule") {
+  return componentDocCard({ title, detail: (items ?? []).join(" "), iconName });
+}
+
 function componentDetailAccessibilityContent(component, fallbackStatePrecedence = "", statePrecedenceOverride = "") {
   const accessibility = componentSectionData(component, "accessibility");
   const statePrecedence = statePrecedenceOverride || accessibility.statePrecedence || fallbackStatePrecedence;
@@ -211,10 +215,7 @@ export function componentMielPanel(entry) {
       section: "miel-handoff",
       children: html`
       <h2>${ui("miel.handoff")}</h2>
-      <div class="fleet-panel-mini">
-        ${icon("hive", { tone: "action", fill: true })}
-        <p>${miel.handoff ?? ""}</p>
-      </div>
+      ${componentDetailRationaleCard(ui("miel.handoff"), [miel.handoff ?? ""], "hive")}
       `,
     })}
     ${componentDetailSection({
@@ -243,6 +244,7 @@ export {
   componentDetailGuidelineGroupsContent,
   componentDetailGuidelinesContent,
   componentDetailPropsRowsTable,
+  componentDetailRationaleCard,
   componentDetailSection,
   componentDetailSectionAttrs,
   componentDetailTable,

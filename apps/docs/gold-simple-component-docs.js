@@ -1,4 +1,4 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
 import { playgroundStaticControls } from "./gold-component-data.js?v=230";
 import { componentDemo } from "./component-demo.js?v=61";
 
@@ -44,16 +44,11 @@ export function simpleOperationalExamplePanel(component, demoFromData) {
   const scenario = componentSectionData(component, "operational-example").scenario;
   const demos = scenario.demo ? [scenario.demo] : (scenario.items ?? []);
   const semanticDecision = scenario.semanticDecision
-    ? html`
-        <div class="fleet-panel-mini component-decision-panel">
-          <strong>${scenario.semanticDecision.title}</strong>
-          <dl>
-            ${(scenario.semanticDecision.rows ?? [])
-              .map((row) => `<div><dt>${row.label}</dt><dd>${row.value}</dd></div>`)
-              .join("")}
-          </dl>
-        </div>
-      `
+    ? componentDetailRationaleCard(
+        scenario.semanticDecision.title,
+        (scenario.semanticDecision.rows ?? []).map((row) => `${row.label}: ${row.value}`),
+        "fact_check",
+      )
     : "";
   return componentDetailSection({
     component,
@@ -67,10 +62,7 @@ export function simpleOperationalExamplePanel(component, demoFromData) {
           <header>${icon(scenario.icon, { tone: "action", fill: true })}<div><strong>${scenario.title}</strong><small>${scenario.meta}</small></div></header>
           <div class="${demoLayoutClass(component, "simple-demo-row")}">${demos.map(demoFromData).join("")}</div>
         </div>
-        <div class="fleet-panel-mini">
-          <strong>${scenario.rationaleTitle}</strong>
-          <ul>${(scenario.rationale ?? []).map((item) => `<li>${item}</li>`).join("")}</ul>
-        </div>
+        ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
         ${semanticDecision}
       </div>
     `,
