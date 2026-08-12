@@ -169,9 +169,6 @@
     border-block-width: var(--sys-frame-device-border-block-sm, var(--sys-frame-device-border-block));
   }
 
-  .props-table > div {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 420px) {

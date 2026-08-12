@@ -61,20 +61,22 @@ function componentDetailSectionAttrs({ component, section, className = "", attrs
 }
 
 function componentDetailTable({ component, section, className = "", columns = [], rows = [] } = {}) {
-  return html`
-    <div class="props-table ${className}" data-doc-primitive="component-detail-table">
-      <div>${columns.map((column) => `<strong>${column}</strong>`).join("")}</div>
-      ${rows
-        .map(
-          (row) => html`
-            <div>
-              ${row.map((value, index) => (index === 0 ? `<code>${value}</code>` : `<span>${value}</span>`)).join("")}
-            </div>
-          `,
-        )
-        .join("")}
-    </div>
-  `;
+  return componentDemo("table", docsTableProps({ label: `${component} ${section}`, columns, rows, className }));
+}
+
+function docsTableProps({ label = "Documentation table", columns = [], rows = [], className = "" } = {}) {
+  const safeColumns = columns.length ? columns : ["Name", "Value"];
+  return {
+    label,
+    variant: "dense",
+    fullWidth: true,
+    className,
+    columns: safeColumns.map((column, index) => ({ key: `c${index}`, label: column, mono: index === 0, priority: index === 0 ? "primary" : "secondary" })),
+    rows: rows.map((row, rowIndex) => {
+      const cells = Array.isArray(row) ? row : [row];
+      return safeColumns.reduce((record, _column, index) => ({ ...record, [`c${index}`]: cells[index] ?? "", id: `row-${rowIndex}` }), {});
+    }),
+  };
 }
 
 function componentDetailDemoGrid({ items = [], className = "button-demo-grid states-grid" } = {}) {

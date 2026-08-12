@@ -189,7 +189,6 @@ export function specPanel(entry) {
 }
 
 export function artifactDetailTable({ className = "", columns = [], rows = [], firstColumn = "code" } = {}) {
-  const classes = ["props-table", className].filter(Boolean).join(" ");
   const normalizeRow = (row) => {
     if (Array.isArray(row)) return row;
     if (row && typeof row === "object") {
@@ -197,21 +196,19 @@ export function artifactDetailTable({ className = "", columns = [], rows = [], f
     }
     return [row ?? "", "", "", ""].slice(0, Math.max(columns.length, 1));
   };
-  return html`
-    <div class="${classes}" data-doc-primitive="artifact-detail-table">
-      <div>${columns.map((column) => `<strong>${column}</strong>`).join("")}</div>
-      ${rows
-        .map(normalizeRow)
-        .map(
-          (row) => html`
-            <div>
-              ${row.map((value, index) => (index === 0 && firstColumn === "code" ? `<code>${value}</code>` : `<span>${value}</span>`)).join("")}
-            </div>
-          `,
-        )
-        .join("")}
-    </div>
-  `;
+  return artifactTable({ label: "Artifact detail table", className, columns, rows: rows.map(normalizeRow), firstColumn });
+}
+
+function artifactTable({ label = "Artifact detail table", className = "", columns = [], rows = [], firstColumn = "code" } = {}) {
+  const safeColumns = columns.length ? columns : ["Name", "Value"];
+  return componentDemo("table", {
+    label,
+    variant: "dense",
+    fullWidth: true,
+    className,
+    columns: safeColumns.map((column, index) => ({ key: `c${index}`, label: column, mono: index === 0 && firstColumn === "code", priority: index === 0 ? "primary" : "secondary" })),
+    rows: rows.map((row, rowIndex) => safeColumns.reduce((record, _column, index) => ({ ...record, [`c${index}`]: row[index] ?? "", id: `row-${rowIndex}` }), {})),
+  });
 }
 
 export function artifactRoleGrid({ className = "", items = [] } = {}) {
