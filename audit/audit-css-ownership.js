@@ -229,7 +229,15 @@ function countDocsPrimitiveDebt(text, file, pattern) {
 function countCardLikeDocDebt(text) {
   return countMatchesByLine(
     text,
-    /<article\b|cardLink\(|class="[^"]*(?:doc-card|docs-card|info-card|variant-card|card-like)/g,
+    /<article\b|class="[^"]*(?:doc-card|docs-card|info-card|variant-card|card-like)/g,
+    (line) => !line.includes("data-doc-primitive="),
+  );
+}
+
+function countLinkCardDebt(text) {
+  return countMatchesByLine(
+    text,
+    /cardLink\(/g,
     (line) => !line.includes("data-doc-primitive="),
   );
 }
@@ -389,10 +397,17 @@ function checkDocsVisualDebtInventory() {
     },
     {
       id: "card-like-doc-markup",
-      description: "Docs-authored article/cardLink/card class patterns that need ownership review against Card/Surface.",
-      pattern: /<article\b|cardLink\(|class="[^"]*(?:doc-card|docs-card|info-card|variant-card|card-like)/g,
+      description: "Docs-authored article/card class patterns that need ownership review against Card/Surface; governed docs primitives are excluded.",
+      pattern: /<article\b|class="[^"]*(?:doc-card|docs-card|info-card|variant-card|card-like)/g,
       files: jsFiles,
       count: countCardLikeDocDebt,
+    },
+    {
+      id: "link-card-markup",
+      description: "Docs-owned navigable card-link helper/calls without a Flow LinkCard/actionable Card contract; these remain explicit debt until the system owns the pattern.",
+      pattern: /cardLink\(/g,
+      files: jsFiles,
+      count: countLinkCardDebt,
     },
   ];
 
