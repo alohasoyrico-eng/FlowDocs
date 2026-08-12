@@ -62,7 +62,7 @@ function componentDetailSectionAttrs({ component, section, className = "", attrs
 
 function componentDetailTable({ component, section, className = "", columns = [], rows = [] } = {}) {
   return html`
-    <div class="props-table ${className}">
+    <div class="props-table ${className}" data-doc-primitive="component-detail-table">
       <div>${columns.map((column) => `<strong>${column}</strong>`).join("")}</div>
       ${rows
         .map(

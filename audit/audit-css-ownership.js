@@ -221,6 +221,11 @@ function countRoleGridDebt(text, file) {
   return countMatchesByLine(text, roleGridClassToken, (line) => !line.includes("data-doc-primitive=") && !line.includes("const classes ="));
 }
 
+function countDocsPrimitiveDebt(text, file, pattern) {
+  if (!/\.js$/.test(file)) return countMatches(text, pattern);
+  return countMatchesByLine(text, pattern, (line) => !line.includes("data-doc-primitive=") && !line.includes("const classes ="));
+}
+
 function checkPublicClassNamespaceOwnership() {
   const sourceFiles = [
     ...walkFiles(docsAppDir, (file) => /\.(css|html|js)$/.test(file)),
@@ -372,6 +377,7 @@ function checkDocsVisualDebtInventory() {
       description: "Docs-owned property table layout used as contract/API table; candidate for Table or docs data primitive boundary.",
       pattern: /props-table/g,
       files: [...jsFiles, ...cssFiles],
+      count: (text, file) => countDocsPrimitiveDebt(text, file, /props-table/g),
     },
     {
       id: "card-like-doc-markup",
