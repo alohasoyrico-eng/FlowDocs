@@ -1,4 +1,5 @@
 import { artifactDetailTable, examplePanel, html, icon, interpolateList, primitiveExample, referenceCopy, referenceTemplate, threeTabs, ui, listPanel, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { componentDemo } from "./component-demo.js?v=61";
 
 export function primitiveTabs(entry) {
   if (entry.title === "Density") {
@@ -32,13 +33,7 @@ export function densityCoordinatorPanel() {
       <div class="density-coordinator-grid">
         ${dependencies
           .map(
-            ([name, copy, iconName]) => html`
-              <article>
-                ${icon(iconName)}
-                <strong>${name}</strong>
-                <span>${copy}</span>
-              </article>
-            `,
+            ([name, copy, iconName]) => componentDemo("card", { title: name, detail: copy, icon: icon(iconName), variant: "minimal", composition: "standard", fullWidth: true }),
           )
           .join("")}
       </div>
@@ -89,7 +84,7 @@ export function primitiveTokenChainPanel(entry) {
       <h2>${ui("reference.tokenChain")}</h2>
       <p>${referenceCopy.primitive?.tokenChainCopy}</p>
       <div class="architecture-chain">
-        ${(referenceCopy.primitive?.tokenChainSteps ?? []).map((step, index) => `<article><b>${index + 1}</b><span>${step}</span></article>`).join("")}
+        ${(referenceCopy.primitive?.tokenChainSteps ?? []).map((step, index) => componentDemo("card", { title: step, status: String(index + 1), variant: "minimal", composition: "standard", fullWidth: true })).join("")}
       </div>
       <div class="token-list">${entry.tokens.map((token) => `<code>${token}</code>`).join("")}</div>
     </section>

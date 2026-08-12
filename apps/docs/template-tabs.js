@@ -21,7 +21,7 @@ export function productPanel(entry) {
       <p>${blueprint?.primary ?? templateBlueprintFallbacks.primary}</p>
       ${
         blueprint
-          ? `<div class="blueprint-grid">${blueprint.modules.map((module) => `<article><strong>${module}</strong><span>${moduleBlueprintCopy(blueprint, module)}</span></article>`).join("")}</div>`
+          ? `<div class="blueprint-grid">${blueprint.modules.map((module) => componentDemo("card", { title: module, detail: moduleBlueprintCopy(blueprint, module), variant: "minimal", composition: "standard", fullWidth: true })).join("")}</div>`
           : ""
       }
     </section>
