@@ -219,7 +219,7 @@ export function artifactRoleGrid({ className = "", items = [] } = {}) {
   return html`
     <div class="${classes}" data-doc-primitive="artifact-role-grid">
       ${items
-        .map(({ icon: iconName, title, copy }) => `<article><span>${icon(iconName)}</span><strong>${title}</strong><p>${copy}</p></article>`)
+        .map(({ icon: iconName, title, copy }) => componentDemo("card", { title, detail: copy, icon: icon(iconName), variant: "minimal", composition: "standard", fullWidth: true }))
         .join("")}
     </div>
   `;
