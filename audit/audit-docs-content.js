@@ -236,6 +236,12 @@ function countComponentDetailRawControls(file, text) {
   return countMatches(stripAllowedComponentDetailControlBridges(text), rawControlPattern);
 }
 
+function countComponentDetailControlBridgeMarkup(file, text) {
+  if (path.basename(file) !== "gold-component-data.js") return 0;
+  if (!text.includes('data-doc-control-bridge="component-playground"')) return 0;
+  return countMatches(text, /<input\b|<select\b/g);
+}
+
 function countComponentDetailCardDebt(file, text) {
   const base = path.basename(file);
   const visualCardMarkupPattern = /class="[^"]*\bcard(?:-|")|cardLink\(/g;
@@ -511,6 +517,10 @@ function checkComponentDetailTemplateReadiness() {
     .filter((entry) => entry.count > 0)
     .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file))
     .slice(0, 16);
+  const componentControlBridgeMatches = componentModuleFiles
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countComponentDetailControlBridgeMarkup(file, read(file)) }))
+    .filter((entry) => entry.count > 0)
+    .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
   const componentOwnSurfaceMatches = topMatches(componentModuleFiles, /class="surface|template-module-surface|doc-panel/g, 16);
   const customGoldRenderers = componentModules
     .filter((entry) => !/renderSimpleGoldSection\(entry,\s*section/.test(entry.text) && /export function render[A-Za-z0-9]+GoldSection/.test(entry.text))
@@ -648,13 +658,12 @@ function checkComponentDetailTemplateReadiness() {
     sharedSimpleRendererSections: simpleRendererSections,
     rawDocPanelMatches: countMatches(componentRuntime, /doc-panel/g),
     rawInteractiveMatches: countMatches(componentRuntimeWithoutBridges, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g),
-    rawControlBridgeMatches: componentModules
-      .filter((entry) => path.basename(entry.file) === "gold-component-data.js" && entry.text.includes('data-doc-control-bridge="component-playground"'))
-      .reduce((total, entry) => total + countMatches(entry.text, /<input\b|<select\b/g), 0),
+    rawControlBridgeMatches: componentControlBridgeMatches.reduce((total, entry) => total + entry.count, 0),
     rawCardMatches: componentCardDebtMatches.reduce((total, entry) => total + entry.count, 0),
     governedCardCompositionMatches: componentGovernedCardCompositionMatches.reduce((total, entry) => total + entry.count, 0),
     componentDocPanelHotspots: componentDocPanelMatches,
     componentRawControlHotspots: componentRawControlMatches,
+    componentAllowedControlBridgeHotspots: componentControlBridgeMatches,
     componentCardDebtHotspots: componentCardDebtMatches,
     componentGovernedCardCompositionHotspots: componentGovernedCardCompositionMatches,
     componentSurfaceHotspots: componentOwnSurfaceMatches,
