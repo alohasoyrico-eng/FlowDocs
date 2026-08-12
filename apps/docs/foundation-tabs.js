@@ -33,9 +33,10 @@ export function foundationArchitecturePanel(entry) {
     <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.architecture")}</h2>
       <p>${referenceTemplate(referenceCopy.foundation?.architectureCopy, entry)}</p>
-      <div class="architecture-chain">
-        ${(referenceCopy.foundation?.architectureSteps ?? []).map((step, index) => `<article><b>${index + 1}</b><span>${step}</span></article>`).join("")}
-      </div>
+      ${artifactRoleGrid({
+        className: "architecture-chain",
+        items: (referenceCopy.foundation?.architectureSteps ?? []).map((step, index) => ({ icon: "account_tree", title: `${index + 1}`, copy: step })),
+      })}
       <pre>${entry.title.toLowerCase()}.foundation
   -> ${entry.tokens[0] ?? `${entry.id}.role`}
   -> component semantic prop

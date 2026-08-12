@@ -173,7 +173,7 @@ function patternExample(entry) {
       ${steps
         .map(
           (step, index) => html`
-            <article>
+            <article data-doc-primitive="pattern-step-visual-example">
               <b>${index + 1}</b>
               <h3>${step}</h3>
               <p>${journeyCopy(entry, ["Entry", "Orient", "Act", "Recover"][index] ?? "Recover")}</p>
@@ -202,7 +202,7 @@ function templateExample(entry) {
             ${blueprint.metrics.map(([value, label]) => `<div><b>${value}</b><span>${label}</span></div>`).join("")}
           </section>
           <section class="work-area">
-            ${blueprint.modules.slice(0, 4).map((module) => `<article><strong>${module}</strong><i></i><i></i></article>`).join("")}
+            ${blueprint.modules.slice(0, 4).map((module) => `<article data-doc-primitive="template-module-visual-example"><strong>${module}</strong><i></i><i></i></article>`).join("")}
           </section>
         </main>
       </div>

@@ -10,7 +10,7 @@ import {
   voiceTokenSection,
   voiceTypographySection,
 } from "./foundation-visual-sections.js";
-import { referenceCodeBlock, referenceDivider, referenceMatrixGrid, referenceRuleGrid, referenceSection } from "./reference-layout.js?v=1";
+import { referenceCodeBlock, referenceDivider, referenceMatrixGrid, referenceRuleGrid, referenceSection, referenceSummaryGrid } from "./reference-layout.js?v=1";
 
 let foundationCopy = {};
 let referenceCopy = {};
@@ -171,18 +171,11 @@ function foundationVisualReferenceSection(entry) {
   return referenceSection(
     "Visual Explanation",
     `The following role cards represent the semantic groups that ${entry.title} defines. Each role remains stable across components, patterns, and templates.`,
-    html`<div class="reference-role-grid">${roles.map((role) => referenceRoleCard(role)).join("")}</div>`,
+    referenceSummaryGrid(
+      "reference-role-grid",
+      roles.map((role) => ({ label: role.name, description: role.copy })),
+    ),
   );
-}
-
-function referenceRoleCard(role) {
-  return html`
-    <article class="reference-role-card">
-      <span>${icon(role.icon)}</span>
-      <strong>${role.name}</strong>
-      <p>${role.copy}</p>
-    </article>
-  `;
 }
 
 function foundationTemplate(value, entry) {
