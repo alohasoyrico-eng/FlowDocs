@@ -1,4 +1,4 @@
-import { artifactContract, artifactFoundationTracePanel, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { patternCopy } from "./docs-state.js";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
@@ -311,9 +311,10 @@ function patternFoundationPanel(source) {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Foundations consumed</h2>
-      <div class="props-table">
-        ${(source.foundations ?? []).map(([name, rule]) => `<div><code>${name}</code><span>Foundation</span><span>Required</span><span>${rule}</span></div>`).join("")}
-      </div>
+      ${artifactDetailTable({
+        columns: ["Foundation", "Type", "Required", "Rule"],
+        rows: (source.foundations ?? []).map(([name, rule]) => [name, "Foundation", "Required", rule]),
+      })}
     </section>
   `;
 }
@@ -322,10 +323,10 @@ function patternSlotContractPanel(source) {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Slot contract</h2>
-      <div class="props-table">
-        <div><strong>Slot</strong><strong>Type</strong><strong>Required</strong><strong>Notes</strong></div>
-        ${(source.slots ?? []).map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}
-      </div>
+      ${artifactDetailTable({
+        columns: ["Slot", "Type", "Required", "Notes"],
+        rows: source.slots ?? [],
+      })}
     </section>
   `;
 }

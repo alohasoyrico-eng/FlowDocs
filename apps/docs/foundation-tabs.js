@@ -1,4 +1,4 @@
-import { examplePanel, foundationExample, foundationRoles, html, icon, referenceCopy, referenceTemplate, threeTabs, ui, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { artifactDetailTable, examplePanel, foundationExample, foundationRoles, html, icon, referenceCopy, referenceTemplate, threeTabs, ui, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 
 export function foundationTabs(entry) {
   return threeTabs(entry, `${foundationOverviewPanel(entry)}${foundationRoleGrid(entry)}${examplePanel(entry)}`, `${foundationArchitecturePanel(entry)}${foundationVisualExplanationPanel(entry)}${guidelinesPanel(entry)}`, `${foundationContractPanel(entry)}${specPanel(entry)}${agentPanel(entry, "Foundation")}`);
@@ -59,13 +59,11 @@ export function foundationContractPanel(entry) {
   return html`
     <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.foundationContract")}</h2>
-      <div class="props-table">
-        <div><strong>${ui("table.contract")}</strong><strong>${ui("table.meaning")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.prevents")}</strong></div>
-        ${(referenceCopy.foundation?.contractRows ?? [])
-          .map((row) => row.map((value) => referenceTemplate(value, entry, { tokens: entry.tokens.join(", "), roles: foundationRoles(entry).map((role) => role.name).join(", ") })))
-          .map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`)
-          .join("")}
-      </div>
+      ${artifactDetailTable({
+        columns: [ui("table.contract"), ui("table.meaning"), ui("table.required"), ui("table.prevents")],
+        rows: (referenceCopy.foundation?.contractRows ?? [])
+          .map((row) => row.map((value) => referenceTemplate(value, entry, { tokens: entry.tokens.join(", "), roles: foundationRoles(entry).map((role) => role.name).join(", ") }))),
+      })}
     </section>
   `;
 }

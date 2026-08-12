@@ -1,4 +1,4 @@
-import { examplePanel, html, icon, interpolateList, primitiveExample, referenceCopy, threeTabs, ui, listPanel, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { artifactDetailTable, examplePanel, html, icon, interpolateList, primitiveExample, referenceCopy, referenceTemplate, threeTabs, ui, listPanel, guidelinesPanel, specPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 
 export function primitiveTabs(entry) {
   if (entry.title === "Density") {
@@ -100,13 +100,10 @@ export function primitiveApiPanel(entry) {
   return html`
     <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
       <h2>${ui("reference.primitiveApi")}</h2>
-      <div class="props-table">
-        <div><strong>${ui("table.prop")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
-        ${(referenceCopy.primitive?.apiRows ?? [])
-          .map((row) => row.map((value) => referenceTemplate(value, entry)))
-          .map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`)
-          .join("")}
-      </div>
+      ${artifactDetailTable({
+        columns: [ui("table.prop"), ui("table.type"), ui("table.required"), ui("table.notes")],
+        rows: (referenceCopy.primitive?.apiRows ?? []).map((row) => row.map((value) => referenceTemplate(value, entry))),
+      })}
     </section>
   `;
 }

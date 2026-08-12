@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDetailTable, html } from "./detail-tabs-core.js?v=5";
 
 export function focusedPatternDesignPanels(entry) {
   if (entry.id === "sidebar") return sidebarDesignPanels();
@@ -112,9 +112,10 @@ function slotContractPanel(title, rows) {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${title}</h2>
-      <div class="props-table">
-        ${rows.map(([slot, status, rule]) => `<div><code>${slot}</code><span>Slot</span><span>${status}</span><span>${rule}</span></div>`).join("")}
-      </div>
+      ${artifactDetailTable({
+        columns: ["Slot", "Type", "Status", "Rule"],
+        rows: rows.map(([slot, status, rule]) => [slot, "Slot", status, rule]),
+      })}
     </section>
   `;
 }

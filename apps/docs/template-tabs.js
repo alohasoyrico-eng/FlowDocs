@@ -1,4 +1,4 @@
-import { artifactContract, artifactFoundationTracePanel, cardLink, examplePanel, findPattern, html, icon, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, cardLink, examplePanel, findPattern, html, icon, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { desktopTemplateDemo } from "./template-desktop-demos.js?v=17";
 
@@ -94,17 +94,17 @@ export function templateContractPanel(entry) {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("contract.template")}</h2>
-      <div class="props-table">
-        <div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
-        ${[
+      ${artifactDetailTable({
+        columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")],
+        rows: [
           ["patternsUsed", "PatternRef[]", "yes", (entry.patternsUsed ?? []).join(", ") || "None"],
           ["templateModulesUsed", "TemplateModuleRef[]", "yes", (entry.templateModulesUsed ?? []).join(", ") || "None"],
           ["dataSources", "DataSource[]", "yes", blueprint?.data?.join(", ") ?? templateBlueprintFallbacks.dataSources],
           ["permissions", "PermissionRole[]", "yes", blueprint?.permissions?.join(", ") ?? templateBlueprintFallbacks.permissions],
           ["states", "StateMatrix", "yes", blueprint?.states?.join(", ") ?? templateBlueprintFallbacks.states],
           ["telemetry", "EventSpec[]", "yes", blueprint?.telemetry?.join(", ") ?? templateBlueprintFallbacks.telemetry],
-        ].map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}
-      </div>
+        ],
+      })}
     </section>
   `;
 }

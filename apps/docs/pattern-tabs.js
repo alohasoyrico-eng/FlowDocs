@@ -1,4 +1,4 @@
-import { artifactContract, artifactFoundationTracePanel, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, icon, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, icon, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=52";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
 import { focusedPatternDesignPanels } from "./pattern-focused-design.js?v=25";
@@ -58,7 +58,7 @@ function sidebarFoundationsPanel() {
     ["Iconography", "Material Symbols use system family, size, optical alignment, and parent-only rules."],
     ["Accessibility", "Disclosure state, focus ring, touch target, aria-current, and reduced-motion behavior are required."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Foundations consumed</h2><div class="props-table">${rows.map(([name, rule]) => `<div><code>${name}</code><span>Foundation</span><span>Required</span><span>${rule}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Foundations consumed</h2>${artifactDetailTable({ columns: ["Foundation", "Type", "Required", "Rule"], rows: rows.map(([name, rule]) => [name, "Foundation", "Required", rule]) })}</section>`;
 }
 
 function topbarFoundationsPanel() {
@@ -75,7 +75,7 @@ function topbarFoundationsPanel() {
     ["Iconography", "Utility icons use Material Symbols sizing and optical alignment; brand slot can swap logo safely."],
     ["Accessibility", "Landmarks, role search, aria-current, aria-haspopup, aria-expanded, focus ring, Escape, and reduced motion are required."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar foundations consumed</h2><div class="props-table">${rows.map(([name, rule]) => `<div><code>${name}</code><span>Foundation</span><span>Required</span><span>${rule}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar foundations consumed</h2>${artifactDetailTable({ columns: ["Foundation", "Type", "Required", "Rule"], rows: rows.map(([name, rule]) => [name, "Foundation", "Required", rule]) })}</section>`;
 }
 
 function topbarSlotPanel() {
@@ -87,7 +87,7 @@ function topbarSlotPanel() {
     ["actions", "Language, contrast, grid, help, notifications, or compact utility commands."],
     ["account", "Avatar trigger plus Menu for settings, profile, workspace, and sign out."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar slots</h2><div class="props-table">${rows.map((row) => `<div><code>${row[0]}</code><span>Slot</span><span>Configurable</span><span>${row[1]}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar slots</h2>${artifactDetailTable({ columns: ["Slot", "Type", "Status", "Rule"], rows: rows.map(([slot, rule]) => [slot, "Slot", "Configurable", rule]) })}</section>`;
 }
 
 function topbarSearchPanel() {
@@ -96,7 +96,7 @@ function topbarSearchPanel() {
     ["Autocomplete", "Pattern dependency", "Owns suggestions, keyboard movement, loading, no-result recovery, and selection when the search slot predicts entities."],
     ["Command Palette", "Pattern candidate", "Separate from topbar when search executes actions, not just artifact lookup."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Search boundary</h2><div class="props-table">${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>Decision</span><span>${row[2]}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Search boundary</h2>${artifactDetailTable({ columns: ["Pattern", "Type", "Status", "Decision"], rows: rows.map(([name, type, decision]) => [name, type, "Decision", decision]) })}</section>`;
 }
 
 function topbarVariantsPanel() {
@@ -149,7 +149,7 @@ function sidebarContractPanel() {
     ["footer", "SidebarFooter", "optional", "Separate utility region for account, help, version, workspace, or environment."],
     ["responsiveMode", "persistent | drawer", "yes", "Breakpoint behavior coordinated with Topbar menu access."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>${ui("contract.pattern")}</h2><div class="props-table"><div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>${ui("contract.pattern")}</h2>${artifactDetailTable({ columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")], rows })}</section>`;
 }
 
 function topbarContractPanel() {
@@ -163,7 +163,7 @@ function topbarContractPanel() {
     ["account", "AvatarMenuSlot", "optional", "Avatar component plus Menu for settings, workspace, profile, sign out."],
     ["responsiveMode", "full | compact | mobile", "yes", "Defines which slots stay visible, compress, or move to sidebar/drawer."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>${ui("contract.pattern")}</h2><div class="props-table"><div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>${ui("contract.pattern")}</h2>${artifactDetailTable({ columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")], rows })}</section>`;
 }
 
 export function journeyPanel(entry) {
@@ -270,10 +270,10 @@ export function patternContractPanel(entry) {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("contract.pattern")}</h2>
-      <div class="props-table">
-        <div><strong>${ui("table.field")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
-        ${rows.map((row) => `<div><code>${row[0]}</code><span>${row[1]}</span><span>${row[2]}</span><span>${row[3]}</span></div>`).join("")}
-      </div>
+      ${artifactDetailTable({
+        columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")],
+        rows,
+      })}
     </section>
   `;
 }

@@ -172,21 +172,10 @@ export function specPanel(entry) {
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("build.specAndApi")}</h2>
       <p>${ui("build.specIntro")}</p>
-      <div class="props-table">
-        <div><strong>${ui("table.name")}</strong><strong>${ui("table.type")}</strong><strong>${ui("table.required")}</strong><strong>${ui("table.notes")}</strong></div>
-        ${props
-          .map(
-            (prop) => html`
-              <div>
-                <code>${prop[0]}</code>
-                <span>${prop[1]}</span>
-                <span>${prop[2]}</span>
-                <span>${prop[3]}</span>
-              </div>
-            `,
-          )
-          .join("")}
-      </div>
+      ${artifactDetailTable({
+        columns: [ui("table.name"), ui("table.type"), ui("table.required"), ui("table.notes")],
+        rows: props,
+      })}
       <div class="quality-gates">
         <h3>${ui("build.qualityGates")}</h3>
         <ul>
@@ -194,6 +183,32 @@ export function specPanel(entry) {
         </ul>
       </div>
     </section>
+  `;
+}
+
+export function artifactDetailTable({ className = "", columns = [], rows = [], firstColumn = "code" } = {}) {
+  const classes = ["props-table", className].filter(Boolean).join(" ");
+  const normalizeRow = (row) => {
+    if (Array.isArray(row)) return row;
+    if (row && typeof row === "object") {
+      return [row.name ?? row.field ?? row.id ?? "", row.type ?? "", row.required ?? "", row.notes ?? row.description ?? ""];
+    }
+    return [row ?? "", "", "", ""].slice(0, Math.max(columns.length, 1));
+  };
+  return html`
+    <div class="${classes}" data-doc-primitive="artifact-detail-table">
+      <div>${columns.map((column) => `<strong>${column}</strong>`).join("")}</div>
+      ${rows
+        .map(normalizeRow)
+        .map(
+          (row) => html`
+            <div>
+              ${row.map((value, index) => (index === 0 && firstColumn === "code" ? `<code>${value}</code>` : `<span>${value}</span>`)).join("")}
+            </div>
+          `,
+        )
+        .join("")}
+    </div>
   `;
 }
 
