@@ -75,12 +75,12 @@ function radioButtonFullWidthPanel() {
 
 function radioButtonResponsivePanel() {
   const examples = componentDemoData("radio-button", "responsive-layout-patterns", "examples");
-  return html`<section ${radioButtonSurfaceAttrs("responsive-layout-patterns")}><h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy("radio-button", "responsive-layout-patterns")}</p><div class="responsive-actions-demo">${examples.map((example) => `<article><span class="overline">${example.label}</span><div class="${example.layout}" data-density-context="${example.density}">${(example.demos ?? []).map((demo) => radioButtonDemoFromData({ ...demo, density: example.density, name: `radio-responsive-${slug(example.label)}` })).join("")}</div></article>`).join("")}</div></section>`;
+  return html`<section ${radioButtonSurfaceAttrs("responsive-layout-patterns")}><h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy("radio-button", "responsive-layout-patterns")}</p><div class="responsive-actions-demo">${examples.map((example) => `<article data-doc-primitive="component-demo-container"><span class="overline">${example.label}</span><div class="${example.layout}" data-density-context="${example.density}">${(example.demos ?? []).map((demo) => radioButtonDemoFromData({ ...demo, density: example.density, name: `radio-responsive-${slug(example.label)}` })).join("")}</div></article>`).join("")}</div></section>`;
 }
 
 function radioButtonViewportOrganizationPanel() {
   const items = componentDemoData("radio-button", "viewport-organization", "items");
-  return html`<section ${radioButtonSurfaceAttrs("viewport-organization", "button-viewport-panel")}><h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy("radio-button", "viewport-organization")}</p><div class="viewport-doc-grid">${items.map((item) => `<article data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code>${radioButtonDemoFromData(item.demo)}</article>`).join("")}</div></section>`;
+  return html`<section ${radioButtonSurfaceAttrs("viewport-organization", "button-viewport-panel")}><h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy("radio-button", "viewport-organization")}</p><div class="viewport-doc-grid">${items.map((item) => `<article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code>${radioButtonDemoFromData(item.demo)}</article>`).join("")}</div></section>`;
 }
 
 function radioButtonPlaygroundPanel() {

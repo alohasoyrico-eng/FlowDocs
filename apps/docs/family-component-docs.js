@@ -76,7 +76,7 @@ function componentContractScenarioPanel(entry, copy) {
       <p>${copy["operational-example"]?.copy ?? entry.summary}</p>
       <div class="component-standard-demo">
         ${componentDemo("card", { title: scenario?.rationaleTitle ?? entry.title, detail: (scenario?.rationale ?? []).join(" "), icon: icon(iconFor(entry)), variant: "minimal", composition: "standard", fullWidth: true })}
-        <article>
+        <article data-doc-primitive="component-standard-demo">
           <strong>${ui("reference.mustProve")}</strong>
           <div class="component-standard-surface">${componentDemo(entry.id, contractDemoDefaults(entry))}</div>
         </article>
@@ -207,7 +207,7 @@ function componentScenarioPanel(entry, profile) {
       <h2>${ui("reference.operationalScenario")}</h2>
       <p>${profile.scenario}</p>
       <div class="component-standard-demo">
-        <article>
+        <article data-doc-primitive="component-standard-demo">
           <header><span>${icon(iconFor(entry))}</span><strong>${entry.title}</strong></header>
           <p>${componentScenarioCopy(entry)}</p>
           <div class="component-standard-surface">${componentFamilyDemo(entry, "default")}</div>

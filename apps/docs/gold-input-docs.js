@@ -114,7 +114,7 @@ function inputResponsivePanel() {
       <p>${componentSectionCopy("input", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
         ${examples.map((example) => html`
-          <article><span class="overline">${example.label}</span>
+          <article data-doc-primitive="component-demo-container"><span class="overline">${example.label}</span>
             ${example.layout === "single" ? `<div data-density-context="${example.density}">${inputDemoFromData(example.demo)}</div>` : `<div class="${example.layout}" data-density-context="${example.density}">${example.demos.map(inputDemoFromData).join("")}</div>`}
           </article>
         `).join("")}
@@ -131,7 +131,7 @@ function inputViewportOrganizationPanel() {
       <p>${componentSectionCopy("input", "viewport-organization")}</p>
       <div class="viewport-doc-grid">
         ${items.map((item) => html`
-          <article data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code>${inputDemoFromData(item.demo)}</article>
+          <article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code>${inputDemoFromData(item.demo)}</article>
         `).join("")}
       </div>
     </section>

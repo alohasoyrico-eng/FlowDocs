@@ -64,7 +64,7 @@ function cardViewportOrganizationPanel() {
       <p>${componentSectionCopy("card", "viewport-organization")}</p>
       <div class="viewport-doc-grid">
         ${items.map((item) => html`
-          <article data-density-context="${item.density}">
+          <article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}">
             <header>${icon(item.icon)}<h3>${item.title}</h3></header>
             <p>${item.rule}</p>
             <code>${item.title}</code>
@@ -98,7 +98,7 @@ function cardVariantsPanel() {
         <p>${componentSectionCopy("card", "reference-compositions")}</p>
         <div class="card-reference-compositions__grid">
           ${mappedItems.map((item) => html`
-            <article>
+            <article data-doc-primitive="card-reference-composition-demo">
               <header>
                 <strong>${item.label}</strong>
                 <code>${item.reference}</code>
@@ -216,7 +216,7 @@ function cardResponsivePanel() {
       <p>${componentSectionCopy("card", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
         ${examples.map((example) => html`
-          <article data-density-context="${example.density}">
+          <article data-doc-primitive="component-demo-container" data-density-context="${example.density}">
             <span class="overline">${example.label}</span>
             ${example.layout === "mini-grid"
               ? `<div class="card-mini-grid">${example.demos.map((demo) => cardDemoFromData(demo)).join("")}</div>`

@@ -83,7 +83,7 @@ function buttonViewportOrganizationPanel() {
         ${groups
           .map(
             (group) => html`
-              <article data-density-context="${group.density}">
+              <article data-doc-primitive="component-viewport-demo" data-density-context="${group.density}">
                 <header>${icon(group.icon)}<h3>${group.title}</h3></header>
                 <p>${group.rule}</p>
                 <code>${group.layout}</code>
@@ -260,7 +260,7 @@ function buttonResponsivePanel() {
       <p>${componentSectionCopy("button", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
         ${examples.map((example) => html`
-          <article>
+          <article data-doc-primitive="component-demo-container">
             <span class="overline">${example.label}</span>
             <div class="${example.layout}">${example.buttons.map(buttonDemoFromData).join("")}</div>
           </article>

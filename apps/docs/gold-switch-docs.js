@@ -59,12 +59,12 @@ function switchFullWidthPanel() {
 
 function switchResponsivePanel() {
   const examples = componentDemoData("switch", "responsive-layout-patterns", "examples");
-  return html`<section ${switchSurfaceAttrs("responsive-layout-patterns")}><h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy("switch", "responsive-layout-patterns")}</p><div class="responsive-actions-demo">${examples.map((example) => `<article><span class="overline">${example.label}</span><div class="${example.layout}" data-density-context="${example.density}">${(example.demos ?? []).map((demo) => switchDemoFromData({ ...demo, density: example.density })).join("")}</div></article>`).join("")}</div></section>`;
+  return html`<section ${switchSurfaceAttrs("responsive-layout-patterns")}><h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy("switch", "responsive-layout-patterns")}</p><div class="responsive-actions-demo">${examples.map((example) => `<article data-doc-primitive="component-demo-container"><span class="overline">${example.label}</span><div class="${example.layout}" data-density-context="${example.density}">${(example.demos ?? []).map((demo) => switchDemoFromData({ ...demo, density: example.density })).join("")}</div></article>`).join("")}</div></section>`;
 }
 
 function switchViewportOrganizationPanel() {
   const items = componentDemoData("switch", "viewport-organization", "items");
-  return html`<section ${switchSurfaceAttrs("viewport-organization", "button-viewport-panel")}><h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy("switch", "viewport-organization")}</p><div class="viewport-doc-grid">${items.map((item) => `<article data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code>${switchDemoFromData(item.demo)}</article>`).join("")}</div></section>`;
+  return html`<section ${switchSurfaceAttrs("viewport-organization", "button-viewport-panel")}><h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy("switch", "viewport-organization")}</p><div class="viewport-doc-grid">${items.map((item) => `<article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code>${switchDemoFromData(item.demo)}</article>`).join("")}</div></section>`;
 }
 
 function switchPlaygroundPanel() {

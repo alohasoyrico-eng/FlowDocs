@@ -226,6 +226,14 @@ function countDocsPrimitiveDebt(text, file, pattern) {
   return countMatchesByLine(text, pattern, (line) => !line.includes("data-doc-primitive=") && !line.includes("const classes ="));
 }
 
+function countCardLikeDocDebt(text) {
+  return countMatchesByLine(
+    text,
+    /<article\b|cardLink\(|class="[^"]*(?:doc-card|docs-card|info-card|variant-card|card-like)/g,
+    (line) => !line.includes("data-doc-primitive="),
+  );
+}
+
 function checkPublicClassNamespaceOwnership() {
   const sourceFiles = [
     ...walkFiles(docsAppDir, (file) => /\.(css|html|js)$/.test(file)),
@@ -384,6 +392,7 @@ function checkDocsVisualDebtInventory() {
       description: "Docs-authored article/cardLink/card class patterns that need ownership review against Card/Surface.",
       pattern: /<article\b|cardLink\(|class="[^"]*(?:doc-card|docs-card|info-card|variant-card|card-like)/g,
       files: jsFiles,
+      count: countCardLikeDocDebt,
     },
   ];
 
