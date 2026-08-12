@@ -241,7 +241,7 @@ function helpCenterDemoPanel() {
 }
 
 function patternInfoCard(title, items = []) {
-  return html`<article class="pattern-variant-card"><strong>${title}</strong><ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`;
+  return patternMielCard(title, items);
 }
 
 function patternDependencyPanel(entry, source) {
@@ -380,15 +380,12 @@ function patternContractMiel(entry) {
         ${patternMielCard(ui("miel.rejectIf"), miel.rejectIf ?? [])}
       </div>
       <div class="pattern-miel-bottom">
-        <article class="pattern-miel-handoff">
-          <h3>${ui("miel.handoff")}</h3>
-          <p>${miel.handoff ?? ""}</p>
-        </article>
+        ${packageDemo("card", { title: ui("miel.handoff"), detail: miel.handoff ?? "", variant: "minimal", composition: "standard", fullWidth: true })}
       </div>
     </section>
   `;
 }
 
 function patternMielCard(title, items) {
-  return `<article class="pattern-miel-card"><h3>${title}</h3><ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul></article>`;
+  return packageDemo("card", { title, detail: items.join(" "), variant: "minimal", composition: "standard", fullWidth: true });
 }
