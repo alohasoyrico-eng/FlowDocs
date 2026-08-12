@@ -1,22 +1,7 @@
 export function renderShell({ active = "", collectionIcon, collections, content, current, html, icon, iconFor, label, ui }) {
-  const drawerGroups = Object.entries(collections)
-    .map(([key, values]) => ({ key, values }))
-    .map(
-      ({ key, values }) => html`
-        <details class="sidebar-group" ${active === key ? "open" : ""}>
-          <summary><span class="sidebar-label">${icon(collectionIcon(key))}<span>${label(key)}</span><b class="sidebar-count">${values.length}</b></span></summary>
-          <div>
-            ${values.map((item) => `<a class="${current.collection === key && current.id === item.id ? "active" : ""}" href="#/${key}/${item.id}">${icon(iconFor(item))}<span>${item.title}</span></a>`).join("")}
-          </div>
-        </details>
-      `,
-    )
-    .join("");
   return html`
     <div class="app-shell">
-      <aside class="sidebar" aria-label="${ui("shell.designNavigation")}">
-        ${drawerGroups}
-        <a class="${active === "stack" ? "active" : ""}" href="#/stack"><span class="sidebar-label">${icon(collectionIcon("stack"))}<span>${ui("shell.stack")}</span></span></a>
+      <aside id="docsReactShellSidebar" class="sidebar docs-react-shell-sidebar-mount" data-doc-shell-boundary="react-sidebar" aria-label="${ui("shell.designNavigation")}">
       </aside>
       <div class="content-shell density-responsive">${content}</div>
     </div>

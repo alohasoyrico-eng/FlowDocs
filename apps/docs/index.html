@@ -11,7 +11,7 @@
     <link rel="icon" href="./assets/logo.svg" />
     <link rel="stylesheet" href="./vendor/material-symbols/material-symbols-rounded.css?v=1" />
     <link rel="stylesheet" href="./vendor/maplibre-gl/maplibre-gl.css?v=1" />
-    <link rel="stylesheet" href="./styles.css?v=618" />
+    <link rel="stylesheet" href="./styles.css?v=619" />
     <script src="./vendor/lottie-web/lottie.min.js?v=1"></script>
     <script src="./vendor/maplibre-gl/maplibre-gl.js?v=1"></script>
     <script src="./generated/vendor/react.production.min.js?v=1"></script>
@@ -30,26 +30,14 @@
   </head>
   <body>
     <a class="skip-link" href="#/home">Skip to content</a>
-    <header class="topbar" aria-label="Primary">
-      <button class="docs-icon-button menu-button" id="menuButton" type="button" aria-label="Open navigation" aria-expanded="false">
-        <span class="material-symbol" data-icon="menu" aria-hidden="true">menu</span>
-      </button>
+    <header class="topbar docs-shell-topbar" aria-label="Primary" data-doc-shell-boundary="topbar">
       <a class="brand" href="#/home" aria-label="Design System OS home">
         <img src="./assets/logo.svg" data-quiet-src="./assets/logo-dark.svg" alt="Design System" />
       </a>
-      <div id="topbarSearch" class="topbar__search"></div>
-      <div class="top-actions">
-        <button class="docs-icon-button language-toggle" id="languageToggle" type="button" aria-label="Switch language" aria-live="polite">
-          <span class="material-symbol" data-icon="language" aria-hidden="true">language</span>
-          <span class="language-toggle__code">EN</span>
-        </button>
-        <button class="docs-icon-button" id="gridToggle" type="button" aria-label="Show column grid" aria-pressed="false">
-          <span class="material-symbol" data-icon="grid_off" aria-hidden="true">grid_off</span>
-        </button>
-        <button class="docs-icon-button" id="themeToggle" type="button" aria-label="Toggle contrast" aria-pressed="false">
-          <span class="material-symbol" data-icon="contrast" aria-hidden="true">contrast</span>
-        </button>
-      </div>
+      <span id="languageToggle" class="language-toggle" hidden aria-live="polite">
+        <span class="language-toggle__code">EN</span>
+      </span>
+      <div id="docsReactShellTopbar" class="docs-react-shell-topbar-mount" data-doc-shell-boundary="react-topbar"></div>
     </header>
 
     <main id="app" tabindex="-1"></main>
@@ -57,6 +45,6 @@
       <div class="layout-grid-overlay__columns"></div>
       <div class="layout-grid-overlay__info"></div>
     </div>
-    <script src="./app.js?v=482" type="module"></script>
+    <script src="./app.js?v=483" type="module"></script>
   </body>
 </html>

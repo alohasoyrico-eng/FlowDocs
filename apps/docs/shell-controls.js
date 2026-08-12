@@ -20,13 +20,18 @@ function applyContrastState(isQuiet) {
   syncBrandLogo();
 }
 
+export function toggleContrastState() {
+  const willQuiet = document.body.dataset.contrast !== "quiet";
+  if (willQuiet) localStorage.setItem("system.contrast", "quiet");
+  else localStorage.removeItem("system.contrast");
+  applyContrastState(willQuiet);
+  return willQuiet;
+}
+
 export function setupContrastToggle() {
   applyContrastState(localStorage.getItem("system.contrast") === "quiet" || document.body.dataset.contrast === "quiet");
   document.querySelector("#themeToggle")?.addEventListener("click", () => {
-    const willQuiet = document.body.dataset.contrast !== "quiet";
-    if (willQuiet) localStorage.setItem("system.contrast", "quiet");
-    else localStorage.removeItem("system.contrast");
-    applyContrastState(willQuiet);
+    toggleContrastState();
   });
 }
 
@@ -122,4 +127,13 @@ export function setupGridOverlay(options = {}) {
   });
   window.addEventListener("resize", () => requestAnimationFrame(updateGridOverlay));
   window.addEventListener("hashchange", () => requestAnimationFrame(() => requestAnimationFrame(updateGridOverlay)));
+}
+
+export function toggleGridOverlay() {
+  const overlay = document.querySelector("#layoutGridOverlay");
+  if (!overlay) return false;
+  const willShow = overlay.hidden;
+  overlay.hidden = !willShow;
+  updateGridOverlay();
+  return willShow;
 }

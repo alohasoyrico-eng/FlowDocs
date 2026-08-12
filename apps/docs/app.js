@@ -36,7 +36,7 @@ import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDe
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=1";
 import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=3";
 import { collectionIcon, configureIconSystem, icon, iconFor, tabIcon } from "./icon-system.js?v=199";
-import { setupCommand, setupMenu, setupTopNav } from "./navigation.js?v=5";
+import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=1";
 import {
   configurePrimitiveReference,
   primitiveApiReferenceSection,
@@ -55,7 +55,7 @@ import {
   referencePeerNav,
   referenceSection,
 } from "./reference-layout.js?v=1";
-import { setupContrastToggle, setupGridOverlay, updateGridOverlay } from "./shell-controls.js?v=1";
+import { setupContrastToggle, setupGridOverlay, toggleContrastState, toggleGridOverlay, updateGridOverlay } from "./shell-controls.js?v=2";
 import { escapeHtml, html, interpolateList, referenceTemplate, slug } from "./utils.js";
 import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=2";
 
@@ -86,6 +86,7 @@ function render() {
   else if (collections[current.collection] && current.id) renderDetail(current.collection, current.id);
   else if (collections[current.collection]) renderCollection(current.collection);
   else renderHome();
+  renderDocsShell(current);
   app.focus({ preventScroll: true });
   requestAnimationFrame(() => requestAnimationFrame(updateGridOverlay));
 }
@@ -350,15 +351,26 @@ async function boot() {
     applyDocsContent(await loadDocsContent());
     window.__systemBoot.status = "configuring";
     configureDocsChrome({ currentLocale: () => currentLocale, render, setCurrentLocale, ui });
+    configureDocsShell({
+      currentLocale: () => currentLocale,
+      render,
+      setCurrentLocale,
+      ui,
+      collections,
+      collectionIcon,
+      iconFor,
+      label,
+      searchIndex,
+      toggleContrastState,
+      toggleGridOverlay,
+    });
     configureLocalizedRenderers();
     applyLocalizedChrome();
     setupContrastToggle();
     setupGridOverlay({ ui });
-    setupTopNav({ collections, groupCollection, html, icon, iconFor, label, ui });
-    setupCommand({ label, searchIndex, ui });
-    setupMenu();
     setupGlobalDocumentInteractions();
     setupLanguageToggle();
+    renderDocsShell(route());
     window.__systemBoot.status = "rendering";
     render();
     window.__systemBoot.status = "ready";
