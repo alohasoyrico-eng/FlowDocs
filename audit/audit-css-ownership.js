@@ -207,6 +207,20 @@ function countMatches(text, pattern) {
   return [...text.matchAll(pattern)].length;
 }
 
+function countMatchesByLine(text, pattern, shouldCountLine = () => true) {
+  return text.split("\n").reduce((total, line) => {
+    if (!shouldCountLine(line)) return total;
+    pattern.lastIndex = 0;
+    return total + [...line.matchAll(pattern)].length;
+  }, 0);
+}
+
+function countRoleGridDebt(text, file) {
+  const roleGridClassToken = /(?:^|[^A-Za-z0-9_-])role-grid(?![A-Za-z0-9_-])/g;
+  if (!/\.js$/.test(file)) return countMatches(text, roleGridClassToken);
+  return countMatchesByLine(text, roleGridClassToken, (line) => !line.includes("data-doc-primitive=") && !line.includes("const classes ="));
+}
+
 function checkPublicClassNamespaceOwnership() {
   const sourceFiles = [
     ...walkFiles(docsAppDir, (file) => /\.(css|html|js)$/.test(file)),
@@ -348,9 +362,10 @@ function checkDocsVisualDebtInventory() {
     },
     {
       id: "role-grid",
-      description: "Docs-owned repeated card grid used across detail pages; candidate for governed docs/template primitive.",
-      pattern: /role-grid/g,
+      description: "Docs-owned repeated card grid used across detail pages; excludes JS callsites already marked as governed docs primitives.",
+      pattern: /(?:^|[^A-Za-z0-9_-])role-grid(?![A-Za-z0-9_-])/g,
       files: [...jsFiles, ...cssFiles],
+      count: countRoleGridDebt,
     },
     {
       id: "props-table",
@@ -372,7 +387,7 @@ function checkDocsVisualDebtInventory() {
         const text = read(file);
         return {
           file: normalize(path.relative(process.cwd(), file)),
-          count: countMatches(text, family.pattern),
+          count: family.count ? family.count(text, file) : countMatches(text, family.pattern),
         };
       })
       .filter((entry) => entry.count > 0)

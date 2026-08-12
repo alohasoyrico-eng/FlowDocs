@@ -1,3 +1,5 @@
+import { componentDemo } from "./component-demo.js?v=61";
+
 let html = String.raw;
 let icon = () => "";
 let iconFor = () => "";
@@ -19,17 +21,10 @@ export function artifactFoundationTracePanel(entry, artifactType) {
       <span class="eyebrow">${ui("reference.foundationTrace")}</span>
       <h2>${ui("reference.howFoundationsGovern")} ${entry.title}</h2>
       <p>${entry.title} must be implemented through foundation decisions before it becomes a component, pattern, or template surface.</p>
-      <div class="role-grid foundation-trace-grid">
+      <div class="role-grid foundation-trace-grid" data-doc-primitive="foundation-trace-grid">
         ${rows
           .map(
-            (row) => html`
-              <article>
-                <span>${icon(iconFor({ title: row.foundation }))}</span>
-                <strong>${row.foundation}</strong>
-                <p>${row.decision}</p>
-                <code>${row.contract}</code>
-              </article>
-            `,
+            (row) => componentDemo("card", { title: row.foundation, detail: `${row.decision} ${row.contract}`, icon: icon(iconFor({ title: row.foundation })), variant: "minimal", composition: "standard", fullWidth: true }),
           )
           .join("")}
       </div>
