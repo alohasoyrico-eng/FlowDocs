@@ -21,7 +21,7 @@ export function artifactFoundationTracePanel(entry, artifactType) {
       <span class="eyebrow">${ui("reference.foundationTrace")}</span>
       <h2>${ui("reference.howFoundationsGovern")} ${entry.title}</h2>
       <p>${entry.title} must be implemented through foundation decisions before it becomes a component, pattern, or template surface.</p>
-      <div class="role-grid foundation-trace-grid" data-doc-primitive="foundation-trace-grid">
+      <div class="foundation-trace-grid" data-doc-primitive="foundation-trace-grid">
         ${rows
           .map(
             (row) => componentDemo("card", { title: row.foundation, detail: `${row.decision} ${row.contract}`, icon: icon(iconFor({ title: row.foundation })), variant: "minimal", composition: "standard", fullWidth: true }),

@@ -89,7 +89,7 @@ function componentDetailDemoGrid({ items = [], className = "button-demo-grid sta
 
 function componentDetailAnatomyGrid({ items = [], iconName = "widgets" } = {}) {
   return html`
-    <div class="role-grid" data-doc-primitive="component-detail-anatomy-grid">
+    <div class="component-detail-anatomy-grid" data-doc-primitive="component-detail-anatomy-grid">
       ${items
         .map((item) => componentDocCard({ title: item.part, detail: `${item.rule} ${(item.tokens ?? []).join(", ")}`, iconName }))
         .join("")}

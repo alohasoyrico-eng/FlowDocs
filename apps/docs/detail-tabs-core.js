@@ -212,7 +212,7 @@ function artifactTable({ label = "Artifact detail table", className = "", column
 }
 
 export function artifactRoleGrid({ className = "", items = [] } = {}) {
-  const classes = ["role-grid", className].filter(Boolean).join(" ");
+  const classes = ["artifact-role-grid", className].filter(Boolean).join(" ");
   return html`
     <div class="${classes}" data-doc-primitive="artifact-role-grid">
       ${items

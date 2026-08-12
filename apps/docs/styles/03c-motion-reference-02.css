@@ -305,7 +305,6 @@
     var(--sys-energy-surface-primary);
 }
 
-.role-grid,
 .architecture-chain {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
@@ -313,7 +312,6 @@
   margin-block-start: var(--sys-frame-gap-component);
 }
 
-.role-grid article,
 .architecture-chain article {
   display: grid;
   gap: var(--sys-space-sm);
@@ -324,7 +322,6 @@
   background: var(--sys-energy-surface-secondary);
 }
 
-.role-grid article > span,
 .architecture-chain b {
   display: grid;
   place-items: center;
@@ -333,11 +330,6 @@
   border-radius: var(--sys-frame-radius-full);
   background: var(--sys-energy-text-primary);
   color: var(--sys-energy-surface-secondary);
-}
-
-.role-grid p {
-  margin: 0;
-  font-size: var(--ref-voice-size-3);
 }
 
 .foundation-trace-grid article code {
