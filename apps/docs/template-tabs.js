@@ -1,4 +1,4 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactRoleGrid, cardLink, examplePanel, findPattern, html, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactRoleGrid, docsLinkCard, examplePanel, findPattern, html, interpolateList, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, ui, listPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel, overviewPanel, teamsPanel } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { desktopTemplateDemo } from "./template-desktop-demos.js?v=17";
 
@@ -119,8 +119,8 @@ export function iaPanel(entry) {
       <p>${blueprint?.informationArchitecture ?? templateBlueprintFallbacks.informationArchitecture}</p>
       ${blueprint ? `<div class="nav-model">${blueprint.nav.map((item) => `<span>${item}</span>`).join("")}</div>` : ""}
       <div class="relation-grid">
-        ${patternsUsed.map((name) => cardLink("patterns", slug(name), "account_tree", name, findPattern(name)?.summary ?? "Pattern contract.")).join("")}
-        ${templateModulesUsed.map((name) => cardLink("templates", entry.id, "view_module", name, blueprint?.templateModuleDetails?.[name] ?? templateBlueprintFallbacks.moduleDetail)).join("")}
+        ${patternsUsed.map((name) => docsLinkCard("patterns", slug(name), "account_tree", name, findPattern(name)?.summary ?? "Pattern contract.")).join("")}
+        ${templateModulesUsed.map((name) => docsLinkCard("templates", entry.id, "view_module", name, blueprint?.templateModuleDetails?.[name] ?? templateBlueprintFallbacks.moduleDetail)).join("")}
       </div>
     </section>
   `;

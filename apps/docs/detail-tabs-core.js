@@ -21,7 +21,7 @@ export let primitiveExample = () => "";
 export let examplePanel = () => "";
 export let visualPanel = () => "";
 export let journeyCopy = () => "";
-export let cardLink = () => "";
+export let docsLinkCard = () => "";
 export let findComponent = () => null;
 export let findPattern = () => null;
 export let goldComponentDocumentationTabs = () => [];
@@ -50,7 +50,7 @@ export function configureDetailTabsContext(nextDeps) {
   examplePanel = nextDeps.examplePanel;
   visualPanel = nextDeps.visualPanel;
   journeyCopy = nextDeps.journeyCopy;
-  cardLink = nextDeps.cardLink;
+  docsLinkCard = nextDeps.docsLinkCard;
   findComponent = nextDeps.findComponent;
   findPattern = nextDeps.findPattern;
   goldComponentDocumentationTabs = nextDeps.goldComponentDocumentationTabs;

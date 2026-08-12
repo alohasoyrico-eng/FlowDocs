@@ -82,67 +82,11 @@
   font-size: var(--sys-voice-size-10);
 }
 
-.artifact-card {
-  position: relative;
+.docs-link-card {
   display: grid;
-  align-content: start;
-  min-block-size: var(--sys-frame-doc-panel-min-lg);
-  padding: var(--sys-frame-padding-container);
-  overflow: hidden;
-  transition:
-    transform var(--sys-momentum-transition-default),
-    border-color var(--sys-momentum-transition-default),
-    box-shadow var(--sys-momentum-transition-default);
-}
-
-.artifact-card::after {
-  content: "";
-  position: absolute;
-  inset: auto -25% -44% auto;
-  inline-size: var(--sys-frame-doc-card-min-block-md);
-  block-size: var(--sys-frame-doc-card-min-block-md);
-  border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
-  border-radius: var(--sys-frame-radius-full);
-  background: color-mix(in srgb, color-mix(in srgb, var(--sys-energy-status-success) 10%, var(--sys-energy-surface-primary)) 70%, transparent);
-}
-
-.artifact-card.foundation {
-  background: var(--sys-energy-surface-primary);
-}
-
-.artifact-card.primitive {
-  background: var(--sys-energy-surface-primary);
-}
-
-.artifact-card.component {
-  min-block-size: var(--sys-frame-doc-panel-min-md);
-}
-
-.artifact-card.pattern {
-  background: var(--sys-energy-surface-primary);
-}
-
-.artifact-card.template {
-  min-block-size: var(--sys-frame-doc-panel-min-xl);
-  padding: var(--sys-frame-gap-component);
-  background: var(--sys-energy-surface-primary);
-  border-color: color-mix(in srgb, var(--sys-energy-status-error) 34%, var(--sys-energy-border-default));
-}
-
-.artifact-card.template h3 {
-  max-inline-size: 11ch;
-  font-size: clamp(var(--sys-voice-size-10), 4vw, var(--sys-voice-size-12));
-}
-
-.card-icon {
-  display: grid;
-  place-items: center;
-  inline-size: var(--sys-frame-doc-icon-lg);
-  block-size: var(--sys-frame-doc-icon-lg);
-  margin-block-end: var(--sys-space-lg);
-  border-radius: var(--sys-frame-radius-full);
-  background: var(--sys-energy-text-primary);
-  color: var(--sys-energy-surface-secondary);
+  min-inline-size: 0;
+  color: inherit;
+  text-decoration: none;
 }
 
 .docs-breadcrumbs {

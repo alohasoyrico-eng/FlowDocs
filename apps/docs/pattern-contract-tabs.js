@@ -1,4 +1,4 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactVariantGrid, cardLink, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactVariantGrid, docsLinkCard, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=5";
 import { componentDemo } from "./component-demo.js?v=60";
 import { patternCopy } from "./docs-state.js";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
@@ -256,16 +256,16 @@ function patternDependencyPanel(entry, source) {
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>Design System dependencies</h2>
       ${dependencyGroup("Foundations", foundations, (name) =>
-        cardLink("foundations", slug(name), "foundation", name, "Governing foundation consumed by this pattern contract."),
+        docsLinkCard("foundations", slug(name), "foundation", name, "Governing foundation consumed by this pattern contract."),
       )}
       ${dependencyGroup("Primitives", primitives, (name) =>
-        cardLink("primitives", slug(name), "category", name, primitiveDependencySummary(name, primitiveSlots)),
+        docsLinkCard("primitives", slug(name), "category", name, primitiveDependencySummary(name, primitiveSlots)),
       )}
       ${dependencyGroup("Components", components, (name) =>
-        cardLink("components", slug(name), "widgets", name, findComponent(name)?.summary ?? "Package component dependency."),
+        docsLinkCard("components", slug(name), "widgets", name, findComponent(name)?.summary ?? "Package component dependency."),
       )}
       ${dependencyGroup("Pattern dependencies", patterns, (name) =>
-        cardLink("patterns", slug(name), "account_tree", name, "Composed pattern dependency declared by the contract."),
+        docsLinkCard("patterns", slug(name), "account_tree", name, "Composed pattern dependency declared by the contract."),
       )}
       ${tokens.length ? html`
         <div class="pattern-dependency-group">

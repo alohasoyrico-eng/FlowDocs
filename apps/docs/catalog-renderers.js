@@ -1,3 +1,5 @@
+import { componentDemo } from "./component-demo.js?v=61";
+
 let deps = {};
 
 export function configureCatalogRenderers(nextDeps) {
@@ -7,20 +9,25 @@ export function configureCatalogRenderers(nextDeps) {
 export function artifactCard(collection, entry) {
   const { iconFor } = deps;
   const meta = collection === "components" ? [entry.platform, componentImplementationLabel(entry)] : entry.platform;
-  return cardLink(collection, entry.id, iconFor(entry), entry.title, entry.summary, meta);
+  return docsLinkCard(collection, entry.id, iconFor(entry), entry.title, entry.summary, meta);
 }
 
-export function cardLink(collection, id, symbol, title, summary, meta = "") {
-  const { html, icon } = deps;
+export function docsLinkCard(collection, id, symbol, title, summary, meta = "") {
+  const { html } = deps;
   const href = collection === "stack" ? "#/stack" : `#/${collection}/${id}`;
   const layerClass = collection === "stack" ? "stack-link" : collection.slice(0, -1);
   const metaItems = (Array.isArray(meta) ? meta : [meta]).filter(Boolean);
   return html`
-    <a class="artifact-card ${layerClass}" href="${href}">
-      <span class="card-icon">${icon(symbol)}</span>
-      <span class="eyebrow card-meta-row">${metaItems.map((item) => `<span>${item}</span>`).join("")}</span>
-      <h3>${title}</h3>
-      <p>${summary}</p>
+    <a class="docs-link-card ${layerClass}" data-doc-primitive="docs-link-card" href="${href}">
+      ${componentDemo("card", {
+        title,
+        detail: summary,
+        status: metaItems.join(" · "),
+        icon: symbol,
+        variant: "minimal",
+        composition: "standard",
+        fullWidth: true,
+      })}
     </a>
   `;
 }

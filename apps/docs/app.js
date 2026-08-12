@@ -1,4 +1,4 @@
-import { artifactCard, artifactTypeLabel, cardLink, configureCatalogRenderers, groupCollection, label } from "./catalog-renderers.js";
+import { artifactCard, artifactTypeLabel, docsLinkCard, configureCatalogRenderers, groupCollection, label } from "./catalog-renderers.js";
 import { loadDocsContent } from "./content-sources.js?v=203";
 import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=58";
 import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=295";
@@ -106,7 +106,7 @@ function shell(content, active = "") {
 }
 
 function renderHome() {
-  app.innerHTML = shell(renderHomeContent({ cardLink, collections, findAny, homeContent, html, icon, slug, stack, ui }), "home");
+  app.innerHTML = shell(renderHomeContent({ docsLinkCard, collections, findAny, homeContent, html, icon, slug, stack, ui }), "home");
   hydrateHomeHeroIllustration(app);
 }
 
@@ -302,7 +302,7 @@ function detailTabsDeps() {
   return {
     artifactContract,
     artifactFoundationTracePanel,
-    cardLink,
+    docsLinkCard,
     componentDocs,
     componentAgentSpec,
     componentCopy,

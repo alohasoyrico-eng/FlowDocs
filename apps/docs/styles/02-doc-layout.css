@@ -25,7 +25,6 @@
 .detail-meta,
 .doc-panel,
 .docs-section-surface,
-.artifact-card,
 .stack-card,
 .layer-grid article {
   border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
@@ -55,13 +54,6 @@
   font-weight: var(--sys-voice-weight-bold);
   letter-spacing: var(--sys-voice-letter-spacing-normal);
   text-transform: uppercase;
-}
-
-.card-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sys-space-2);
-  align-items: center;
 }
 
 h1,
@@ -158,7 +150,6 @@ p {
 }
 
 .hero-action:hover,
-.artifact-card:hover,
 .stack-card:hover {
   transform: translateY(var(--sys-depth-lift-rest));
   border-color: var(--sys-energy-border-strong);

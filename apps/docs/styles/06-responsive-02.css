@@ -81,10 +81,6 @@
     line-height: var(--sys-voice-paragraph-md-line-height);
   }
 
-  .artifact-card {
-    min-block-size: var(--sys-frame-doc-panel-min-md);
-  }
-
   .comparison-table > div,
   .button-matrix,
   .button-state-matrix,

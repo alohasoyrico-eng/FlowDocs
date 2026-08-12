@@ -1,4 +1,4 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactRoleGrid, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactRoleGrid, docsLinkCard, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=52";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
 import { focusedPatternDesignPanels } from "./pattern-focused-design.js?v=25";
@@ -199,7 +199,7 @@ export function screensPanel(entry) {
       <h2>${ui("reference.screensComponents")}</h2>
       <p>These are the expected building blocks for ${entry.title}. Each one should link to its component contract before implementation.</p>
       <div class="relation-grid">
-        ${componentsUsed.map((name) => cardLink("components", slug(name), "widgets", name, findComponent(name)?.summary ?? "Component contract.")).join("")}
+        ${componentsUsed.map((name) => docsLinkCard("components", slug(name), "widgets", name, findComponent(name)?.summary ?? "Component contract.")).join("")}
       </div>
     </section>
   `;

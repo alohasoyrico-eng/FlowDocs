@@ -1,6 +1,6 @@
 import { componentDemo } from "./component-demo.js?v=61";
 
-export function renderHomeContent({ cardLink, collections, findAny, homeContent, html, icon, slug, stack, ui }) {
+export function renderHomeContent({ docsLinkCard, collections, findAny, homeContent, html, icon, slug, stack, ui }) {
   const home = homeContent ?? {};
   const collectionCount = (collection) => (collection === "stack" ? stack.length : collections[collection]?.length ?? 0);
   return html`
@@ -79,7 +79,7 @@ export function renderHomeContent({ cardLink, collections, findAny, homeContent,
       </div>
       <div class="spotlight-grid">
         ${(home.fastPaths?.items ?? [])
-          .map((item) => cardLink(item.collection, slug(item.title), item.icon, item.title, findAny(item.title)?.summary ?? item.summary ?? ""))
+          .map((item) => docsLinkCard(item.collection, slug(item.title), item.icon, item.title, findAny(item.title)?.summary ?? item.summary ?? ""))
           .join("")}
       </div>
     </section>
