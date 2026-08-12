@@ -1,10 +1,9 @@
 import { artifactContract, artifactFoundationTracePanel, cardLink, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, icon, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=52";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
-import { focusedPatternDesignPanels, topbarMarkup } from "./pattern-focused-design.js?v=25";
+import { focusedPatternDesignPanels } from "./pattern-focused-design.js?v=25";
 import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=2";
 import { patternMielTabs } from "./pattern-miel-tabs.js?v=7";
-import { collections } from "./docs-state.js";
 
 export function patternTabs(entry) {
   if (entry.id === "sidebar" || entry.id === "topbar") {
@@ -41,80 +40,8 @@ function patternBuildBody(entry) {
 }
 
 export function patternExamplePanel(entry) {
-  if (entry.id === "topbar") return topbarPatternPanel(entry);
-  if (entry.id === "sidebar") return sidebarPatternPanel(entry);
+  if (entry.id === "topbar" || entry.id === "sidebar") return shellPatternOverviewDemo(entry.id) || examplePanel(entry);
   return examplePanel(entry);
-}
-
-function topbarPatternPanel(entry) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-stage-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">${ui("reference.realExample")}</span>
-      <h2>${entry.title} documentation shell</h2>
-      <div class="pattern-stage pattern-stage--real-shell pattern-stage--real-topbar" data-pattern-demo="topbar">
-        ${topbarMarkup({ actionVariant: "account", navVariant: "sections", idBase: "Overview" })}
-        <main class="pattern-workspace" aria-label="Documentation preview">
-          <section>
-            <span class="eyebrow">Docs shell</span>
-            <h3>Global controls stay stable while content changes</h3>
-            <p>Topbar composes brand, section navigation, Search, Notification Panel, and Avatar Menu without creating local account or alert controls.</p>
-          </section>
-          <div class="pattern-workgrid">
-            <article><strong>Search</strong><span>Shared search slot, owned by Search and Autocomplete behavior</span></article>
-            <article><strong>Notification Panel</strong><span>Icon Button, Badge, List, Empty State, Toast</span></article>
-            <article><strong>Avatar Menu</strong><span>Menu avatar-trigger for account and session actions</span></article>
-          </div>
-        </main>
-      </div>
-    </section>
-  `;
-}
-
-function sidebarPatternPanel(entry) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-stage-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">${ui("reference.realExample")}</span>
-      <h2>${entry.title} docs shell frame</h2>
-      <div class="pattern-stage pattern-stage--real-shell pattern-stage--real-sidebar" data-pattern-demo="sidebar">
-        <aside class="sidebar" aria-label="${ui("shell.designNavigation")}">
-          ${docsCollections().map((collection) => html`
-            <details class="sidebar-group" ${collection.id === "patterns" ? "open" : ""}>
-              <summary><span class="sidebar-label">${icon(collection.icon)}<span>${collection.label}</span><b class="sidebar-count">${collection.count}</b></span></summary>
-              <div>
-                ${collection.items.map((item) => `<a class="${item === "Sidebar" ? "active" : ""}" ${item === "Sidebar" ? `aria-current="page"` : ""} href="#/${collection.id}/${slug(item)}">${item}</a>`).join("")}
-              </div>
-            </details>
-          `).join("")}
-          <a href="#/stack"><span class="sidebar-label">${icon("layers")}<span>${ui("shell.stack")}</span></span></a>
-        </aside>
-        <main class="pattern-workspace" aria-label="Section preview">
-          <nav class="docs-breadcrumbs" aria-label="Breadcrumbs">
-            <a href="#/home">Home</a><span>/</span><a href="#/patterns">Patterns</a><span>/</span><strong>Sidebar</strong>
-          </nav>
-          <section>
-            <span class="eyebrow">Docs shell</span>
-            <h3>Collections stay scannable while detail pages change</h3>
-            <p>Sidebar owns the persistent map of Design System: collection groups, artifact counts, active route, disclosure, and the responsive drawer opened from the topbar menu button.</p>
-          </section>
-          <div class="pattern-workgrid">
-            <article><strong>details</strong><span>Each collection uses native disclosure semantics</span></article>
-            <article><strong>active</strong><span>The current artifact is visible in the open group</span></article>
-          </div>
-        </main>
-      </div>
-    </section>
-  `;
-}
-
-function docsCollections() {
-  const count = (key) => collections[key]?.length ?? 0;
-  return [
-    { id: "foundations", label: "Foundations", icon: "bolt", count: count("foundations"), items: ["Energy", "Voice", "Frame"] },
-    { id: "primitives", label: "Primitives", icon: "token", count: count("primitives"), items: ["Color", "Typography", "Spacing"] },
-    { id: "components", label: "Components", icon: "widgets", count: count("components"), items: ["Button", "Card", "Table"] },
-    { id: "patterns", label: "Patterns", icon: "account_tree", count: count("patterns"), items: ["Topbar", "Sidebar", "Search"] },
-    { id: "templates", label: "Templates", icon: "dashboard", count: count("templates"), items: ["Driver Mobile App", "Fleet Dashboard Suite"] },
-  ];
 }
 
 function sidebarFoundationsPanel() {

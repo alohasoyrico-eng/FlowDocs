@@ -36,6 +36,10 @@ function checkNoLegacyShellSelectors(file) {
 
 function checkDocsShellBoundary() {
   const navigationFile = path.join(path.dirname(docsAppFile), "navigation.js");
+  const docsAppDir = path.dirname(docsAppFile);
+  const patternTabsFile = path.join(docsAppDir, "pattern-tabs.js");
+  const patternFocusedDesignFile = path.join(docsAppDir, "pattern-focused-design.js");
+  const patternShellReactDemosFile = path.join(docsAppDir, "pattern-shell-react-demos.js");
   if (fs.existsSync(navigationFile)) {
     add("errors", navigationFile, 1, "Legacy navigation.js must not exist; docs shell navigation is owned by docs-shell-react.js and Flow React Topbar/Sidebar.");
   }
@@ -84,6 +88,55 @@ function checkDocsShellBoundary() {
 
   for (const file of [docsIndexFile, docsChromeFile, docsLayoutFile, docsAppFile]) {
     checkNoLegacyShellSelectors(file);
+  }
+
+  const patternTabs = read(patternTabsFile);
+  for (const forbidden of [
+    "topbarMarkup",
+    "sidebarPatternPanel",
+    "topbarPatternPanel",
+    "pattern-stage--real-shell",
+    'class="sidebar"',
+    'class="sidebar-group"',
+  ]) {
+    if (patternTabs.includes(forbidden)) {
+      add("errors", patternTabsFile, lineOf(patternTabs, forbidden), `Topbar/Sidebar pattern detail pages must not render shell markup manually: ${forbidden}. Use Flow React pattern islands.`);
+    }
+  }
+  for (const required of [
+    'shellPatternOverviewDemo(entry.id)',
+    'entry.id === "topbar" || entry.id === "sidebar"',
+  ]) {
+    if (!patternTabs.includes(required)) {
+      add("errors", patternTabsFile, 1, `Topbar/Sidebar pattern pages must route examples through the React shell demo: ${required}.`);
+    }
+  }
+
+  const focusedDesign = read(patternFocusedDesignFile);
+  for (const forbidden of [
+    "topbarMarkup",
+    "sidebarMarkup",
+    "pattern-design-shell-demo",
+    "top-actions",
+    "sidebar-group",
+    "searchSlotMarkup",
+    "avatarMenuMarkup",
+    "notificationPanelMarkup",
+  ]) {
+    if (focusedDesign.includes(forbidden)) {
+      add("errors", patternFocusedDesignFile, lineOf(focusedDesign, forbidden), `Focused Topbar/Sidebar design docs must not create local shell renderers: ${forbidden}. Mark unsupported variants as Candidate until Flow exposes them.`);
+    }
+  }
+
+  const reactPatternDemos = read(patternShellReactDemosFile);
+  for (const required of [
+    'patternReactDemo("topbar"',
+    'patternReactDemo("sidebar"',
+    'data-component-source="react-pattern"',
+  ]) {
+    if (!reactPatternDemos.includes(required)) {
+      add("errors", patternShellReactDemosFile, 1, `Shell pattern demos must consume generated Flow React patterns: ${required}.`);
+    }
   }
 }
 
