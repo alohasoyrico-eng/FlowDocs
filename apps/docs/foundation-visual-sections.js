@@ -1,4 +1,4 @@
-import { referenceSection } from "./reference-layout.js?v=1";
+import { referenceSection, referenceSummaryGrid } from "./reference-layout.js?v=1";
 
 let foundationCopy = {};
 let html = String.raw;
@@ -15,9 +15,7 @@ export function energyPaletteSection() {
     section.title ?? "",
     section.description ?? "",
     html`
-      <div class="energy-palette-summary">
-        ${(section.summary ?? []).map((item) => `<article><strong>${item.value}</strong><span>${item.label}</span></article>`).join("")}
-      </div>
+      ${referenceSummaryGrid("energy-palette-summary", section.summary ?? [])}
       <div class="energy-palette-grid">
         ${(section.families ?? []).map((item) => energyPaletteFamily(item.label, item.family, steps)).join("")}
       </div>
@@ -59,9 +57,7 @@ export function voiceTypographySection() {
     section.title ?? "",
     section.description ?? "",
     html`
-      <div class="voice-type-summary">
-        ${(section.summary ?? []).map((item) => `<article><strong>${item.value}</strong><span>${item.label}</span></article>`).join("")}
-      </div>
+      ${referenceSummaryGrid("voice-type-summary", section.summary ?? [])}
       <div class="voice-type-grid">
         ${(section.groups ?? []).map(({ name, meta, variants }) => voiceTypeRow(name, meta, variants)).join("")}
       </div>
@@ -78,9 +74,7 @@ export function voiceTokenSection() {
     section.title ?? "",
     section.description ?? "",
     html`
-      <div class="voice-token-summary">
-        ${(section.summary ?? []).map((item) => `<article><strong>${item.value}</strong><span>${item.label}</span></article>`).join("")}
-      </div>
+      ${referenceSummaryGrid("voice-token-summary", section.summary ?? [])}
       <div class="voice-token-grid">
         ${(section.groups ?? []).map(({ label, count, tokens }) => voiceTokenCard(label, count, tokens)).join("")}
       </div>
@@ -177,9 +171,7 @@ export function frameTokenSection() {
     section.title ?? "",
     section.description ?? "",
     html`
-      <div class="frame-token-summary">
-        ${(section.summary ?? []).map((item) => `<article><strong>${item.value}</strong><span>${item.label}</span></article>`).join("")}
-      </div>
+      ${referenceSummaryGrid("frame-token-summary", section.summary ?? [])}
       <div class="frame-token-grid">
         ${(section.groups ?? []).map(([label, count, description, chips]) => frameTokenCard(label, count, description, chips)).join("")}
       </div>

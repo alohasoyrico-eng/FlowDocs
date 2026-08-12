@@ -1,4 +1,4 @@
-import { referenceCallout, referenceCodeBlock, referenceSection } from "./reference-layout.js?v=1";
+import { referenceCallout, referenceCodeBlock, referenceMatrixGrid, referenceRuleGrid, referenceSection } from "./reference-layout.js?v=1";
 
 let primitiveCopy = {};
 let html = String.raw;
@@ -146,9 +146,7 @@ export function primitiveSpecMatrixSection(entry) {
     ui("reference.specificationMatrix"),
     ui("reference.specificationMatrixIntro"),
     html`
-      <div class="reference-matrix">
-        ${rows.map((row) => `<article><span>${row.aspect}</span><strong>${row.contract}</strong><p>${row.notes}</p></article>`).join("")}
-      </div>
+      ${referenceMatrixGrid(rows)}
     `,
   );
 }
@@ -225,9 +223,7 @@ export function primitiveTokenReferenceSection(entry) {
       <div class="reference-token-grid">
         ${entry.tokens.map((token) => `<code>${token}</code>`).join("")}
       </div>
-      <div class="reference-rule-grid">
-        ${cards.map((card) => `<article><strong>${card.title}</strong><p>${primitiveTemplate(card.copyTemplate, entry)}</p></article>`).join("")}
-      </div>
+      ${referenceRuleGrid(cards.map((card) => ({ title: card.title, copy: primitiveTemplate(card.copyTemplate, entry) })))}
     `,
   );
 }

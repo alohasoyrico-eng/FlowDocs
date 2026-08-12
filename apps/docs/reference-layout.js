@@ -80,3 +80,30 @@ export function referenceCodeBlock(code) {
   const { escapeHtml } = deps;
   return `<pre class="reference-code"><code>${escapeHtml(code)}</code></pre>`;
 }
+
+export function referenceSummaryGrid(className, items = []) {
+  const { html } = deps;
+  return html`
+    <div class="${className}" data-doc-primitive="reference-summary-grid">
+      ${items.map((item) => `<article><strong>${item.value}</strong><span>${item.label}</span></article>`).join("")}
+    </div>
+  `;
+}
+
+export function referenceRuleGrid(items = []) {
+  const { html } = deps;
+  return html`
+    <div class="reference-rule-grid" data-doc-primitive="reference-rule-grid">
+      ${items.map((item) => `<article><strong>${item.title}</strong><p>${item.copy}</p></article>`).join("")}
+    </div>
+  `;
+}
+
+export function referenceMatrixGrid(rows = [], className = "reference-matrix") {
+  const { html } = deps;
+  return html`
+    <div class="${className}" data-doc-primitive="reference-matrix-grid">
+      ${rows.map((row) => `<article><span>${row.aspect}</span><strong>${row.contract}</strong><p>${row.notes}</p></article>`).join("")}
+    </div>
+  `;
+}

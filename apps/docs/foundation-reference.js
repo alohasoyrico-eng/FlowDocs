@@ -10,7 +10,7 @@ import {
   voiceTokenSection,
   voiceTypographySection,
 } from "./foundation-visual-sections.js";
-import { referenceCodeBlock, referenceDivider, referenceSection } from "./reference-layout.js?v=1";
+import { referenceCodeBlock, referenceDivider, referenceMatrixGrid, referenceRuleGrid, referenceSection } from "./reference-layout.js?v=1";
 
 let foundationCopy = {};
 let referenceCopy = {};
@@ -144,9 +144,7 @@ function foundationCardsSection(title, description, cards) {
     title,
     description,
     html`
-      <div class="reference-spec-grid">
-        ${cards.map((card) => `<article><span>${card.label}</span><strong>${card.title}</strong><p>${card.copy}</p></article>`).join("")}
-      </div>
+      ${referenceMatrixGrid(cards.map((card) => ({ aspect: card.label, contract: card.title, notes: card.copy })), "reference-spec-grid")}
     `,
   );
 }
@@ -201,9 +199,7 @@ function foundationSpecSection(entry) {
     section.title ?? "Specification",
     section.description ?? "",
     html`
-      <div class="reference-spec-grid">
-        ${spec.cards.map((card) => `<article><span>${card.label}</span><strong>${card.value}</strong><p>${card.copy}</p></article>`).join("")}
-      </div>
+      ${referenceMatrixGrid(spec.cards.map((card) => ({ aspect: card.label, contract: card.value, notes: card.copy })), "reference-spec-grid")}
       ${referenceCodeBlock(spec.code)}
     `,
   );
@@ -268,12 +264,7 @@ function foundationRulesSection(entry) {
     copy.title ?? "Dependency Rules",
     "",
     html`
-      <div class="reference-rule-grid">
-        ${items.map((item) => {
-          const title = item.title ?? foundationTemplate(item.titleTemplate, entry);
-          return `<article><strong>${title}</strong><p>${item.copy ?? ""}</p></article>`;
-        }).join("")}
-      </div>
+      ${referenceRuleGrid(items.map((item) => ({ title: item.title ?? foundationTemplate(item.titleTemplate, entry), copy: item.copy ?? "" })))}
     `,
   );
 }
