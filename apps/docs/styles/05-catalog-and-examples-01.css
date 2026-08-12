@@ -107,15 +107,11 @@
 }
 
 .artifact-card.foundation {
-  background:
-    linear-gradient(135deg, color-mix(in srgb, color-mix(in srgb, var(--sys-energy-status-error) 12%, var(--sys-energy-surface-primary)) 72%, transparent), transparent 72%),
-    var(--sys-energy-surface-primary);
+  background: var(--sys-energy-surface-primary);
 }
 
 .artifact-card.primitive {
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--sys-energy-surface-accent) 84%, transparent), transparent 70%),
-    var(--sys-energy-surface-primary);
+  background: var(--sys-energy-surface-primary);
 }
 
 .artifact-card.component {
@@ -123,18 +119,13 @@
 }
 
 .artifact-card.pattern {
-  background:
-    linear-gradient(180deg, color-mix(in srgb, color-mix(in srgb, var(--sys-energy-status-success) 10%, var(--sys-energy-surface-primary)) 55%, transparent), transparent 68%),
-    var(--sys-energy-surface-primary);
+  background: var(--sys-energy-surface-primary);
 }
 
 .artifact-card.template {
   min-block-size: var(--sys-frame-doc-panel-min-xl);
   padding: var(--sys-frame-gap-component);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--sys-energy-status-error) 13%, transparent), transparent 42%),
-    linear-gradient(225deg, color-mix(in srgb, var(--sys-energy-surface-accent) 92%, transparent), transparent 58%),
-    var(--sys-energy-surface-primary);
+  background: var(--sys-energy-surface-primary);
   border-color: color-mix(in srgb, var(--sys-energy-status-error) 34%, var(--sys-energy-border-default));
 }
 
@@ -275,9 +266,7 @@ pre {
 }
 
 .example-panel {
-  background:
-    linear-gradient(135deg, color-mix(in srgb, color-mix(in srgb, var(--sys-energy-status-success) 10%, var(--sys-energy-surface-primary)) 52%, transparent), transparent 70%),
-    var(--sys-energy-surface-primary);
+  background: var(--sys-energy-surface-primary);
 }
 
 .real-example {

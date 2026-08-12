@@ -259,9 +259,7 @@
   padding: var(--sys-space-lg);
   border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
   border-radius: var(--sys-frame-radius-container);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--sys-energy-surface-accent) 70%, transparent), transparent 72%),
-    var(--sys-energy-surface-secondary);
+  background: var(--sys-energy-surface-secondary);
   overflow: hidden;
 }
 
