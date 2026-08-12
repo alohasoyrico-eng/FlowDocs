@@ -4,6 +4,7 @@ import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
 import { focusedPatternDesignPanels } from "./pattern-focused-design.js?v=25";
 import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=2";
 import { patternMielTabs } from "./pattern-miel-tabs.js?v=7";
+import { componentDemo } from "./component-demo.js?v=61";
 
 export function patternTabs(entry) {
   if (entry.id === "sidebar" || entry.id === "topbar") {
@@ -128,7 +129,7 @@ function sidebarMotionPanel() {
     ["Mobile drawer", "Slides from the navigation edge with focus restoration and Escape close."],
     ["Active state", "Changes instantly; do not animate route identity in a way that delays orientation."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Motion contract</h2><div class="architecture-chain">${rows.map(([name, rule], index) => `<article><b>${index + 1}</b><strong>${name}</strong><span>${rule}</span></article>`).join("")}</div></section>`;
+  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Motion contract</h2><div class="architecture-chain">${rows.map(([name, rule], index) => patternDocCard(name, rule, index)).join("")}</div></section>`;
 }
 
 function sidebarVariantsPanel() {
@@ -182,11 +183,7 @@ export function journeyPanel(entry) {
       ${steps
         .map(
           ([step, copy], index) => html`
-            <article>
-              <b>${index + 1}</b>
-              <h2>${step}</h2>
-              <p>${copy}</p>
-            </article>
+            ${patternDocCard(step, copy, index)}
           `,
         )
         .join("")}
@@ -245,10 +242,14 @@ export function patternDecisionTreePanel(entry) {
     <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("reference.decisionTree")}</h2>
       <div class="architecture-chain">
-        ${decisions.map(([name, copy], index) => `<article><b>${index + 1}</b><strong>${name}</strong><span>${copy}</span></article>`).join("")}
+        ${decisions.map(([name, copy], index) => patternDocCard(name, copy, index)).join("")}
       </div>
     </section>
   `;
+}
+
+function patternDocCard(title, detail, index) {
+  return componentDemo("card", { title, detail, status: String(index + 1), variant: "minimal", composition: "standard", fullWidth: true });
 }
 
 export function patternFailureModesPanel(entry) {
