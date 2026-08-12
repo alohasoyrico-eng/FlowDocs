@@ -60,6 +60,7 @@ function topbarProps(current) {
   const contrastEnabled = document.body.dataset.contrast === "quiet";
   const gridVisible = !document.querySelector("#layoutGridOverlay")?.hidden;
   const results = searchResults(state.searchQuery);
+  const navigationOpen = document.body.dataset.navOpen === "true";
   return {
     label: ui("shell.primaryNavigation"),
     density: "md",
@@ -67,7 +68,9 @@ function topbarProps(current) {
     navigationAction: {
       label: ui("shell.openNavigation"),
       ariaLabel: ui("shell.openNavigation"),
-      icon: document.body.dataset.navOpen === "true" ? "close" : "menu",
+      icon: navigationOpen ? "close" : "menu",
+      "aria-expanded": String(navigationOpen),
+      "aria-controls": "docsReactShellSidebar",
       onClick: () => toggleNavigation(),
     },
     search: {
@@ -150,7 +153,7 @@ function sidebarProps(current) {
     activeKey: activeRouteKey(current),
     groups: sidebarGroups(current),
     collapseAction: { label: ui("shell.designNavigation"), ariaLabel: ui("shell.designNavigation") },
-    drawer: { label: ui("shell.designNavigation"), side: "left" },
+    drawer: false,
     onRouteSelect: (key, route) => {
       if (!route?.href) return;
       window.location.hash = route.href.replace(/^#/, "");

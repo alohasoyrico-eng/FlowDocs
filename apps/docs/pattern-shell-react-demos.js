@@ -107,7 +107,7 @@ function sidebarDemoPanel() {
             ],
           },
         ],
-        drawer: { label: "Fleet navigation drawer", side: "left" },
+        drawer: false,
         "data-pattern-demo": "sidebar",
       })}
     </section>
