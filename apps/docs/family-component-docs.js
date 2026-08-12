@@ -1,7 +1,7 @@
 import { candidateComponentTabs, configureCandidateComponentDocs, hasCandidateCompositionPlan } from "./candidate-component-docs.js?v=2";
 import { artifactFoundationTracePanel, configureComponentFoundationTrace } from "./component-foundation-trace.js?v=1";
 import { componentDemo } from "./component-demo.js?v=60";
-import { componentDetailDemoGrid, componentDetailSection, componentDetailTable } from "./gold-component-core.js?v=214";
+import { componentDetailAnatomyGrid, componentDetailDemoGrid, componentDetailSection, componentDetailTable } from "./gold-component-core.js?v=214";
 
 export { artifactFoundationTracePanel };
 
@@ -120,9 +120,7 @@ function componentContractAnatomyPanel(entry, copy) {
       section: "anatomy",
       children: html`
       <h2>Anatomy</h2>
-      <div class="role-grid">
-        ${anatomy.map((item) => `<article><span>${icon(iconFor(entry))}</span><strong>${item.part}</strong><p>${item.rule}</p><code>${(item.tokens ?? []).join(", ")}</code></article>`).join("")}
-      </div>
+      ${componentDetailAnatomyGrid({ items: anatomy, iconName: iconFor(entry) })}
       `,
     })}
   `;

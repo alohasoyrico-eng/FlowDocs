@@ -83,6 +83,16 @@ function componentDetailDemoGrid({ items = [], className = "button-demo-grid sta
   `;
 }
 
+function componentDetailAnatomyGrid({ items = [], iconName = "widgets" } = {}) {
+  return html`
+    <div class="role-grid" data-doc-primitive="component-detail-anatomy-grid">
+      ${items
+        .map((item) => `<article><span>${icon(iconName)}</span><strong>${item.part}</strong><p>${item.rule}</p><code>${(item.tokens ?? []).join(", ")}</code></article>`)
+        .join("")}
+    </div>
+  `;
+}
+
 function componentDetailChecklist(items = []) {
   return html`
     <div class="checklist-grid">
@@ -216,6 +226,7 @@ export {
   componentApiProps,
   componentCopy,
   componentDetailAccessibilityContent,
+  componentDetailAnatomyGrid,
   componentDetailApiPropsTable,
   componentDemoData,
   componentDetailChecklist,
