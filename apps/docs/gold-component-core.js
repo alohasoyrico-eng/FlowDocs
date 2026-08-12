@@ -1,3 +1,5 @@
+import { componentDemo } from "./component-demo.js?v=61";
+
 let componentCopy = {};
 let componentDocs = {};
 let html = String.raw;
@@ -87,7 +89,7 @@ function componentDetailAnatomyGrid({ items = [], iconName = "widgets" } = {}) {
   return html`
     <div class="role-grid" data-doc-primitive="component-detail-anatomy-grid">
       ${items
-        .map((item) => `<article><span>${icon(iconName)}</span><strong>${item.part}</strong><p>${item.rule}</p><code>${(item.tokens ?? []).join(", ")}</code></article>`)
+        .map((item) => componentDocCard({ title: item.part, detail: `${item.rule} ${(item.tokens ?? []).join(", ")}`, iconName }))
         .join("")}
     </div>
   `;
@@ -98,13 +100,19 @@ function componentDetailChecklist(items = []) {
     <div class="checklist-grid">
       ${items
         .map(
-          (item) => html`
-            <article>${icon(item.icon ?? "check_circle", { tone: item.tone ?? "success", fill: true })}<span>${item.copy}</span></article>
-          `,
+          (item) => componentDocCard({ title: item.copy, iconName: item.icon ?? "check_circle" }),
         )
         .join("")}
     </div>
   `;
+}
+
+function componentDocCard({ title, detail, status, iconName } = {}) {
+  return componentDemo("card", { title, detail, status, icon: iconName ? icon(iconName, { tone: "action", fill: true }) : undefined, variant: "minimal", composition: "standard", fullWidth: true });
+}
+
+function componentDocListCard(title, items) {
+  return componentDocCard({ title, detail: (items ?? []).join(" ") });
 }
 
 function componentDetailAccessibilityContent(component, fallbackStatePrecedence = "", statePrecedenceOverride = "") {
@@ -136,7 +144,7 @@ function componentDetailGuidelineGroupsContent(groups = []) {
   return html`
     <h2>${ui("guidelines.title")}</h2>
     <div class="guidelines-grid">
-      ${groups.map((group) => `<article><h3>${group.title}</h3><ul>${(group.items ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>`).join("")}
+      ${groups.map((group) => componentDocListCard(group.title, group.items)).join("")}
     </div>
   `;
 }
@@ -149,8 +157,8 @@ function componentDetailTestsListContent({ mustTest = [], rejectIf = [], classNa
   return html`
     <h2>${ui("tests.title")}</h2>
     <div class="${className}">
-      <article><h3>${ui("tests.mustTest")}</h3><ul>${mustTest.map((item) => `<li>${item}</li>`).join("")}</ul></article>
-      <article><h3>${ui("tests.rejectIf")}</h3><ul>${rejectIf.map((item) => `<li>${item}</li>`).join("")}</ul></article>
+      ${componentDocListCard(ui("tests.mustTest"), mustTest)}
+      ${componentDocListCard(ui("tests.rejectIf"), rejectIf)}
     </div>
   `;
 }
@@ -192,9 +200,9 @@ export function componentMielPanel(entry) {
       <h2>${ui("miel.title")}</h2>
       <p>${miel.copy}</p>
       <div class="guidelines-grid">
-        <article><h3>${ui("miel.agentCanDecide")}</h3><ul>${(miel.canDecide ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
-        <article><h3>${ui("miel.agentMustAsk")}</h3><ul>${(miel.mustAsk ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
-        <article><h3>${ui("miel.rejectIf")}</h3><ul>${(miel.rejectIf ?? []).map((item) => `<li>${item}</li>`).join("")}</ul></article>
+        ${componentDocListCard(ui("miel.agentCanDecide"), miel.canDecide)}
+        ${componentDocListCard(ui("miel.agentMustAsk"), miel.mustAsk)}
+        ${componentDocListCard(ui("miel.rejectIf"), miel.rejectIf)}
       </div>
       `,
     })}
