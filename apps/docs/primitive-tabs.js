@@ -51,7 +51,7 @@ export function densityDecisionPanel() {
         ${rows
           .map(
             ([density, title, context, outcome]) => html`
-              <article data-density-context="${density}">
+              <article data-doc-primitive="density-decision-demo" data-density-context="${density}">
                 <header><strong>${density}</strong><span>${title}</span></header>
                 <p>${context}</p>
                 <small>${outcome}</small>

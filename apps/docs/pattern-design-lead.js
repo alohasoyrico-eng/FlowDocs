@@ -1,4 +1,4 @@
-import { html, icon } from "./detail-tabs-core.js?v=5";
+import { artifactRoleGrid, html } from "./detail-tabs-core.js?v=5";
 
 export function patternDesignLeadPanel(entry) {
   if (entry.id === "sidebar") return sidebarDesignLeadPanel();
@@ -32,9 +32,10 @@ function designLeadPanel(title, copy, rules) {
       <span class="eyebrow">Design</span>
       <h2>${title}</h2>
       <p>${copy}</p>
-      <div class="pattern-design-lead-grid">
-        ${rules.map(([name, rule]) => `<article>${icon("rule")}<strong>${name}</strong><span>${rule}</span></article>`).join("")}
-      </div>
+      ${artifactRoleGrid({
+        className: "pattern-design-lead-grid",
+        items: rules.map(([name, rule]) => ({ icon: "rule", title: name, copy: rule })),
+      })}
     </section>
   `;
 }

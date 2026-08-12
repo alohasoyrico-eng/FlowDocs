@@ -180,14 +180,7 @@ function componentDetailFoundationCompactList(foundations = []) {
       ${foundations
         .map(([name, coverage]) => {
           const data = typeof coverage === "string" ? { status: "covered", decision: coverage, behavior: coverage, tokens: [] } : coverage;
-          return html`
-            <article>
-              <header><strong>${name}</strong><span>${data.status}</span></header>
-              <p>${data.decision}</p>
-              <small>${data.behavior}</small>
-              <div class="token-list">${(data.tokens ?? []).map((token) => `<code>${token}</code>`).join("")}</div>
-            </article>
-          `;
+          return componentDocCard({ title: name, detail: `${data.decision} ${data.behavior} ${(data.tokens ?? []).join(", ")}`, status: data.status, iconName: "foundation" });
         })
         .join("")}
     </div>

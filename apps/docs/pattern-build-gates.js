@@ -1,4 +1,4 @@
-import { html, icon, ui } from "./detail-tabs-core.js?v=5";
+import { artifactRoleGrid, html, ui } from "./detail-tabs-core.js?v=5";
 
 export function patternBuildGatePanel(entry) {
   const gates = entry.id === "sidebar"
@@ -17,9 +17,10 @@ export function patternBuildGatePanel(entry) {
   return html`
     <section class="surface docs-section-surface detail-section-surface wide pattern-build-gates" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
       <h2>${ui("build.qualityGates")}</h2>
-      <div class="checklist-grid">
-        ${gates.map((gate) => `<article>${icon("check_circle")}<span>${gate}</span></article>`).join("")}
-      </div>
+      ${artifactRoleGrid({
+        className: "checklist-grid",
+        items: gates.map((gate) => ({ icon: "check_circle", title: gate, copy: "" })),
+      })}
     </section>
   `;
 }

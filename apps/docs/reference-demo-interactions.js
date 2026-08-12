@@ -63,7 +63,7 @@ export function setupReferenceDemos({ foundationCopy, icon, primitiveCopy }) {
     const role = button.dataset.symbolChoice;
     const sets = foundationCopy?.explorers?.items?.Symbol?.sets ?? {};
     demo.dataset.symbolDemo = role;
-    demo.querySelector("[data-symbol-gallery]").innerHTML = (sets[role] ?? []).map((name) => `<article>${icon(name)}<span>${name}</span></article>`).join("");
+    demo.querySelector("[data-symbol-gallery]").innerHTML = (sets[role] ?? []).map((name) => `<article data-doc-primitive="symbol-gallery-item">${icon(name)}<span>${name}</span></article>`).join("");
   });
 
   bindChoice("[data-tone-demo]", "[data-tone-choice]", (demo, button) => {
