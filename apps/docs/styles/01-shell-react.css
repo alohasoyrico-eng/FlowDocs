@@ -112,8 +112,38 @@
 }
 
 @media (max-width: 991px) {
+  body[data-nav-open="true"] {
+    overflow: hidden;
+  }
+
   .docs-shell-topbar {
     z-index: calc(var(--sys-depth-z-overlay) + 1);
+  }
+
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .docs-react-shell-sidebar-mount {
+    block-size: calc(100svh - var(--sys-frame-height-shell-topbar));
+    inline-size: min(var(--sys-frame-sidebar-expanded), calc(100vw - var(--space-6)));
+    inset-block-start: var(--sys-frame-height-shell-topbar);
+    inset-inline-start: 0;
+    max-inline-size: calc(100vw - var(--space-3));
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    transform: translateX(-100%);
+    transition:
+      opacity var(--sys-momentum-transition-touch),
+      transform var(--sys-momentum-transition-touch);
+    z-index: var(--sys-depth-z-overlay);
+  }
+
+  body[data-nav-open="true"] .docs-react-shell-sidebar-mount {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
   }
 
   .docs-react-shell-topbar > [data-doc-shell-slot="navigation-action"] {
@@ -121,6 +151,7 @@
   }
 
   .docs-react-shell-topbar > [data-doc-shell-slot="search-field"] {
+    flex: 1 1 auto;
     min-width: 0;
   }
 
@@ -138,8 +169,19 @@
     gap: var(--space-1);
   }
 
+  .docs-react-shell-topbar__action[data-doc-shell-action="language"],
+  .docs-react-shell-topbar__action[data-doc-shell-action="grid"] {
+    display: none;
+  }
+
   .docs-react-shell-topbar > .docs-react-shell-search-results {
     inset-block-start: calc(var(--sys-frame-height-shell-topbar-mobile) + var(--sys-frame-height-control-sm) + var(--sys-space-sm));
     inset-inline: var(--space-2);
+  }
+
+  .docs-react-shell-sidebar-mount {
+    block-size: calc(100svh - var(--sys-frame-height-shell-topbar-mobile));
+    inline-size: min(20rem, calc(100vw - var(--space-4)));
+    inset-block-start: var(--sys-frame-height-shell-topbar-mobile);
   }
 }

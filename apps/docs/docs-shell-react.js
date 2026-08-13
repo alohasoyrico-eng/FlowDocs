@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Sidebar } from "./generated/react/patterns/Sidebar.js?v=2";
-import { Topbar } from "./generated/react/patterns/Topbar.js?v=1";
+import { Sidebar } from "./generated/react/patterns/Sidebar.js?v=3";
+import { Topbar } from "./generated/react/patterns/Topbar.js?v=2";
 
 let currentLocale = () => "en";
 let render = () => {};
@@ -114,6 +114,7 @@ function topbarProps(current) {
         ariaLabel: ui("shell.languageToggle"),
         icon: "language",
         className: "docs-react-shell-topbar__action",
+        "data-doc-shell-action": "language",
         onClick: () => {
           setCurrentLocale(currentLocale() === "en" ? "es" : "en");
           render();
@@ -126,6 +127,7 @@ function topbarProps(current) {
         icon: gridVisible ? "grid_on" : "grid_off",
         selected: gridVisible,
         className: "docs-react-shell-topbar__action",
+        "data-doc-shell-action": "grid",
         onClick: () => {
           toggleGridOverlay();
           renderDocsTopbar(current);
@@ -138,6 +140,7 @@ function topbarProps(current) {
         icon: "contrast",
         selected: contrastEnabled,
         className: "docs-react-shell-topbar__action",
+        "data-doc-shell-action": "contrast",
         onClick: () => {
           toggleContrastState();
           renderDocsTopbar(current);

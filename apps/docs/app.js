@@ -36,7 +36,7 @@ import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDe
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=1";
 import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=3";
 import { collectionIcon, configureIconSystem, icon, iconFor, tabIcon } from "./icon-system.js?v=199";
-import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=1";
+import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=2";
 import {
   configurePrimitiveReference,
   primitiveApiReferenceSection,

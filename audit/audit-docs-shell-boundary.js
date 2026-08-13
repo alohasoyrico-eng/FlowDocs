@@ -239,11 +239,21 @@ function checkDocsShellBoundary() {
     [path.join(docsAppDir, "generated/react/patterns/Topbar.js"), generatedTopbar, "const shouldRenderDrawer = Boolean(sidebar) && sidebar?.drawer !== false"],
     [path.join(docsAppDir, "generated/react/patterns/Topbar.js"), generatedTopbar, '"aria-expanded": navigationAction?.["aria-expanded"]'],
     [path.join(docsAppDir, "generated/react/patterns/Topbar.js"), generatedTopbar, '"aria-controls": navigationAction?.["aria-controls"]'],
+    [path.join(docsAppDir, "generated/react/patterns/Sidebar.js"), generatedSidebar, "showCloseButton: drawer?.showCloseButton ?? false"],
+    [path.join(docsAppDir, "generated/react/patterns/Topbar.js"), generatedTopbar, "showCloseButton: sidebarDrawer?.showCloseButton ?? false"],
     [path.join(docsAppDir, "generated/react/Drawer.js"), generatedDrawer, "showCloseButton = true"],
     [path.join(docsAppDir, "generated/react/Drawer.js"), generatedDrawer, "showCloseButton && closeLabel"],
   ]) {
     if (!text.includes(required)) {
       add("errors", file, 1, `Generated Flow shell bridge must preserve governed drawer behavior: ${required}.`);
+    }
+  }
+  for (const [file, text, forbidden] of [
+    [path.join(docsAppDir, "generated/react/patterns/Sidebar.js"), generatedSidebar, "showCloseButton: drawer?.showCloseButton ?? true"],
+    [path.join(docsAppDir, "generated/react/patterns/Topbar.js"), generatedTopbar, "showCloseButton: sidebarDrawer?.showCloseButton ?? true"],
+  ]) {
+    if (text.includes(forbidden)) {
+      add("errors", file, lineOf(text, forbidden), `Generated Flow shell bridge must not reintroduce a parallel drawer close control: ${forbidden}.`);
     }
   }
 

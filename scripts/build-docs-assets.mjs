@@ -74,11 +74,17 @@ function walkFiles(dir) {
     return [file];
   });
 }
+function pruneSourceTypes(dir) {
+  for (const file of walkFiles(dir)) {
+    if (file.endsWith(".ts") && !file.endsWith(".d.ts")) fs.rmSync(file, { force: true });
+  }
+}
 function relativeImport(fromFile, toFile, suffix = "") {
   const relativePath = path.relative(path.dirname(fromFile), toFile).replaceAll(path.sep, "/");
   const specifier = relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
   return `${specifier}${suffix}`;
 }
+pruneSourceTypes(componentModuleOutputDir);
 for (const outputFile of walkFiles(reactOutputDir).filter((file) => file.endsWith(".js") || file.endsWith(".d.ts"))) {
   const extensionSuffix = outputFile.endsWith(".js") ? "?v=1" : "";
   const componentsImport = relativeImport(outputFile, path.join(componentModuleOutputDir, "index.js"), extensionSuffix);
