@@ -729,6 +729,18 @@ function checkFlowDocsV2PagesReadiness() {
   const docsIndex = read(docsIndexFile);
   const docsShellReact = read(docsShellReactFile);
   const docsContentSources = read(docsContentSourcesFile);
+  const docsStyleFiles = [
+    path.join(docsAppDir, "styles.css"),
+    ...fs.readdirSync(path.join(docsAppDir, "styles"))
+      .filter((file) => file.endsWith(".css"))
+      .map((file) => path.join(docsAppDir, "styles", file)),
+  ];
+  const docsRuntimeFiles = fs.readdirSync(docsAppDir)
+    .filter((file) => file.endsWith(".js"))
+    .map((file) => path.join(docsAppDir, file));
+  const scriptFiles = fs.readdirSync(path.join(process.cwd(), "scripts"))
+    .filter((file) => file.endsWith(".mjs") || file.endsWith(".js"))
+    .map((file) => path.join(process.cwd(), "scripts", file));
   const componentDetailRuntime = fs.existsSync(path.join(docsAppDir, "gold-component-core.js"))
     ? read(path.join(docsAppDir, "gold-component-core.js"))
     : "";
@@ -786,6 +798,24 @@ function checkFlowDocsV2PagesReadiness() {
     && docsContentSources.includes("catalog")
     && docsApp.includes("homeContent")
     && docsApp.includes("collections");
+  const docPanelCssMatches = docsStyleFiles
+    .map((file) => ({
+      file: path.relative(process.cwd(), file),
+      count: read(file).split("\n").filter((line) => line.includes(".doc-panel")).length,
+    }))
+    .filter((entry) => entry.count > 0);
+  const docPanelRuntimeMatches = docsRuntimeFiles
+    .map((file) => ({
+      file: path.relative(process.cwd(), file),
+      count: (read(file).match(/doc-panel/g) ?? []).length,
+    }))
+    .filter((entry) => entry.count > 0);
+  const legacyScriptIdentifierMatches = scriptFiles
+    .map((file) => ({
+      file: path.relative(process.cwd(), file),
+      count: (read(file).match(/legacy[A-Z][A-Za-z0-9]*/g) ?? []).length,
+    }))
+    .filter((entry) => entry.count > 0);
 
   const componentReadiness = result.inventory.componentDetailTemplateReadiness ?? {};
   const artifactReadiness = result.inventory.artifactDetailSurfaceReadiness ?? {};
@@ -809,6 +839,9 @@ function checkFlowDocsV2PagesReadiness() {
     ...((componentReadiness.rawInteractiveMatches ?? 0) ? ["component-detail:raw-interactive"] : []),
     ...((componentReadiness.rawCardMatches ?? 0) ? ["component-detail:raw-card"] : []),
     ...visualDebt.filter((entry) => entry.total > 0).map((entry) => `visual-debt:${entry.id}:${entry.total}`),
+    ...docPanelCssMatches.map((entry) => `release:doc-panel-css:${entry.file}:${entry.count}`),
+    ...docPanelRuntimeMatches.map((entry) => `release:doc-panel-runtime:${entry.file}:${entry.count}`),
+    ...legacyScriptIdentifierMatches.map((entry) => `release:legacy-script-identifier:${entry.file}:${entry.count}`),
   ];
 
   result.inventory.flowDocsV2Pages = {
@@ -832,6 +865,12 @@ function checkFlowDocsV2PagesReadiness() {
       componentRawInteractiveMatches: componentReadiness.rawInteractiveMatches ?? 0,
       componentRawCardMatches: componentReadiness.rawCardMatches ?? 0,
       visualDebtCategories: visualDebt.filter((entry) => entry.total > 0).length,
+    },
+    releaseReadiness: {
+      docPanelCssMatches,
+      docPanelRuntimeMatches,
+      legacyScriptIdentifierMatches,
+      ready: docPanelCssMatches.length === 0 && docPanelRuntimeMatches.length === 0 && legacyScriptIdentifierMatches.length === 0,
     },
     pageDebt,
   };

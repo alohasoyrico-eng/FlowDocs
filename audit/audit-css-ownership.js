@@ -157,7 +157,7 @@ function checkPatternComponentBoundaryOwnership() {
       },
       {
         pattern: /\.bottom-sheet-demo(?:__|[\s,{.#:[>])/g,
-        message: "FlowDocs must not render or style the legacy Bottom Sheet demo; use the Flow React pattern island.",
+        message: "FlowDocs must not render or style the obsolete Bottom Sheet demo; use the Flow React pattern island.",
       },
       {
         pattern: /data-pattern-sheet=["']bottom-sheet["']/g,

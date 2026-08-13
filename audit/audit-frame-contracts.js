@@ -180,10 +180,10 @@ function checkFrameLayoutContract() {
     [/min-inline-size:\s*0;/, "Tab panel must be shrinkable inside the Frame shell."],
     [/max-inline-size:\s*100%;/, "Tab panel must not exceed the Frame shell."],
   ]);
-  requireCss(".doc-panel", [
-    [/min-inline-size:\s*0;/, "Documentation panels must be shrinkable inside Frame."],
-    [/max-inline-size:\s*100%;/, "Documentation panels must not exceed Frame."],
-    [/overflow-wrap:\s*anywhere;/, "Documentation panels must protect Frame from long content overflow."],
+  requireCss(".docs-section-surface", [
+    [/min-inline-size:\s*0;/, "Documentation Surface sections must be shrinkable inside Frame."],
+    [/max-inline-size:\s*100%;/, "Documentation Surface sections must not exceed Frame."],
+    [/overflow-wrap:\s*anywhere;/, "Documentation Surface sections must protect Frame from long content overflow."],
   ]);
 
   const shellControlsText = fs.existsSync(docsShellControlsFile) ? read(docsShellControlsFile) : "";

@@ -45,6 +45,7 @@ function summarizeInventory(inventory) {
       shellReady: flowDocsV2Pages.shellReady ?? false,
       homeContentOwned: flowDocsV2Pages.homeContentOwned ?? false,
       detailPagesReady: flowDocsV2Pages.detailPagesReady ?? false,
+      releaseReady: flowDocsV2Pages.releaseReadiness?.ready ?? false,
       pageDebt: flowDocsV2Pages.pageDebt?.length ?? 0,
     },
     docsVisualDebt: visualDebt.map((entry) => ({

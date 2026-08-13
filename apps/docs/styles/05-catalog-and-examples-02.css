@@ -221,7 +221,6 @@
   text-align: center;
 }
 
-.doc-panel.wide,
 .docs-section-surface.wide {
   grid-column: 1 / -1;
 }

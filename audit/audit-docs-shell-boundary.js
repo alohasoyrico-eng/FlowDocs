@@ -10,7 +10,7 @@ const {
   add,
 } = require("./audit-context.js");
 
-const legacyShellSelectors = [
+const forbiddenShellSelectors = [
   "#menuButton",
   "#topbarSearch",
   "#topSearch",
@@ -25,12 +25,12 @@ function lineOf(text, token) {
   return index === -1 ? 1 : text.slice(0, index).split("\n").length;
 }
 
-function checkNoLegacyShellSelectors(file) {
+function checkNoObsoleteShellSelectors(file) {
   if (!fs.existsSync(file)) return;
   const text = read(file);
-  for (const selector of legacyShellSelectors) {
+  for (const selector of forbiddenShellSelectors) {
     if (text.includes(selector)) {
-      add("errors", file, lineOf(text, selector), `Docs shell must not reference legacy shell selector ${selector}; use docs-shell-react.js and Flow React shell patterns.`);
+      add("errors", file, lineOf(text, selector), `Docs shell must not reference obsolete shell selector ${selector}; use docs-shell-react.js and Flow React shell patterns.`);
     }
   }
 }
@@ -50,7 +50,7 @@ function checkDocsShellBoundary() {
   const patternShellRenderersFile = path.join(docsAppDir, "pattern-shell-renderers.js");
   const templateDesktopDemosFile = path.join(docsAppDir, "template-desktop-demos.js");
   const docsStylesFile = path.join(docsAppDir, "styles.css");
-  const legacyShellStyleFiles = [
+  const forbiddenShellStyleFiles = [
     "styles/07-pattern-focused-demos.css",
     "styles/07-pattern-sidebar-slots.css",
     "styles/07-pattern-topbar-sections.css",
@@ -60,7 +60,7 @@ function checkDocsShellBoundary() {
     "styles/07-pattern-topbar.css",
     "styles/07-pattern-demo-responsive.css",
   ].map((file) => path.join(docsAppDir, file));
-  const legacyDocsSelectors = [
+  const forbiddenDocsSelectors = [
     ".search-slot",
     ".pattern-command-demo,",
     ".pattern-command-demo__",
@@ -78,7 +78,7 @@ function checkDocsShellBoundary() {
     "styles/06-responsive-02.css",
   ].map((file) => path.join(docsAppDir, file));
   if (fs.existsSync(navigationFile)) {
-    add("errors", navigationFile, 1, "Legacy navigation.js must not exist; docs shell navigation is owned by docs-shell-react.js and Flow React Topbar/Sidebar.");
+    add("errors", navigationFile, 1, "Obsolete navigation.js must not exist; docs shell navigation is owned by docs-shell-react.js and Flow React Topbar/Sidebar.");
   }
   if (fs.existsSync(patternShellRenderersFile)) {
     add("errors", patternShellRenderersFile, 1, "Manual shell renderers must not exist; templates and pattern pages must consume Flow React Topbar/Sidebar or template islands.");
@@ -88,9 +88,9 @@ function checkDocsShellBoundary() {
       add("errors", file, 1, "Docs-only slot helpers must not exist for Search, Notification Panel, or Avatar Menu; use Flow React patterns or pattern-package-demo.js for component snippets.");
     }
   }
-  for (const file of legacyShellStyleFiles) {
+  for (const file of forbiddenShellStyleFiles) {
     if (fs.existsSync(file)) {
-      add("errors", file, 1, "Legacy shell demo CSS must not exist without a Flow React owner.");
+      add("errors", file, 1, "Obsolete shell demo CSS must not exist without a Flow React owner.");
     }
   }
 
@@ -107,7 +107,7 @@ function checkDocsShellBoundary() {
     "07-pattern-demo-responsive.css",
   ]) {
     if (docsStyles.includes(forbiddenImport)) {
-      add("errors", docsStylesFile, lineOf(docsStyles, forbiddenImport), `Docs styles must not import legacy shell demo CSS: ${forbiddenImport}.`);
+      add("errors", docsStylesFile, lineOf(docsStyles, forbiddenImport), `Docs styles must not import obsolete shell demo CSS: ${forbiddenImport}.`);
     }
   }
   const styleFiles = [
@@ -118,9 +118,9 @@ function checkDocsShellBoundary() {
   ];
   for (const file of styleFiles) {
     const text = read(file);
-    for (const selector of legacyDocsSelectors) {
+    for (const selector of forbiddenDocsSelectors) {
       if (text.includes(selector)) {
-        add("errors", file, lineOf(text, selector), `Docs CSS must not keep legacy shell/pattern selector ${selector}; demos must consume Flow React boundaries.`);
+        add("errors", file, lineOf(text, selector), `Docs CSS must not keep obsolete shell/pattern selector ${selector}; demos must consume Flow React boundaries.`);
       }
     }
   }
@@ -157,7 +157,7 @@ function checkDocsShellBoundary() {
     if (!app.includes(required)) add("errors", docsAppFile, 1, `Docs app is missing shell React integration: ${required}.`);
   }
   for (const forbidden of ["setupCommand", "setupMenu", "setupTopNav", "./navigation.js"]) {
-    if (app.includes(forbidden)) add("errors", docsAppFile, lineOf(app, forbidden), `Docs app must not wire legacy shell behavior: ${forbidden}.`);
+    if (app.includes(forbidden)) add("errors", docsAppFile, lineOf(app, forbidden), `Docs app must not wire obsolete shell behavior: ${forbidden}.`);
   }
 
   const shell = read(docsShellReactFile);
@@ -183,7 +183,7 @@ function checkDocsShellBoundary() {
   }
 
   for (const file of [docsIndexFile, docsChromeFile, docsLayoutFile, docsAppFile]) {
-    checkNoLegacyShellSelectors(file);
+    checkNoObsoleteShellSelectors(file);
   }
   for (const file of responsiveShellStyleFiles) {
     const text = read(file);

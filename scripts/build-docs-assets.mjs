@@ -7,13 +7,10 @@ const root = process.cwd();
 const require = createRequire(import.meta.url);
 const componentModuleFile = fileURLToPath(import.meta.resolve("#design-system/components"));
 const componentModuleOutputDir = path.join(root, "apps/docs/generated/components");
-const legacyComponentModuleOutputDir = path.join(root, "apps/docs/generated/components");
 const componentSourceFile = fileURLToPath(import.meta.resolve("#design-system/components-css"));
 const componentOutputFile = path.join(root, "apps/docs/generated/components.css");
-const legacyComponentOutputFile = path.join(root, "apps/docs/generated/components.css");
 const tokenSourceFile = fileURLToPath(import.meta.resolve("#design-system/tokens-css"));
 const tokenOutputFile = path.join(root, "apps/docs/generated/tokens.css");
-const legacyTokenOutputFile = path.join(root, "apps/docs/generated/tokens.css");
 const tokenContextSourceFile = fileURLToPath(import.meta.resolve("#design-system/token-contexts-css"));
 const tokenContextOutputFile = path.join(root, "apps/docs/generated/token-contexts.css");
 const vendorOutputDir = path.join(root, "apps/docs/generated/vendor");
@@ -58,11 +55,10 @@ const componentSource = fs.readFileSync(componentSourceFile, "utf8").replace(
 );
 
 fs.mkdirSync(path.dirname(componentOutputFile), { recursive: true });
-fs.rmSync(legacyComponentModuleOutputDir, { recursive: true, force: true });
-fs.rmSync(legacyComponentOutputFile, { force: true });
-fs.rmSync(legacyTokenOutputFile, { force: true });
-fs.rmSync(tokenContextOutputFile, { force: true });
 fs.rmSync(componentModuleOutputDir, { recursive: true, force: true });
+fs.rmSync(componentOutputFile, { force: true });
+fs.rmSync(tokenOutputFile, { force: true });
+fs.rmSync(tokenContextOutputFile, { force: true });
 fs.rmSync(reactOutputDir, { recursive: true, force: true });
 fs.cpSync(path.dirname(componentModuleFile), componentModuleOutputDir, { recursive: true });
 const reactDistSource = firstExistingPath([

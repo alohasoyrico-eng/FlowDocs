@@ -136,7 +136,6 @@
   gap: var(--density-section-gap);
 }
 
-:is(.detail-page, .reference-doc) .doc-panel,
 :is(.detail-page, .reference-doc) .docs-section-surface {
   gap: var(--density-subsection-gap);
   padding: var(--density-surface-padding);
@@ -144,17 +143,12 @@
   box-shadow: none;
 }
 
-:is(.detail-page, .reference-doc) .doc-panel > h2,
-:is(.detail-page, .reference-doc) .doc-panel > h3,
 :is(.detail-page, .reference-doc) .docs-section-surface > h2,
 :is(.detail-page, .reference-doc) .docs-section-surface > h3 {
   font-size: var(--density-doc-heading-size);
   line-height: var(--density-doc-heading-line-height);
 }
 
-:is(.detail-page, .reference-doc) .doc-panel > p,
-:is(.detail-page, .reference-doc) .doc-panel li,
-:is(.detail-page, .reference-doc) .doc-panel dd,
 :is(.detail-page, .reference-doc) .docs-section-surface > p,
 :is(.detail-page, .reference-doc) .docs-section-surface li,
 :is(.detail-page, .reference-doc) .docs-section-surface dd {
