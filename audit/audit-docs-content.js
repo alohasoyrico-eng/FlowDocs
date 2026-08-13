@@ -719,6 +719,128 @@ function checkComponentDetailTemplateReadiness() {
   }
 }
 
+function checkFlowDocsV2PagesReadiness() {
+  const docsContentBundleFile = path.join(docsAppDir, "generated/docs-content.bundle.json");
+  const docsContentBundle = readJson(docsContentBundleFile) ?? {};
+  const catalog = docsContentBundle.catalog ?? {};
+  const docsApp = read(docsAppFile);
+  const docsLayout = read(docsLayoutFile);
+  const docsHome = read(docsHomeStackRenderersFile);
+  const docsIndex = read(docsIndexFile);
+  const docsShellReact = read(docsShellReactFile);
+  const docsContentSources = read(docsContentSourcesFile);
+  const componentDetailRuntime = fs.existsSync(path.join(docsAppDir, "gold-component-core.js"))
+    ? read(path.join(docsAppDir, "gold-component-core.js"))
+    : "";
+  const foundationPrimitiveRuntime = [
+    path.join(docsAppDir, "foundation-tabs.js"),
+    path.join(docsAppDir, "primitive-tabs.js"),
+    docsReferenceLayoutFile,
+  ].filter((file) => fs.existsSync(file)).map((file) => read(file)).join("\n");
+  const appAndLayout = `${docsApp}\n${docsLayout}`;
+
+  const collectionCounts = {
+    foundations: catalog.foundations?.length ?? 0,
+    primitives: catalog.primitives?.length ?? 0,
+    components: catalog.components?.length ?? 0,
+    patterns: catalog.patterns?.length ?? 0,
+    templates: catalog.templates?.length ?? 0,
+  };
+  const expectedCounts = {
+    foundations: 11,
+    primitives: 24,
+    components: 60,
+    patterns: 63,
+    templates: 9,
+  };
+  const detailRoutes = Object.values(collectionCounts).reduce((total, count) => total + count, 0);
+  const expectedDetailRoutes = Object.values(expectedCounts).reduce((total, count) => total + count, 0);
+
+  const homeContentKeys = [
+    "home.hero",
+    "home.coverage",
+    "home.documentationStatus",
+    "home.visualMigration",
+    "home.architecture",
+    "home.fastPaths",
+  ];
+  const missingHomeKeys = homeContentKeys.filter((key) => !docsHome.includes(key));
+  const shellMarkers = [
+    { id: "topbarMount", ready: docsIndex.includes('id="docsReactShellTopbar"') },
+    { id: "sidebarMount", ready: docsLayout.includes('id="docsReactShellSidebar"') },
+    { id: "reactTopbarConsumer", ready: docsShellReact.includes('"data-doc-shell-consumer": "react-topbar"') },
+    { id: "reactSidebarConsumer", ready: docsShellReact.includes('"data-doc-shell-consumer": "react-sidebar"') },
+    { id: "mobileToggleOwnsSidebar", ready: docsShellReact.includes('"aria-controls": "docsReactShellSidebar"') },
+  ];
+  const detailPageMarkers = [
+    { id: "artifactDetailShell", ready: docsLayout.includes('data-doc-primitive="detail-page-shell"') },
+    { id: "componentPatternTemplateDetailTabs", ready: docsLayout.includes('data-react-component="detail-shell-tabs"') },
+    { id: "componentTemplateSections", ready: componentDetailRuntime.includes('data-doc-template="component-detail"') },
+    { id: "artifactTemplateSections", ready: appAndLayout.includes('data-doc-template="artifact-detail"') },
+    { id: "foundationDetailPage", ready: docsApp.includes('data-doc-primitive="foundation-reference-page"') },
+    { id: "primitiveDetailPage", ready: docsApp.includes('data-doc-primitive="primitive-reference-page"') },
+    { id: "foundationPrimitiveTemplateSections", ready: foundationPrimitiveRuntime.includes('data-doc-template="foundation-primitive-detail"') },
+  ];
+  const flowContentOwned = docsContentSources.includes("generated/docs-content.bundle.json")
+    && docsContentSources.includes("homeContent")
+    && docsContentSources.includes("catalog")
+    && docsApp.includes("homeContent")
+    && docsApp.includes("collections");
+
+  const componentReadiness = result.inventory.componentDetailTemplateReadiness ?? {};
+  const artifactReadiness = result.inventory.artifactDetailSurfaceReadiness ?? {};
+  const foundationPrimitiveReadiness = result.inventory.foundationPrimitiveDetailSurfaceReadiness ?? {};
+  const detailShellReadiness = result.inventory.detailShellTemplateReadiness ?? {};
+  const visualDebt = result.inventory.docsVisualDebt ?? [];
+  const pageDebt = [
+    ...shellMarkers.filter((entry) => !entry.ready).map((entry) => `shell:${entry.id}`),
+    ...detailPageMarkers.filter((entry) => !entry.ready).map((entry) => `detail:${entry.id}`),
+    ...missingHomeKeys.map((key) => `home:${key}`),
+    ...Object.entries(expectedCounts)
+      .filter(([key, expected]) => collectionCounts[key] !== expected)
+      .map(([key, expected]) => `catalog:${key}:${collectionCounts[key]}/${expected}`),
+    ...(detailRoutes === expectedDetailRoutes ? [] : [`routes:${detailRoutes}/${expectedDetailRoutes}`]),
+    ...(flowContentOwned ? [] : ["content:generated-bundle"]),
+    ...(detailShellReadiness.wrapperReady ? [] : ["detail-shell:react-tabs-wrapper"]),
+    ...((artifactReadiness.rawDocPanelHotspots?.length ?? 0) ? ["artifact-detail:doc-panel-hotspots"] : []),
+    ...((foundationPrimitiveReadiness.rawDocPanelHotspots?.length ?? 0) ? ["foundation-primitive-detail:doc-panel-hotspots"] : []),
+    ...((componentReadiness.ungovernedCustomGoldRenderers?.length ?? 0) ? ["component-detail:ungoverned-custom-renderers"] : []),
+    ...((componentReadiness.rawDocPanelMatches ?? 0) ? ["component-detail:raw-doc-panel"] : []),
+    ...((componentReadiness.rawInteractiveMatches ?? 0) ? ["component-detail:raw-interactive"] : []),
+    ...((componentReadiness.rawCardMatches ?? 0) ? ["component-detail:raw-card"] : []),
+    ...visualDebt.filter((entry) => entry.total > 0).map((entry) => `visual-debt:${entry.id}:${entry.total}`),
+  ];
+
+  result.inventory.flowDocsV2Pages = {
+    collectionCounts,
+    expectedCounts,
+    detailRoutes,
+    expectedDetailRoutes,
+    flowContentOwned,
+    shellReady: shellMarkers.every((entry) => entry.ready),
+    shellMarkers,
+    homeContentOwned: missingHomeKeys.length === 0,
+    missingHomeKeys,
+    detailPagesReady: detailPageMarkers.every((entry) => entry.ready),
+    detailPageMarkers,
+    inheritedReadiness: {
+      detailShellWrapperReady: detailShellReadiness.wrapperReady ?? false,
+      artifactDocPanelHotspots: artifactReadiness.rawDocPanelHotspots?.length ?? 0,
+      foundationPrimitiveDocPanelHotspots: foundationPrimitiveReadiness.rawDocPanelHotspots?.length ?? 0,
+      componentUngovernedCustomRenderers: componentReadiness.ungovernedCustomGoldRenderers?.length ?? 0,
+      componentRawDocPanelMatches: componentReadiness.rawDocPanelMatches ?? 0,
+      componentRawInteractiveMatches: componentReadiness.rawInteractiveMatches ?? 0,
+      componentRawCardMatches: componentReadiness.rawCardMatches ?? 0,
+      visualDebtCategories: visualDebt.filter((entry) => entry.total > 0).length,
+    },
+    pageDebt,
+  };
+
+  if (pageDebt.length) {
+    add("errors", docsAppDir, 1, `FlowDocs v2 pages are not ready: ${pageDebt.join(", ")}.`);
+  }
+}
+
 function checkI18nReadiness() {
   const appFile = docsAppFile;
   const app = read(appFile);
@@ -1087,5 +1209,6 @@ module.exports = {
   checkArtifactDetailSurfaceReadiness,
   checkFoundationPrimitiveDetailSurfaceReadiness,
   checkComponentDetailTemplateReadiness,
+  checkFlowDocsV2PagesReadiness,
   checkI18nReadiness,
 };

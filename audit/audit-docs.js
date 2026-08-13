@@ -18,6 +18,7 @@ const {
   checkArtifactDetailSurfaceReadiness,
   checkFoundationPrimitiveDetailSurfaceReadiness,
   checkComponentDetailTemplateReadiness,
+  checkFlowDocsV2PagesReadiness,
   checkI18nReadiness,
 } = require("./audit-docs-content.js");
 const {
@@ -66,5 +67,6 @@ checkPatternComponentBoundaryOwnership();
 checkDocsPackageImportBoundary();
 checkPublicClassNamespaceOwnership();
 checkDocsVisualDebtInventory();
+checkFlowDocsV2PagesReadiness();
 
 finishAudit();

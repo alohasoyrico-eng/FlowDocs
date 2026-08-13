@@ -5,6 +5,7 @@ function summarizeInventory(inventory) {
   const componentReadiness = inventory.componentDetailTemplateReadiness ?? {};
   const artifactReadiness = inventory.artifactDetailSurfaceReadiness ?? {};
   const foundationPrimitiveReadiness = inventory.foundationPrimitiveDetailSurfaceReadiness ?? {};
+  const flowDocsV2Pages = inventory.flowDocsV2Pages ?? {};
   const visualDebt = inventory.docsVisualDebt ?? [];
   return {
     demoQuality: {
@@ -35,6 +36,16 @@ function summarizeInventory(inventory) {
       allowedControlBridgeMatches: componentReadiness.rawControlBridgeMatches ?? 0,
       rawCardMatches: componentReadiness.rawCardMatches ?? 0,
       governedCardCompositionMatches: componentReadiness.governedCardCompositionMatches ?? 0,
+    },
+    flowDocsV2Pages: {
+      detailRoutes: flowDocsV2Pages.detailRoutes ?? 0,
+      expectedDetailRoutes: flowDocsV2Pages.expectedDetailRoutes ?? 0,
+      collectionCounts: flowDocsV2Pages.collectionCounts ?? {},
+      flowContentOwned: flowDocsV2Pages.flowContentOwned ?? false,
+      shellReady: flowDocsV2Pages.shellReady ?? false,
+      homeContentOwned: flowDocsV2Pages.homeContentOwned ?? false,
+      detailPagesReady: flowDocsV2Pages.detailPagesReady ?? false,
+      pageDebt: flowDocsV2Pages.pageDebt?.length ?? 0,
     },
     docsVisualDebt: visualDebt.map((entry) => ({
       id: entry.id,
