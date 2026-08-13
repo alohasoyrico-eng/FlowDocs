@@ -1,4 +1,4 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactRoleGrid, docsLinkCard, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, docsLinkCard, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
 import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=52";
 import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
 import { focusedPatternDesignPanels } from "./pattern-focused-design.js?v=25";
@@ -26,12 +26,7 @@ function patternDesignBody(entry) {
     return focusedPatternDesignPanels(entry);
   }
   const leadPanel = journeyPanel(entry);
-  const customPanels = entry.id === "sidebar"
-    ? `${sidebarFoundationsPanel()}${sidebarLayoutPanel()}${sidebarMotionPanel()}${sidebarVariantsPanel()}`
-    : entry.id === "topbar"
-      ? `${topbarFoundationsPanel()}${topbarSlotPanel()}${topbarSearchPanel()}${topbarVariantsPanel()}`
-      : "";
-  return `${leadPanel}${customPanels}${patternDecisionTreePanel(entry)}${patternFailureModesPanel(entry)}${screensPanel(entry)}${metricsPanel(entry)}${researchPanel(entry)}${guidelinesPanel(entry)}`;
+  return `${leadPanel}${patternDecisionTreePanel(entry)}${patternFailureModesPanel(entry)}${screensPanel(entry)}${metricsPanel(entry)}${researchPanel(entry)}${guidelinesPanel(entry)}`;
 }
 
 function patternBuildBody(entry) {
@@ -43,102 +38,6 @@ function patternBuildBody(entry) {
 export function patternExamplePanel(entry) {
   if (entry.id === "topbar" || entry.id === "sidebar") return shellPatternOverviewDemo(entry.id) || examplePanel(entry);
   return examplePanel(entry);
-}
-
-function sidebarFoundationsPanel() {
-  const rows = [
-    ["Frame", "Persistent desktop width, drawer placement, internal scroll, group spacing, and content minmax rules."],
-    ["Voice", "Parent labels, child labels, disclosure names, active-route copy, and count labels stay readable."],
-    ["Energy", "Surface, active state, hover/focus, border, and Badge count color use semantic tokens."],
-    ["Depth", "Persistent desktop sidebar stays flat; mobile drawer gets overlay/elevation only when it leaves document system."],
-    ["Momentum", "Disclosure, hover, active, drawer, and reduced-motion behavior use system duration and easing."],
-    ["State", "Hover, focus, selected, pressed, disabled, and open states resolve without color-only meaning."],
-    ["Tone", "Navigation stays neutral by default, assistive on selected route, and avoids urgent styling for orientation."],
-    ["Growth", "Artifact counts use Badge as metadata with monospaced count treatment."],
-    ["Symbol", "Parent group symbols communicate zones without adding icons to child routes."],
-    ["Iconography", "Material Symbols use system family, size, optical alignment, and parent-only rules."],
-    ["Accessibility", "Disclosure state, focus ring, touch target, aria-current, and reduced-motion behavior are required."]
-  ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Foundations consumed</h2>${artifactDetailTable({ columns: ["Foundation", "Type", "Required", "Rule"], rows: rows.map(([name, rule]) => [name, "Foundation", "Required", rule]) })}</section>`;
-}
-
-function topbarFoundationsPanel() {
-  const rows = [
-    ["Frame", "Defines height, slot priority, responsive wrap, safe target size, and search/nav allocation."],
-    ["Voice", "Owns brand labels, placeholder copy, accessible names, account labels, and search result labels."],
-    ["Energy", "Controls surface, active collection, search focus, notification count, hover, and focus states."],
-    ["Depth", "Separates sticky shell, search results, and account menu without turning the topbar into a card."],
-    ["Momentum", "Controls search focus reveal, menu panel entry, action feedback, and reduced-motion fallback."],
-    ["State", "Selected nav, unread notification, open account menu, search focus, pressed, and disabled states are explicit."],
-    ["Tone", "Topbar remains neutral; notifications can become warning only when count/status requires it."],
-    ["Growth", "Collection counts and unread counts are metadata, not primary navigation labels."],
-    ["Symbol", "Action symbols support labels and slots; they never replace accessible names."],
-    ["Iconography", "Utility icons use Material Symbols sizing and optical alignment; brand slot can swap logo safely."],
-    ["Accessibility", "Landmarks, role search, aria-current, aria-haspopup, aria-expanded, focus ring, Escape, and reduced motion are required."]
-  ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar foundations consumed</h2>${artifactDetailTable({ columns: ["Foundation", "Type", "Required", "Rule"], rows: rows.map(([name, rule]) => [name, "Foundation", "Required", rule]) })}</section>`;
-}
-
-function topbarSlotPanel() {
-  const rows = [
-    ["leading", "Menu trigger, product switcher, or mobile sidebar entry. Uses Icon Button behavior."],
-    ["brand", "Logo, wordmark, partner logo, or compact mark. Must preserve accessible home label."],
-    ["navigation", "Collection links or product sections. Active item uses aria-current."],
-    ["search", "Search Input slot now; Global Search pattern only when results/routing/history are owned."],
-    ["actions", "Language, contrast, grid, help, notifications, or compact utility commands."],
-    ["account", "Avatar trigger plus Menu for settings, profile, workspace, and sign out."]
-  ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar slots</h2>${artifactDetailTable({ columns: ["Slot", "Type", "Status", "Rule"], rows: rows.map(([slot, rule]) => [slot, "Slot", "Configurable", rule]) })}</section>`;
-}
-
-function topbarSearchPanel() {
-  const rows = [
-    ["Search", "Pattern dependency", "Owns query, results, empty state, routing, recents, and recovery when the topbar search is more than a local field."],
-    ["Autocomplete", "Pattern dependency", "Owns suggestions, keyboard movement, loading, no-result recovery, and selection when the search slot predicts entities."],
-    ["Command Palette", "Pattern candidate", "Separate from topbar when search executes actions, not just artifact lookup."]
-  ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Search boundary</h2>${artifactDetailTable({ columns: ["Pattern", "Type", "Status", "Decision"], rows: rows.map(([name, type, decision]) => [name, type, "Decision", decision]) })}</section>`;
-}
-
-function topbarVariantsPanel() {
-  const variants = [
-    ["Docs", "Brand, collection nav, artifact search, language, grid, contrast, and sidebar entry."],
-    ["Product", "Product logo, workspace switcher, global search, notifications, help, and account menu."],
-    ["Co-brand", "Primary logo plus partner/customer mark with same slot contract."],
-    ["Search-focused", "Search expands; nav compresses or moves to overflow/sidebar."],
-    ["Account-aware", "Avatar opens Menu with settings, workspace, profile, and logout."],
-    ["Notification-aware", "Unread Badge and notification menu/panel use state and tone without hijacking navigation."]
-  ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Topbar variants</h2>${artifactRoleGrid({ items: variants.map(([name, rule]) => ({ icon: "web_asset", title: name, copy: rule })) })}</section>`;
-}
-
-function sidebarLayoutPanel() {
-  const rules = [
-    "Desktop uses a persistent sidebar with tokenized expanded width and main content as minmax(0, 1fr).",
-    "Small viewports open the sidebar from Topbar/Menu as a drawer and must not create horizontal page overflow.",
-    "Maximum visible depth is two levels: parent collection to child route.",
-    "Children do not use icons by default; parents own iconography because they represent collection zones.",
-    "Optional footer is a separate region for help, version, workspace, or account utilities, never mixed into primary routes."
-  ];
-  return listPanel("Sidebar layout rules", rules);
-}
-
-function sidebarMotionPanel() {
-  const rows = [
-    ["Group disclosure", "Uses quick reveal/collapse; reduced motion removes animated height/opacity."],
-    ["Mobile drawer", "Slides from the navigation edge with focus restoration and Escape close."],
-    ["Active state", "Changes instantly; do not animate route identity in a way that delays orientation."]
-  ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Motion contract</h2><div class="architecture-chain">${rows.map(([name, rule], index) => patternDocCard(name, rule, index)).join("")}</div></section>`;
-}
-
-function sidebarVariantsPanel() {
-  const variants = [
-    ["Grouped", "Current docs shell. Parent icons, Badge counts, child text links, active route."],
-    ["Drawer", "Mobile behavior opened from Topbar/Menu, with focus trap and close affordance."],
-    ["With Footer", "Optional utility region for help, version, workspace, account, or environment status."]
-  ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>Sidebar variants</h2>${artifactRoleGrid({ items: variants.map(([name, rule]) => ({ icon: "view_sidebar", title: name, copy: rule })) })}</section>`;
 }
 
 function sidebarContractPanel() {

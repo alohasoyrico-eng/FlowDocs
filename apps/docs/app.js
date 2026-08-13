@@ -1,6 +1,6 @@
 import { artifactCard, artifactTypeLabel, docsLinkCard, configureCatalogRenderers, groupCollection, label } from "./catalog-renderers.js";
 import { loadDocsContent } from "./content-sources.js?v=203";
-import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=58";
+import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=59";
 import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=295";
 import { applyLocalizedChrome, configureDocsChrome, setupLanguageToggle } from "./docs-chrome.js?v=2";
 import { renderCollectionContent, renderDetailContent, renderShell } from "./docs-layout.js?v=225";

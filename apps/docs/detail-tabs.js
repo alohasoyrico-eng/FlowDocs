@@ -1,7 +1,7 @@
 import { componentDocs, familyComponentTabs, goldComponentDocumentationTabs, configureDetailTabsContext } from "./detail-tabs-core.js?v=5";
 import { foundationTabs } from "./foundation-tabs.js?v=3";
 import { primitiveTabs } from "./primitive-tabs.js?v=3";
-import { patternTabs } from "./pattern-tabs.js?v=58";
+import { patternTabs } from "./pattern-tabs.js?v=59";
 import { templateTabs } from "./template-tabs.js?v=15";
 
 export { accessibilityPanel, agentPanel, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs-core.js?v=5";
