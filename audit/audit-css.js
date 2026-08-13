@@ -20,6 +20,7 @@ const {
 } = require("./audit-context.js");
 
 const tokenCssFile = resolveBoundaryPath("#design-system/tokens-css", "packages/tokens/styles/tokens.css");
+const tokenContextCssFile = resolveBoundaryPath("#design-system/token-contexts-css", "apps/docs/generated/token-contexts.css");
 
 function isAllowedTokenDeclaration(line) {
   return /^\s*--(?:ref|sys|comp)-[a-z0-9-]+:\s*/.test(line);
@@ -111,8 +112,10 @@ function checkStaticHygiene() {
 function checkMissingFoundationTokenReferences() {
   const cssFiles = [
     tokenCssFile,
+    tokenContextCssFile,
     docsCssFile,
     path.join(docsAppDir, "generated/tokens.css"),
+    path.join(docsAppDir, "generated/token-contexts.css"),
     path.join(docsAppDir, "generated/components.css"),
     ...docsStyleModuleFiles,
   ].filter((file) => fs.existsSync(file));
@@ -142,7 +145,9 @@ function checkMissingFoundationTokenReferences() {
 function readFullDocsCss() {
   return [
     tokenCssFile,
+    tokenContextCssFile,
     path.join(docsAppDir, "generated/tokens.css"),
+    path.join(docsAppDir, "generated/token-contexts.css"),
     readDocsCss(),
   ]
     .filter(Boolean)

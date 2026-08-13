@@ -258,27 +258,7 @@
 }
 
 .density-responsive {
-  --sys-density-control-height: var(--ref-frame-height-control-lg-comfortable);
-  --sys-density-control-padding-x: var(--sys-space-8);
-  --sys-density-control-padding-y: var(--sys-space-5);
-  --sys-density-panel-padding: var(--sys-space-10);
-  --sys-density-card-padding: var(--sys-space-10);
-  --sys-density-surface-padding: var(--sys-space-24);
-  --sys-density-component-gap: var(--sys-space-8);
-  --sys-density-component-gap-lg: var(--sys-space-10);
-  --sys-density-subsection-gap: var(--sys-space-16);
-  --sys-density-section-gap: var(--sys-space-24);
-  --sys-density-page-gap: var(--sys-space-32);
-  --sys-density-row-height: var(--ref-frame-height-control-lg-comfortable);
-  --sys-density-doc-heading-size: var(--sys-voice-size-11);
-  --sys-density-doc-heading-line-height: var(--sys-voice-line-height-tight);
-  --sys-density-doc-body-size: var(--sys-voice-size-8);
-  --sys-density-doc-body-line-height: var(--sys-voice-line-height-relaxed);
-  --sys-density-doc-label-size: var(--sys-voice-size-4);
-  --sys-density-doc-card-title-size: var(--sys-voice-size-8);
-  --sys-density-doc-card-body-size: var(--sys-voice-size-7);
-  --sys-density-doc-card-min-block: calc(var(--sys-density-row-height) * 2);
-  --sys-density-doc-example-min-block: calc(var(--sys-density-row-height) * 3);
+  /* Flow-owned density context tokens come from generated/token-contexts.css. */
   --button-default-height: var(--ref-frame-height-control-lg-comfortable);
   --button-default-padding-x: var(--sys-space-8);
   --button-default-font-size: var(--sys-voice-size-8);
@@ -288,27 +268,6 @@
 
 @media (min-width: 576px) and (max-width: 1439px) {
   .density-responsive {
-    --sys-density-control-height: var(--ref-frame-height-control-md);
-    --sys-density-control-padding-x: var(--sys-space-5);
-    --sys-density-control-padding-y: var(--sys-space-3);
-    --sys-density-panel-padding: var(--sys-space-6);
-    --sys-density-card-padding: var(--sys-space-6);
-    --sys-density-surface-padding: var(--sys-space-12);
-    --sys-density-component-gap: var(--sys-space-5);
-    --sys-density-component-gap-lg: var(--sys-space-7);
-    --sys-density-subsection-gap: var(--sys-space-9);
-    --sys-density-section-gap: var(--sys-space-16);
-    --sys-density-page-gap: var(--sys-space-20);
-    --sys-density-row-height: var(--ref-frame-height-control-md);
-    --sys-density-doc-heading-size: var(--sys-voice-size-10);
-    --sys-density-doc-heading-line-height: var(--sys-voice-line-height-tight);
-    --sys-density-doc-body-size: var(--sys-voice-size-6);
-    --sys-density-doc-body-line-height: var(--sys-voice-line-height-relaxed);
-    --sys-density-doc-label-size: var(--sys-voice-size-3);
-    --sys-density-doc-card-title-size: var(--sys-voice-size-6);
-    --sys-density-doc-card-body-size: var(--sys-voice-size-6);
-    --sys-density-doc-card-min-block: calc(var(--sys-density-row-height) * 2);
-    --sys-density-doc-example-min-block: calc(var(--sys-density-row-height) * 3);
     --button-default-height: var(--sys-frame-height-control-md);
     --button-default-padding-x: var(--sys-frame-button-padding-x-md);
     --button-default-font-size: var(--sys-voice-size-6);
@@ -319,27 +278,6 @@
 
 @media (max-width: 575px) {
   .density-responsive {
-    --sys-density-control-height: var(--ref-frame-height-control-md);
-    --sys-density-control-padding-x: var(--sys-space-5);
-    --sys-density-control-padding-y: var(--sys-space-3);
-    --sys-density-panel-padding: var(--sys-space-5);
-    --sys-density-card-padding: var(--sys-space-5);
-    --sys-density-surface-padding: var(--sys-space-5);
-    --sys-density-component-gap: var(--sys-space-4);
-    --sys-density-component-gap-lg: var(--sys-space-5);
-    --sys-density-subsection-gap: var(--sys-space-6);
-    --sys-density-section-gap: var(--sys-space-10);
-    --sys-density-page-gap: var(--sys-space-12);
-    --sys-density-row-height: var(--ref-frame-height-control-md);
-    --sys-density-doc-heading-size: var(--sys-voice-size-9);
-    --sys-density-doc-heading-line-height: var(--sys-voice-line-height-tight);
-    --sys-density-doc-body-size: var(--sys-voice-size-7);
-    --sys-density-doc-body-line-height: var(--sys-voice-line-height-relaxed);
-    --sys-density-doc-label-size: var(--sys-voice-size-3);
-    --sys-density-doc-card-title-size: var(--sys-voice-size-7);
-    --sys-density-doc-card-body-size: var(--sys-voice-size-6);
-    --sys-density-doc-card-min-block: calc(var(--sys-density-row-height) * 2);
-    --sys-density-doc-example-min-block: calc(var(--sys-density-row-height) * 3);
     --button-default-height: var(--sys-frame-height-control-md);
     --button-default-padding-x: var(--sys-frame-button-padding-x-md);
     --button-default-font-size: var(--sys-voice-size-6);

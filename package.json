@@ -17,6 +17,7 @@
     "#design-system/react": "flow/react",
     "#design-system/components-css": "flow/components/styles.css",
     "#design-system/tokens-css": "flow/tokens/styles.css",
+    "#design-system/token-contexts-css": "flow/tokens/context-styles.css",
     "#design-system/content/catalog": "flow/content/catalog",
     "#design-system/content/component-docs": "flow/content/component-docs",
     "#design-system/content/component-copy": "flow/content/component-copy",

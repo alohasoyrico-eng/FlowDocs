@@ -13,6 +13,7 @@ const {
 } = require("./audit-context.js");
 
 const tokenCssFile = resolveBoundaryPath("#design-system/tokens-css", "packages/tokens/styles/tokens.css");
+const tokenContextCssFile = resolveBoundaryPath("#design-system/token-contexts-css", "apps/docs/generated/token-contexts.css");
 
 function lineNumber(source, index) {
   return source.slice(0, index).split("\n").length;
@@ -74,9 +75,12 @@ function requireCss(selector, rules) {
 }
 
 function checkFrameLayoutContract() {
-  const cssText = readDocsCss();
+  const tokenContextCss = fs.existsSync(tokenContextCssFile) ? read(tokenContextCssFile) : "";
+  const generatedTokenContextCssFile = path.join(docsAppDir, "generated/token-contexts.css");
+  const generatedTokenContextCss = fs.existsSync(generatedTokenContextCssFile) ? read(generatedTokenContextCssFile) : "";
+  const cssText = `${readDocsCss()}\n${tokenContextCss}\n${generatedTokenContextCss}`;
   const tokenCss = read(tokenCssFile);
-  const rootBlock = extractCssBlocks(cssText, ":root");
+  const rootBlock = extractCssBlocks(`${tokenContextCss}\n${generatedTokenContextCss}\n${readDocsCss()}`, ":root");
   const tokenRootBlock = extractCssBlocks(tokenCss, ":root");
   const runtimeRootBlock = `${tokenRootBlock}\n${rootBlock}`;
 
@@ -139,7 +143,7 @@ function checkFrameLayoutContract() {
     [/--frame-section-y:\s*var\(--density-section-gap\);/, "Frame page rhythm must resolve from Density."],
   ];
   for (const [pattern, message] of densityContracts) {
-    if (!pattern.test(runtimeRootBlock)) add("errors", tokenCssFile, 1, message);
+    if (!pattern.test(runtimeRootBlock)) add("errors", tokenContextCssFile, 1, message);
   }
 
   for (const selector of ['[data-density="sm"]', '[data-density="md"]', '[data-density="lg"]', '[data-density-demo="sm"]', '[data-density-demo="md"]', '[data-density-demo="lg"]']) {

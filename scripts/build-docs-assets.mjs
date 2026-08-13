@@ -14,6 +14,8 @@ const legacyComponentOutputFile = path.join(root, "apps/docs/generated/component
 const tokenSourceFile = fileURLToPath(import.meta.resolve("#design-system/tokens-css"));
 const tokenOutputFile = path.join(root, "apps/docs/generated/tokens.css");
 const legacyTokenOutputFile = path.join(root, "apps/docs/generated/tokens.css");
+const tokenContextSourceFile = fileURLToPath(import.meta.resolve("#design-system/token-contexts-css"));
+const tokenContextOutputFile = path.join(root, "apps/docs/generated/token-contexts.css");
 const vendorOutputDir = path.join(root, "apps/docs/generated/vendor");
 const reactOutputDir = path.join(root, "apps/docs/generated/react");
 
@@ -49,6 +51,7 @@ function dependencyFile(packageName, relativePath) {
 }
 
 const tokenSource = fs.readFileSync(tokenSourceFile, "utf8");
+const tokenContextSource = fs.readFileSync(tokenContextSourceFile, "utf8");
 const componentSource = fs.readFileSync(componentSourceFile, "utf8").replace(
   /@import "\.\.\/\.\.\/tokens\/styles\/tokens\.css\?v=\d+";/,
   '@import "./tokens.css?v=1";'
@@ -58,6 +61,7 @@ fs.mkdirSync(path.dirname(componentOutputFile), { recursive: true });
 fs.rmSync(legacyComponentModuleOutputDir, { recursive: true, force: true });
 fs.rmSync(legacyComponentOutputFile, { force: true });
 fs.rmSync(legacyTokenOutputFile, { force: true });
+fs.rmSync(tokenContextOutputFile, { force: true });
 fs.rmSync(componentModuleOutputDir, { recursive: true, force: true });
 fs.rmSync(reactOutputDir, { recursive: true, force: true });
 fs.cpSync(path.dirname(componentModuleFile), componentModuleOutputDir, { recursive: true });
@@ -103,6 +107,7 @@ for (const outputFile of walkFiles(reactOutputDir).filter((file) => file.endsWit
   );
 }
 fs.writeFileSync(tokenOutputFile, `${generatedHeader("packages/tokens/styles/tokens.css")}${tokenSource}`);
+fs.writeFileSync(tokenContextOutputFile, `${generatedHeader("packages/tokens/styles/token-contexts.css")}${tokenContextSource}`);
 fs.writeFileSync(componentOutputFile, `${generatedHeader("packages/components/styles/components.css")}${componentSource}`);
 fs.mkdirSync(vendorOutputDir, { recursive: true });
 fs.copyFileSync(dependencyFile("react", "umd/react.production.min.js"), path.join(vendorOutputDir, "react.production.min.js"));
@@ -132,3 +137,4 @@ console.log(`Built docs asset bridge: ${path.relative(root, componentModuleOutpu
 console.log(`Built docs React bridge: ${path.relative(root, reactOutputDir)}`);
 console.log(`Built docs asset bridge: ${path.relative(root, componentOutputFile)}`);
 console.log(`Built docs asset bridge: ${path.relative(root, tokenOutputFile)}`);
+console.log(`Built docs asset bridge: ${path.relative(root, tokenContextOutputFile)}`);
