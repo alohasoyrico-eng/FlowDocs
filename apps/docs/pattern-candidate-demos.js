@@ -10,37 +10,6 @@ function patternReactDemo(pattern, props, state = "default", variant = "standard
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
 }
 
-function bottomSheetPatternDemo({
-  label = "Mobile sheet",
-  description = "",
-  items = [],
-  state = "open",
-  actions = [],
-} = {}, attrs = {}) {
-  const attrText = Object.entries(attrs)
-    .map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`)
-    .join(" ");
-  return html`
-    <section class="bottom-sheet-demo" data-pattern-sheet="bottom-sheet" data-state="${state}" ${attrText}>
-      <div class="bottom-sheet-demo__scrim">
-        <div class="bottom-sheet-demo__panel" role="dialog" aria-modal="true" aria-label="${label}">
-          <span class="bottom-sheet-demo__handle" aria-hidden="true"></span>
-          <header>
-            <div>
-              <strong>${label}</strong>
-              ${description ? `<p>${description}</p>` : ""}
-            </div>
-          </header>
-          <div class="bottom-sheet-demo__body">
-            ${items.map((item) => `<span>${typeof item === "string" ? item : item.label}</span>`).join("")}
-          </div>
-          ${actions.length ? `<footer>${actions.map((action) => packageDemo("button", action)).join("")}</footer>` : ""}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
 export function candidatePatternOverviewDemo(patternId) {
   const shellDemo = shellPatternOverviewDemo(patternId);
   if (shellDemo) return shellDemo;

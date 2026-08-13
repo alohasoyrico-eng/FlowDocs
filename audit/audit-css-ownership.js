@@ -145,31 +145,29 @@ function checkDocsPackageMarkupOwnership() {
 function checkPatternComponentBoundaryOwnership() {
   const bottomSheetCss = path.join(docsAppDir, "styles/05d-bottom-sheet-docs.css");
   if (fs.existsSync(bottomSheetCss)) {
-    const text = read(bottomSheetCss);
-    const componentNamespace = /--comp-bottom-sheet-[a-z0-9-]+/g;
-    let match;
-    while ((match = componentNamespace.exec(text))) {
-      add("errors", bottomSheetCss, lineForIndex(text, match.index), "Bottom Sheet is a pattern, not a component; use --pattern-bottom-sheet-* for pattern-local tokens.");
-    }
+    add("errors", bottomSheetCss, 1, "FlowDocs must not own Bottom Sheet CSS; compose the Flow React pattern or package components instead.");
+  }
 
-    const buttonAnatomySelectors = [
+  for (const file of walkFiles(docsAppDir, (candidate) => /\.(?:css|js)$/.test(candidate))) {
+    const text = read(file);
+    const forbidden = [
       {
-        pattern: /\.bottom-sheet-demo\s+button(?::|[\s,{])/g,
-        message: "Bottom Sheet pattern must compose package Button; docs CSS may not style raw button anatomy inside the pattern.",
+        pattern: /--(?:comp|pattern)-bottom-sheet-[a-z0-9-]+/g,
+        message: "Bottom Sheet tokens must not be declared in FlowDocs; the pattern boundary belongs to Flow.",
       },
       {
-        pattern: /\.bottom-sheet-demo\s+footer\s+button(?::|[\s,{])/g,
-        message: "Bottom Sheet pattern footer may lay out package Button demos, but must not restyle button anatomy.",
+        pattern: /\.bottom-sheet-demo(?:__|[\s,{.#:[>])/g,
+        message: "FlowDocs must not render or style the legacy Bottom Sheet demo; use the Flow React pattern island.",
       },
       {
-        pattern: /\.bottom-sheet-demo\s+\[data-sheet-action=/g,
-        message: "Bottom Sheet pattern actions must use package Button variants; data-sheet-action must not become a second Button styling API.",
+        pattern: /data-pattern-sheet=["']bottom-sheet["']/g,
+        message: "FlowDocs must not publish a parallel Bottom Sheet demo API; use data-flow-pattern from the Flow React pattern.",
       },
     ];
-    for (const check of buttonAnatomySelectors) {
-      check.pattern.lastIndex = 0;
+    for (const check of forbidden) {
+      let match;
       while ((match = check.pattern.exec(text))) {
-        add("errors", bottomSheetCss, lineForIndex(text, match.index), check.message);
+        add("errors", file, lineForIndex(text, match.index), check.message);
       }
     }
   }

@@ -11,37 +11,6 @@ function packageDemo(component, demo = {}, attrs = {}) {
   return markup.replace(/^<([a-z0-9-]+)/i, `<$1 ${attrText}`);
 }
 
-function bottomSheetPatternDemo({
-  label = "Mobile sheet",
-  description = "",
-  items = [],
-  state = "open",
-  actions = [],
-} = {}, attrs = {}) {
-  const attrText = Object.entries(attrs)
-    .map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`)
-    .join(" ");
-  return html`
-    <section class="bottom-sheet-demo" data-pattern-sheet="bottom-sheet" data-state="${state}" ${attrText}>
-      <div class="bottom-sheet-demo__scrim">
-        <div class="bottom-sheet-demo__panel" role="dialog" aria-modal="true" aria-label="${label}">
-          <span class="bottom-sheet-demo__handle" aria-hidden="true"></span>
-          <header>
-            <div>
-              <strong>${label}</strong>
-              ${description ? `<p>${description}</p>` : ""}
-            </div>
-          </header>
-          <div class="bottom-sheet-demo__body">
-            ${items.map((item) => `<span>${typeof item === "string" ? item : item.label}</span>`).join("")}
-          </div>
-          ${actions.length ? `<footer>${actions.map((action) => packageDemo("button", action)).join("")}</footer>` : ""}
-        </div>
-      </div>
-    </section>
-  `;
-}
-
 export function mobilePatternOverviewDemo(patternId) {
   const reactDemo = mobileReactPatternOverviewDemo(patternId);
   if (reactDemo) return reactDemo;
@@ -60,7 +29,7 @@ function fullscreenSheetDemoPanel() {
       <div class="pattern-fullscreen-sheet-demo pattern-mobile-demo" data-fullscreen-sheet-demo data-step-index="0">
         ${packageDemo("button", { label: "Edit station policy", icon: "open_in_full" }, { "data-fullscreen-sheet-open": "" })}
         <div class="pattern-fullscreen-sheet-demo__sheet" data-fullscreen-sheet hidden>
-          ${bottomSheetPatternDemo({ label: "Station policy", description: "Edit contextual mobile settings without losing the route.", state: "closed", items: ["Station", "Limits", "Review"] }, { "data-fullscreen-sheet-component": "" })}
+          ${packageDemo("drawer", { label: "Station policy", description: "Edit contextual mobile settings without losing the route.", trigger: "Open station policy", state: "closed", fields: ["Station", "Limits", "Review"] }, { "data-fullscreen-sheet-component": "" })}
           <div data-fullscreen-stepper>
             ${packageDemo("stepper", { current: 0, steps: [{ label: "Station", description: "Context" }, { label: "Limit", description: "Policy" }, { label: "Review", description: "Confirm" }] })}
           </div>
