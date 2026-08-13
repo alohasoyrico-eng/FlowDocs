@@ -40,8 +40,9 @@
     "build:docs-assets": "node scripts/build-docs-assets.mjs",
     "build:docs": "npm run build:docs-content && npm run build:docs-assets",
     "serve": "node scripts/serve-docs.mjs",
+    "typecheck:docs": "node_modules/flow/node_modules/.bin/tsc -p tsconfig.json",
     "audit:docs": "node audit/audit-docs.js",
     "audit:docs-runtime": "node audit/audit-docs-runtime.mjs",
-    "validate:docs": "npm run build:docs && npm run audit:docs && npm run audit:docs-runtime"
+    "validate:docs": "npm run build:docs && npm run typecheck:docs && npm run audit:docs && npm run audit:docs-runtime"
   }
 }
