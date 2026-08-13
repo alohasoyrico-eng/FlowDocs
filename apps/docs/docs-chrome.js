@@ -16,19 +16,8 @@ export function applyLocalizedChrome() {
   if (skipLink) skipLink.textContent = ui("shell.skipToContent");
   document.querySelector(".topbar")?.setAttribute("aria-label", ui("shell.primaryNavigation"));
   document.querySelector(".brand")?.setAttribute("aria-label", ui("shell.brandHome"));
-  const languageToggle = document.querySelector("#languageToggle");
-  if (languageToggle) {
-    const languageCode = languageToggle.querySelector(".language-toggle__code");
-    if (languageCode) languageCode.textContent = ui("shell.languageCurrent");
-    languageToggle.dataset.locale = currentLocale();
-    languageToggle.setAttribute("aria-label", ui("shell.languageToggle"));
-  }
 }
 
 export function setupLanguageToggle() {
-  document.querySelector("#languageToggle")?.addEventListener("click", () => {
-    setCurrentLocale(currentLocale() === "en" ? "es" : "en");
-    applyLocalizedChrome();
-    render();
-  });
+  // Language is owned by the Flow Topbar action in docs-shell-react.js.
 }

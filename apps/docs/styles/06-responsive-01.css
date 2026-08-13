@@ -52,7 +52,7 @@
     grid-template-columns: 1fr;
   }
 
-  .sidebar {
+  .sidebar:not(.docs-react-shell-sidebar-mount) {
     position: fixed;
     inset: var(--sys-frame-height-shell-topbar) var(--sys-space-lg) var(--sys-space-lg) var(--sys-space-lg);
     z-index: var(--sys-depth-z-overlay);
@@ -77,13 +77,13 @@
       transform var(--sys-momentum-transition-default);
   }
 
-  body[data-nav-open="true"] .sidebar {
+  body[data-nav-open="true"] .sidebar:not(.docs-react-shell-sidebar-mount) {
     opacity: 1;
     pointer-events: auto;
     transform: var(--component-transform-y-rest);
   }
 
-  .sidebar a {
+  .sidebar:not(.docs-react-shell-sidebar-mount) a {
     min-inline-size: 0;
   }
 
@@ -234,7 +234,7 @@
     grid-template-columns: var(--sys-frame-sidebar-expanded) minmax(0, 1fr);
   }
 
-  .sidebar {
+  .sidebar:not(.docs-react-shell-sidebar-mount) {
     position: sticky;
     inset: auto;
     top: var(--sys-frame-height-shell-topbar);

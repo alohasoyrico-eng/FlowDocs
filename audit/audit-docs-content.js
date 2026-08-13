@@ -920,9 +920,15 @@ function checkI18nReadiness() {
       add("errors", appFile, 1, `Docs app must use i18n UI readiness helper: ${required}.`);
     }
   }
-  const index = read(docsIndexFile);
-  if (!index.includes('id="languageToggle"')) {
-    add("errors", docsIndexFile, 1, "Docs app must expose a language toggle for i18n readiness.");
+  const shell = read(docsShellReactFile);
+  for (const required of [
+    'key: "language"',
+    'label: ui("shell.languageToggle")',
+    "setCurrentLocale(currentLocale() === \"en\" ? \"es\" : \"en\")",
+  ]) {
+    if (!shell.includes(required)) {
+      add("errors", docsShellReactFile, 1, `Docs app must expose i18n through the Flow Topbar language action: ${required}.`);
+    }
   }
 }
 

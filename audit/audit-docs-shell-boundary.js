@@ -17,6 +17,7 @@ const legacyShellSelectors = [
   "#topSearchResults",
   "#gridToggle",
   "#themeToggle",
+  "#languageToggle",
 ];
 
 function lineOf(text, token) {
@@ -72,6 +73,10 @@ function checkDocsShellBoundary() {
     ".pattern-search-demo",
     ".pattern-autocomplete-demo",
   ];
+  const responsiveShellStyleFiles = [
+    "styles/06-responsive-01.css",
+    "styles/06-responsive-02.css",
+  ].map((file) => path.join(docsAppDir, file));
   if (fs.existsSync(navigationFile)) {
     add("errors", navigationFile, 1, "Legacy navigation.js must not exist; docs shell navigation is owned by docs-shell-react.js and Flow React Topbar/Sidebar.");
   }
@@ -128,6 +133,9 @@ function checkDocsShellBoundary() {
   ]) {
     if (!index.includes(required)) add("errors", docsIndexFile, 1, `Docs index is missing React shell mount: ${required}.`);
   }
+  if (index.includes('id="languageToggle"')) {
+    add("errors", docsIndexFile, lineOf(index, 'id="languageToggle"'), "Docs shell must not keep a local language control; language is owned by the Flow Topbar action.");
+  }
 
   const layout = read(docsLayoutFile);
   for (const required of [
@@ -176,6 +184,18 @@ function checkDocsShellBoundary() {
 
   for (const file of [docsIndexFile, docsChromeFile, docsLayoutFile, docsAppFile]) {
     checkNoLegacyShellSelectors(file);
+  }
+  for (const file of responsiveShellStyleFiles) {
+    const text = read(file);
+    for (const forbidden of [
+      ".sidebar {",
+      'body[data-nav-open="true"] .sidebar {',
+      ".sidebar a {",
+    ]) {
+      if (text.includes(forbidden)) {
+        add("errors", file, lineOf(text, forbidden), `Responsive docs CSS must not target .sidebar globally because it overrides the Flow React Sidebar mount: ${forbidden}.`);
+      }
+    }
   }
 
   const patternTabs = read(patternTabsFile);

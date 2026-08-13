@@ -176,18 +176,12 @@
 @media (max-width: 480px) {
   .topbar {
     grid-template-areas:
-      "menu brand brand brand"
-      "search search actions actions";
-    grid-template-columns: auto minmax(0, 1fr) auto auto;
+      "brand"
+      "flowshell";
+    grid-template-columns: minmax(0, 1fr);
     row-gap: var(--sys-space-2);
     column-gap: var(--sys-space-sm);
     padding-block: var(--sys-space-sm);
-  }
-
-  .docs-icon-button.menu-button {
-    grid-area: menu;
-    inline-size: var(--sys-frame-height-control-sm);
-    block-size: var(--sys-frame-height-control-sm);
   }
 
   .brand {
@@ -200,24 +194,14 @@
     inline-size: clamp(var(--sys-frame-brand-logo-mobile-min), 28vw, var(--sys-frame-brand-logo-mobile-max));
   }
 
-  .topbar__search {
-    grid-area: search;
-    min-block-size: var(--sys-frame-doc-icon-md);
+  .docs-react-shell-topbar-mount {
+    grid-area: flowshell;
+    grid-column: 1 / -1;
+    inline-size: 100%;
+    min-inline-size: 0;
   }
 
-  .top-actions {
-    grid-area: actions;
-    align-self: stretch;
-    gap: var(--sys-space-xs);
-  }
-
-  .top-actions .docs-icon-button,
-  .top-actions .language-toggle {
-    inline-size: var(--sys-frame-doc-icon-md);
-    block-size: var(--sys-frame-doc-icon-md);
-  }
-
-  .sidebar {
+  .sidebar:not(.docs-react-shell-sidebar-mount) {
     inset: var(--sys-frame-height-shell-topbar-mobile) var(--sys-space-md) var(--sys-space-md) var(--sys-space-md);
     max-inline-size: calc(100vw - (var(--sys-space-md) * 2));
     block-size: calc(100svh - var(--sys-frame-height-shell-topbar-mobile) - var(--sys-space-md));
