@@ -16,11 +16,6 @@
   --density-section-gap: var(--ref-frame-space-12);
   --density-page-gap: var(--ref-frame-space-16);
   --density-row-height: var(--ref-frame-height-control-sm);
-  --button-default-height: var(--sys-frame-height-control-sm);
-  --button-default-padding-x: var(--sys-frame-button-padding-x-sm);
-  --button-default-font-size: var(--ref-voice-size-5);
-  --button-default-gap: var(--ref-frame-space-2);
-  --button-default-icon-size: var(--sys-symbol-size-sm);
   --density-gap: var(--density-component-gap);
   --density-pad: var(--density-panel-padding);
 }
@@ -38,11 +33,6 @@
   --density-section-gap: var(--ref-frame-space-16);
   --density-page-gap: var(--ref-frame-space-20);
   --density-row-height: var(--ref-frame-height-control-md);
-  --button-default-height: var(--sys-frame-height-control-md);
-  --button-default-padding-x: var(--sys-frame-button-padding-x-md);
-  --button-default-font-size: var(--ref-voice-size-6);
-  --button-default-gap: var(--ref-frame-space-2);
-  --button-default-icon-size: var(--sys-symbol-size-sm);
   --density-gap: var(--density-component-gap);
   --density-pad: var(--density-panel-padding);
 }
@@ -60,11 +50,6 @@
   --density-section-gap: var(--ref-frame-space-24);
   --density-page-gap: var(--ref-frame-space-32);
   --density-row-height: var(--ref-frame-height-control-lg-comfortable);
-  --button-default-height: var(--ref-frame-height-control-lg-comfortable);
-  --button-default-padding-x: var(--ref-frame-space-8);
-  --button-default-font-size: var(--ref-voice-size-8);
-  --button-default-gap: var(--ref-frame-space-4);
-  --button-default-icon-size: var(--sys-symbol-size-lg);
   --density-gap: var(--density-component-gap);
   --density-pad: var(--density-panel-padding);
 }
