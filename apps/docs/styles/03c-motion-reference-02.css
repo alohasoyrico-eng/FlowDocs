@@ -180,12 +180,12 @@
 
 .stack-demo {
   display: grid;
-  gap: var(--density-gap, var(--sys-frame-gap-component));
+  gap: var(--density-component-gap, var(--sys-frame-gap-component));
   background: var(--sys-energy-surface-secondary);
 }
 
 .stack-demo div {
-  padding: var(--density-pad, var(--sys-space-md));
+  padding: var(--density-panel-padding, var(--sys-space-md));
   border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
   border-radius: var(--sys-frame-radius-container);
   background: var(--sys-energy-surface-primary);

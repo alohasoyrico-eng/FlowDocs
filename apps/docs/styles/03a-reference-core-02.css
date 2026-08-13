@@ -3,69 +3,18 @@
   color: var(--sys-energy-surface-secondary);
 }
 
-[data-density-demo="sm"] {
-  --density-control-height: var(--ref-frame-height-control-md-compact);
-  --density-control-padding-x: var(--ref-frame-space-4);
-  --density-control-padding-y: var(--ref-frame-space-2);
-  --density-panel-padding: var(--ref-frame-space-5);
-  --density-card-padding: var(--ref-frame-space-5);
-  --density-surface-padding: var(--ref-frame-space-8);
-  --density-component-gap: var(--ref-frame-space-3);
-  --density-component-gap-lg: var(--ref-frame-space-5);
-  --density-subsection-gap: var(--ref-frame-space-6);
-  --density-section-gap: var(--ref-frame-space-12);
-  --density-page-gap: var(--ref-frame-space-16);
-  --density-row-height: var(--ref-frame-height-control-sm);
-  --density-gap: var(--density-component-gap);
-  --density-pad: var(--density-panel-padding);
-}
-
-[data-density-demo="md"] {
-  --density-control-height: var(--ref-frame-height-control-md);
-  --density-control-padding-x: var(--ref-frame-space-5);
-  --density-control-padding-y: var(--ref-frame-space-3);
-  --density-panel-padding: var(--ref-frame-space-6);
-  --density-card-padding: var(--ref-frame-space-6);
-  --density-surface-padding: var(--ref-frame-space-12);
-  --density-component-gap: var(--ref-frame-space-5);
-  --density-component-gap-lg: var(--ref-frame-space-7);
-  --density-subsection-gap: var(--ref-frame-space-9);
-  --density-section-gap: var(--ref-frame-space-16);
-  --density-page-gap: var(--ref-frame-space-20);
-  --density-row-height: var(--ref-frame-height-control-md);
-  --density-gap: var(--density-component-gap);
-  --density-pad: var(--density-panel-padding);
-}
-
-[data-density-demo="lg"] {
-  --density-control-height: var(--ref-frame-height-control-lg-comfortable);
-  --density-control-padding-x: var(--ref-frame-space-8);
-  --density-control-padding-y: var(--ref-frame-space-5);
-  --density-panel-padding: var(--ref-frame-space-10);
-  --density-card-padding: var(--ref-frame-space-10);
-  --density-surface-padding: var(--ref-frame-space-24);
-  --density-component-gap: var(--ref-frame-space-8);
-  --density-component-gap-lg: var(--ref-frame-space-10);
-  --density-subsection-gap: var(--ref-frame-space-16);
-  --density-section-gap: var(--ref-frame-space-24);
-  --density-page-gap: var(--ref-frame-space-32);
-  --density-row-height: var(--ref-frame-height-control-lg-comfortable);
-  --density-gap: var(--density-component-gap);
-  --density-pad: var(--density-panel-padding);
-}
-
 .frame-demo-columns {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
-  gap: var(--density-gap, var(--sys-frame-gap-component-lg));
+  gap: var(--density-component-gap, var(--sys-frame-gap-component-lg));
   margin-block-start: var(--sys-frame-gap-component-lg);
   transition: gap var(--sys-momentum-transition-default);
 }
 
 .frame-demo-columns article {
   display: grid;
-  gap: var(--density-gap, 0.65rem);
-  padding: var(--density-pad, var(--sys-frame-padding-container));
+  gap: var(--density-component-gap, var(--sys-frame-gap-component));
+  padding: var(--density-panel-padding, var(--sys-frame-padding-container));
   border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
   border-radius: var(--sys-frame-radius-container);
   background: var(--sys-energy-surface-primary);
