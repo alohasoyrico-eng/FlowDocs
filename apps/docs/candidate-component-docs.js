@@ -1,6 +1,6 @@
 import { componentDemo } from "./component-demo.js?v=60";
 import { candidateCompositionPlans } from "./candidate-component-plans.js?v=2";
-import { componentDetailChecklist, componentDetailDemoGrid, componentDetailSection, componentDetailTable } from "./gold-component-core.js?v=214";
+import { componentDetailChecklist, componentDetailDemoGrid, componentDetailSection, componentDetailTable } from "./gold-component-core.js?v=221";
 
 let html = String.raw;
 let icon = () => "";

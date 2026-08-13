@@ -5,6 +5,7 @@ export function setupButtonPlaygrounds({ buttonDemo, componentSectionData, escap
     const preview = playground.querySelector("[data-button-preview]");
     const markup = playground.querySelector("[data-button-markup]");
     const warning = playground.querySelector("[data-button-warning]");
+    if (!preview || !markup || !warning) return;
 
     const read = (name) => {
       const input = playground.querySelector(`[data-button-playground-input="${name}"]`);
@@ -25,8 +26,12 @@ export function setupButtonPlaygrounds({ buttonDemo, componentSectionData, escap
       preview.dataset.densityContext = density;
       preview.innerHTML = buttonDemo(label, `${variant}${full}`, intent, "", iconName, state);
       const button = preview.querySelector(".button");
-      const attrs = [...button.attributes].map((attr) => `${attr.name}="${attr.value}"`).join(" ");
-      markup.textContent = `<button ${attrs}>${rawLabel}</button>`;
+      if (button) {
+        const attrs = [...button.attributes].map((attr) => `${attr.name}="${attr.value}"`).join(" ");
+        markup.textContent = `<button ${attrs}>${rawLabel}</button>`;
+      } else {
+        markup.textContent = preview.textContent?.trim() ?? "";
+      }
 
       const context = { intent: intent || "default", state: state || "default", label: rawLabel.toLowerCase() };
       const messages = (componentSectionData("button", "playground").warnings ?? [])

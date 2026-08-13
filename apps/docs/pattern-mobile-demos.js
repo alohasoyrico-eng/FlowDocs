@@ -1,6 +1,7 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 import { componentDemo } from "./component-demo.js?v=60";
-import { mobileReactPatternOverviewDemo } from "./pattern-mobile-react-demos.js?v=2";
+import { demoPreviewFrameIsland } from "./demo-preview-frame-island.js?v=1";
+import { mobileReactPatternOverviewDemo } from "./pattern-mobile-react-demos.js?v=3";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -9,6 +10,29 @@ function packageDemo(component, demo = {}, attrs = {}) {
     .map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`)
     .join(" ");
   return markup.replace(/^<([a-z0-9-]+)/i, `<$1 ${attrText}`);
+}
+
+function mobileDemoSection(title, body) {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: "wide pattern-mobile-panel",
+    source: "docs-mobile-pattern-previews",
+  });
+}
+
+function mobilePatternPreviewFrame({ title, className, attrs = "", body = "" } = {}) {
+  return demoPreviewFrameIsland({
+    label: title,
+    previewHtml: body,
+    kind: "viewport",
+    state: "viewport-mobile",
+    density: "sm",
+    fullWidth: true,
+    className: [className, "docs-mobile-pattern-preview"].filter(Boolean).join(" "),
+    attrs,
+    source: "docs-mobile-pattern-previews",
+  });
 }
 
 export function mobilePatternOverviewDemo(patternId) {
@@ -22,11 +46,8 @@ export function mobilePatternOverviewDemo(patternId) {
 }
 
 function fullscreenSheetDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Mobile station edit</h2>
-      <div class="pattern-fullscreen-sheet-demo pattern-mobile-demo" data-fullscreen-sheet-demo data-step-index="0">
+  return mobileDemoSection("Mobile station edit", html`
+      ${mobilePatternPreviewFrame({ title: "Mobile station edit", className: "pattern-fullscreen-sheet-demo", attrs: 'data-fullscreen-sheet-demo data-step-index="0"', body: html`
         ${packageDemo("button", { label: "Edit station policy", icon: "open_in_full" }, { "data-fullscreen-sheet-open": "" })}
         <div class="pattern-fullscreen-sheet-demo__sheet" data-fullscreen-sheet hidden>
           ${packageDemo("drawer", { label: "Station policy", description: "Edit contextual mobile settings without losing the route.", trigger: "Open station policy", state: "closed", fields: ["Station", "Limits", "Review"] }, { "data-fullscreen-sheet-component": "" })}
@@ -53,17 +74,13 @@ function fullscreenSheetDemoPanel() {
           </footer>
         </div>
         <div data-fullscreen-toast hidden>${packageDemo("toast", { label: "Station policy saved", description: "Mobile task completed and focus returned.", tone: "success" }, { "data-pattern-toast": "fullscreen-sheet" })}</div>
-      </div>
-    </section>
-  `;
+      ` })}
+  `);
 }
 
 function swipeActionsDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Row actions with explicit reveal</h2>
-      <div class="pattern-swipe-actions-demo pattern-mobile-demo" data-swipe-actions-demo>
+  return mobileDemoSection("Row actions with explicit reveal", html`
+      ${mobilePatternPreviewFrame({ title: "Row actions with explicit reveal", className: "pattern-swipe-actions-demo", attrs: "data-swipe-actions-demo", body: html`
         <div class="pattern-swipe-actions-demo__row">
           ${packageDemo("movement-row", { label: "Fuel purchase", meta: "Today - Station 24 - JMX-214-B", amount: "-$842", status: "Approved" }, { "data-swipe-row": "" })}
           <div class="pattern-swipe-actions-demo__rail" data-swipe-actions-rail hidden>
@@ -76,17 +93,13 @@ function swipeActionsDemoPanel() {
           ${packageDemo("button", { label: "Hide actions", variant: "secondary" }, { "data-swipe-hide": "", hidden: "" })}
         </footer>
         <div data-swipe-toast hidden>${packageDemo("toast", { label: "Action selected", description: "Row action is ready.", tone: "success" }, { "data-pattern-toast": "swipe-actions" })}</div>
-      </div>
-    </section>
-  `;
+      ` })}
+  `);
 }
 
 function quickActionsGridDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Card shortcut grid</h2>
-      <div class="pattern-quick-actions-grid-demo pattern-mobile-demo" data-quick-actions-grid-demo>
+  return mobileDemoSection("Card shortcut grid", html`
+      ${mobilePatternPreviewFrame({ title: "Card shortcut grid", className: "pattern-quick-actions-grid-demo", attrs: "data-quick-actions-grid-demo", body: html`
         <div class="pattern-quick-actions-grid-demo__grid">
           ${packageDemo("quick-action", { label: "Freeze", icon: "block", badge: "Risk" }, { "data-quick-grid-action": "freeze" })}
           ${packageDemo("quick-action", { label: "Limits", icon: "tune" }, { "data-quick-grid-action": "limits" })}
@@ -97,17 +110,13 @@ function quickActionsGridDemoPanel() {
         <div data-quick-grid-dialog hidden>${packageDemo("dialog", { label: "Freeze card?", description: "The driver cannot use this card until it is reactivated.", trigger: "Freeze card", tone: "danger", actions: [{ label: "Freeze card", intent: "danger", key: "confirm" }, { label: "Cancel", variant: "secondary", key: "cancel" }] }, { "data-pattern-dialog": "quick-actions-grid" })}</div>
         <div data-quick-grid-toast hidden>${packageDemo("toast", { label: "Shortcut applied", description: "Quick action was completed.", tone: "success" }, { "data-pattern-toast": "quick-actions-grid" })}</div>
         ${packageDemo("badge", { label: "4 shortcuts", tone: "neutral", variant: "standard" }, { "data-quick-grid-count": "" })}
-      </div>
-    </section>
-  `;
+      ` })}
+  `);
 }
 
 function drawerAdapterDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Inspector drawer adapter</h2>
-      <div class="pattern-drawer-adapter-demo pattern-mobile-demo" data-drawer-adapter-demo>
+  return mobileDemoSection("Inspector drawer adapter", html`
+      ${mobilePatternPreviewFrame({ title: "Inspector drawer adapter", className: "pattern-drawer-adapter-demo", attrs: "data-drawer-adapter-demo", body: html`
         ${packageDemo("button", { label: "Open mobile drawer", icon: "dock_to_left" }, { "data-drawer-adapter-open": "" })}
         <div class="pattern-drawer-adapter-demo__drawer" data-drawer-adapter-panel hidden>
           ${packageDemo("drawer", { label: "Vehicle inspector", description: "Adapted side panel content for mobile.", trigger: "Open drawer", state: "closed", fields: ["Overview", "Documents", "Risk"], actions: [{ label: "Open risk review", variant: "secondary", key: "risk" }, { label: "Close drawer", variant: "secondary", key: "close" }] }, { "data-drawer-adapter-component": "" })}
@@ -115,7 +124,6 @@ function drawerAdapterDemoPanel() {
         </div>
         <div data-drawer-adapter-dialog hidden>${packageDemo("dialog", { label: "Open risk review?", description: "Risk review pauses the drawer task and requires a decision.", trigger: "Risk review", actions: [{ label: "Open review", key: "confirm" }, { label: "Cancel", variant: "secondary", key: "cancel" }] }, { "data-pattern-dialog": "drawer-adapter" })}</div>
         <div data-drawer-adapter-toast hidden>${packageDemo("toast", { label: "Drawer action complete", description: "Adapted drawer selection was handled.", tone: "success" }, { "data-pattern-toast": "drawer-adapter" })}</div>
-      </div>
-    </section>
-  `;
+      ` })}
+  `);
 }

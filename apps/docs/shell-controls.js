@@ -54,12 +54,12 @@ function resolvedCssLength(value) {
 }
 
 function frameOverlayTarget() {
-  const selectors = [".detail-layout", ".hero", ".page-hero", ".reference-doc", ".section > :not(.section-head)", ".content-shell"];
+  const selectors = [".detail-layout", ".docs-intro", ".docs-page-intro", ".reference-doc", ".section > :not(.section-head)", ".content-shell"];
   return selectors.map((selector) => document.querySelector(selector)).find((node) => node?.getBoundingClientRect().width > 0);
 }
 
 export function updateGridOverlay() {
-  const overlay = document.querySelector("#layoutGridOverlay");
+  const overlay = document.querySelector("#docsGridOverlay");
   if (!overlay || overlay.hidden) return;
   const target = frameOverlayTarget();
   if (!target) return;
@@ -74,8 +74,8 @@ export function updateGridOverlay() {
   const outerRight = Math.min(window.innerWidth, Math.round(outerRect?.right ?? window.innerWidth));
   const topbar = document.querySelector(".topbar")?.getBoundingClientRect();
   const top = Math.round(topbar?.bottom ?? 0);
-  const columnRoot = overlay.querySelector(".layout-grid-overlay__columns");
-  const info = overlay.querySelector(".layout-grid-overlay__info");
+  const columnRoot = overlay.querySelector(".docs-grid-overlay__columns");
+  const info = overlay.querySelector(".docs-grid-overlay__info");
   const columnsToken = rootStyles.getPropertyValue("--frame-grid-columns").trim();
   const gutterToken = rootStyles.getPropertyValue("--frame-grid-gutter").trim();
   const marginToken = rootStyles.getPropertyValue("--frame-grid-margin").trim();
@@ -97,7 +97,7 @@ export function updateGridOverlay() {
   overlay.style.setProperty("--frame-grid-overlay-top", `${top}px`);
 
   if (columnRoot) {
-    columnRoot.innerHTML = Array.from({ length: columns }, () => `<span class="layout-grid-overlay__column"></span>`).join("");
+    columnRoot.innerHTML = Array.from({ length: columns }, () => `<span class="docs-grid-overlay__column"></span>`).join("");
   }
   if (info) {
     info.textContent = `${tier.label} · ${translate("grid.pageGrid")} · ${columns} ${columns === 1 ? translate("grid.column") : translate("grid.columns")} · ${translate("grid.gutter")} ${gutter}`;
@@ -111,7 +111,7 @@ export function setupGridOverlay(options = {}) {
 }
 
 export function toggleGridOverlay() {
-  const overlay = document.querySelector("#layoutGridOverlay");
+  const overlay = document.querySelector("#docsGridOverlay");
   if (!overlay) return false;
   const willShow = overlay.hidden;
   overlay.hidden = !willShow;

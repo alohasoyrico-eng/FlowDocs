@@ -1,4 +1,4 @@
-import { artifactDetailTable, artifactVariantGrid, html } from "./detail-tabs-core.js?v=5";
+import { artifactDetailTable, artifactDocumentationSection, artifactVariantGrid, html } from "./detail-tabs-core.js?v=10";
 
 export function focusedPatternDesignPanels(entry) {
   if (entry.id === "sidebar") return sidebarDesignPanels();
@@ -12,6 +12,15 @@ function sidebarDesignPanels() {
 
 function topbarDesignPanels() {
   return `${topbarViewportOrganizationPanel()}${topbarResponsiveLayoutPanel()}${topbarSlotContractPanel()}${topbarVariantStatusPanel()}`;
+}
+
+function focusedDesignSection(title, body, className = "wide pattern-design-section") {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className,
+    source: "pattern-focused-design",
+  });
 }
 
 function sidebarViewportOrganizationPanel() {
@@ -47,21 +56,15 @@ function topbarResponsiveLayoutPanel() {
 }
 
 function designMatrixPanel(title, rows) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Design</span>
-      <h2>${title}</h2>
+  return focusedDesignSection(title, html`
       ${artifactVariantGrid({
         items: rows.map(([title, status, copy]) => ({ title, status, copy })),
       })}
-    </section>
-  `;
+  `);
 }
 
 function sidebarVariantStatusPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>Variant status</h2>
+  return focusedDesignSection("Variant status", html`
       ${artifactVariantGrid({
         items: [
           { title: "Persistent", status: "Current", copy: "Desktop and wide tablet use the real sidebar beside content." },
@@ -69,14 +72,11 @@ function sidebarVariantStatusPanel() {
           { title: "Logo + footer", status: "Candidate", copy: "Useful when a product shell needs its own brand slot plus help, version, or workspace metadata at the bottom." },
         ],
       })}
-    </section>
-  `;
+  `, "wide pattern-design-section pattern-design-demo-panel");
 }
 
 function topbarVariantStatusPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>Variant status</h2>
+  return focusedDesignSection("Variant status", html`
       ${artifactVariantGrid({
         items: [
           { title: "Docs shell", status: "Current", copy: "Brand, search, language, grid, and theme actions use the real topbar." },
@@ -85,8 +85,7 @@ function topbarVariantStatusPanel() {
           { title: "Sections + account", status: "Candidate", copy: "Documented as parent/child section navigation before search, plus Badge, Avatar, and account menu actions." },
         ],
       })}
-    </section>
-  `;
+  `, "wide pattern-design-section pattern-design-demo-panel");
 }
 
 function sidebarSlotContractPanel() {
@@ -113,13 +112,10 @@ function topbarSlotContractPanel() {
 }
 
 function slotContractPanel(title, rows) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${title}</h2>
+  return focusedDesignSection(title, html`
       ${artifactDetailTable({
         columns: ["Slot", "Type", "Status", "Rule"],
         rows: rows.map(([slot, status, rule]) => [slot, "Slot", status, rule]),
       })}
-    </section>
-  `;
+  `, "wide pattern-rule-panel");
 }

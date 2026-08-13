@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderRouteSummaryGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, routeSummaryDemoFromData); }
 export function routeSummaryDemo(label = "Fast route", meta = "18 min", state = "default") { return simpleDemo("route-summary", { label, meta, state }); }

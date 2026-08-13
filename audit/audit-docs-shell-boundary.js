@@ -126,23 +126,29 @@ function checkDocsShellBoundary() {
   }
 
   const index = read(docsIndexFile);
-  for (const required of [
+  if (!index.includes('<main id="app"')) {
+    add("errors", docsIndexFile, 1, 'Docs index must expose one React shell mount: <main id="app".');
+  }
+  for (const forbidden of [
     'id="docsReactShellTopbar"',
     'data-doc-shell-boundary="react-topbar"',
     'data-doc-shell-boundary="topbar"',
   ]) {
-    if (!index.includes(required)) add("errors", docsIndexFile, 1, `Docs index is missing React shell mount: ${required}.`);
+    if (index.includes(forbidden)) add("errors", docsIndexFile, lineOf(index, forbidden), `Docs index must not keep obsolete split shell mount: ${forbidden}.`);
   }
   if (index.includes('id="languageToggle"')) {
     add("errors", docsIndexFile, lineOf(index, 'id="languageToggle"'), "Docs shell must not keep a local language control; language is owned by the Flow Topbar action.");
   }
 
   const layout = read(docsLayoutFile);
-  for (const required of [
+  if (!layout.includes("return content;")) {
+    add("errors", docsLayoutFile, 1, "Docs layout must delegate shell chrome to DocsShellTemplate and return page content only.");
+  }
+  for (const forbidden of [
     'id="docsReactShellSidebar"',
     'data-doc-shell-boundary="react-sidebar"',
   ]) {
-    if (!layout.includes(required)) add("errors", docsLayoutFile, 1, `Docs layout is missing React shell mount: ${required}.`);
+    if (layout.includes(forbidden)) add("errors", docsLayoutFile, lineOf(layout, forbidden), `Docs layout must not keep obsolete split shell mount: ${forbidden}.`);
   }
   if (/<details class="sidebar-group"|<a class="[^"]*active[^"]*" href="#\//.test(layout)) {
     add("errors", docsLayoutFile, 1, "Docs layout must not author a manual sidebar tree; route groups through Flow React Sidebar.");
@@ -151,7 +157,7 @@ function checkDocsShellBoundary() {
   const app = read(docsAppFile);
   for (const required of [
     "configureDocsShell",
-    "renderDocsShell(current)",
+    "renderDocsShell(current, { pageMarkup: app.innerHTML, afterRender: afterShellRender })",
     "./docs-shell-react.js",
   ]) {
     if (!app.includes(required)) add("errors", docsAppFile, 1, `Docs app is missing shell React integration: ${required}.`);
@@ -162,20 +168,22 @@ function checkDocsShellBoundary() {
 
   const shell = read(docsShellReactFile);
   for (const required of [
-    'from "./generated/react/patterns/Topbar.js',
-    'from "./generated/react/patterns/Sidebar.js',
-    '"data-doc-shell-consumer": "react-topbar"',
-    '"data-doc-shell-consumer": "react-sidebar"',
+    'from "./generated/react/templates/DocsShellTemplate.js',
+    "React.createElement(DocsShellTemplate",
+    '"data-doc-shell-consumer": "docs-shell-template"',
+    "function DocsPageSlot",
     '"aria-expanded": String(navigationOpen)',
-    '"aria-controls": "docsReactShellSidebar"',
+    '"aria-controls": "docs-shell-sidebar-nav"',
     "drawer: false",
   ]) {
     if (!shell.includes(required)) add("errors", docsShellReactFile, 1, `Docs shell React boundary is missing Flow shell contract: ${required}.`);
   }
   for (const forbidden of [
+    'from "./generated/react/patterns/Topbar.js',
+    'from "./generated/react/patterns/Sidebar.js',
+    '"aria-controls": "docsReactShellSidebar"',
     'drawer: { label: ui("shell.designNavigation")',
     'closeLabel: ui("shell.designNavigation")',
-    '"aria-controls": "docs-shell-navigation"',
   ]) {
     if (shell.includes(forbidden)) {
       add("errors", docsShellReactFile, lineOf(shell, forbidden), `Docs shell must use the real sidebar mount and the topbar hamburger as the only mobile navigation control: ${forbidden}.`);

@@ -1,6 +1,7 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSectionAttrs, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, componentDetailSection, demoCell, demoPlaygroundFrame, html, icon, ui } from "./gold-component-core.js?v=221";
+import { docsSourceMarkupSlot } from "./docs-code-block.js?v=2";
 import { componentDemo } from "./component-demo.js?v=60";
-import { playgroundStaticControls } from "./gold-component-data.js?v=230";
+import { playgroundStaticControls } from "./gold-component-data.js?v=231";
 
 export function renderTextAreaGoldSection(entry, section) {
   const renderers = {
@@ -24,68 +25,68 @@ export function renderTextAreaGoldSection(entry, section) {
 
 function textAreaOperationalExamplePanel() {
   const scenario = componentSectionData("text-area", "operational-example").scenario;
-  return html`<section ${textAreaSurfaceAttrs("operational-example", "button-operational-panel")}><h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("text-area", "operational-example")}</p><div class="text-area-scenario"><div class="filter-console"><header>${icon("edit_note", { tone: "action", fill: true })}<div><strong>Operational notes</strong><small>Multiline values with review context</small></div></header><div class="text-area-stack">${(scenario.fields ?? []).map(textAreaDemoFromData).join("")}</div></div>${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}</div></section>`;
+  return textAreaSection("operational-example", html`<h2>${ui("component.operationalExample")}</h2><p>${componentSectionCopy("text-area", "operational-example")}</p><div class="text-area-scenario"><div class="filter-console"><header>${icon("edit_note", { tone: "action", fill: true })}<div><strong>Operational notes</strong><small>Multiline values with review context</small></div></header><div class="text-area-stack">${(scenario.fields ?? []).map(textAreaDemoFromData).join("")}</div></div>${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}</div>`, "button-operational-panel", "");
 }
 
 function textAreaAnatomyPanel() {
   const anatomy = componentSectionData("text-area", "anatomy").items ?? [];
-  return html`<section ${textAreaSurfaceAttrs("anatomy")}><h2>${ui("component.anatomy")}</h2>${componentDetailAnatomyGrid({ items: anatomy, iconName: "edit_note" })}</section>`;
+  return textAreaSection("anatomy", html`<h2>${ui("component.anatomy")}</h2>${componentDetailAnatomyGrid({ items: anatomy, iconName: "edit_note" })}`, "", "");
 }
 
 function textAreaAccessibilityPanel() {
-  return html`<section ${textAreaSurfaceAttrs("accessibility")}>${componentDetailAccessibilityContent("text-area")}</section>`;
+  return textAreaSection("accessibility", html`${componentDetailAccessibilityContent("text-area")}`, "", "");
 }
 
 function textAreaVariantsPanel() {
   const variants = componentDemoData("text-area", "variants");
-  return html`<section ${textAreaSurfaceAttrs("variants")}><h2>${ui("component.variants")}</h2><p>${componentSectionCopy("text-area", "variants")}</p><div class="button-demo-grid states-grid">${variants.map((demo) => demoCell(demo.label, textAreaDemoFromData(demo))).join("")}</div></section>`;
+  return textAreaSection("variants", html`<h2>${ui("component.variants")}</h2><p>${componentSectionCopy("text-area", "variants")}</p><div class="docs-demo-matrix states-grid">${variants.map((demo) => demoCell(demo.label, textAreaDemoFromData(demo))).join("")}</div>`, "", "");
 }
 
 function textAreaStatesPanel() {
   const states = componentDemoData("text-area", "states");
-  return html`<section ${textAreaSurfaceAttrs("states")}><h2>${ui("component.states")}</h2><p>${componentSectionCopy("text-area", "states")}</p><div class="button-demo-grid states-grid">${states.map((demo) => demoCell(demo.label, textAreaDemoFromData(demo))).join("")}</div></section>`;
+  return textAreaSection("states", html`<h2>${ui("component.states")}</h2><p>${componentSectionCopy("text-area", "states")}</p><div class="docs-demo-matrix states-grid">${states.map((demo) => demoCell(demo.label, textAreaDemoFromData(demo))).join("")}</div>`, "", "");
 }
 
 function textAreaStateVariantMatrixPanel() {
   const rows = componentDemoData("text-area", "variant-state-behavior", "rows");
   const states = componentDemoData("text-area", "variant-state-behavior", "states");
-  return html`<section ${textAreaSurfaceAttrs("variant-state-behavior")}><h2>${ui("component.variantStateBehavior")}</h2><p>${componentSectionCopy("text-area", "variant-state-behavior")}</p><div class="button-demo-grid state-behavior-grid">${rows.flatMap((row) => states.map((state) => demoCell(`${row.label} · ${state}`, textAreaDemo(row.field, stateValue(row, state), row.placeholder, stateHelper(row, state), row.rows, row.maxLength, "sm", state)))).join("")}</div></section>`;
+  return textAreaSection("variant-state-behavior", html`<h2>${ui("component.variantStateBehavior")}</h2><p>${componentSectionCopy("text-area", "variant-state-behavior")}</p><div class="docs-demo-matrix docs-demo-matrix--state">${rows.flatMap((row) => states.map((state) => demoCell(`${row.label} · ${state}`, textAreaDemo(row.field, stateValue(row, state), row.placeholder, stateHelper(row, state), row.rows, row.maxLength, "sm", state)))).join("")}</div>`, "", "");
 }
 
 function textAreaFullWidthPanel() {
   const items = componentDemoData("text-area", "full-width", "items");
-  return html`<section ${textAreaSurfaceAttrs("full-width")}><h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy("text-area", "full-width")}</p><div class="full-width-demo">${items.map((item) => `<div><span class="overline">${item.label}</span>${item.layout === "container" ? `<div class="container-demo">${item.demos.map((demo) => `<div data-span="${demo.span}">${textAreaDemoFromData(demo)}</div>`).join("")}</div>` : `<div class="button-stack${item.layout === "stack-natural" ? " natural" : ""}">${textAreaDemoFromData(item.demo)}</div>`}</div>`).join("")}</div></section>`;
+  return textAreaSection("full-width", html`<h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy("text-area", "full-width")}</p><div class="full-width-demo">${items.map((item) => `<div><span class="overline">${item.label}</span>${item.layout === "container" ? `<div class="container-demo">${item.demos.map((demo) => `<div data-span="${demo.span}">${textAreaDemoFromData(demo)}</div>`).join("")}</div>` : `<div class="button-stack${item.layout === "stack-natural" ? " natural" : ""}">${textAreaDemoFromData(item.demo)}</div>`}</div>`).join("")}</div>`, "", "");
 }
 
 function textAreaResponsivePanel() {
   const examples = componentDemoData("text-area", "responsive-layout-patterns", "examples");
-  return html`<section ${textAreaSurfaceAttrs("responsive-layout-patterns")}><h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy("text-area", "responsive-layout-patterns")}</p><div class="responsive-actions-demo">${examples.map((example) => `<article data-doc-primitive="component-demo-container"><span class="overline">${example.label}</span><div class="${example.layout}" data-density-context="${example.density}">${(example.demos ?? []).map((demo) => textAreaDemoFromData({ ...demo, density: example.density })).join("")}</div></article>`).join("")}</div></section>`;
+  return textAreaSection("responsive-layout-patterns", html`<h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy("text-area", "responsive-layout-patterns")}</p><div class="responsive-actions-demo">${examples.map((example) => `<article data-doc-primitive="component-demo-container"><span class="overline">${example.label}</span><div class="${example.layout}" data-density-context="${example.density}">${(example.demos ?? []).map((demo) => textAreaDemoFromData({ ...demo, density: example.density })).join("")}</div></article>`).join("")}</div>`, "", "");
 }
 
 function textAreaViewportOrganizationPanel() {
   const items = componentDemoData("text-area", "viewport-organization", "items");
-  return html`<section ${textAreaSurfaceAttrs("viewport-organization", "button-viewport-panel")}><h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy("text-area", "viewport-organization")}</p><div class="viewport-doc-grid">${items.map((item) => `<article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code>${textAreaDemoFromData(item.demo)}</article>`).join("")}</div></section>`;
+  return textAreaSection("viewport-organization", html`<h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy("text-area", "viewport-organization")}</p><div class="docs-viewport-matrix">${items.map((item) => `<article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}"><header>${icon(item.icon, { tone: "action" })}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.title}</code>${textAreaDemoFromData(item.demo)}</article>`).join("")}</div>`, "button-viewport-panel", "");
 }
 
 function textAreaPlaygroundPanel() {
   const playground = componentSectionData("text-area", "playground");
-  return html`<section ${textAreaSurfaceAttrs("playground", "button-playground", `data-component-playground="text-area" data-ready="false"`)}><h2>${ui("component.playground")}</h2><p>${componentSectionCopy("text-area", "playground")}</p><div class="playground-layout"><div class="playground-controls" aria-label="${ui("playground.textAreaControls")}">${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}</div><div class="playground-preview"><div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${textAreaDemoFromData(playground.preview ?? {})}</div><pre data-component-markup>${playground.snippet ?? ""}</pre></div></div></section>`;
+  return textAreaSection("playground", html`<h2>${ui("component.playground")}</h2><p>${componentSectionCopy("text-area", "playground")}</p>${demoPlaygroundFrame({ label: ui("component.playground"), controlsAttrs: `aria-label="${ui("playground.textAreaControls")}"`, controlsHtml: playgroundStaticControls(playground.controls ?? [], "data-component-playground-input"), previewHtml: `<div data-doc-playground-preview data-density-context="${playground.preview?.density ?? "md"}">${textAreaDemoFromData(playground.preview ?? {})}</div>`, sourceHtml: docsSourceMarkupSlot(playground.snippet ?? ""), source: "textAreaPlaygroundPanel" })}`, "button-playground", `data-component-playground="text-area" data-ready="false"`);
 }
 
 function textAreaContractPanel() {
-  return html`<section ${textAreaSurfaceAttrs("api-foundations")}><h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy("text-area", "api-foundations")}</p>${componentDetailApiPropsTable("text-area")}</section>`;
+  return textAreaSection("api-foundations", html`<h2>${ui("build.apiAndFoundations")}</h2><p>${componentSectionCopy("text-area", "api-foundations")}</p>${componentDetailApiPropsTable("text-area")}`, "", "");
 }
 
 function textAreaGuidelinesPanel() {
-  return html`<section ${textAreaSurfaceAttrs("guidelines")}>${componentDetailGuidelinesContent("text-area")}</section>`;
+  return textAreaSection("guidelines", html`${componentDetailGuidelinesContent("text-area")}`, "", "");
 }
 
 function textAreaTestPanel() {
-  return html`<section ${textAreaSurfaceAttrs("tests-rejection-rules")}>${componentDetailTestsContent("text-area")}</section>`;
+  return textAreaSection("tests-rejection-rules", html`${componentDetailTestsContent("text-area")}`, "", "");
 }
 
-function textAreaSurfaceAttrs(section, className = "", attrs = "") {
-  return componentDetailSectionAttrs({ component: "text-area", section, className, attrs });
+function textAreaSection(section, children, className = "", attrs = "") {
+  return componentDetailSection({ component: "text-area", section, className, attrs, children });
 }
 
 function textAreaDemoFromData(demo) {

@@ -19,6 +19,7 @@ import { ChatComposer } from "./generated/react/ChatComposer.js?v=1";
 import { ChatMessage } from "./generated/react/ChatMessage.js?v=1";
 import { ChatThread } from "./generated/react/ChatThread.js?v=1";
 import { Chip } from "./generated/react/Chip.js?v=1";
+import { CodeBlock } from "./generated/react/CodeBlock.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { Combobox } from "./generated/react/Combobox.js?v=1";
 import { CountrySelector } from "./generated/react/CountrySelector.js?v=1";
@@ -61,10 +62,9 @@ import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
-import { patternReactComponents, patternReactIslandWrappers } from "./pattern-react-islands.js?v=30";
-import { templateReactComponents, templateReactIslandWrappers } from "./template-react-islands.js?v=1";
-
-const mounted = new WeakMap(); const reactComponents = {
+import { patternReactComponents, patternReactIslandWrappers } from "./pattern-react-islands.js?v=39";
+import { templateReactComponents, templateReactIslandWrappers } from "./template-react-islands.js?v=2";
+const mounted = new WeakMap(); let detailTabHydrationReady = false; const reactComponents = {
   accordion: Accordion,
   "animated-moment": AnimatedMoment,
   "audit-event": AuditEvent,
@@ -84,6 +84,7 @@ const mounted = new WeakMap(); const reactComponents = {
   "chat-message": ChatMessage,
   "chat-thread": ChatThread,
   chip: Chip,
+  "code-block": CodeBlock,
   "code-input": CodeInput,
   combobox: Combobox,
   "country-selector": CountrySelector,
@@ -354,11 +355,7 @@ function SliderIsland({ initialProps }) {
 
 function TextAreaIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? "");
-  return React.createElement(TextArea, {
-    ...initialProps,
-    value,
-    onChange: setValue,
-  });
+  return React.createElement(TextArea, { ...initialProps, value, onChange: setValue });
 }
 
 const reactIslandWrappers = {
@@ -380,6 +377,11 @@ const reactIslandWrappers = {
 function parseProps(node) { try { return JSON.parse(node.dataset.reactProps ?? "{}"); } catch { return {}; } }
 
 export function setupReactComponentIslands(root = document) {
+  if (!detailTabHydrationReady && typeof document !== "undefined") {
+    detailTabHydrationReady = true;
+    document.addEventListener("docs-detail-tab-change", () => window.requestAnimationFrame(() => setupReactComponentIslands(document.querySelector("#tabPanel") ?? document)));
+    document.addEventListener("docs-react-slot-html-mounted", () => window.requestAnimationFrame(() => setupReactComponentIslands(document.querySelector("#tabPanel") ?? document)));
+  }
   for (const node of Array.from(root.querySelectorAll?.("[data-react-component]:not([data-react-mounted='true'])") ?? [])) {
     const Component = reactComponents[node.dataset.reactComponent];
     const Island = reactIslandWrappers[node.dataset.reactComponent];

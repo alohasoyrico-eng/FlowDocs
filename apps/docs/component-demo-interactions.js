@@ -3,7 +3,7 @@ import { setupToastDemos } from "./toast-demo-interactions.js?v=4";
 import { renderProgressIndicatorPreview, setupProgressIndicatorDemos } from "./progress-indicator-demo-interactions.js?v=3";
 import { setupMenuDemos, setupOverlayDemos } from "./overlay-demo-interactions.js?v=6";
 import { setupAccordionDemos, setupListDemos, setupTableDemos } from "./display-demo-interactions.js?v=6";
-import { setupStatefulComponentDemos } from "./stateful-component-interactions.js?v=39";
+import { setupStatefulComponentDemos } from "./stateful-component-interactions.js?v=40";
 import { setupChoiceDemos, setupRadioButtonDemos, setupSwitchDemos } from "./choice-demo-interactions.js?v=2";
 import { setupReactComponentIslands } from "./react-component-islands.js?v=9";
 
@@ -21,8 +21,8 @@ function setupComponentPlaygrounds(deps) {
   document.querySelectorAll("[data-component-playground]:not([data-ready='true'])").forEach((playground) => {
     playground.dataset.ready = "true";
     const inputs = [...playground.querySelectorAll("[data-component-playground-input]")];
-    const preview = playground.querySelector("[data-component-preview]");
-    const markup = playground.querySelector("[data-component-markup]");
+    const preview = playground.querySelector("[data-doc-playground-preview]");
+    const markup = playground.querySelector("[data-doc-playground-markup]");
     const component = playground.dataset.componentPlayground;
     if (!preview || !component) return;
 

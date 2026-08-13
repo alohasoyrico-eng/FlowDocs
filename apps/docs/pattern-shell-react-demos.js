@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -6,6 +6,15 @@ function escapeAttribute(value) {
 
 function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
+function shellReactDemoSection(title, body, className) {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: ["wide", className].filter(Boolean).join(" "),
+    source: "pattern-shell-react-demos",
+  });
 }
 
 export function shellPatternOverviewDemo(patternId) {
@@ -17,10 +26,7 @@ export function shellPatternOverviewDemo(patternId) {
 }
 
 function topbarDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-topbar-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Product shell topbar</h2>
+  return shellReactDemoSection("Product shell topbar", html`
       ${patternReactDemo("topbar", {
         label: "Fleet operations shell",
         density: "md",
@@ -69,15 +75,11 @@ function topbarDemoPanel() {
         },
         "data-pattern-demo": "topbar",
       })}
-    </section>
-  `;
+  `, "pattern-topbar-panel");
 }
 
 function sidebarDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-sidebar-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Workspace sidebar</h2>
+  return shellReactDemoSection("Workspace sidebar", html`
       ${patternReactDemo("sidebar", {
         label: "Fleet navigation",
         density: "md",
@@ -110,15 +112,11 @@ function sidebarDemoPanel() {
         drawer: false,
         "data-pattern-demo": "sidebar",
       })}
-    </section>
-  `;
+  `, "pattern-sidebar-panel");
 }
 
 function sectionHeaderDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-section-header-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Operational section header</h2>
+  return shellReactDemoSection("Operational section header", html`
       ${patternReactDemo("section-header", {
         title: "Vehicle exceptions",
         description: "Review high-risk fuel, document, and route exceptions before dispatch.",
@@ -146,15 +144,11 @@ function sectionHeaderDemoPanel() {
         },
         "data-pattern-demo": "section-header",
       })}
-    </section>
-  `;
+  `, "pattern-section-header-panel");
 }
 
 function settingsReactDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-settings-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Workspace settings</h2>
+  return shellReactDemoSection("Workspace settings", html`
       ${patternReactDemo("settings", {
         label: "Workspace settings",
         description: "Preference changes remain auditable and permission-aware.",
@@ -186,6 +180,5 @@ function settingsReactDemoPanel() {
         resetAction: { label: "Reset", variant: "secondary", icon: "restart_alt" },
         "data-pattern-demo": "settings",
       })}
-    </section>
-  `;
+  `, "pattern-settings-panel");
 }

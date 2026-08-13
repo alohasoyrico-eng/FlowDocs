@@ -1,7 +1,7 @@
 import { createIllustrationAsset } from "#design-system/components";
 
 export function hydrateHomeHeroIllustration(root) {
-  const slot = root.querySelector("[data-illustration-slot='home-hero']");
+  const slot = root.querySelector("[data-illustration-slot='home-intro']");
   if (!slot) return;
   const { assetNode } = createIllustrationAsset({
     id: slot.dataset.illustrationId,
@@ -13,8 +13,8 @@ export function hydrateHomeHeroIllustration(root) {
     density: "lg",
     theme: "auto",
     loading: "eager",
-    fallbackText: "Hero illustration unavailable",
+    fallbackText: "Intro illustration unavailable",
   });
-  assetNode.classList.add("hero-visual__asset");
+  assetNode.classList.add("docs-intro-visual__asset");
   slot.replaceChildren(assetNode);
 }

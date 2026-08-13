@@ -1,5 +1,6 @@
-import { html, ui } from "./detail-tabs-core.js?v=5";
+import { html, ui } from "./detail-tabs-core.js?v=10";
 import { componentDemo } from "./component-demo.js?v=61";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
 
 export function patternMielTabs(entry) {
   if (entry.id === "sidebar") return sidebarMielPanel();
@@ -52,8 +53,8 @@ function topbarMielPanel() {
 }
 
 function patternMielPanel(title, canDecide, mustAsk, rejectIf, handoff, machineContract) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-miel-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail" data-pattern-doc="miel">
+  return documentationSectionIsland({
+    bodyHtml: html`
       <header class="pattern-miel-header">
         <span class="eyebrow">MIEL</span>
         <h2>${title}</h2>
@@ -68,8 +69,12 @@ function patternMielPanel(title, canDecide, mustAsk, rejectIf, handoff, machineC
         ${mielCard(ui("miel.handoff"), handoff)}
         ${mielCard(ui("miel.machineContract"), Object.entries(machineContract).map(([key, value]) => `${key}: ${value}`).join(" "))}
       </div>
-    </section>
-  `;
+    `,
+    className: "artifact-detail-surface wide pattern-miel-panel",
+    template: "artifact-detail",
+    attrs: 'data-pattern-doc="miel"',
+    source: "patternMielPanel",
+  });
 }
 
 function mielRuleCard(title, items) {

@@ -1,7 +1,7 @@
-import { componentSectionData, html, icon } from "./gold-component-core.js?v=214";
-import { buttonDemo } from "./gold-button-docs.js?v=218";
-import { selectDemo } from "./gold-select-docs.js?v=221";
-import { cardDemo } from "./gold-card-docs.js?v=220";
+import { componentSectionData, html, icon } from "./gold-component-core.js?v=221";
+import { buttonDemo } from "./gold-button-docs.js?v=225";
+import { selectDemo } from "./gold-select-docs.js?v=228";
+import { cardDemo } from "./gold-card-docs.js?v=227";
 
 export function selectDemoFromData(demo) {
   return selectDemo(demo.field, demo.value, demo.helper, demo.density ?? "md", demo.state ?? "", demo.variant ?? "default", demo.icon ?? "");

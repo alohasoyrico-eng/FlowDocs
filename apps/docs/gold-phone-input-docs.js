@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderPhoneInputGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, phoneInputDemoFromData); }
 export function phoneInputDemo(label = "Phone number", value = "+52 55 1842 9011", state = "default") { return simpleDemo("phone-input", { label, value, state }); }

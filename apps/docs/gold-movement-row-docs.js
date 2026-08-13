@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderMovementRowGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, movementRowDemoFromData); }
 export function movementRowDemo(label = "Fuel purchase", state = "default") { return simpleDemo("movement-row", { label, state }); }

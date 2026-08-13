@@ -1,6 +1,7 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, demoPlaygroundFrame, html, icon, ui } from "./gold-component-core.js?v=221";
+import { docsSourceMarkupSlot } from "./docs-code-block.js?v=2";
 import { componentDemo } from "./component-demo.js?v=60";
-import { cardDemoFromData, playgroundStaticControls } from "./gold-component-data.js?v=230";
+import { cardDemoFromData, playgroundStaticControls } from "./gold-component-data.js?v=231";
 
 export function renderCardGoldSection(entry, section) {
   const renderers = {
@@ -22,14 +23,13 @@ export function renderCardGoldSection(entry, section) {
   return renderers[section]?.() ?? "";
 }
 
-function cardSurfaceAttrs(section, className = "", attrs = "") {
-  return componentDetailSectionAttrs({ component: "card", section, className, attrs });
+function cardSection(section, children, className = "", attrs = "") {
+  return componentDetailSection({ component: "card", section, className, attrs, children });
 }
 
 function cardOperationalExamplePanel() {
   const scenario = componentSectionData("card", "operational-example").scenario;
-  return html`
-    <section ${cardSurfaceAttrs("operational-example", "button-operational-panel")}>
+  return cardSection("operational-example", html`
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("card", "operational-example")}</p>
       <div class="card-scenario">
@@ -38,31 +38,27 @@ function cardOperationalExamplePanel() {
         </div>
         ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
       </div>
-    </section>
-  `;
+  `, "button-operational-panel");
 }
 
 function cardAnatomyPanel() {
   const anatomy = componentSectionData("card", "anatomy").items ?? [];
-  return html`
-    <section ${cardSurfaceAttrs("anatomy")}>
+  return cardSection("anatomy", html`
       <h2>${ui("component.anatomy")}</h2>
       ${componentDetailAnatomyGrid({ items: anatomy, iconName: "view_agenda" })}
-    </section>
-  `;
+  `);
 }
 
 function cardAccessibilityPanel() {
-  return html`<section ${cardSurfaceAttrs("accessibility")}>${componentDetailAccessibilityContent("card", "disabled, loading, error, selected, focus, hover, default")}</section>`;
+  return cardSection("accessibility", html`${componentDetailAccessibilityContent("card", "disabled, loading, error, selected, focus, hover, default")}`, "", "");
 }
 
 function cardViewportOrganizationPanel() {
   const items = componentDemoData("card", "viewport-organization", "items");
-  return html`
-    <section ${cardSurfaceAttrs("viewport-organization", "button-viewport-panel")}>
+  return cardSection("viewport-organization", html`
       <h2>${ui("component.viewportOrganization")}</h2>
       <p>${componentSectionCopy("card", "viewport-organization")}</p>
-      <div class="viewport-doc-grid">
+      <div class="docs-viewport-matrix">
         ${items.map((item) => html`
           <article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}">
             <header>${icon(item.icon)}<h3>${item.title}</h3></header>
@@ -72,8 +68,7 @@ function cardViewportOrganizationPanel() {
           </article>
         `).join("")}
       </div>
-    </section>
-  `;
+  `, "button-viewport-panel");
 }
 
 function cardVariantsPanel() {
@@ -90,8 +85,7 @@ function cardVariantsPanel() {
     },
     ...compositions
   ];
-  return html`
-    <section ${cardSurfaceAttrs("variants")}>
+  return cardSection("variants", html`
       <h2>${ui("component.variants")}</h2>
       <p>${componentSectionCopy("card", "variants")}</p>
       <div class="card-reference-compositions">
@@ -111,8 +105,7 @@ function cardVariantsPanel() {
           `).join("")}
         </div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function cardReferenceCompositionDemo(item) {
@@ -148,25 +141,22 @@ function cardGhostContextDemo(demo = {}) {
 
 function cardStatesPanel() {
   const states = componentDemoData("card", "states");
-  return html`
-    <section ${cardSurfaceAttrs("states")}>
+  return cardSection("states", html`
       <h2>${ui("component.states")}</h2>
       <p>${componentSectionCopy("card", "states")}</p>
-      <div class="button-demo-grid states-grid">
+      <div class="docs-demo-matrix states-grid">
         ${states.map((demo) => demoCell(demo.label, cardDemo(demo))).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function cardStateVariantMatrixPanel() {
   const rows = componentDemoData("card", "variant-state-behavior", "rows");
   const states = componentDemoData("card", "variant-state-behavior", "states");
-  return html`
-    <section ${cardSurfaceAttrs("variant-state-behavior")}>
+  return cardSection("variant-state-behavior", html`
       <h2>${ui("component.variantStateBehavior")}</h2>
       <p>${componentSectionCopy("card", "variant-state-behavior")}</p>
-      <div class="button-demo-grid state-behavior-grid">
+      <div class="docs-demo-matrix docs-demo-matrix--state">
         ${rows
           .flatMap((row) =>
             states.map((state) =>
@@ -184,14 +174,12 @@ function cardStateVariantMatrixPanel() {
           )
           .join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function cardFullWidthPanel() {
   const items = componentDemoData("card", "full-width", "items");
-  return html`
-    <section ${cardSurfaceAttrs("full-width")}>
+  return cardSection("full-width", html`
       <h2>${ui("component.fullWidth")}</h2>
       <p>${componentSectionCopy("card", "full-width")}</p>
       <div class="full-width-demo">
@@ -204,14 +192,12 @@ function cardFullWidthPanel() {
           </div>
         `).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function cardResponsivePanel() {
   const examples = componentDemoData("card", "responsive-layout-patterns", "examples");
-  return html`
-    <section ${cardSurfaceAttrs("responsive-layout-patterns")}>
+  return cardSection("responsive-layout-patterns", html`
       <h2>${ui("component.responsiveLayoutPatterns")}</h2>
       <p>${componentSectionCopy("card", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
@@ -224,45 +210,39 @@ function cardResponsivePanel() {
           </article>
         `).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function cardPlaygroundPanel() {
   const playground = componentSectionData("card", "playground");
-  return html`
-    <section ${cardSurfaceAttrs("playground", "button-playground", 'data-component-playground="card" data-ready="false"')}>
+  return cardSection("playground", html`
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("card", "playground")}</p>
-      <div class="playground-layout">
-        <div class="playground-controls" aria-label="${ui("playground.cardControls")}">
-          ${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}
-        </div>
-        <div class="playground-preview">
-          <div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${cardDemoFromData(playground.preview ?? {})}</div>
-          <pre data-component-markup>${playground.snippet ?? ""}</pre>
-        </div>
-      </div>
-    </section>
-  `;
+      ${demoPlaygroundFrame({
+        label: ui("component.playground"),
+        controlsAttrs: `aria-label="${ui("playground.cardControls")}"`,
+        controlsHtml: playgroundStaticControls(playground.controls ?? [], "data-component-playground-input"),
+        previewHtml: `<div data-doc-playground-preview data-density-context="${playground.preview?.density ?? "md"}">${cardDemoFromData(playground.preview ?? {})}</div>`,
+        sourceHtml: docsSourceMarkupSlot(playground.snippet ?? ""),
+        source: "cardPlaygroundPanel",
+      })}
+  `, "button-playground", 'data-component-playground="card" data-ready="false"');
 }
 
 function cardContractPanel() {
-  return html`
-    <section ${cardSurfaceAttrs("api-foundations")}>
+  return cardSection("api-foundations", html`
       <h2>${ui("build.apiAndFoundations")}</h2>
       <p>${componentSectionCopy("card", "api-foundations")}</p>
       ${componentDetailApiPropsTable("card")}
-    </section>
-  `;
+  `);
 }
 
 function cardGuidelinesPanel() {
-  return html`<section ${cardSurfaceAttrs("guidelines")}>${componentDetailGuidelinesContent("card")}</section>`;
+  return cardSection("guidelines", html`${componentDetailGuidelinesContent("card")}`, "", "");
 }
 
 function cardTestPanel() {
-  return html`<section ${cardSurfaceAttrs("tests-rejection-rules")}>${componentDetailTestsContent("card")}</section>`;
+  return cardSection("tests-rejection-rules", html`${componentDetailTestsContent("card")}`, "", "");
 }
 
 export function cardDemo(demo = {}, value, detail, iconName, state = "default") {

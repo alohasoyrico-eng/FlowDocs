@@ -1,7 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { Sidebar } from "./generated/react/patterns/Sidebar.js?v=3";
-import { Topbar } from "./generated/react/patterns/Topbar.js?v=2";
+import { DocsShellTemplate } from "./generated/react/templates/DocsShellTemplate.js?v=1";
 
 let currentLocale = () => "en";
 let render = () => {};
@@ -15,8 +14,9 @@ let searchIndex = () => [];
 let toggleContrastState = () => false;
 let toggleGridOverlay = () => false;
 
-let topbarRoot;
-const sidebarRoots = new WeakMap();
+let shellRoot;
+let lastPageMarkup = "";
+let lastAfterRender = () => {};
 const state = {
   searchQuery: "",
   searchOpen: false,
@@ -36,29 +36,26 @@ export function configureDocsShell(nextDeps) {
   toggleGridOverlay = nextDeps.toggleGridOverlay;
 }
 
-export function renderDocsShell(current) {
-  renderDocsTopbar(current);
-  renderDocsSidebar(current);
-}
-
-function renderDocsTopbar(current) {
-  const mount = document.querySelector("#docsReactShellTopbar");
+export function renderDocsShell(current, options = {}) {
+  const mount = document.querySelector("#app");
   if (!mount) return;
-  topbarRoot ||= createRoot(mount);
-  topbarRoot.render(React.createElement(Topbar, topbarProps(current)));
-}
-
-function renderDocsSidebar(current) {
-  const mount = document.querySelector("#docsReactShellSidebar");
-  if (!mount) return;
-  const root = sidebarRoots.get(mount) ?? createRoot(mount);
-  sidebarRoots.set(mount, root);
-  root.render(React.createElement(Sidebar, sidebarProps(current)));
+  if (typeof options.pageMarkup === "string") lastPageMarkup = options.pageMarkup;
+  if (typeof options.afterRender === "function") lastAfterRender = options.afterRender;
+  if (mount.nodeType !== 1) {
+    mount.innerHTML = lastPageMarkup;
+    lastAfterRender(mount);
+    return;
+  }
+  shellRoot ||= createRoot(mount);
+  shellRoot.render(React.createElement(DocsShellTemplate, docsShellProps(current), React.createElement(DocsPageSlot, {
+    markup: lastPageMarkup,
+    onRendered: lastAfterRender,
+  })));
 }
 
 function topbarProps(current) {
   const contrastEnabled = document.body.dataset.contrast === "quiet";
-  const gridVisible = !document.querySelector("#layoutGridOverlay")?.hidden;
+  const gridVisible = !document.querySelector("#docsGridOverlay")?.hidden;
   const results = searchResults(state.searchQuery);
   const navigationOpen = document.body.dataset.navOpen === "true";
   return {
@@ -66,11 +63,11 @@ function topbarProps(current) {
     density: "md",
     className: "docs-react-shell-topbar",
     navigationAction: {
-      label: ui("shell.openNavigation"),
-      ariaLabel: ui("shell.openNavigation"),
-      icon: navigationOpen ? "close" : "menu",
+      label: navigationOpen ? ui("shell.closeNavigation") : ui("shell.openNavigation"),
+      ariaLabel: navigationOpen ? ui("shell.closeNavigation") : ui("shell.openNavigation"),
+      icon: "menu",
       "aria-expanded": String(navigationOpen),
-      "aria-controls": "docsReactShellSidebar",
+      "aria-controls": "docs-shell-sidebar-nav",
       "data-doc-shell-slot": "navigation-action",
       onClick: () => toggleNavigation(),
     },
@@ -84,7 +81,7 @@ function topbarProps(current) {
       onQueryChange: (value) => {
         state.searchQuery = value;
         state.searchOpen = Boolean(value);
-        renderDocsTopbar(current);
+        renderDocsShell(current);
       },
       delegate: state.searchOpen
         ? {
@@ -102,7 +99,7 @@ function topbarProps(current) {
             state.searchQuery = "";
             state.searchOpen = false;
             window.location.hash = match.href.replace(/^#/, "");
-            renderDocsTopbar(current);
+            renderDocsShell(current);
           },
         }
         : undefined,
@@ -130,7 +127,7 @@ function topbarProps(current) {
         "data-doc-shell-action": "grid",
         onClick: () => {
           toggleGridOverlay();
-          renderDocsTopbar(current);
+          renderDocsShell(current);
         },
       },
       {
@@ -143,7 +140,7 @@ function topbarProps(current) {
         "data-doc-shell-action": "contrast",
         onClick: () => {
           toggleContrastState();
-          renderDocsTopbar(current);
+          renderDocsShell(current);
         },
       },
     ],
@@ -152,13 +149,18 @@ function topbarProps(current) {
 }
 
 function sidebarProps(current) {
+  const navigationOpen = document.body.dataset.navOpen === "true";
   return {
     label: ui("shell.designNavigation"),
     density: "md",
+    className: "sidebar docs-react-shell-sidebar-mount",
+    id: "docs-shell-sidebar-nav",
     activeKey: activeRouteKey(current),
     groups: sidebarGroups(current),
     collapseAction: { label: ui("shell.designNavigation"), ariaLabel: ui("shell.designNavigation"), "data-doc-shell-slot": "collapse-action" },
     drawer: false,
+    drawerOpen: navigationOpen,
+    mobileDrawer: navigationOpen,
     onRouteSelect: (key, route) => {
       if (!route?.href) return;
       window.location.hash = route.href.replace(/^#/, "");
@@ -166,6 +168,50 @@ function sidebarProps(current) {
     },
     "data-doc-shell-consumer": "react-sidebar",
   };
+}
+
+function docsShellProps(current) {
+  const navigationOpen = document.body.dataset.navOpen === "true";
+  const contrastEnabled = document.body.dataset.contrast === "quiet";
+  return {
+    label: ui("shell.primaryNavigation"),
+    density: "md",
+    theme: contrastEnabled ? "dark" : "light",
+    state: state.searchOpen ? "search-open" : navigationOpen ? "sidebar-open" : "desktop",
+    mobile: window.matchMedia?.("(max-width: 991px)")?.matches ?? false,
+    sidebarOpen: navigationOpen,
+    brand: React.createElement("a", {
+      className: "brand",
+      href: "#/home",
+      "aria-label": ui("shell.home"),
+    }, React.createElement("img", {
+      src: "./assets/logo.svg",
+      "data-quiet-src": "./assets/logo-dark.svg",
+      alt: "Design System",
+    })),
+    topbar: topbarProps(current),
+    sidebar: sidebarProps(current),
+    pageLabel: label(current.collection ?? "home"),
+    skipLinkLabel: ui("shell.skipToContent"),
+    className: "docs-react-shell-template",
+    contentClassName: "docs-react-shell-page",
+    "data-doc-shell-consumer": "docs-shell-template",
+  };
+}
+
+function DocsPageSlot({ markup, onRendered }) {
+  const ref = React.useRef(null);
+  React.useLayoutEffect(() => {
+    if (!ref.current) return;
+    if (ref.current.innerHTML !== markup) ref.current.innerHTML = markup;
+    onRendered?.(ref.current);
+  }, [markup, onRendered]);
+  return React.createElement("div", {
+    ref,
+    className: "content-shell density-responsive",
+    "data-flow-slot": "page-content",
+    "data-doc-shell-page-mount": "",
+  });
 }
 
 function sidebarGroups(current) {
@@ -222,12 +268,12 @@ function toggleNavigation() {
   const isOpen = document.body.dataset.navOpen === "true";
   if (isOpen) closeNavigation();
   else document.body.dataset.navOpen = "true";
-  renderDocsTopbar(route());
+  renderDocsShell(route());
 }
 
 function closeNavigation() {
   delete document.body.dataset.navOpen;
-  renderDocsTopbar(route());
+  renderDocsShell(route());
 }
 
 function route() {

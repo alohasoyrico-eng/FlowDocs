@@ -1,11 +1,24 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { html } from "./detail-tabs-core.js?v=10";
+import { demoPreviewFrameIsland } from "./demo-preview-frame-island.js?v=1";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 function templateReactDemo(template, props, state = "loaded", variant = "standard") {
-  return `<div class="docs-react-island docs-template-demo" data-react-component="${template}" data-component-source="react-template" data-doc-template="${template}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="true" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+  return demoPreviewFrameIsland({
+    label: props?.label ?? template,
+    description: props?.description ?? "",
+    previewHtml: `<div class="docs-react-island" data-react-component="${template}" data-component-source="react-template" data-doc-template="${template}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="true" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`,
+    kind: "template",
+    state,
+    density: props?.density ?? "sm",
+    fullWidth: true,
+    className: "docs-template-preview",
+    attrs: `data-doc-template-preview="${escapeAttribute(template)}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}"`,
+    source: "templateReactDemo",
+  });
 }
 
 const templateData = {
@@ -172,8 +185,8 @@ const templateData = {
 export function reactTemplateDemo(entry) {
   const demo = templateData[entry.id];
   if (!demo) return "";
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide template-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
+  return documentationSectionIsland({
+    bodyHtml: html`
       <div class="template-desktop-panel__header">
         <div>
           <span class="eyebrow">Product demo</span>
@@ -181,6 +194,9 @@ export function reactTemplateDemo(entry) {
         </div>
       </div>
       ${templateReactDemo(demo.component, demo.props, demo.props.state ?? "loaded")}
-    </section>
-  `;
+    `,
+    className: "artifact-detail-surface wide template-desktop-panel",
+    template: "artifact-detail",
+    source: "reactTemplateDemo",
+  });
 }

@@ -38,6 +38,7 @@ const {
 } = require("./audit-css-ownership.js");
 const { checkFoundationCascadeContracts } = require("./audit-foundation-cascade-contracts.js");
 const { checkDocsShellBoundary } = require("./audit-docs-shell-boundary.js");
+const { checkDocsTemplateBoundaries } = require("./audit-docs-template-boundaries.js");
 const { finishAudit } = require("./audit-result.js");
 
 checkStaticHygiene();
@@ -61,6 +62,7 @@ checkReferenceCopyOwnership();
 checkDocsContentOwnership();
 checkFoundationCascadeContracts();
 checkDocsShellBoundary();
+checkDocsTemplateBoundaries();
 checkDocsComponentCssOwnership();
 checkDocsPackageMarkupOwnership();
 checkPatternComponentBoundaryOwnership();

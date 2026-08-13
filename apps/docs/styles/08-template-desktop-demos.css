@@ -25,7 +25,7 @@
   overflow-x: auto;
 }
 
-.docs-template-demo {
+.docs-template-preview {
   display: block;
   max-inline-size: 100%;
   min-inline-size: 0;

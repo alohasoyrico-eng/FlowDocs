@@ -1,6 +1,7 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSectionAttrs, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, demoPlaygroundFrame, html, icon, ui } from "./gold-component-core.js?v=221";
+import { docsSourceMarkupSlot } from "./docs-code-block.js?v=2";
 import { componentDemo } from "./component-demo.js?v=60";
-import { playgroundStaticControls, selectDemoFromData } from "./gold-component-data.js?v=230";
+import { playgroundStaticControls, selectDemoFromData } from "./gold-component-data.js?v=231";
 
 export function renderSelectGoldSection(entry, section) {
   const renderers = {
@@ -22,14 +23,13 @@ export function renderSelectGoldSection(entry, section) {
   return renderers[section]?.() ?? "";
 }
 
-function selectSurfaceAttrs(section, className = "", attrs = "") {
-  return componentDetailSectionAttrs({ component: "select", section, className, attrs });
+function selectSection(section, children, className = "", attrs = "") {
+  return componentDetailSection({ component: "select", section, className, attrs, children });
 }
 
 function selectOperationalExamplePanel() {
   const scenario = componentSectionData("select", "operational-example").scenario;
-  return html`
-    <section ${selectSurfaceAttrs("operational-example", "button-operational-panel")}>
+  return selectSection("operational-example", html`
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("select", "operational-example")}</p>
       <div class="select-scenario">
@@ -44,31 +44,27 @@ function selectOperationalExamplePanel() {
         </div>
         ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
       </div>
-    </section>
-  `;
+  `, "button-operational-panel");
 }
 
 function selectAnatomyPanel() {
   const anatomy = componentSectionData("select", "anatomy").items ?? [];
-  return html`
-    <section ${selectSurfaceAttrs("anatomy")}>
+  return selectSection("anatomy", html`
       <h2>${ui("component.anatomy")}</h2>
       ${componentDetailAnatomyGrid({ items: anatomy, iconName: "arrow_drop_down_circle" })}
-    </section>
-  `;
+  `);
 }
 
 function selectAccessibilityPanel() {
-  return html`<section ${selectSurfaceAttrs("accessibility")}>${componentDetailAccessibilityContent("select", "disabled, loading, error, open, focus, filled, default")}</section>`;
+  return selectSection("accessibility", html`${componentDetailAccessibilityContent("select", "disabled, loading, error, open, focus, filled, default")}`, "", "");
 }
 
 function selectViewportOrganizationPanel() {
   const items = componentDemoData("select", "viewport-organization", "items");
-  return html`
-    <section ${selectSurfaceAttrs("viewport-organization", "button-viewport-panel")}>
+  return selectSection("viewport-organization", html`
       <h2>${ui("component.viewportOrganization")}</h2>
       <p>${componentSectionCopy("select", "viewport-organization")}</p>
-      <div class="viewport-doc-grid">
+      <div class="docs-viewport-matrix">
         ${items.map((item) => html`
           <article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}">
             <header>${icon(item.icon)}<h3>${item.title}</h3></header>
@@ -78,44 +74,38 @@ function selectViewportOrganizationPanel() {
           </article>
         `).join("")}
       </div>
-    </section>
-  `;
+  `, "button-viewport-panel");
 }
 
 function selectVariantsPanel() {
   const variants = componentDemoData("select", "variants");
-  return html`
-    <section ${selectSurfaceAttrs("variants")}>
+  return selectSection("variants", html`
       <h2>${ui("component.variants")}</h2>
       <p>${componentSectionCopy("select", "variants")}</p>
-      <div class="button-demo-grid states-grid">
+      <div class="docs-demo-matrix states-grid">
         ${variants.map((demo) => demoCell(demo.label, selectDemo(demo.field, demo.value, demo.helper, demo.density, demo.state, demo.variant, demo.icon ?? ""))).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function selectStatesPanel() {
   const states = componentDemoData("select", "states");
-  return html`
-    <section ${selectSurfaceAttrs("states")}>
+  return selectSection("states", html`
       <h2>${ui("component.states")}</h2>
       <p>${componentSectionCopy("select", "states")}</p>
-      <div class="button-demo-grid states-grid">
+      <div class="docs-demo-matrix states-grid">
         ${states.map((demo) => demoCell(demo.label, selectDemo(demo.field, demo.value, demo.helper, demo.density, demo.state, demo.variant ?? "default", demo.icon ?? ""))).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function selectStateVariantMatrixPanel() {
   const rows = componentDemoData("select", "variant-state-behavior", "rows");
   const states = componentDemoData("select", "variant-state-behavior", "states");
-  return html`
-    <section ${selectSurfaceAttrs("variant-state-behavior")}>
+  return selectSection("variant-state-behavior", html`
       <h2>${ui("component.variantStateBehavior")}</h2>
       <p>${componentSectionCopy("select", "variant-state-behavior")}</p>
-      <div class="button-demo-grid state-behavior-grid">
+      <div class="docs-demo-matrix docs-demo-matrix--state">
         ${rows
           .flatMap((row) =>
             states.map((state) =>
@@ -124,14 +114,12 @@ function selectStateVariantMatrixPanel() {
           )
           .join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function selectFullWidthPanel() {
   const items = componentDemoData("select", "full-width", "items");
-  return html`
-    <section ${selectSurfaceAttrs("full-width")}>
+  return selectSection("full-width", html`
       <h2>${ui("component.fullWidth")}</h2>
       <p>${componentSectionCopy("select", "full-width")}</p>
       <div class="full-width-demo">
@@ -144,14 +132,12 @@ function selectFullWidthPanel() {
           </div>
         `).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function selectResponsivePanel() {
   const examples = componentDemoData("select", "responsive-layout-patterns", "examples");
-  return html`
-    <section ${selectSurfaceAttrs("responsive-layout-patterns")}>
+  return selectSection("responsive-layout-patterns", html`
       <h2>${ui("component.responsiveLayoutPatterns")}</h2>
       <p>${componentSectionCopy("select", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
@@ -164,45 +150,39 @@ function selectResponsivePanel() {
           </article>
         `).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function selectPlaygroundPanel() {
   const playground = componentSectionData("select", "playground");
-  return html`
-    <section ${selectSurfaceAttrs("playground", "button-playground", 'data-component-playground="select" data-ready="false"')}>
+  return selectSection("playground", html`
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("select", "playground")}</p>
-      <div class="playground-layout">
-        <div class="playground-controls" aria-label="${ui("playground.selectControls")}">
-          ${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}
-        </div>
-        <div class="playground-preview">
-          <div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${selectDemoFromData(playground.preview ?? {})}</div>
-          <pre data-component-markup>${playground.snippet ?? ""}</pre>
-        </div>
-      </div>
-    </section>
-  `;
+      ${demoPlaygroundFrame({
+        label: ui("component.playground"),
+        controlsAttrs: `aria-label="${ui("playground.selectControls")}"`,
+        controlsHtml: playgroundStaticControls(playground.controls ?? [], "data-component-playground-input"),
+        previewHtml: `<div data-doc-playground-preview data-density-context="${playground.preview?.density ?? "md"}">${selectDemoFromData(playground.preview ?? {})}</div>`,
+        sourceHtml: docsSourceMarkupSlot(playground.snippet ?? ""),
+        source: "selectPlaygroundPanel",
+      })}
+  `, "button-playground", 'data-component-playground="select" data-ready="false"');
 }
 
 function selectContractPanel() {
-  return html`
-    <section ${selectSurfaceAttrs("api-foundations")}>
+  return selectSection("api-foundations", html`
       <h2>${ui("build.apiAndFoundations")}</h2>
       <p>${componentSectionCopy("select", "api-foundations")}</p>
       ${componentDetailApiPropsTable("select")}
-    </section>
-  `;
+  `);
 }
 
 function selectGuidelinesPanel() {
-  return html`<section ${selectSurfaceAttrs("guidelines")}>${componentDetailGuidelinesContent("select")}</section>`;
+  return selectSection("guidelines", html`${componentDetailGuidelinesContent("select")}`, "", "");
 }
 
 function selectTestPanel() {
-  return html`<section ${selectSurfaceAttrs("tests-rejection-rules")}>${componentDetailTestsContent("select")}</section>`;
+  return selectSection("tests-rejection-rules", html`${componentDetailTestsContent("select")}`, "", "");
 }
 
 export function selectDemo(label, value, helper, density = "", state = "", variant = "default", leadingIcon = "") {

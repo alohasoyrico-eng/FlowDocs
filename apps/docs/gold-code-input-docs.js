@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderCodeInputGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, codeInputDemoFromData); }
 export function codeInputDemo(label = "Security code", value = "428195", state = "default") { return simpleDemo("code-input", { label, value, state }); }

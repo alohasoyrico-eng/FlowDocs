@@ -47,8 +47,8 @@ function setupChipDemos(root = document) {
 }
 
 function setupTabsDemos(root = document) {
-  root.querySelectorAll('[data-doc-component="tabs"]:not([data-stateful-ready="true"]), .detail-tablist:not([data-stateful-ready="true"])').forEach((tablist) => {
-    tablist.dataset.statefulReady = "true";
+  root.querySelectorAll('[data-doc-component="tabs"]:not([data-stateful-ready="true"]), .docs-detail-tabs-nav:not([data-stateful-ready="true"])').forEach((tabsRoot) => {
+    tabsRoot.dataset.statefulReady = "true";
   });
 }
 

@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderKpiTileGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, kpiTileDemoFromData); }
 export function kpiTileDemo(label = "Fuel spend", value = "$84.2k", state = "default") { return simpleDemo("kpi-tile", { label, value, state }); }

@@ -47,7 +47,7 @@
   }
 
   .app-shell,
-  .detail-hero,
+  .docs-detail-intro,
   .detail-layout {
     grid-template-columns: 1fr;
   }
@@ -97,7 +97,7 @@
     min-inline-size: max-content;
   }
 
-  .hero {
+  .docs-intro {
     min-block-size: auto;
   }
 
@@ -122,7 +122,7 @@
   .button-density-scale,
   .density-contract-grid,
   .two-column-list,
-  .playground-layout,
+  .docs-playground-layout,
   .voice-type-row,
   .reference-layout,
   .operational-explorer,
@@ -169,7 +169,7 @@
     grid-column: 3;
   }
 
-  .viewport-doc-grid {
+  .docs-viewport-matrix {
     grid-template-columns: 1fr;
   }
 
@@ -180,7 +180,7 @@
 }
 
 @media (max-width: 760px) {
-  .hero {
+  .docs-intro {
     grid-template-columns: 1fr;
     gap: var(--density-component-gap-lg);
     inline-size: min(100%, var(--frame-page-shell));
@@ -188,18 +188,18 @@
     padding-inline: var(--frame-page-x);
   }
 
-  .hero-copy,
-  .hero-visual {
+  .docs-intro-copy,
+  .docs-intro-visual {
     align-self: center;
     padding: 0;
   }
 
-  .hero-visual {
+  .docs-intro-visual {
     justify-self: stretch;
     place-items: center;
   }
 
-  .hero-visual img {
+  .docs-intro-visual img {
     inline-size: min(100%, var(--sys-frame-doc-device-min-block));
     transform: var(--component-transform-none);
   }
@@ -212,11 +212,11 @@
 }
 
 @media (max-width: 900px) {
-  :is(.detail-page, .reference-doc) .button-demo-grid,
-  :is(.detail-page, .reference-doc) .state-behavior-grid,
+  :is(.detail-page, .reference-doc) .docs-demo-matrix,
+  :is(.detail-page, .reference-doc) .docs-demo-matrix--state,
   :is(.detail-page, .reference-doc) .full-width-demo,
   :is(.detail-page, .reference-doc) .responsive-actions-demo,
-  :is(.detail-page, .reference-doc) .viewport-doc-grid,
+  :is(.detail-page, .reference-doc) .docs-viewport-matrix,
   :is(.detail-page, .reference-doc) .checklist-grid,
   :is(.detail-page, .reference-doc) .guidelines-grid,
   :is(.detail-page, .reference-doc) .card-mini-grid {

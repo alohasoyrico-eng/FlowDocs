@@ -24,7 +24,7 @@
   --docs-detail-tabs-indicator-transition: left var(--sys-duration-base) var(--sys-motion-curve-touch), width var(--sys-duration-base) var(--sys-motion-curve-touch);
 }
 
-.detail-tablist {
+.docs-detail-tabs-nav {
   box-sizing: border-box;
   position: relative;
   display: inline-flex;
@@ -41,16 +41,16 @@
   scrollbar-width: none;
 }
 
-.detail-tablist::-webkit-scrollbar {
+.docs-detail-tabs-nav::-webkit-scrollbar {
   display: none;
 }
 
-.detail-tabs.detail-tablist {
+.detail-tabs.docs-detail-tabs-nav {
   inline-size: max-content;
   max-inline-size: 100%;
 }
 
-.detail-tablist::before {
+.docs-detail-tabs-nav::before {
   content: "";
   position: absolute;
   z-index: var(--sys-depth-z-base);
@@ -65,7 +65,7 @@
   transition: var(--docs-detail-tabs-indicator-transition);
 }
 
-.detail-tablist [role="tab"] {
+.docs-detail-tabs-nav [role="tab"] {
   position: relative;
   z-index: var(--sys-depth-z-raised);
   display: inline-flex;
@@ -88,36 +88,36 @@
   transition: color var(--sys-duration-fast) var(--sys-motion-curve-enter), transform var(--sys-duration-touch) var(--sys-motion-curve-touch);
 }
 
-.detail-tablist [role="tab"][aria-selected="true"] {
+.docs-detail-tabs-nav [role="tab"][aria-selected="true"] {
   background: var(--docs-detail-tabs-tab-bg);
   color: var(--docs-detail-tabs-tab-text-selected);
   box-shadow: none;
   font-weight: var(--docs-detail-tabs-font-weight-selected);
 }
 
-.detail-tablist [role="tab"]:focus,
-.detail-tablist [role="tab"]:focus-visible,
-.detail-tablist[data-state="focus"] [role="tab"][aria-selected="true"] {
+.docs-detail-tabs-nav [role="tab"]:focus,
+.docs-detail-tabs-nav [role="tab"]:focus-visible,
+.docs-detail-tabs-nav[data-state="focus"] [role="tab"][aria-selected="true"] {
   z-index: var(--sys-depth-z-floating);
   outline: var(--docs-detail-tabs-focus-ring);
   outline-offset: var(--docs-detail-tabs-focus-offset);
 }
 
-.detail-tablist [role="tab"]:hover,
-.detail-tablist[data-state="hover"] [role="tab"]:not([aria-selected="true"]):nth-of-type(2) {
+.docs-detail-tabs-nav [role="tab"]:hover,
+.docs-detail-tabs-nav[data-state="hover"] [role="tab"]:not([aria-selected="true"]):nth-of-type(2) {
   background: color-mix(in srgb, var(--sys-energy-surface-primary) 58%, transparent);
 }
 
-.detail-tablist [role="tab"]:active {
+.docs-detail-tabs-nav [role="tab"]:active {
   transform: scale(var(--sys-momentum-scale-press));
 }
 
-.detail-tablist[data-state="disabled"] {
+.docs-detail-tabs-nav[data-state="disabled"] {
   opacity: var(--sys-disabled-readable-opacity);
   pointer-events: none;
 }
 
-.detail-tablist[data-variant="underline"] {
+.docs-detail-tabs-nav[data-variant="underline"] {
   --docs-detail-tabs-indicator-block: var(--sys-frame-border-indicator);
   gap: var(--sys-space-5);
   padding: 0;
@@ -127,7 +127,7 @@
   background: transparent;
 }
 
-.detail-tablist[data-variant="underline"]::before {
+.docs-detail-tabs-nav[data-variant="underline"]::before {
   inset-block-start: auto;
   inset-block-end: calc(var(--sys-frame-border-thin) * -1);
   border-radius: var(--sys-frame-radius-full);
@@ -135,45 +135,45 @@
   box-shadow: none;
 }
 
-.detail-tablist[data-variant="contained"] {
+.docs-detail-tabs-nav[data-variant="contained"] {
   border-color: var(--sys-energy-border-default);
   background: var(--sys-energy-surface-primary);
 }
 
-.detail-tablist[data-variant="scrollable"] {
+.docs-detail-tabs-nav[data-variant="scrollable"] {
   --docs-detail-tabs-overflow: auto hidden;
   flex-wrap: nowrap;
   justify-content: flex-start;
   scrollbar-width: thin;
 }
 
-.detail-tablist[data-variant="underline"] [role="tab"] {
+.docs-detail-tabs-nav[data-variant="underline"] [role="tab"] {
   min-block-size: var(--docs-detail-tabs-tab-height);
   padding: 0 var(--sys-space-1);
   border-radius: 0;
 }
 
-.detail-tablist[data-variant="underline"] [role="tab"][aria-selected="true"] {
+.docs-detail-tabs-nav[data-variant="underline"] [role="tab"][aria-selected="true"] {
   background: var(--docs-detail-tabs-tab-bg);
   color: var(--sys-energy-action-primary);
   box-shadow: none;
 }
 
-.simple-viewport-demo[data-demo-layout~="contained"],
-.simple-viewport-demo[data-demo-layout~="scrollable"],
-.simple-viewport-demo[data-demo-layout~="underline"] {
+.docs-viewport-demo[data-demo-layout~="contained"],
+.docs-viewport-demo[data-demo-layout~="scrollable"],
+.docs-viewport-demo[data-demo-layout~="underline"] {
   inline-size: 100%;
   overflow: visible;
 }
 
-.simple-viewport-demo[data-demo-layout~="contained"] > [data-doc-component="tabs"],
-.simple-viewport-demo[data-demo-layout~="scrollable"] > [data-doc-component="tabs"],
-.simple-viewport-demo[data-demo-layout~="underline"] > [data-doc-component="tabs"] {
+.docs-viewport-demo[data-demo-layout~="contained"] > [data-doc-component="tabs"],
+.docs-viewport-demo[data-demo-layout~="scrollable"] > [data-doc-component="tabs"],
+.docs-viewport-demo[data-demo-layout~="underline"] > [data-doc-component="tabs"] {
   inline-size: 100%;
   min-inline-size: 0;
 }
 
-  .detail-tablist[data-variant="scrollable"] {
+  .docs-detail-tabs-nav[data-variant="scrollable"] {
     overflow-x: auto;
     flex-wrap: nowrap;
     justify-content: flex-start;
@@ -186,7 +186,7 @@
   max-inline-size: 100%;
 }
 
-.button-viewport-panel:has([data-doc-component="tabs"]) .viewport-doc-grid {
+.button-viewport-panel:has([data-doc-component="tabs"]) .docs-viewport-matrix {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
 }
 
@@ -210,7 +210,7 @@
   overflow-x: auto;
 }
 
-.button-viewport-panel:has([data-doc-component="tabs"]) .simple-viewport-demo > [data-doc-component="tabs"] {
+.button-viewport-panel:has([data-doc-component="tabs"]) .docs-viewport-demo > [data-doc-component="tabs"] {
   justify-self: center;
   width: max-content;
   min-width: 0;
@@ -220,7 +220,7 @@
 }
 
 @media (max-width: 900px) {
-  :is(.detail-page, .reference-doc) .detail-tabs.detail-tablist {
+  :is(.detail-page, .reference-doc) .detail-tabs.docs-detail-tabs-nav {
     inline-size: 100%;
     max-inline-size: 100%;
   }
@@ -235,7 +235,7 @@
 }
 
 @media (max-width: 420px) {
-  :is(.detail-page, .reference-doc) .detail-tabs.detail-tablist {
+  :is(.detail-page, .reference-doc) .detail-tabs.docs-detail-tabs-nav {
     --docs-detail-tabs-tab-padding-x: var(--sys-space-2);
   }
 }

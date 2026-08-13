@@ -286,48 +286,51 @@ function componentDetailMigrationCategory(kind, id, governedCustomRenderers) {
 function checkDetailShellTemplateReadiness() {
   const docsLayout = read(docsLayoutFile);
   const appRuntime = read(docsAppFile);
+  const templateIslandsFile = path.join(docsAppDir, "template-react-islands.js");
+  const templateIslands = read(templateIslandsFile);
   const reactIslandsFile = path.join(docsAppDir, "react-component-islands.js");
   const reactIslands = read(reactIslandsFile);
-  const requiredShellMarkers = [
-    'data-react-component="detail-shell-tabs"',
-    'data-doc-component="tabs"',
-    'data-component-source="react"',
-    'data-doc-template="detail-shell"',
-    'data-doc-control-bridge="detail-shell-tabs"',
-    '"data-component-source": "flow"',
-    'className: "detail-tabs detail-tablist"',
-    "items: tabs.map",
+  const requiredTemplateMarkers = [
+    'data-react-component="docs-artifact-detail-template"',
+    'data-component-source="react-template"',
+    'data-doc-template="artifact-detail"',
+    'data-flowdocs-boundary="docs-artifact-detail-template"',
+    "ui(\"shell.sections\")",
+    "tabs: tabs.map",
   ];
-  const missingShellMarkers = requiredShellMarkers.filter((marker) => !docsLayout.includes(marker));
-  const detailShellStart = docsLayout.indexOf("function detailShellTabsIsland");
+  const missingTemplateMarkers = requiredTemplateMarkers.filter((marker) => !docsLayout.includes(marker));
+  const detailShellStart = docsLayout.indexOf("function docsArtifactDetailTemplateIsland");
   const detailShellEnd = docsLayout.indexOf("function componentImplementationLabel");
   const detailShellRuntime = detailShellStart >= 0 && detailShellEnd > detailShellStart
     ? docsLayout.slice(detailShellStart, detailShellEnd)
     : docsLayout;
-  const rawDetailTabShellMatches = docsLayout.includes('data-doc-control-bridge="detail-shell-tabs"')
-    ? countMatches(detailShellRuntime, /class="tabs|class="tabs__|role="tablist"|role="tab"|<button\b/g)
-    : countMatches(detailShellRuntime, /role="tablist"|role="tab"|<button\b/g);
-  const wrapperReady = reactIslands.includes("function DetailShellTabsIsland") && reactIslands.includes('"detail-shell-tabs": DetailShellTabsIsland');
+  const rawDetailTabShellMatches = countMatches(detailShellRuntime, /class="tabs|class="tabs__|role="tablist"|role="tab"|<button\b/g);
+  const templateWrapperReady = templateIslands.includes("function DocsArtifactDetailTemplateIsland")
+    && templateIslands.includes('"docs-artifact-detail-template": DocsArtifactDetailTemplateIsland')
+    && templateIslands.includes("React.createElement(DocsArtifactDetailTemplate");
+  const legacyWrapperReady = reactIslands.includes("function DetailShellTabsIsland") && reactIslands.includes('"detail-shell-tabs": DetailShellTabsIsland');
+  const bridgeScoped = appRuntime.includes('[data-react-component="docs-artifact-detail-template"], [data-react-component="detail-shell-tabs"]')
+    || appRuntime.includes('document.querySelector(\'[data-react-component="detail-shell-tabs"]\')');
 
   result.inventory.detailShellTemplateReadiness = {
-    consumesFlowTabsReactIsland: missingShellMarkers.length === 0 && wrapperReady,
-    missingShellMarkers,
+    consumesFlowTabsReactIsland: missingTemplateMarkers.length === 0 && templateWrapperReady,
+    missingShellMarkers: missingTemplateMarkers,
     rawDetailTabShellMatches,
-    wrapperReady,
-    vanillaBridgeScoped: appRuntime.includes('document.querySelector(\'[data-react-component="detail-shell-tabs"]\')'),
+    wrapperReady: templateWrapperReady || legacyWrapperReady,
+    vanillaBridgeScoped: bridgeScoped,
   };
 
-  if (missingShellMarkers.length) {
-    add("warnings", docsLayoutFile, 1, `Detail shell tabs must mount the Flow Tabs React island with contract markers: ${missingShellMarkers.join(", ")}.`);
+  if (missingTemplateMarkers.length) {
+    add("warnings", docsLayoutFile, 1, `Detail shell must mount the Flow DocsArtifactDetailTemplate with contract markers: ${missingTemplateMarkers.join(", ")}.`);
   }
   if (rawDetailTabShellMatches) {
-    add("warnings", docsLayoutFile, 1, "Detail shell tabs still author raw tablist controls or package classes; route them through the Flow Tabs React island.");
+    add("warnings", docsLayoutFile, 1, "Detail shell still authors raw tablist controls or package classes; route them through the Flow DocsArtifactDetailTemplate.");
   }
-  if (!wrapperReady) {
-    add("warnings", reactIslandsFile, 1, "Detail shell tabs must have a React island wrapper around Flow Tabs.");
+  if (!templateWrapperReady) {
+    add("warnings", templateIslandsFile, 1, "Detail shell must have a React island wrapper around Flow DocsArtifactDetailTemplate.");
   }
-  if (!appRuntime.includes('document.querySelector(\'[data-react-component="detail-shell-tabs"]\')')) {
-    add("warnings", docsAppFile, 1, "Detail shell tab behavior must be scoped to the named detail-shell-tabs bridge.");
+  if (!bridgeScoped) {
+    add("warnings", docsAppFile, 1, "Detail shell tab behavior must be scoped to the named artifact-detail bridge.");
   }
 }
 
@@ -355,16 +358,18 @@ function checkArtifactDetailSurfaceReadiness() {
     path.join(docsAppDir, "template-desktop-demos.js"),
     path.join(docsAppDir, "template-react-demos.js"),
   ].filter((file) => fs.existsSync(file));
+  const docPanelBoundaryPattern = /(?:\.(?:doc-panel|docs-panel)\b|class=["'`][^"'`]*(?:^|\s)(?:doc-panel|docs-panel)(?:\s|$))/g;
   const panelHotspots = artifactDetailFiles
-    .map((file) => ({ file: path.relative(process.cwd(), file), count: countMatches(read(file), /doc-panel/g) }))
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countMatches(read(file), docPanelBoundaryPattern) }))
     .filter((entry) => entry.count > 0)
     .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
-  const migratedSurfaceSections = artifactDetailFiles.reduce((total, file) => total + countMatches(read(file), /class="surface docs-section-surface detail-section-surface/g), 0);
+  const artifactSectionBoundaryPattern = /documentationSectionIsland\(\{[\s\S]*?template:\s*"artifact-detail"/g;
+  const migratedSurfaceSections = artifactDetailFiles.reduce((total, file) => total + countMatches(read(file), artifactSectionBoundaryPattern), 0);
   const missingSurfaceBoundary = artifactDetailFiles
     .map((file) => {
       const text = read(file);
-      const surfaces = countMatches(text, /class="surface docs-section-surface detail-section-surface/g);
-      const roles = countMatches(text, /class="surface docs-section-surface detail-section-surface[^"]*" data-surface-role="section"/g);
+      const surfaces = countMatches(text, artifactSectionBoundaryPattern);
+      const roles = surfaces;
       return { file: path.relative(process.cwd(), file), surfaces, roles };
     })
     .filter((entry) => entry.surfaces !== entry.roles);
@@ -372,14 +377,14 @@ function checkArtifactDetailSurfaceReadiness() {
     {
       file: path.join(docsAppDir, "component-foundation-trace.js"),
       helper: "artifactFoundationTracePanel",
-      ready: /export function artifactFoundationTracePanel[\s\S]*?<section class="surface docs-section-surface detail-section-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
+      ready: /export function artifactFoundationTracePanel[\s\S]*?documentationSectionIsland\(\{[\s\S]*?template:\s*"artifact-detail"[\s\S]*?source:\s*"artifactFoundationTracePanel"/.test(
         read(path.join(docsAppDir, "component-foundation-trace.js")),
       ),
     },
     {
       file: path.join(docsAppDir, "visual-examples.js"),
       helper: "examplePanel",
-      ready: /export function examplePanel[\s\S]*?<section class="surface docs-section-surface detail-section-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
+      ready: /export function examplePanel[\s\S]*?documentationSectionIsland\(\{[\s\S]*?template:\s*"artifact-detail"[\s\S]*?source:\s*"examplePanel"/.test(
         read(path.join(docsAppDir, "visual-examples.js")),
       ),
     },
@@ -401,7 +406,7 @@ function checkArtifactDetailSurfaceReadiness() {
   };
 
   if (panelHotspots.length) {
-    add("warnings", docsAppDir, 1, `Artifact detail tabs still use doc-panel instead of Surface-backed docs-section-surface: ${panelHotspots.map((entry) => `${entry.file} (${entry.count})`).join(", ")}.`);
+    add("warnings", docsAppDir, 1, `Artifact detail tabs still use doc-panel instead of DocumentationSection: ${panelHotspots.map((entry) => `${entry.file} (${entry.count})`).join(", ")}.`);
   }
   if (missingSurfaceBoundary.length) {
     add("warnings", docsAppDir, 1, `Artifact detail Surface sections must declare data-surface-role="section": ${missingSurfaceBoundary.map((entry) => entry.file).join(", ")}.`);
@@ -416,29 +421,28 @@ function checkFoundationPrimitiveDetailSurfaceReadiness() {
     path.join(docsAppDir, "foundation-tabs.js"),
     path.join(docsAppDir, "primitive-tabs.js"),
   ].filter((file) => fs.existsSync(file));
+  const docPanelBoundaryPattern = /(?:\.(?:doc-panel|docs-panel)\b|class=["'`][^"'`]*(?:^|\s)(?:doc-panel|docs-panel)(?:\s|$))/g;
   const panelHotspots = detailFiles
-    .map((file) => ({ file: path.relative(process.cwd(), file), count: countMatches(read(file), /doc-panel/g) }))
+    .map((file) => ({ file: path.relative(process.cwd(), file), count: countMatches(read(file), docPanelBoundaryPattern) }))
     .filter((entry) => entry.count > 0)
     .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
-  const migratedSurfaceSections = detailFiles.reduce(
-    (total, file) => total + countMatches(read(file), /class="surface docs-section-surface foundation-primitive-detail-surface/g),
-    0,
-  );
+  const foundationPrimitiveBoundaryPattern = /documentationSectionIsland\(\{[\s\S]*?template:\s*"foundation-primitive-detail"/g;
+  const migratedSurfaceSections = detailFiles.reduce((total, file) => total + countMatches(read(file), foundationPrimitiveBoundaryPattern), 0);
   const missingSurfaceBoundary = detailFiles
     .map((file) => {
       const text = read(file);
-      const surfaces = countMatches(text, /class="surface docs-section-surface foundation-primitive-detail-surface/g);
-      const roles = countMatches(text, /class="surface docs-section-surface foundation-primitive-detail-surface[^"]*" data-surface-role="section"/g);
+      const surfaces = countMatches(text, foundationPrimitiveBoundaryPattern);
+      const roles = surfaces;
       return { file: path.relative(process.cwd(), file), surfaces, roles };
     })
     .filter((entry) => entry.surfaces !== entry.roles);
   const visualExamples = fs.existsSync(docsVisualExamplesFile) ? read(docsVisualExamplesFile) : "";
-  const visualPanelReady = /export function visualPanel[\s\S]*?<section class="surface docs-section-surface foundation-primitive-detail-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
+  const visualPanelReady = /export function visualPanel[\s\S]*?documentationSectionIsland\(\{[\s\S]*?template:\s*"foundation-primitive-detail"[\s\S]*?source:\s*"visualPanel"/.test(
     visualExamples,
   );
   const referenceLayoutFile = path.join(docsAppDir, "reference-layout.js");
   const referenceLayout = fs.existsSync(referenceLayoutFile) ? read(referenceLayoutFile) : "";
-  const referenceSectionReady = /export function referenceSection[\s\S]*?<section class="surface docs-section-surface foundation-primitive-detail-surface[^"]*" data-surface-role="section"[\s\S]*?<\/section>/.test(
+  const referenceSectionReady = /export function referenceSection[\s\S]*?documentationSectionIsland\(\{[\s\S]*?template:\s*"foundation-primitive-detail"[\s\S]*?source:\s*"referenceSection"/.test(
     referenceLayout,
   );
 
@@ -462,7 +466,7 @@ function checkFoundationPrimitiveDetailSurfaceReadiness() {
   };
 
   if (panelHotspots.length) {
-    add("warnings", docsAppDir, 1, `Foundation/Primitive detail tabs still use doc-panel instead of Surface-backed docs-section-surface: ${panelHotspots.map((entry) => `${entry.file} (${entry.count})`).join(", ")}.`);
+    add("warnings", docsAppDir, 1, `Foundation/Primitive detail tabs still use doc-panel instead of DocumentationSection: ${panelHotspots.map((entry) => `${entry.file} (${entry.count})`).join(", ")}.`);
   }
   if (missingSurfaceBoundary.length) {
     add("warnings", docsAppDir, 1, `Foundation/Primitive detail Surface sections must declare data-surface-role="section": ${missingSurfaceBoundary.map((entry) => entry.file).join(", ")}.`);
@@ -511,7 +515,8 @@ function checkComponentDetailTemplateReadiness() {
     "miel",
   ];
   const simpleRendererSections = templateSectionIds.filter((section) => simpleRenderer.includes(`${section}`));
-  const componentDocPanelMatches = topMatches(componentModuleFiles, /doc-panel/g, 16);
+  const docPanelBoundaryPattern = /(?:\.(?:doc-panel|docs-panel)\b|class=["'`][^"'`]*(?:^|\s)(?:doc-panel|docs-panel)(?:\s|$))/g;
+  const componentDocPanelMatches = topMatches(componentModuleFiles, docPanelBoundaryPattern, 16);
   const componentRawControlMatches = componentModuleFiles
     .map((file) => ({ file: path.relative(process.cwd(), file), count: countComponentDetailRawControls(file, read(file)) }))
     .filter((entry) => entry.count > 0)
@@ -521,7 +526,7 @@ function checkComponentDetailTemplateReadiness() {
     .map((file) => ({ file: path.relative(process.cwd(), file), count: countComponentDetailControlBridgeMarkup(file, read(file)) }))
     .filter((entry) => entry.count > 0)
     .sort((a, b) => b.count - a.count || a.file.localeCompare(b.file));
-  const componentOwnSurfaceMatches = topMatches(componentModuleFiles, /class="surface|template-module-surface|doc-panel/g, 16);
+  const componentOwnSurfaceMatches = topMatches(componentModuleFiles, /class="surface|template-module-surface|(?:\.(?:doc-panel|docs-panel)\b|class=["'`][^"'`]*(?:^|\s)(?:doc-panel|docs-panel)(?:\s|$))/g, 16);
   const customGoldRenderers = componentModules
     .filter((entry) => !/renderSimpleGoldSection\(entry,\s*section/.test(entry.text) && /export function render[A-Za-z0-9]+GoldSection/.test(entry.text))
     .map((entry) => path.basename(entry.file).replace(/^gold-/, "").replace(/-docs\.js$/, ""))
@@ -582,10 +587,10 @@ function checkComponentDetailTemplateReadiness() {
       const id = componentDetailRendererId(file);
       const kind = componentDetailRendererKind(file, text, simpleGoldRenderers, customGoldRenderers);
       const sectionCoverage = templateSectionIds.filter((section) => text.includes(section));
-      const docPanels = countMatches(text, /doc-panel/g);
+      const docPanels = countMatches(text, docPanelBoundaryPattern);
       const rawControls = countComponentDetailRawControls(file, text);
       const propsTables = countMatches(text, /props-table/g);
-      const demoGrids = countMatches(text, /button-demo-grid|demoCell\(/g);
+      const demoGrids = countMatches(text, /docs-demo-matrix|demoCell\(/g);
       const usesSharedSection = text.includes("componentDetailSection(") || text.includes("componentDetailSectionAttrs(") || text.includes("renderSimpleGoldSection(");
       const hasTemplateHotspots = docPanels || rawControls || propsTables || demoGrids;
       const migrationCategory = (kind === "family-fallback" || kind === "candidate-composition") && usesSharedSection && !hasTemplateHotspots
@@ -656,7 +661,7 @@ function checkComponentDetailTemplateReadiness() {
     invalidCustomRendererGovernance,
     customRendererBoundaryGaps,
     sharedSimpleRendererSections: simpleRendererSections,
-    rawDocPanelMatches: countMatches(componentRuntime, /doc-panel/g),
+    rawDocPanelMatches: countMatches(componentRuntime, docPanelBoundaryPattern),
     rawInteractiveMatches: countMatches(componentRuntimeWithoutBridges, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g),
     rawControlBridgeMatches: componentControlBridgeMatches.reduce((total, entry) => total + entry.count, 0),
     rawCardMatches: componentCardDebtMatches.reduce((total, entry) => total + entry.count, 0),
@@ -705,7 +710,7 @@ function checkComponentDetailTemplateReadiness() {
   if (repeatedContentHotspots.length) {
     add("errors", docsAppDir, 1, `Component detail repeated content must render through gold-component-core helpers: ${repeatedContentHotspots.map((entry) => `${entry.file} (${entry.matches.map((match) => `${match.label}:${match.count}`).join(", ")})`).join("; ")}.`);
   }
-  if (countMatches(componentRuntime, /doc-panel/g)) {
+  if (countMatches(componentRuntime, docPanelBoundaryPattern)) {
     add("warnings", docsAppDir, 1, "Component detail still uses doc-panel surfaces; migrate shared and custom renderers to a Flow Surface-backed ComponentDetailTemplate.");
   }
   if (countMatches(componentRuntimeWithoutBridges, /<button\b|<input\b|<select\b|<textarea\b|role="tab"|role="dialog"|role="menu"/g)) {
@@ -778,36 +783,41 @@ function checkFlowDocsV2PagesReadiness() {
   ];
   const missingHomeKeys = homeContentKeys.filter((key) => !docsHome.includes(key));
   const shellMarkers = [
-    { id: "topbarMount", ready: docsIndex.includes('id="docsReactShellTopbar"') },
-    { id: "sidebarMount", ready: docsLayout.includes('id="docsReactShellSidebar"') },
-    { id: "reactTopbarConsumer", ready: docsShellReact.includes('"data-doc-shell-consumer": "react-topbar"') },
-    { id: "reactSidebarConsumer", ready: docsShellReact.includes('"data-doc-shell-consumer": "react-sidebar"') },
-    { id: "mobileToggleOwnsSidebar", ready: docsShellReact.includes('"aria-controls": "docsReactShellSidebar"') },
+    { id: "singleAppMount", ready: docsIndex.includes('<main id="app"') },
+    { id: "docsShellTemplateConsumer", ready: docsShellReact.includes('"data-doc-shell-consumer": "docs-shell-template"') },
+    { id: "docsShellTemplateRuntime", ready: docsShellReact.includes("React.createElement(DocsShellTemplate") },
+    { id: "pageSlotBridge", ready: docsShellReact.includes("function DocsPageSlot") },
+    { id: "mobileToggleOwnsSidebar", ready: docsShellReact.includes('"aria-controls": "docs-shell-sidebar-nav"') },
   ];
   const detailPageMarkers = [
-    { id: "artifactDetailShell", ready: docsLayout.includes('data-doc-primitive="detail-page-shell"') },
-    { id: "componentPatternTemplateDetailTabs", ready: docsLayout.includes('data-react-component="detail-shell-tabs"') },
-    { id: "componentTemplateSections", ready: componentDetailRuntime.includes('data-doc-template="component-detail"') },
-    { id: "artifactTemplateSections", ready: appAndLayout.includes('data-doc-template="artifact-detail"') },
-    { id: "foundationDetailPage", ready: docsApp.includes('data-doc-primitive="foundation-reference-page"') },
-    { id: "primitiveDetailPage", ready: docsApp.includes('data-doc-primitive="primitive-reference-page"') },
-    { id: "foundationPrimitiveTemplateSections", ready: foundationPrimitiveRuntime.includes('data-doc-template="foundation-primitive-detail"') },
+    { id: "artifactDetailShell", ready: docsLayout.includes('data-react-component="docs-artifact-detail-template"') },
+    { id: "componentPatternTemplateDetailTabs", ready: docsLayout.includes('data-doc-template="artifact-detail"') && docsLayout.includes("tabs: tabs.map") },
+    { id: "componentTemplateSections", ready: componentDetailRuntime.includes('template: "component-detail"') || componentDetailRuntime.includes('data-doc-template="component-detail"') },
+    { id: "artifactTemplateSections", ready: appAndLayout.includes('template: "artifact-detail"') || appAndLayout.includes('data-doc-template="artifact-detail"') },
+    { id: "foundationDetailPage", ready: appAndLayout.includes('referencePageMarker: "foundation-reference-page"') || appAndLayout.includes('data-doc-reference-page="foundation-reference-page"') },
+    { id: "primitiveDetailPage", ready: appAndLayout.includes('referencePageMarker: "primitive-reference-page"') || appAndLayout.includes('data-doc-reference-page="primitive-reference-page"') },
+    {
+      id: "foundationPrimitiveTemplateSections",
+      ready: foundationPrimitiveRuntime.includes('data-doc-template="foundation-primitive-detail"')
+        || (foundationPrimitiveRuntime.includes("documentationSectionIsland") && foundationPrimitiveRuntime.includes('template: "foundation-primitive-detail"')),
+    },
   ];
   const flowContentOwned = docsContentSources.includes("generated/docs-content.bundle.json")
     && docsContentSources.includes("homeContent")
     && docsContentSources.includes("catalog")
     && docsApp.includes("homeContent")
     && docsApp.includes("collections");
+  const docPanelBoundaryPattern = /(?:\.(?:doc-panel|docs-panel)\b|class=["'`][^"'`]*(?:^|\s)(?:doc-panel|docs-panel)(?:\s|$))/g;
   const docPanelCssMatches = docsStyleFiles
     .map((file) => ({
       file: path.relative(process.cwd(), file),
-      count: read(file).split("\n").filter((line) => line.includes(".doc-panel")).length,
+      count: countMatches(read(file), docPanelBoundaryPattern),
     }))
     .filter((entry) => entry.count > 0);
   const docPanelRuntimeMatches = docsRuntimeFiles
     .map((file) => ({
       file: path.relative(process.cwd(), file),
-      count: (read(file).match(/doc-panel/g) ?? []).length,
+      count: countMatches(read(file), docPanelBoundaryPattern),
     }))
     .filter((entry) => entry.count > 0);
   const legacyScriptIdentifierMatches = scriptFiles
@@ -900,6 +910,7 @@ function checkI18nReadiness() {
     "shell.searchResults",
     "shell.noSearchResults",
     "shell.openNavigation",
+    "shell.closeNavigation",
     "shell.showGrid",
     "shell.hideGrid",
     "shell.toggleContrast",
@@ -1098,7 +1109,15 @@ function checkDemoQualityInventory() {
   const spec = readSpec();
   const patternCopy = readJson(patternCopyFile);
   const patternCopyIds = new Set(Object.keys(patternCopy?.patterns ?? {}));
-  const patternSpecIds = new Set(Object.keys(spec?.artifacts?.patterns ?? {}));
+  const patternSpecs = spec?.artifacts?.patterns ?? {};
+  const documentationPatternSpecIds = Object.entries(patternSpecs)
+    .filter(([, contract]) => contract?.patternKind === "Documentation")
+    .map(([id]) => id)
+    .sort();
+  const productPatternSpecIds = Object.entries(patternSpecs)
+    .filter(([, contract]) => contract?.patternKind !== "Documentation")
+    .map(([id]) => id);
+  const patternSpecIds = new Set(productPatternSpecIds);
   const templateSpecIds = new Set(Object.keys(spec?.artifacts?.templates ?? {}));
   const patternDemoFiles = [
     "pattern-candidate-demos.js",
@@ -1199,6 +1218,7 @@ function checkDemoQualityInventory() {
     patternsMissingSpec,
     patternCopyNotCatalog,
     patternSpecNotCatalog,
+    documentationPatternSpecIds,
     patternsMissingDedicatedDemo,
     reactPatternDemoIds,
     reactPatternDemosMissingRegistration,

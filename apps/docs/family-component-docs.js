@@ -1,7 +1,7 @@
 import { candidateComponentTabs, configureCandidateComponentDocs, hasCandidateCompositionPlan } from "./candidate-component-docs.js?v=2";
-import { artifactFoundationTracePanel, configureComponentFoundationTrace } from "./component-foundation-trace.js?v=1";
+import { artifactFoundationTracePanel, configureComponentFoundationTrace } from "./component-foundation-trace.js?v=2";
 import { componentDemo } from "./component-demo.js?v=60";
-import { componentDetailAnatomyGrid, componentDetailDemoGrid, componentDetailSection, componentDetailTable } from "./gold-component-core.js?v=214";
+import { componentDetailAnatomyGrid, componentDetailDemoGrid, componentDetailSection, componentDetailTable } from "./gold-component-core.js?v=221";
 
 export { artifactFoundationTracePanel };
 

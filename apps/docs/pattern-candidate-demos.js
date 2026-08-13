@@ -1,6 +1,6 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 import { patternPackageDemo as packageDemo } from "./pattern-package-demo.js?v=1";
-import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=2";
+import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=3";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -8,6 +8,15 @@ function escapeAttribute(value) {
 
 function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
+function candidateDemoSection(className, title, body) {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: ["wide", className].filter(Boolean).join(" "),
+    source: "pattern-candidate-demos",
+  });
 }
 
 export function candidatePatternOverviewDemo(patternId) {
@@ -30,10 +39,7 @@ export function candidatePatternOverviewDemo(patternId) {
 }
 
 function commandPaletteDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-command-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Command palette</h2>
+  return candidateDemoSection("pattern-command-panel", "Command palette", html`
       ${patternReactDemo("command-palette", {
         label: "Command palette",
         description: "Search routes, actions, entities, and help topics.",
@@ -48,15 +54,11 @@ function commandPaletteDemoPanel() {
         empty: { title: "No commands found", description: "Try a route, entity, or action keyword.", icon: "search_off" },
         "data-pattern-demo": "command-palette",
       })}
-    </section>
-  `;
+  `);
 }
 
 function notificationPanelDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-notification-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Notification panel</h2>
+  return candidateDemoSection("pattern-notification-demo-panel", "Notification panel", html`
       ${patternReactDemo("notification-panel", {
         label: "Notifications",
         description: "Operational alerts that need review.",
@@ -70,15 +72,11 @@ function notificationPanelDemoPanel() {
         empty: { title: "All clear", description: "No notifications need attention.", icon: "notifications_none" },
         "data-pattern-demo": "notification-panel",
       })}
-    </section>
-  `;
+  `);
 }
 
 function avatarMenuDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-avatar-menu-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Avatar menu</h2>
+  return candidateDemoSection("pattern-avatar-menu-panel", "Avatar menu", html`
       ${patternReactDemo("avatar-menu", {
         name: "Ana Sosa",
         status: "online",
@@ -92,15 +90,11 @@ function avatarMenuDemoPanel() {
         ],
         "data-pattern-demo": "avatar-menu",
       })}
-    </section>
-  `;
+  `);
 }
 
 function confirmationDialogDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-confirmation-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Destructive confirmation</h2>
+  return candidateDemoSection("pattern-confirmation-panel", "Destructive confirmation", html`
       ${patternReactDemo("confirmation-dialog", {
         label: "Freeze JMX-214-B?",
         description: "The assigned driver cannot use this card until it is reactivated.",
@@ -113,15 +107,11 @@ function confirmationDialogDemoPanel() {
         validation: { label: "Freeze card", message: "This action creates an audit event.", state: "warning" },
         "data-pattern-demo": "confirmation-dialog",
       })}
-    </section>
-  `;
+  `);
 }
 
 function actionSheetDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-action-sheet-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Mobile action sheet</h2>
+  return candidateDemoSection("pattern-action-sheet-panel", "Mobile action sheet", html`
       ${patternReactDemo("action-sheet", {
         label: "JMX-214-B actions",
         description: "Choose a contextual action for this vehicle.",
@@ -136,15 +126,11 @@ function actionSheetDemoPanel() {
         cancelAction: { key: "cancel", label: "Cancel", variant: "secondary" },
         "data-pattern-demo": "action-sheet",
       })}
-    </section>
-  `;
+  `);
 }
 
 function searchDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-search-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Scoped search</h2>
+  return candidateDemoSection("pattern-search-panel", "Scoped search", html`
       ${patternReactDemo("search", {
         label: "Search fleet records",
         placeholder: "Search vehicle, driver, card, or station",
@@ -167,15 +153,11 @@ function searchDemoPanel() {
         clearAction: { label: "Clear search", icon: "close" },
         "data-pattern-demo": "search",
       })}
-    </section>
-  `;
+  `);
 }
 
 function autocompleteDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-autocomplete-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Entity autocomplete</h2>
+  return candidateDemoSection("pattern-autocomplete-panel", "Entity autocomplete", html`
       ${patternReactDemo("autocomplete", {
         label: "Assign vehicle or station",
         placeholder: "Start typing an entity",
@@ -189,15 +171,11 @@ function autocompleteDemoPanel() {
         empty: { title: "No suggestions", description: "Check spelling or create a support request.", icon: "search_off" },
         "data-pattern-demo": "autocomplete",
       })}
-    </section>
-  `;
+  `);
 }
 
 function selectOptionLayerDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-select-layer-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Permissioned option layer</h2>
+  return candidateDemoSection("pattern-select-layer-panel", "Permissioned option layer", html`
       ${patternReactDemo("select-option-layer", {
         label: "Card policy",
         helper: "Unavailable policies stay visible with a reason.",
@@ -211,15 +189,11 @@ function selectOptionLayerDemoPanel() {
         action: { key: "review-approval", label: "Review approval", icon: "policy", variant: "secondary" },
         "data-pattern-demo": "select-option-layer",
       })}
-    </section>
-  `;
+  `);
 }
 
 function multiSelectDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-multi-select-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Multi select filters</h2>
+  return candidateDemoSection("pattern-multi-select-panel", "Multi select filters", html`
       ${patternReactDemo("multi-select", {
         label: "Fleet filters",
         helper: "Select up to two filters to preview the query.",
@@ -236,15 +210,11 @@ function multiSelectDemoPanel() {
         clearAction: { label: "Clear filters", icon: "close", variant: "secondary" },
         "data-pattern-demo": "multi-select",
       })}
-    </section>
-  `;
+  `);
 }
 
 function formSectionDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-form-section-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Editable form section</h2>
+  return candidateDemoSection("pattern-form-section-panel", "Editable form section", html`
       ${patternReactDemo("form-section", {
         title: "Driver profile",
         description: "Update the operational details used by dispatch, compliance, and support.",
@@ -260,15 +230,11 @@ function formSectionDemoPanel() {
         secondaryAction: { key: "reset", label: "Reset", icon: "refresh", variant: "secondary" },
         "data-pattern-demo": "form-section",
       })}
-    </section>
-  `;
+  `);
 }
 
 function toolbarDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-toolbar-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Table toolbar</h2>
+  return candidateDemoSection("pattern-toolbar-panel", "Table toolbar", html`
       ${patternReactDemo("toolbar", {
         label: "Vehicle table actions",
         density: "md",
@@ -304,15 +270,11 @@ function toolbarDemoPanel() {
         },
         "data-pattern-demo": "toolbar",
       })}
-    </section>
-  `;
+  `);
 }
 
 function filterChipGroupDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-filter-chip-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Active filter chips</h2>
+  return candidateDemoSection("pattern-filter-chip-panel", "Active filter chips", html`
       ${patternReactDemo("filter-chip-group", {
         label: "Active vehicle filters",
         density: "md",
@@ -327,15 +289,11 @@ function filterChipGroupDemoPanel() {
         reset: { label: "Clear all filters", variant: "secondary" },
         "data-pattern-demo": "filter-chip-group",
       })}
-    </section>
-  `;
+  `);
 }
 
 function fileUploadDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-file-upload-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Evidence upload</h2>
+  return candidateDemoSection("pattern-file-upload-panel", "Evidence upload", html`
       ${patternReactDemo("file-upload", {
         label: "Evidence upload",
         description: "Upload a PDF or image under 10 MB.",
@@ -347,6 +305,5 @@ function fileUploadDemoPanel() {
         validation: { label: "File policy", message: "Only PDF, JPG, or PNG files under 10 MB are accepted.", state: "warning", live: true },
         "data-pattern-demo": "file-upload",
       })}
-    </section>
-  `;
+  `);
 }

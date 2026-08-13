@@ -5,7 +5,7 @@ body[data-contrast="quiet"] [data-doc-component="slider"][data-state="complete"]
   color: var(--sys-color-text);
 }
 
-.docs-demo-layout--slider.simple-demo-row {
+.docs-demo-frame--slider.docs-demo-row {
   --docs-slider-demo-edge-padding: calc(var(--component-control-min-size) / 3);
   align-items: stretch;
   display: grid;
@@ -13,6 +13,6 @@ body[data-contrast="quiet"] [data-doc-component="slider"][data-state="complete"]
   padding-inline: var(--docs-slider-demo-edge-padding);
 }
 
-.docs-demo-layout--slider.simple-demo-row [data-doc-component="slider"] {
+.docs-demo-frame--slider.docs-demo-row [data-doc-component="slider"] {
   inline-size: 100%;
 }

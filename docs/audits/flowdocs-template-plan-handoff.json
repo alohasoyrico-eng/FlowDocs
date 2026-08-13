@@ -1,0 +1,161 @@
+{
+  "schema": "flowdocs-template-plan-handoff.v1",
+  "date": "2026-08-13",
+  "plan": "Plan FlowDocs Templates",
+  "status": "closed",
+  "progress": {
+    "completedIterations": 31,
+    "totalIterations": 31,
+    "percent": 100
+  },
+  "scope": {
+    "flowDocsRepo": "repo-split-output/FlowDocs",
+    "flowRepo": "repo-split-output/Flow3.0",
+    "documentationFamilies": [
+      "home",
+      "foundation detail",
+      "primitive detail",
+      "component detail",
+      "pattern detail",
+      "template detail"
+    ],
+    "inventoryCounts": {
+      "foundations": 11,
+      "primitives": 24,
+      "components": 60,
+      "patterns": 63,
+      "templates": 9,
+      "detailRoutes": 167
+    }
+  },
+  "flowOwnedContracts": {
+    "components": [
+      "CodeBlock"
+    ],
+    "patterns": [
+      "ArtifactMetadataBar",
+      "DemoPreviewFrame",
+      "DocumentationHero",
+      "DocumentationPrimitiveDemo",
+      "DocumentationReferenceGrid",
+      "DocumentationSection",
+      "DocumentationTokenGrid"
+    ],
+    "templates": [
+      "DocsArtifactDetailTemplate",
+      "DocsShellTemplate"
+    ],
+    "flowBuildEvidence": {
+      "command": "npm run build",
+      "workingDirectory": "repo-split-output/Flow3.0/packages/react",
+      "status": "pass",
+      "artifactCount": 295
+    }
+  },
+  "flowDocsEvidence": {
+    "validation": {
+      "command": "npm run validate:docs",
+      "status": "pass",
+      "runtimeRoutes": "167 detail routes passed"
+    },
+    "auditSummary": {
+      "missingRegistrations": 0,
+      "artifactDocPanelHotspots": 0,
+      "foundationPrimitiveDocPanelHotspots": 0,
+      "rawDocPanelMatches": 0,
+      "rawInteractiveMatches": 0,
+      "rawCardMatches": 0,
+      "ungovernedCustomRenderers": 0,
+      "pageDebt": 0,
+      "docsTemplateBoundaryMode": "strict",
+      "strictFindings": 0,
+      "visualDebtTotals": {
+        "decorative-backgrounds": 0,
+        "standard-chip": 0,
+        "role-grid": 0,
+        "props-table": 0,
+        "card-like-doc-markup": 0,
+        "link-card-markup": 0
+      }
+    },
+    "visualQa": {
+      "status": "pass",
+      "matrixTotal": 24,
+      "matrixPassed": 24,
+      "viewports": [
+        "desktop 1280x900",
+        "mobile 390x844"
+      ],
+      "themes": [
+        "light",
+        "dark"
+      ],
+      "routes": [
+        "#/home",
+        "#/foundations/color",
+        "#/primitives/stack",
+        "#/components/button",
+        "#/patterns/agent-conversation",
+        "#/templates/dashboard"
+      ],
+      "assertions": [
+        "main surface present",
+        "no legacy .doc-panel",
+        "no data-flowdocs-boundary-debt",
+        "no horizontal page overflow",
+        "no console warnings or errors",
+        "no failed network requests",
+        "grid overlay remains hidden by default"
+      ]
+    }
+  },
+  "closedPhases": [
+    {
+      "id": "A",
+      "name": "documentation-section",
+      "result": "strict owner gate closed; local section wrappers reduced to zero active findings"
+    },
+    {
+      "id": "B",
+      "name": "documentation-hero",
+      "result": "home and detail heroes consume Flow-owned DocumentationHero boundary"
+    },
+    {
+      "id": "C",
+      "name": "demo-preview-frame",
+      "result": "demo framing is governed by Flow-owned DemoPreviewFrame or explicit Flow documentation demo patterns"
+    },
+    {
+      "id": "D",
+      "name": "nav/metadata",
+      "result": "artifact metadata is Flow-owned and local metadata/card wrappers have zero active findings"
+    },
+    {
+      "id": "E",
+      "name": "code/example blocks",
+      "result": "source snippets route through Flow-owned CodeBlock boundary"
+    },
+    {
+      "id": "F",
+      "name": "page templates",
+      "result": "home and 167 detail routes are covered by FlowDocs v2 template ownership gates"
+    },
+    {
+      "id": "G",
+      "name": "legacy removal + QA",
+      "result": "strict audits and representative visual QA pass"
+    }
+  ],
+  "knownHistoricalReferences": {
+    "status": "non-blocking",
+    "reason": "Some audit and crosswalk files intentionally retain legacy selector names as regression patterns or historical evidence. Runtime/source app strict findings are zero."
+  },
+  "releaseDecision": {
+    "readyForCommit": true,
+    "readyForRelease": true,
+    "requiresManualReviewBeforePublicRelease": [
+      "human visual review of screenshots if a formal release note requires image evidence",
+      "commit scoping across FlowDocs and Flow3.0 because both repos contain related uncommitted work"
+    ]
+  }
+}

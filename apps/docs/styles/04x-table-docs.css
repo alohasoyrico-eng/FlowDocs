@@ -13,18 +13,18 @@
   inline-size: 100%;
 }
 
-.docs-demo-layout--table.simple-demo-row {
+.docs-demo-frame--table.docs-demo-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   inline-size: 100%;
 }
 
-.detail-page .docs-demo-layout--table.simple-scenario,
-.reference-doc .docs-demo-layout--table.simple-scenario {
+.detail-page .docs-demo-frame--table.simple-scenario,
+.reference-doc .docs-demo-frame--table.simple-scenario {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.docs-demo-layout--table .simple-console,
-.docs-demo-layout--table [data-doc-component="table"] {
+.docs-demo-frame--table .simple-console,
+.docs-demo-frame--table [data-doc-component="table"] {
   inline-size: 100%;
 }

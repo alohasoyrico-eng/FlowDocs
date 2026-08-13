@@ -1,29 +1,36 @@
 import { componentDemo } from "./component-demo.js?v=61";
+import { documentationHeroIsland } from "./documentation-hero-island.js?v=1";
 
-export function renderHomeContent({ docsLinkCard, collections, findAny, homeContent, html, icon, slug, stack, ui }) {
+export function renderHomeContent({ docsLinkCard, collections, findAny, homeContent, html, slug, stack, ui }) {
   const home = homeContent ?? {};
   const collectionCount = (collection) => (collection === "stack" ? stack.length : collections[collection]?.length ?? 0);
+  const heroVisual = html`
+    <div
+      data-illustration-slot="home-intro"
+      data-illustration-id="home-intro"
+      data-source="custom-artwork"
+      data-purpose="decorative"
+      data-src="./assets/hero-visual-light.png?v=2"
+      data-dark-src="./assets/hero-visual-dark.png?v=1"
+      data-alt=""
+    ></div>
+  `;
   return html`
-    <section class="hero">
-      <div class="hero-copy">
-        <p class="kicker">${home.hero?.kicker ?? ""}</p>
-        <h1>${home.hero?.title ?? ui("shell.home")}</h1>
-        <p class="lede">${home.hero?.lede ?? ""}</p>
-        <div class="hero-actions">
-          ${(home.hero?.actions ?? []).map((action) => `<a class="hero-action ${action.variant}" href="${action.href}">${icon(action.icon)} ${action.label}</a>`).join("")}
-        </div>
-      </div>
-      <div
-        class="hero-visual"
-        data-illustration-slot="home-hero"
-        data-illustration-id="home-hero"
-        data-source="custom-artwork"
-        data-purpose="decorative"
-        data-src="./assets/hero-visual-light.png?v=2"
-        data-dark-src="./assets/hero-visual-dark.png?v=1"
-        data-alt=""
-      ></div>
-    </section>
+    ${documentationHeroIsland({
+      kicker: home.hero?.kicker ?? "",
+      title: home.hero?.title ?? ui("shell.home"),
+      description: home.hero?.lede ?? "",
+      actions: (home.hero?.actions ?? []).map((action, index) => ({
+        key: action.label,
+        label: action.label,
+        icon: action.icon,
+        href: action.href,
+        variant: action.variant === "primary" || index === 0 ? "primary" : "secondary",
+      })),
+      visualHtml: heroVisual,
+      template: "docs-home-template",
+      source: "home-stack-renderers",
+    })}
     <section class="section tight">
       <div class="section-head">
         <p class="kicker">${home.coverage?.kicker ?? ""}</p>
@@ -89,7 +96,7 @@ export function renderHomeContent({ docsLinkCard, collections, findAny, homeCont
 export function renderStackContent({ html, referenceCopy, stack }) {
   const page = referenceCopy.stackPage ?? {};
   return html`
-    <section class="page-hero">
+    <section class="docs-page-intro">
       <p class="kicker">${page.kicker ?? ""}</p>
       <h1>${page.title ?? ""}</h1>
       <p>${page.copy ?? ""}</p>

@@ -1,4 +1,6 @@
-import { componentDemo } from "./component-demo.js?v=60";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
+import { docsCodeBlock } from "./docs-code-block.js?v=2";
+import { escapeHtml } from "./utils.js";
 
 let deps = {};
 
@@ -52,26 +54,30 @@ export function referenceHeader(collection, entry, options = {}) {
 }
 
 export function referenceCallout(title, copy, intent = "accent") {
-  const { html } = deps;
-  return html`
-    <aside class="reference-callout" data-intent="${intent}">
-      <strong>${title}</strong>
-      <p>${copy}</p>
-    </aside>
-  `;
+  const props = {
+    title,
+    description: copy,
+    className: "reference-callout",
+    layout: "callout",
+    state: "callout",
+    tone: intent === "warning" ? "warning" : "default",
+    "data-intent": intent,
+    "data-doc-template": "foundation-primitive-detail",
+    "data-flowdocs-section-source": "referenceCallout",
+  };
+  return `<div class="docs-react-island docs-documentation-section-island" data-react-component="documentation-section" data-component-source="react-pattern" data-doc-pattern="documentation-section" data-flowdocs-boundary="documentation-section" data-doc-template="foundation-primitive-detail" data-doc-primitive="reference-callout" data-react-props="${escapeHtml(JSON.stringify(props))}"></div>`;
 }
 
 export function referenceSection(title, description, body, headingRole = "display") {
-  const { html } = deps;
-  return html`
-    <section class="surface docs-section-surface foundation-primitive-detail-surface reference-section-block" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail" data-heading-role="${headingRole}">
-      <div class="reference-section-head">
-        <h2>${title}</h2>
-        ${description ? `<p>${description}</p>` : ""}
-      </div>
-      ${body}
-    </section>
-  `;
+  return documentationSectionIsland({
+    title,
+    description,
+    bodyHtml: body,
+    className: "foundation-primitive-detail-surface reference-section-block",
+    template: "foundation-primitive-detail",
+    attrs: `data-heading-role="${headingRole}"`,
+    source: "referenceSection",
+  });
 }
 
 export function referenceDivider() {
@@ -79,37 +85,64 @@ export function referenceDivider() {
 }
 
 export function referenceCodeBlock(code) {
-  const { escapeHtml } = deps;
-  return `<pre class="reference-code"><code>${escapeHtml(code)}</code></pre>`;
+  return docsCodeBlock(code, { className: "reference-code" });
+}
+
+export function referenceList(items = [], { label = "", className = "reference-list" } = {}) {
+  const props = {
+    items: items.map((item, index) => ({
+      key: `reference-item-${index}`,
+      label: item,
+    })),
+    label,
+    variant: "standard",
+    density: "sm",
+    className,
+  };
+  return `<div class="docs-react-island docs-reference-list-island" data-react-component="list" data-component-source="react-component" data-doc-component="list" data-flowdocs-boundary="list" data-doc-primitive="reference-list" data-react-props="${escapeHtml(JSON.stringify(props))}"></div>`;
+}
+
+export function referenceTokenGrid(tokens = [], { label = "Token reference", className = "reference-token-grid" } = {}) {
+  const props = {
+    items: tokens,
+    label,
+    variant: "tokens",
+    density: "sm",
+    className,
+  };
+  return `<div class="docs-react-island docs-reference-token-grid-island" data-react-component="documentation-token-grid" data-component-source="react-pattern" data-doc-pattern="documentation-token-grid" data-flowdocs-boundary="documentation-token-grid" data-doc-primitive="reference-token-grid" data-react-props="${escapeHtml(JSON.stringify(props))}"></div>`;
 }
 
 export function referenceSummaryGrid(className, items = []) {
-  const { html } = deps;
-  return html`
-    <div class="${className}" data-doc-primitive="reference-summary-grid">
-      ${items.map((item) => referenceCard({ title: item.label, value: item.value, composition: "stats" })).join("")}
-    </div>
-  `;
+  return referenceGridIsland({
+    className,
+    kind: "summary",
+    items: items.map((item) => ({ title: item.label, value: item.value, composition: "stats" })),
+  });
 }
 
 export function referenceRuleGrid(items = []) {
-  const { html } = deps;
-  return html`
-    <div class="reference-rule-grid" data-doc-primitive="reference-rule-grid">
-      ${items.map((item) => referenceCard({ title: item.title, detail: item.copy })).join("")}
-    </div>
-  `;
+  return referenceGridIsland({
+    className: "reference-rule-grid",
+    kind: "rule",
+    items: items.map((item) => ({ title: item.title, detail: item.copy })),
+  });
 }
 
 export function referenceMatrixGrid(rows = [], className = "reference-matrix") {
-  const { html } = deps;
-  return html`
-    <div class="${className}" data-doc-primitive="reference-matrix-grid">
-      ${rows.map((row) => referenceCard({ title: row.contract, detail: row.notes, status: row.aspect })).join("")}
-    </div>
-  `;
+  return referenceGridIsland({
+    className,
+    kind: "matrix",
+    items: rows.map((row) => ({ title: row.contract, detail: row.notes, status: row.aspect })),
+  });
 }
 
-function referenceCard({ title, value, detail, status, composition = "standard" } = {}) {
-  return componentDemo("card", { title, value, detail, status, variant: "minimal", composition, fullWidth: true });
+function referenceGridIsland({ className, kind, items }) {
+  const props = {
+    kind,
+    className,
+    items,
+    density: "sm",
+  };
+  return `<div class="docs-react-island docs-reference-grid-island" data-react-component="documentation-reference-grid" data-component-source="react-pattern" data-doc-pattern="documentation-reference-grid" data-flowdocs-boundary="documentation-reference-grid" data-doc-primitive="reference-${kind}-grid" data-react-props="${escapeHtml(JSON.stringify(props))}"></div>`;
 }

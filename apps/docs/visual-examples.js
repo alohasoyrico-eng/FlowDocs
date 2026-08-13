@@ -65,25 +65,31 @@ export function visualExample(collection, entry) {
 
 export function visualPanel(entry, kind) {
   const { html, ui } = deps;
-  return html`
-    <section class="surface docs-section-surface foundation-primitive-detail-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="foundation-primitive-detail">
+  return deps.documentationSectionIsland({
+    bodyHtml: html`
       <h2>${ui("reference.visualExample")}</h2>
       <p>This example shows the expected visual grammar for ${entry.title}. It is intentionally schematic: enough to teach structure without becoming a fake final screen.</p>
       ${visualExample(kind + "s", entry)}
-    </section>
-  `;
+    `,
+    className: "foundation-primitive-detail-surface wide",
+    template: "foundation-primitive-detail",
+    source: "visualPanel",
+  });
 }
 
 export function examplePanel(entry) {
   const { html, ui } = deps;
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide example-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
+  return deps.documentationSectionIsland({
+    bodyHtml: html`
       <span class="eyebrow">${ui("reference.realExample")}</span>
       <h2>${exampleTitle(entry)}</h2>
       <p>${exampleCopy(entry)}</p>
       ${realExample(entry)}
-    </section>
-  `;
+    `,
+    className: "artifact-detail-surface wide example-panel",
+    template: "artifact-detail",
+    source: "examplePanel",
+  });
 }
 
 function exampleTitle(entry) {

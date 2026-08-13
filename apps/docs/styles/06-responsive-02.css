@@ -44,13 +44,13 @@
   }
 
   h1,
-  .page-hero h1,
-  .detail-hero h1 {
+  .docs-page-intro h1,
+  .docs-detail-intro h1 {
     font-size: var(--sys-voice-size-12);
   }
 
-  .hero,
-  .page-hero,
+  .docs-intro,
+  .docs-page-intro,
   .reference-doc {
     padding-inline: var(--frame-page-x);
   }
@@ -64,14 +64,14 @@
     font-size: var(--sys-voice-size-13);
   }
 
-  .detail-hero-content,
+  .docs-detail-intro-content,
   .detail-layout,
   .section-head,
   .section > :not(.section-head) {
     padding-inline: var(--frame-page-x);
   }
 
-  .detail-hero-content {
+  .docs-detail-intro-content {
     gap: var(--sys-space-md);
   }
 
@@ -95,8 +95,8 @@
   .density-contract-grid,
   .density-contract-grid dl div,
   .two-column-list,
-  .viewport-doc-grid,
-  .playground-layout,
+  .docs-viewport-matrix,
+  .docs-playground-layout,
   .voice-type-summary,
   .voice-token-summary,
   .voice-type-samples,
@@ -168,7 +168,7 @@
 }
 
 @media (max-width: 420px) {
-  .detail-tabs.detail-tablist [role="tab"] {
+  .detail-tabs.docs-detail-tabs-nav [role="tab"] {
     padding-inline: var(--sys-space-2);
   }
 }

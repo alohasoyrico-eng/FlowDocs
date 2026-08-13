@@ -88,7 +88,7 @@
   justify-items: start;
 }
 
-.button-demo-grid {
+.docs-demo-matrix {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
   gap: var(--sys-frame-gap-component-lg);
@@ -100,7 +100,7 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
 }
 
-.state-behavior-grid {
+.docs-demo-matrix--state {
   inline-size: 100%;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
 }
@@ -136,22 +136,22 @@
   gap: var(--density-section-gap);
 }
 
-:is(.detail-page, .reference-doc) .docs-section-surface {
+:is(.detail-page, .reference-doc) .documentation-section {
   gap: var(--density-subsection-gap);
   padding: var(--density-surface-padding);
   background: color-mix(in srgb, var(--sys-energy-surface-primary) 94%, transparent);
   box-shadow: none;
 }
 
-:is(.detail-page, .reference-doc) .docs-section-surface > h2,
-:is(.detail-page, .reference-doc) .docs-section-surface > h3 {
+:is(.detail-page, .reference-doc) .documentation-section > [data-flow-slot="documentation-section.body"] > h2,
+:is(.detail-page, .reference-doc) .documentation-section > [data-flow-slot="documentation-section.body"] > h3 {
   font-size: var(--density-doc-heading-size);
   line-height: var(--density-doc-heading-line-height);
 }
 
-:is(.detail-page, .reference-doc) .docs-section-surface > p,
-:is(.detail-page, .reference-doc) .docs-section-surface li,
-:is(.detail-page, .reference-doc) .docs-section-surface dd {
+:is(.detail-page, .reference-doc) .documentation-section > [data-flow-slot="documentation-section.body"] > p,
+:is(.detail-page, .reference-doc) .documentation-section li,
+:is(.detail-page, .reference-doc) .documentation-section dd {
   font-size: var(--density-doc-body-size);
   line-height: var(--density-doc-body-line-height);
 }
@@ -161,19 +161,19 @@
 :is(.detail-page, .reference-doc) .component-standard-demo,
 :is(.detail-page, .reference-doc) .full-width-demo,
 :is(.detail-page, .reference-doc) .responsive-actions-demo,
-:is(.detail-page, .reference-doc) .button-demo-grid,
+:is(.detail-page, .reference-doc) .docs-demo-matrix,
 :is(.detail-page, .reference-doc) .button-principles,
 :is(.detail-page, .reference-doc) .button-anatomy,
 :is(.detail-page, .reference-doc) .checklist-grid,
-:is(.detail-page, .reference-doc) :is(.artifact-role-grid, .component-detail-anatomy-grid, .foundation-trace-grid),
-:is(.detail-page, .reference-doc) .reference-role-grid,
+:is(.detail-page, .reference-doc) :is(.docs-role-matrix, .component-detail-anatomy-grid, .foundation-trace-grid),
+:is(.detail-page, .reference-doc) .docs-role-matrix.reference-role-matrix,
 :is(.detail-page, .reference-doc) .guidelines-grid,
 :is(.detail-page, .reference-doc) .foundation-compact-list,
 :is(.detail-page, .reference-doc) .button-density-scale,
 :is(.detail-page, .reference-doc) .density-contract-grid,
 :is(.detail-page, .reference-doc) .two-column-list,
-:is(.detail-page, .reference-doc) .viewport-doc-grid,
-:is(.detail-page, .reference-doc) .playground-layout,
+:is(.detail-page, .reference-doc) .docs-viewport-matrix,
+:is(.detail-page, .reference-doc) .docs-playground-layout,
 :is(.detail-page, .reference-doc) .button-matrix,
 :is(.detail-page, .reference-doc) .button-state-matrix,
 :is(.detail-page, .reference-doc) .comparison-table,
@@ -186,12 +186,12 @@
   margin-block-start: 0;
 }
 
-:is(.detail-page, .reference-doc) .button-demo-grid,
+:is(.detail-page, .reference-doc) .docs-demo-matrix,
 :is(.detail-page, .reference-doc) .variant-grid {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
 }
 
-:is(.detail-page, .reference-doc) .state-behavior-grid {
+:is(.detail-page, .reference-doc) .docs-demo-matrix--state {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
 }
 
@@ -203,7 +203,7 @@
 :is(.detail-page, .reference-doc) .checklist-grid,
 :is(.detail-page, .reference-doc) .guidelines-grid,
 :is(.detail-page, .reference-doc) .two-column-list,
-:is(.detail-page, .reference-doc) .viewport-doc-grid,
+:is(.detail-page, .reference-doc) .docs-viewport-matrix,
 :is(.detail-page, .reference-doc) .responsive-actions-demo {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
 }
@@ -211,7 +211,7 @@
 :is(.detail-page, .reference-doc) .button-principles article,
 :is(.detail-page, .reference-doc) .button-anatomy article,
 :is(.detail-page, .reference-doc) .checklist-grid article,
-:is(.detail-page, .reference-doc) :is(.artifact-role-grid, .component-detail-anatomy-grid, .foundation-trace-grid) article,
+:is(.detail-page, .reference-doc) :is(.docs-role-matrix, .component-detail-anatomy-grid, .foundation-trace-grid) article,
 :is(.detail-page, .reference-doc) .reference-role-card,
 :is(.detail-page, .reference-doc) .guidelines-grid article,
 :is(.detail-page, .reference-doc) .button-decision-list article,
@@ -219,8 +219,8 @@
 :is(.detail-page, .reference-doc) .button-density-scale article,
 :is(.detail-page, .reference-doc) .density-contract-grid article,
 :is(.detail-page, .reference-doc) .two-column-list article,
-:is(.detail-page, .reference-doc) .viewport-doc-grid > article,
-:is(.detail-page, .reference-doc) .playground-preview,
+:is(.detail-page, .reference-doc) .docs-viewport-matrix > article,
+:is(.detail-page, .reference-doc) .docs-playground-preview,
 :is(.detail-page, .reference-doc) .driver-sheet,
 :is(.detail-page, .reference-doc) .filter-console,
 :is(.detail-page, .reference-doc) .component-standard-demo article,
@@ -244,8 +244,8 @@
 
 :is(.detail-page, .reference-doc) .button-operational-panel .driver-sheet,
 :is(.detail-page, .reference-doc) .button-operational-panel .button-decision-list,
-:is(.detail-page, .reference-doc) .button-playground .playground-preview,
-:is(.detail-page, .reference-doc) .button-viewport-panel .viewport-doc-grid > article,
+:is(.detail-page, .reference-doc) .button-playground .docs-playground-preview,
+:is(.detail-page, .reference-doc) .button-viewport-panel .docs-viewport-matrix > article,
 :is(.detail-page, .reference-doc) .select-scenario .filter-console,
 :is(.detail-page, .reference-doc) .component-standard-demo article,
 :is(.detail-page, .reference-doc) .foundation-explorer,
@@ -258,8 +258,8 @@
 :is(.detail-page, .reference-doc) .foundation-compact-list article strong,
 :is(.detail-page, .reference-doc) .button-density-scale article strong,
 :is(.detail-page, .reference-doc) .density-contract-grid article h3,
-:is(.detail-page, .reference-doc) .viewport-doc-grid article h3,
-:is(.detail-page, .reference-doc) :is(.artifact-role-grid, .component-detail-anatomy-grid, .foundation-trace-grid) article strong,
+:is(.detail-page, .reference-doc) .docs-viewport-matrix article h3,
+:is(.detail-page, .reference-doc) :is(.docs-role-matrix, .component-detail-anatomy-grid, .foundation-trace-grid) article strong,
 :is(.detail-page, .reference-doc) .reference-role-card strong,
 :is(.detail-page, .reference-doc) .guidelines-grid article h3,
 :is(.detail-page, .reference-doc) .driver-sheet strong,
@@ -275,8 +275,8 @@
 :is(.detail-page, .reference-doc) .foundation-compact-list article small,
 :is(.detail-page, .reference-doc) .button-density-scale article p,
 :is(.detail-page, .reference-doc) .density-contract-grid article dd,
-:is(.detail-page, .reference-doc) .viewport-doc-grid article p,
-:is(.detail-page, .reference-doc) :is(.artifact-role-grid, .component-detail-anatomy-grid, .foundation-trace-grid) article p,
+:is(.detail-page, .reference-doc) .docs-viewport-matrix article p,
+:is(.detail-page, .reference-doc) :is(.docs-role-matrix, .component-detail-anatomy-grid, .foundation-trace-grid) article p,
 :is(.detail-page, .reference-doc) .reference-role-card p,
 :is(.detail-page, .reference-doc) .guidelines-grid article li,
 :is(.detail-page, .reference-doc) .driver-sheet p,
@@ -318,8 +318,8 @@
 .button-density-scale,
 .density-contract-grid,
 .two-column-list,
-.viewport-doc-grid,
-.playground-layout {
+.docs-viewport-matrix,
+.docs-playground-layout {
   display: grid;
   gap: var(--sys-frame-gap-component-lg);
   min-inline-size: 0;
@@ -339,8 +339,8 @@
 .button-density-scale article,
 .density-contract-grid article,
 .two-column-list article,
-.viewport-doc-grid > article,
-.playground-preview {
+.docs-viewport-matrix > article,
+.docs-playground-preview {
   display: grid;
   gap: var(--sys-frame-gap-component);
   align-content: start;
@@ -357,7 +357,7 @@
 .foundation-compact-list article strong,
 .button-density-scale article strong,
 .density-contract-grid article h3,
-.viewport-doc-grid article h3 {
+.docs-viewport-matrix article h3 {
   color: var(--sys-energy-text-primary);
 }
 
@@ -367,7 +367,7 @@
 .foundation-compact-list article small,
 .button-density-scale article p,
 .density-contract-grid article dd,
-.viewport-doc-grid article p {
+.docs-viewport-matrix article p {
   color: var(--sys-energy-text-secondary);
 }
 

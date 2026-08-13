@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -6,6 +6,15 @@ function escapeAttribute(value) {
 
 function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
+function journeyReactDemoSection(title, body) {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: "wide pattern-journey-panel",
+    source: "pattern-journey-react-demos",
+  });
 }
 
 const setupSteps = [
@@ -34,7 +43,7 @@ export function journeyReactPatternOverviewDemo(patternId) {
 }
 
 function driverOnboardingReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Driver mobile setup</h2>${patternReactDemo("driver-onboarding-mobile", {
+  return journeyReactDemoSection("Driver mobile setup", patternReactDemo("driver-onboarding-mobile", {
     label: "Driver mobile setup",
     description: "Phone, verification, biometric prompt, validation, and recovery stay owned by Flow.",
     density: "md",
@@ -52,11 +61,11 @@ function driverOnboardingReactPanel() {
     secondaryAction: { key: "back", label: "Back", variant: "secondary", icon: "arrow_back" },
     feedback: { label: "Setup draft saved", description: "The driver can continue on this device.", tone: "info" },
     "data-pattern-demo": "driver-onboarding-mobile",
-  }, "in-progress")}</section>`;
+  }, "in-progress"));
 }
 
 function fleetManagerOnboardingReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Fleet manager workspace setup</h2>${patternReactDemo("fleet-manager-onboarding-desktop", {
+  return journeyReactDemoSection("Fleet manager workspace setup", patternReactDemo("fleet-manager-onboarding-desktop", {
     label: "Fleet manager setup",
     description: "Workspace profile, fleet import, access tasks, settings, and validation in one React pattern.",
     density: "md",
@@ -80,11 +89,11 @@ function fleetManagerOnboardingReactPanel() {
     secondaryAction: { key: "back", label: "Back", variant: "secondary", icon: "arrow_back" },
     feedback: { label: "Workspace setup saved", description: "Fleet manager can continue into templates.", tone: "success" },
     "data-pattern-demo": "fleet-manager-onboarding-desktop",
-  }, "in-progress")}</section>`;
+  }, "in-progress"));
 }
 
 function multiStepFormReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Governed multi-step form</h2>${patternReactDemo("multi-step-form", {
+  return journeyReactDemoSection("Governed multi-step form", patternReactDemo("multi-step-form", {
     label: "Policy request",
     description: "Step navigation, field state, validation, save, and summary are owned by the React pattern.",
     density: "md",
@@ -106,11 +115,11 @@ function multiStepFormReactPanel() {
     saveAction: { key: "save", label: "Save draft", icon: "save" },
     feedback: { label: "Draft saved", description: "The request can be completed later.", tone: "info" },
     "data-pattern-demo": "multi-step-form",
-  }, "dirty")}</section>`;
+  }, "dirty"));
 }
 
 function helpCenterReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Contextual help center</h2>${patternReactDemo("help-center", {
+  return journeyReactDemoSection("Contextual help center", patternReactDemo("help-center", {
     label: "Operations help",
     description: "Search, topics, articles, drawer, empty/recovery state, and sidebar routing use Flow contracts.",
     density: "md",
@@ -127,5 +136,5 @@ function helpCenterReactPanel() {
     drawer: { label: "Operations help", triggerLabel: "Open help", closeLabel: "Close help", side: "right" },
     recovery: { title: "No help articles found", description: "Try a broader task or contact support.", action: { key: "support", label: "Contact support" } },
     "data-pattern-demo": "help-center",
-  }, "results")}</section>`;
+  }, "results"));
 }

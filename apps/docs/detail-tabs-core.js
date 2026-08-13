@@ -1,4 +1,6 @@
 import { componentDemo } from "./component-demo.js?v=60";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
+import { docsCodeBlock } from "./docs-code-block.js?v=2";
 
 export let html = String.raw;
 export let icon = () => "";
@@ -70,19 +72,24 @@ export function threeTabs(entry, overviewExtra, designBody, buildBody) {
 export function overviewPanel(entry) {
   return html`
     <div class="panel-grid">
-      <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-        <h2>${ui("overview.whyItExists")}</h2>
-        <p>${entry.summary}</p>
-        <p>${ui("overview.intentCopy")}</p>
-      </section>
-      <section class="surface docs-section-surface detail-section-surface" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-        <h2>${ui("overview.platform")}</h2>
-        <p>${entry.platform}</p>
-      </section>
-      <section class="surface docs-section-surface detail-section-surface" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-        <h2>${ui("overview.publicTokens")}</h2>
-        <div class="token-list">${entry.tokens.map((token) => `<code>${token}</code>`).join("")}</div>
-      </section>
+      ${artifactDocumentationSection({
+        title: ui("overview.whyItExists"),
+        body: `<p>${entry.summary}</p><p>${ui("overview.intentCopy")}</p>`,
+        className: "wide",
+        source: "overviewPanel",
+      })}
+      ${artifactDocumentationSection({
+        title: ui("overview.platform"),
+        body: `<p>${entry.platform}</p>`,
+        className: "",
+        source: "overviewPanel",
+      })}
+      ${artifactDocumentationSection({
+        title: ui("overview.publicTokens"),
+        body: `<div class="token-list">${entry.tokens.map((token) => `<code>${token}</code>`).join("")}</div>`,
+        className: "",
+        source: "overviewPanel",
+      })}
     </div>
   `;
 }
@@ -95,10 +102,12 @@ export function teamsPanel(entry) {
       ${audiences
         .map(
           (audience) => html`
-            <section class="surface docs-section-surface detail-section-surface" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-              <h2>${audience}</h2>
-              <p>${teamNotes[audience] ?? teamNotes.fallback}</p>
-            </section>
+            ${artifactDocumentationSection({
+              title: audience,
+              body: `<p>${teamNotes[audience] ?? teamNotes.fallback}</p>`,
+              className: "",
+              source: "teamsPanel",
+            })}
           `,
         )
         .join("")}
@@ -115,13 +124,11 @@ export function decisionPanel(entry) {
 }
 
 export function tokenPanel(entry) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("reference.tokenModel")}</h2>
-      <p>${referenceCopy.tokenModel?.copy}</p>
-      <div class="token-list">${entry.tokens.map((token) => `<code>${token}</code>`).join("")}</div>
-    </section>
-  `;
+  return artifactDocumentationSection({
+    title: ui("reference.tokenModel"),
+    body: `<p>${referenceCopy.tokenModel?.copy}</p><div class="token-list">${entry.tokens.map((token) => `<code>${token}</code>`).join("")}</div>`,
+    source: "tokenPanel",
+  });
 }
 
 export function accessibilityPanel(entry) {
@@ -156,23 +163,19 @@ export function engineeringPanel(entry) {
         platform: entry.platform,
         tokens: entry.tokens,
       };
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("build.engineeringContract")}</h2>
-      <ul>
-        ${items.map((item) => `<li>${item}</li>`).join("")}
-      </ul>
-      <pre>${JSON.stringify(payload, null, 2)}</pre>
-    </section>
-  `;
+  return artifactDocumentationSection({
+    title: ui("build.engineeringContract"),
+    body: `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>${docsCodeBlock(JSON.stringify(payload, null, 2))}`,
+    source: "engineeringPanel",
+  });
 }
 
 export function specPanel(entry) {
   const props = specProps(entry);
   const gates = specQualityGates(entry);
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("build.specAndApi")}</h2>
+  return artifactDocumentationSection({
+    title: ui("build.specAndApi"),
+    body: html`
       <p>${ui("build.specIntro")}</p>
       ${artifactDetailTable({
         columns: [ui("table.name"), ui("table.type"), ui("table.required"), ui("table.notes")],
@@ -184,8 +187,9 @@ export function specPanel(entry) {
           ${gates.map((gate) => `<li>${gate}</li>`).join("")}
         </ul>
       </div>
-    </section>
-  `;
+    `,
+    source: "specPanel",
+  });
 }
 
 export function artifactDetailTable({ className = "", columns = [], rows = [], firstColumn = "code" } = {}) {
@@ -212,9 +216,9 @@ function artifactTable({ label = "Artifact detail table", className = "", column
 }
 
 export function artifactRoleGrid({ className = "", items = [] } = {}) {
-  const classes = ["artifact-role-grid", className].filter(Boolean).join(" ");
+  const classes = ["docs-role-matrix", className].filter(Boolean).join(" ");
   return html`
-    <div class="${classes}" data-doc-primitive="artifact-role-grid">
+    <div class="${classes}" data-doc-primitive="docs-role-matrix">
       ${items
         .map(({ icon: iconName, title, copy }) => artifactCard({ title, detail: copy, iconName }))
         .join("")}
@@ -271,28 +275,30 @@ export function guidelinesPanel(entry) {
   const contract = artifactContract(entry);
   const doItems = ["pattern", "template"].includes(entry.type) && contract?.agentInstructions ? contract.agentInstructions : referenceCopy.guidelines?.do ?? [];
   const dontItems = ["pattern", "template"].includes(entry.type) && contract?.rejectIf ? contract.rejectIf : referenceCopy.guidelines?.doNot ?? [];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("guidelines.title")}</h2>
+  return artifactDocumentationSection({
+    title: ui("guidelines.title"),
+    body: html`
       <div class="guidelines-grid">
         ${artifactListCard(ui("guidelines.do"), doItems)}
         ${artifactListCard(ui("guidelines.doNot"), dontItems)}
       </div>
-    </section>
-  `;
+    `,
+    source: "guidelinesPanel",
+  });
 }
 
 export function demoMatrixPanel(entry) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("reference.demoMatrix")}</h2>
+  return artifactDocumentationSection({
+    title: ui("reference.demoMatrix"),
+    body: html`
       <p>${referenceCopy.demoMatrix?.copy}</p>
       <div class="demo-matrix">
         ${(referenceCopy.demoMatrix?.states ?? []).map((state) => `<span>${state}</span>`).join("")}
         ${(referenceCopy.demoMatrix?.platforms ?? []).map((state) => `<span>${state}</span>`).join("")}
       </div>
-    </section>
-  `;
+    `,
+    source: "demoMatrixPanel",
+  });
 }
 
 export function agentPanel(entry, layerName) {
@@ -304,7 +310,7 @@ export function agentPanel(entry, layerName) {
   const preserve = interpolateList(referenceCopy.mielGeneric?.preserve, entry);
   if (contract) {
     return html`
-      <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
+      ${artifactDocumentationSection({ body: html`
         <span class="eyebrow">MIEL</span>
         <h2>${ui("miel.title")}</h2>
         <p>${ui("miel.intro")}</p>
@@ -313,21 +319,13 @@ export function agentPanel(entry, layerName) {
           ${artifactListCard(ui("miel.agentCanDecide"), canDecide)}
           ${artifactListCard(ui("miel.agentMustAsk"), mustAsk)}
         </div>
-      </section>
-      <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-        <h2>${ui("miel.humanReview")}</h2>
-        <div class="checklist-grid">
-          ${preserve.map((item) => artifactCard({ title: item, iconName: "check_circle" })).join("")}
-        </div>
-      </section>
-      <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-        <h2>${ui("miel.machineContract")}</h2>
-        <pre>${JSON.stringify(agentSpec, null, 2)}</pre>
-      </section>
+      `, source: "agentPanel" })}
+      ${artifactDocumentationSection({ title: ui("miel.humanReview"), body: `<div class="checklist-grid">${preserve.map((item) => artifactCard({ title: item, iconName: "check_circle" })).join("")}</div>`, source: "agentPanel" })}
+      ${artifactDocumentationSection({ title: ui("miel.machineContract"), body: docsCodeBlock(JSON.stringify(agentSpec, null, 2)), source: "agentPanel" })}
     `;
   }
   return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
+    ${artifactDocumentationSection({ body: html`
       <span class="eyebrow">MIEL</span>
       <h2>${ui("miel.title")}</h2>
       <p>${ui("miel.intro")}</p>
@@ -336,25 +334,28 @@ export function agentPanel(entry, layerName) {
         ${artifactListCard(ui("miel.agentCanDecide"), canDecide)}
         ${artifactListCard(ui("miel.agentMustAsk"), mustAsk)}
       </div>
-    </section>
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("miel.humanReview")}</h2>
-      <div class="checklist-grid">
-        ${preserve.map((item) => artifactCard({ title: item, iconName: "check_circle" })).join("")}
-      </div>
-    </section>
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("miel.machineContract")}</h2>
-      <pre>${JSON.stringify(agentSpec, null, 2)}</pre>
-    </section>
+    `, source: "agentPanel" })}
+    ${artifactDocumentationSection({ title: ui("miel.humanReview"), body: `<div class="checklist-grid">${preserve.map((item) => artifactCard({ title: item, iconName: "check_circle" })).join("")}</div>`, source: "agentPanel" })}
+    ${artifactDocumentationSection({ title: ui("miel.machineContract"), body: docsCodeBlock(JSON.stringify(agentSpec, null, 2)), source: "agentPanel" })}
   `;
 }
 
 export function listPanel(title, items) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${title}</h2>
-      <ul>${items.map((entry) => `<li>${entry}</li>`).join("")}</ul>
-    </section>
-  `;
+  return artifactDocumentationSection({
+    title,
+    body: `<ul>${items.map((entry) => `<li>${entry}</li>`).join("")}</ul>`,
+    source: "listPanel",
+  });
+}
+
+export function artifactDocumentationSection({ title, description, body = "", className = "wide", attrs = "", source = "detail-tabs-core" } = {}) {
+  return documentationSectionIsland({
+    title,
+    description,
+    bodyHtml: body,
+    className: ["artifact-detail-surface", className].filter(Boolean).join(" "),
+    template: "artifact-detail",
+    attrs,
+    source,
+  });
 }

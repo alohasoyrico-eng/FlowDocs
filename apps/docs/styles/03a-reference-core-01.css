@@ -228,7 +228,7 @@
   border-block-start: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
 }
 
-.reference-role-grid {
+.docs-role-matrix.reference-role-matrix {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
   gap: var(--sys-frame-gap-component-lg);

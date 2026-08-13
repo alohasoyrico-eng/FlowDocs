@@ -1,0 +1,771 @@
+{
+  "schema": "flowdocs-template-boundary-gates.v1",
+  "date": "2026-08-13",
+  "iteration": 53,
+  "scope": "Audit gates for FlowDocs local wrappers now owned by Flow documentation templates, documentation patterns, Code Block, and Copy Button contracts.",
+  "mode": {
+    "default": "strict",
+    "strictActivation": "FLOWDOCS_TEMPLATE_BOUNDARY_STRICT=1 npm run audit:docs",
+    "inventoryActivation": "FLOWDOCS_TEMPLATE_BOUNDARY_INVENTORY=1 npm run audit:docs",
+    "strictOwnerActivation": "FLOWDOCS_TEMPLATE_BOUNDARY_STRICT_OWNER=<owner-id> npm run audit:docs",
+    "reason": "All governed template boundary owners currently have zero inventory findings, so the default audit mode now fails regressions. Inventory mode is retained only for forensic discovery."
+  },
+  "generatedFlowBridge": {
+    "docsShellTemplate": {
+      "status": "available",
+      "source": "Flow3.0 packages/react/dist/templates/DocsShellTemplate.js",
+      "generatedRuntime": "apps/docs/generated/react/templates/DocsShellTemplate.js",
+      "generatedTypes": "apps/docs/generated/react/templates/DocsShellTemplate.d.ts",
+      "validatedImport": true,
+      "adapterStatus": "active",
+      "adapterRuntime": "apps/docs/docs-shell-react.js",
+      "adapterEvidence": {
+        "singleTemplateInstance": true,
+        "singleTopbarInstance": true,
+        "singleSidebarInstance": true,
+        "oldSplitMountsRemoved": true,
+        "mobileHamburgerOpensSidebar": true,
+        "extraDrawerCloseButton": false,
+        "screenshots": [
+          "/private/tmp/flowdocs-docs-shell-desktop-2.png",
+          "/private/tmp/flowdocs-docs-shell-mobile-2.png"
+        ]
+      }
+    },
+    "documentationSection": {
+      "status": "available",
+      "source": "Flow3.0 packages/react/dist/patterns/DocumentationSection.js",
+      "generatedRuntime": "apps/docs/generated/react/patterns/DocumentationSection.js",
+      "generatedTypes": "apps/docs/generated/react/patterns/DocumentationSection.d.ts",
+      "validatedImport": true,
+      "adapterStatus": "closed-for-section-boundary",
+      "adapterRuntime": [
+        "apps/docs/component-foundation-trace.js",
+        "apps/docs/detail-tabs-core.js",
+        "apps/docs/documentation-section-island.js",
+        "apps/docs/foundation-tabs.js",
+        "apps/docs/gold-button-docs.js",
+        "apps/docs/gold-card-docs.js",
+        "apps/docs/gold-checkbox-docs.js",
+        "apps/docs/gold-combobox-docs.js",
+        "apps/docs/gold-component-core.js",
+        "apps/docs/gold-icon-button-docs.js",
+        "apps/docs/gold-input-docs.js",
+        "apps/docs/gold-radio-button-docs.js",
+        "apps/docs/gold-select-docs.js",
+        "apps/docs/gold-switch-docs.js",
+        "apps/docs/gold-text-area-docs.js",
+        "apps/docs/pattern-build-gates.js",
+        "apps/docs/pattern-candidate-demos.js",
+        "apps/docs/pattern-contract-tabs.js",
+        "apps/docs/pattern-design-lead.js",
+        "apps/docs/pattern-desktop-demos.js",
+        "apps/docs/pattern-desktop-react-demos.js",
+        "apps/docs/pattern-focused-design.js",
+        "apps/docs/pattern-journey-demos.js",
+        "apps/docs/pattern-journey-react-demos.js",
+        "apps/docs/pattern-miel-tabs.js",
+        "apps/docs/pattern-mobile-demos.js",
+        "apps/docs/pattern-mobile-react-demos.js",
+        "apps/docs/pattern-operational-demos.js",
+        "apps/docs/pattern-operational-react-demos.js",
+        "apps/docs/pattern-shell-react-demos.js",
+        "apps/docs/pattern-tabs.js",
+        "apps/docs/pattern-utility-demos.js",
+        "apps/docs/primitive-tabs.js",
+        "apps/docs/reference-layout.js",
+        "apps/docs/template-react-demos.js",
+        "apps/docs/template-tabs.js",
+        "apps/docs/visual-examples.js"
+      ],
+      "remainingLocalBoundarySignals": 0,
+      "adapterEvidence": {
+        "foundationEnergy": {
+          "flowSections": 5,
+          "oldSectionSurfaces": 0
+        },
+        "patternSearch": {
+          "flowSections": 3,
+          "oldSectionSurfaces": 4
+        },
+        "templateConfigurationConsole": {
+          "flowSections": 10,
+          "templateSources": 2,
+          "oldSectionSurfaces": 3
+        },
+        "driverAndVehicleAdministration": {
+          "flowSections": 4,
+          "oldSectionSurfaces": 3
+        },
+        "checkboxGroup": {
+          "flowSections": 5,
+          "oldSectionSurfaces": 3
+        },
+        "actionSheet": {
+          "flowSections": 4,
+          "candidateSources": 1,
+          "oldSectionSurfaces": 3
+        },
+        "fileUpload": {
+          "flowSections": 4,
+          "candidateSources": 1,
+          "oldSectionSurfaces": 3
+        },
+        "bulkActions": {
+          "flowSections": 6,
+          "contractSources": 2,
+          "oldSectionSurfaces": 2
+        },
+        "multiStepForm": {
+          "flowSections": 6,
+          "contractSources": 2,
+          "oldSectionSurfaces": 2
+        },
+        "helpCenter": {
+          "flowSections": 6,
+          "contractSources": 2,
+          "oldSectionSurfaces": 2
+        },
+        "kpiCard": {
+          "flowSections": 6,
+          "desktopReactSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "virtualDataTable": {
+          "flowSections": 6,
+          "desktopReactSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "rolesAndPermissions": {
+          "flowSections": 8,
+          "desktopReactSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "primitiveColor": {
+          "flowSections": 6,
+          "oldSectionSurfaces": 0
+        },
+        "primitiveTypography": {
+          "flowSections": 6,
+          "oldSectionSurfaces": 0
+        },
+        "templateDriverMobileApp": {
+          "flowSections": 10,
+          "templateSources": 2,
+          "oldSectionSurfaces": 3
+        },
+        "bottomSheetMobile": {
+          "flowSections": 6,
+          "mobileReactSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "fullscreenSheetMobile": {
+          "flowSections": 6,
+          "mobileReactSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "drawerAdapterMobile": {
+          "flowSections": 6,
+          "mobileReactSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "topbarShell": {
+          "flowSections": 2,
+          "shellSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "sidebarShell": {
+          "flowSections": 2,
+          "shellSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "authJourney": {
+          "flowSections": 6,
+          "journeyFallbackSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "driverOnboardingJourney": {
+          "flowSections": 7,
+          "journeyReactSources": 1,
+          "oldSectionSurfaces": 1
+        },
+        "documentationSectionBoundaryIteration": {
+          "structuralLegacyClassesRemoved": true,
+          "targetGoldComponentRenderers": 10,
+          "residualSignalsBefore": 159,
+          "residualSignalsAfter": 0,
+          "residualBreakdown": {
+            "localDocsMatrixGrid": 0,
+            "docsPanelWrapper": 0
+          },
+          "note": "Section wrapper ownership is closed. Matrix/demo layout ownership is now tracked under demo-preview-frame with governed docs-demo-matrix/docs-viewport-matrix/docs-role-matrix classes."
+        },
+        "routeSmokeQa": {
+          "cachebuster": "documentation-section-boundary-1",
+          "routes": [
+            "#/home",
+            "#/components/button",
+            "#/components/icon-button",
+            "#/patterns/sidebar",
+            "#/templates/fleet-manager-desktop",
+            "#/foundations/energy",
+            "#/primitives/stack"
+          ],
+          "legacySectionClassCount": 0,
+          "consoleErrors": 0
+        },
+        "docsMatrixRename": {
+          "oldClasses": [
+            "button-demo-grid",
+            "state-behavior-grid",
+            "viewport-doc-grid",
+            "artifact-role-grid",
+            "reference-role-grid"
+          ],
+          "newClasses": [
+            "docs-demo-matrix",
+            "docs-demo-matrix--state",
+            "docs-viewport-matrix",
+            "docs-role-matrix",
+            "reference-role-matrix"
+          ],
+          "docPanelFalsePositiveFix": true
+        },
+        "validation": {
+          "command": "npm run validate:docs",
+          "status": "pass",
+          "templateBoundaryTotal": 427,
+          "documentationSectionOwnerPresent": false
+        },
+        "demoPreviewFrameBoundaryIteration": {
+          "structuralLegacyClassesRemoved": true,
+          "residualSignalsBefore": 154,
+          "residualSignalsAfter": 0,
+          "legacyRuntimeDomCount": 0,
+          "normalizedLegacyDataValues": true,
+          "normalizer": "apps/docs/gold-simple-component-docs.js",
+          "newClassesAndAttrs": [
+            "docs-demo-frame--*",
+            "docs-demo-row",
+            "docs-viewport-demo",
+            "docs-playground-layout",
+            "docs-playground-preview",
+            "docs-mobile-pattern-preview",
+            "docs-template-preview",
+            "data-doc-playground-preview",
+            "data-doc-playground-markup"
+          ],
+          "routeSmokeQa": {
+            "cachebuster": "demo-preview-frame-smoke",
+            "routes": [
+              "#/components/button",
+              "#/components/station-pin",
+              "#/components/combobox",
+              "#/patterns/driver-onboarding-mobile",
+              "#/templates/fleet-manager-desktop"
+            ],
+            "legacyDemoFrameDomCount": 0,
+            "consoleErrors": 0
+          },
+          "validation": {
+            "command": "npm run validate:docs",
+            "status": "pass",
+            "templateBoundaryTotal": 262,
+            "demoPreviewFrameOwnerPresent": false
+          }
+        },
+        "codeBlockBoundaryIteration": {
+          "structuralRawPreRemoved": true,
+          "residualSignalsBefore": 61,
+          "residualSignalsAfter": 0,
+          "governedEmitter": "apps/docs/docs-code-block.js",
+          "migratedHelpers": [
+            "referenceCodeBlock",
+            "docsSourceMarkupSlot",
+            "docsInlineCode"
+          ],
+          "sourceSlotsPreserved": [
+            "data-doc-playground-markup",
+            "data-button-markup"
+          ],
+          "routeSmokeQa": {
+            "cachebuster": "code-block-final-smoke-2",
+            "routes": [
+              "#/components/button",
+              "#/components/card",
+              "#/templates/fleet-manager-desktop"
+            ],
+            "rawPreOutsideCodeBlock": 0,
+            "consoleErrors": 0
+          },
+          "validation": {
+            "command": "npm run validate:docs",
+            "status": "pass",
+            "templateBoundaryTotal": 201,
+            "codeBlockOwnerPresent": false
+          }
+        },
+        "artifactMetadataBoundaryIteration": {
+          "legacyClassesRemoved": true,
+          "residualSignalsBefore": 11,
+          "residualSignalsAfter": 0,
+          "governedEmitter": "apps/docs/artifact-metadata-bar.js",
+          "migratedHelpers": [
+            "docsLinkCard",
+            "renderDetailContent metadata"
+          ],
+          "newClassesAndAttrs": [
+            "docs-artifact-link",
+            "docs-metadata-bar",
+            "detail-metadata-bar",
+            "data-doc-boundary=\"artifact-metadata-bar\""
+          ],
+          "validation": {
+            "command": "npm run validate:docs",
+            "status": "pass",
+            "templateBoundaryTotal": 190,
+            "artifactMetadataOwnerPresent": false
+          }
+        },
+        "detailNavigationBoundaryIteration": {
+          "legacyDetailTablistRemoved": true,
+          "residualSignalsBefore": 27,
+          "residualSignalsAfter": 0,
+          "governedRuntime": "Flow Tabs React island",
+          "migratedFiles": [
+            "apps/docs/docs-layout.js",
+            "apps/docs/stateful-component-interactions.js",
+            "apps/docs/styles/04m-tabs-docs.css",
+            "apps/docs/styles/06-responsive-02.css",
+            "audit/audit-docs-content.js"
+          ],
+          "newClassesAndAttrs": [
+            "docs-detail-tabs-nav",
+            "data-doc-component=\"tabs\"",
+            "data-doc-control-bridge=\"detail-shell-tabs\""
+          ],
+          "validation": {
+            "command": "npm run validate:docs",
+            "status": "pass",
+            "templateBoundaryTotal": 163,
+            "onThisPageNavOwnerPresent": false
+          }
+        },
+        "docsShellLayoutBoundaryIteration": {
+          "legacyShellOverlayAndNavigationIdsRemoved": true,
+          "residualSignalsBefore": 16,
+          "residualSignalsAfter": 0,
+          "governedRuntime": "DocsShellTemplate React runtime",
+          "migratedFiles": [
+            "apps/docs/docs-shell-react.js",
+            "apps/docs/shell-controls.js",
+            "apps/docs/index.html",
+            "apps/docs/styles/01-shell-01.css",
+            "audit/audit-docs-content.js",
+            "audit/audit-docs-shell-boundary.js"
+          ],
+          "newClassesAndAttrs": [
+            "docs-grid-overlay",
+            "docsGridOverlay",
+            "docs-shell-sidebar-nav",
+            "aria-controls=\"docs-shell-sidebar-nav\""
+          ],
+          "routeSmokeQa": {
+            "cachebuster": "docs-shell-layout-final-3",
+            "routes": [
+              "#/home"
+            ],
+            "viewports": [
+              "1280x900",
+              "390x844"
+            ],
+            "sidebarTargetCount": 1,
+            "mobileNavigationControlsTarget": true,
+            "legacyShellDomCount": 0
+          },
+          "validation": {
+            "command": "npm run validate:docs",
+            "status": "pass",
+            "templateBoundaryTotal": 132,
+            "docsShellLayoutOwnerPresent": false
+          }
+        },
+        "documentationHeroBoundaryIteration": {
+          "legacyHeroClassesRemoved": true,
+          "residualSignalsBefore": 132,
+          "residualSignalsAfter": 0,
+          "migratedFiles": [
+            "apps/docs/home-stack-renderers.js",
+            "apps/docs/docs-layout.js",
+            "apps/docs/home-illustrations.js",
+            "apps/docs/shell-controls.js",
+            "apps/docs/styles/01-shell-intro.css",
+            "apps/docs/styles/02-doc-layout.css",
+            "apps/docs/styles/06-responsive-01.css",
+            "apps/docs/styles/06-responsive-02.css"
+          ],
+          "newClassesAndAttrs": [
+            "docs-intro",
+            "docs-intro-copy",
+            "docs-intro-actions",
+            "docs-intro-action",
+            "docs-intro-visual",
+            "docs-page-intro",
+            "docs-detail-intro",
+            "docs-detail-intro-content",
+            "data-illustration-slot=\"home-intro\""
+          ],
+          "auditRefinement": {
+            "reason": "The previous inventory rule counted structured content keys like home.hero and any color-mix() in unrelated component CSS.",
+            "rule": "Only legacy DOM classes, CSS selectors, slots, and legacy grid overlay names count as documentation hero boundary debt."
+          },
+          "validation": {
+            "command": "npm run validate:docs",
+            "status": "pass",
+            "templateBoundaryTotal": 0,
+            "documentationHeroOwnerPresent": false
+          }
+        }
+      },
+      "nextMigrationBoundary": "No active template boundary owner remains in inventory mode."
+    }
+  },
+  "createdAuditFiles": [
+    "audit/audit-docs-template-boundaries.js"
+  ],
+  "updatedAuditFiles": [
+    "audit/audit-docs.js",
+    "audit/audit-docs-content.js",
+    "audit/audit-result.js"
+  ],
+  "governedOwners": [
+    "DocsShellTemplate + documentation-page-shell",
+    "documentation-hero",
+    "documentation-section",
+    "demo-preview-frame",
+    "on-this-page-nav",
+    "artifact-metadata-bar",
+    "Code Block",
+    "Copy Button"
+  ],
+  "inventoryRun": {
+    "command": "npm run audit:docs -- --json",
+    "status": "pass",
+    "localBoundarySignals": 0,
+    "governedOwnersWithSignals": 0,
+    "warnings": [],
+    "documentationPatternSpecIds": [
+      "artifact-metadata-bar",
+      "demo-preview-frame",
+      "documentation-hero",
+      "documentation-page-shell",
+      "documentation-section",
+      "on-this-page-nav"
+    ],
+    "productPatternSpecNotCatalog": []
+  },
+  "inventoryByOwner": [],
+  "strictRun": {
+    "command": "FLOWDOCS_TEMPLATE_BOUNDARY_STRICT=1 npm run audit:docs -- --json",
+    "status": "pass",
+    "strictFindings": [],
+    "refinement": {
+      "reason": "The first strict detector was too broad: it counted the real React sidebar mount and the Sidebar pattern demo panel as manual sidebar markup.",
+      "rule": "Only class attributes with a standalone sidebar token outside docs-react-shell-sidebar-mount count as strict manual sidebar blockers."
+    }
+  },
+  "strictOwnerRun": {
+    "command": "FLOWDOCS_TEMPLATE_BOUNDARY_STRICT_OWNER=docs-shell-layout npm run audit:docs -- --json",
+    "status": "pass",
+    "strictOwners": [
+      "docs-shell-layout"
+    ],
+    "strictFindings": [],
+    "unknownOwnerGuard": {
+      "command": "FLOWDOCS_TEMPLATE_BOUNDARY_STRICT_OWNER=not-real npm run audit:docs -- --json",
+      "status": "fail",
+      "reason": "Unknown owner ids fail so targeted gates cannot silently do nothing."
+    }
+  },
+  "nextRequiredWork": [
+    "Template boundary audit is strict by default; continue replacing documentation page families with Flow-owned docs templates after supporting artifacts exist in runtime.",
+    "Start replacing documentation page families with Flow-owned docs templates after their required supporting artifacts exist in runtime.",
+    "After each template family migrates, promote its owner checks from inventory to strict."
+  ],
+  "evidence": {
+    "templateBoundaryMigration": {
+      "iterations": {
+        "documentationHeroBoundaryIteration": {
+          "routeSmokeQa": {
+            "cachebuster": "documentation-hero-flow-2",
+            "route": "#/home",
+            "viewport": "1280x900",
+            "boot": "ready",
+            "heroIslands": 1,
+            "mountedHeroIslands": 1,
+            "flowHeroCount": 1,
+            "introClassCount": 1,
+            "visualSlotCount": 1,
+            "visualAssetCount": 1,
+            "legacyHeroSectionCount": 0,
+            "actionButtons": [
+              "routeOpen patterns",
+              "dashboardView templates"
+            ],
+            "consoleErrors": 0
+          }
+        },
+        "documentationHeroRuntimeIteration": {
+          "flowRuntimePattern": "DocumentationHero",
+          "flowFiles": [
+            "packages/react/src/patterns/DocumentationHero.ts",
+            "packages/react/src/patterns/DocumentationHero.d.ts",
+            "packages/react/src/patterns/index.ts",
+            "packages/react/src/patterns/index.d.ts",
+            "packages/react/src/index.ts",
+            "packages/react/src/index.d.ts",
+            "packages/react/dist/patterns/DocumentationHero.js",
+            "packages/react/dist/patterns/DocumentationHero.d.ts"
+          ],
+          "docsConsumerFiles": [
+            "apps/docs/documentation-hero-island.js",
+            "apps/docs/pattern-react-islands.js",
+            "apps/docs/home-stack-renderers.js",
+            "apps/docs/app.js",
+            "apps/docs/styles/01-shell-intro.css"
+          ],
+          "docsGeneratedBridge": [
+            "apps/docs/generated/react/patterns/DocumentationHero.js",
+            "apps/docs/generated/react/patterns/DocumentationHero.d.ts"
+          ],
+          "validation": {
+            "flowReactBuild": "pass",
+            "docsValidate": "pass",
+            "docsRuntimeRoutes": 167
+          },
+          "result": "Docs home hero now consumes a Flow-owned DocumentationHero pattern through a governed React island instead of owning raw hero composition."
+        },
+        "artifactMetadataBarRuntimeIteration": {
+          "flowRuntimePattern": "ArtifactMetadataBar",
+          "flowFiles": [
+            "packages/react/src/patterns/ArtifactMetadataBar.ts",
+            "packages/react/src/patterns/ArtifactMetadataBar.d.ts",
+            "packages/react/src/patterns/index.ts",
+            "packages/react/src/patterns/index.d.ts",
+            "packages/react/src/index.ts",
+            "packages/react/src/index.d.ts",
+            "packages/react/dist/patterns/ArtifactMetadataBar.js",
+            "packages/react/dist/patterns/ArtifactMetadataBar.d.ts"
+          ],
+          "docsConsumerFiles": [
+            "apps/docs/artifact-metadata-bar.js",
+            "apps/docs/pattern-react-islands.js",
+            "apps/docs/catalog-renderers.js",
+            "apps/docs/docs-layout.js",
+            "apps/docs/app.js"
+          ],
+          "docsGeneratedBridge": [
+            "apps/docs/generated/react/patterns/ArtifactMetadataBar.js",
+            "apps/docs/generated/react/patterns/ArtifactMetadataBar.d.ts"
+          ],
+          "validation": {
+            "flowReactBuild": "pass",
+            "docsValidate": "pass",
+            "docsRuntimeRoutes": 167
+          },
+          "routeSmokeQa": {
+            "cachebuster": "artifact-metadata-bar-flow-final",
+            "routes": [
+              "#/components",
+              "#/components/button"
+            ],
+            "viewport": "1280x900",
+            "collection": {
+              "boot": "ready",
+              "islands": 60,
+              "mounted": 60,
+              "flowBars": 60,
+              "itemWrappers": 120,
+              "localBoundaryNodes": 0,
+              "consoleErrors": 0
+            },
+            "detail": {
+              "boot": "ready",
+              "islands": 1,
+              "mounted": 1,
+              "flowBars": 1,
+              "itemWrappers": 7,
+              "localBoundaryNodes": 0,
+              "consoleErrors": 0
+            }
+          },
+          "result": "Artifact metadata in collection cards and detail headers now consumes a Flow-owned ArtifactMetadataBar pattern instead of local tag or pill composition."
+        },
+        "demoPreviewFrameRuntimeIteration": {
+          "flowRuntimePattern": "DemoPreviewFrame",
+          "flowFiles": [
+            "packages/react/src/patterns/DemoPreviewFrame.ts",
+            "packages/react/src/patterns/DemoPreviewFrame.d.ts",
+            "packages/react/src/patterns/index.ts",
+            "packages/react/src/patterns/index.d.ts",
+            "packages/react/src/index.ts",
+            "packages/react/src/index.d.ts",
+            "packages/react/dist/patterns/DemoPreviewFrame.js",
+            "packages/react/dist/patterns/DemoPreviewFrame.d.ts"
+          ],
+          "docsConsumerFiles": [
+            "apps/docs/demo-preview-frame-island.js",
+            "apps/docs/gold-button-docs.js",
+            "apps/docs/gold-card-docs.js",
+            "apps/docs/gold-checkbox-docs.js",
+            "apps/docs/gold-combobox-docs.js",
+            "apps/docs/gold-component-core.js",
+            "apps/docs/gold-icon-button-docs.js",
+            "apps/docs/gold-input-docs.js",
+            "apps/docs/gold-radio-button-docs.js",
+            "apps/docs/gold-select-docs.js",
+            "apps/docs/gold-simple-component-docs.js",
+            "apps/docs/gold-switch-docs.js",
+            "apps/docs/gold-text-area-docs.js",
+            "apps/docs/pattern-react-islands.js",
+            "apps/docs/react-component-islands.js",
+            "apps/docs/app.js",
+            "apps/docs/index.html"
+          ],
+          "docsGeneratedBridge": [
+            "apps/docs/generated/react/patterns/DemoPreviewFrame.js",
+            "apps/docs/generated/react/patterns/DemoPreviewFrame.d.ts"
+          ],
+          "validation": {
+            "flowReactBuild": "pass",
+            "docsValidate": "pass",
+            "docsRuntimeRoutes": 167
+          },
+          "routeSmokeQa": {
+            "cachebuster": "demo-preview-frame-clean-final",
+            "routes": [
+              "#/components/button",
+              "#/components/input",
+              "#/components/avatar"
+            ],
+            "viewport": "1280x900",
+            "tab": "Design",
+            "results": {
+              "button": {
+                "demoFrameIslands": 44,
+                "mounted": 44,
+                "flowFrames": 44,
+                "previewSlots": 44,
+                "htmlSlots": 44,
+                "legacyDemoCells": 0,
+                "consoleErrors": 0
+              },
+              "input": {
+                "demoFrameIslands": 30,
+                "mounted": 30,
+                "flowFrames": 30,
+                "previewSlots": 30,
+                "htmlSlots": 30,
+                "legacyDemoCells": 0,
+                "consoleErrors": 0
+              },
+              "avatar": {
+                "demoFrameIslands": 29,
+                "mounted": 29,
+                "flowFrames": 29,
+                "previewSlots": 29,
+                "htmlSlots": 29,
+                "legacyDemoCells": 0,
+                "consoleErrors": 0
+              }
+            }
+          },
+          "playgroundRuntimeIteration": {
+            "cachebuster": "demo-frame-playground-1",
+            "routes": [
+              "#/components/button",
+              "#/components/input",
+              "#/components/select",
+              "#/components/card",
+              "#/components/combobox",
+              "#/components/checkbox",
+              "#/components/switch",
+              "#/components/radio-button",
+              "#/components/text-area",
+              "#/components/icon-button",
+              "#/components/avatar"
+            ],
+            "tab": "Build",
+            "playgroundFrames": 11,
+            "mountedFrames": 11,
+            "legacyPlaygroundLayouts": 0,
+            "consoleErrors": 0,
+            "result": "Component playground wrappers now mount through the Flow-owned DemoPreviewFrame runtime while preserving existing preview/source slots and playground interactions."
+          },
+        "templateAndMobilePreviewIteration": {
+            "cachebuster": "template-mobile-frame-3",
+            "migratedFiles": [
+              "apps/docs/template-react-demos.js",
+              "apps/docs/pattern-mobile-demos.js",
+              "apps/docs/pattern-react-islands.js",
+              "apps/docs/react-component-islands.js"
+            ],
+            "templateRouteSmokeQa": {
+              "route": "#/templates/fleet-manager-desktop",
+              "frameIslands": 1,
+              "frameMounted": 1,
+              "flowFrames": 1,
+              "templateIslands": 1,
+              "templateMounted": 1,
+              "legacyTemplatePreview": 0,
+              "consoleErrors": 0
+            },
+            "mobilePatternRouteSmokeQa": {
+              "route": "#/patterns/fullscreen-sheet",
+              "note": "Mobile pattern route uses the React demo path before fallback demos; fallback docs-mobile-pattern-preview wrappers are still build/type/audit validated and now emit DemoPreviewFrame.",
+              "legacyMobilePreview": 0,
+              "consoleErrors": 0
+            },
+            "hydrationFix": {
+              "reason": "DocumentationSection and DemoPreviewFrame slots can insert nested React islands after the initial setup pass.",
+              "event": "docs-react-slot-html-mounted",
+              "result": "Nested FlowDocs React islands are mounted after section and frame slot HTML renders."
+            },
+            "validation": {
+              "command": "npm run validate:docs",
+              "status": "pass",
+              "docsRuntimeRoutes": 167
+            },
+          "result": "Template previews and mobile fallback previews now route through the Flow-owned DemoPreviewFrame boundary instead of standalone docs preview wrappers."
+        },
+        "strictDefaultBoundaryIteration": {
+          "auditFile": "audit/audit-docs-template-boundaries.js",
+          "change": "Strict mode now falls back to each owner's inventory patterns when no narrower strictPatterns are declared, and strict is the default docs audit mode.",
+          "modes": {
+            "default": "strict",
+            "inventoryOptOut": "FLOWDOCS_TEMPLATE_BOUNDARY_INVENTORY=1",
+            "targetedStrict": "FLOWDOCS_TEMPLATE_BOUNDARY_STRICT_OWNER=<owner-id>"
+          },
+          "validation": {
+            "command": "npm run validate:docs",
+            "status": "pass",
+            "docsTemplateBoundaryDebtMode": "strict",
+            "strictFindings": 0,
+            "docsRuntimeRoutes": 167
+          },
+          "result": "Closed template boundary owners are now protected by the normal validation path instead of requiring a manually remembered strict environment variable."
+        },
+          "runtimeHydrationFix": {
+            "reason": "Dynamic detail tabs replaced tabPanel HTML without mounting newly inserted React islands.",
+            "files": [
+              "apps/docs/app.js",
+              "apps/docs/react-component-islands.js"
+            ],
+            "result": "React islands inserted after docs-detail-tab-change are rehydrated through the shared island boundary."
+          },
+          "result": "Component demo cells now route through a Flow-owned DemoPreviewFrame pattern with stable preview slots; remaining demo wrapper families are explicitly tracked as follow-up work."
+        }
+      }
+    }
+  }
+}

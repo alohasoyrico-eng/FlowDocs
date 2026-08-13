@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderTreeViewGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, treeViewDemoFromData); }
 export function treeViewDemo(label = "Tree View", state = "default") { return simpleDemo("tree-view", { label, state }); }

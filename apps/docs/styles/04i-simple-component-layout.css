@@ -89,7 +89,7 @@
   line-height: var(--sys-voice-line-height-dense);
 }
 
-.simple-demo-row {
+.docs-demo-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -122,11 +122,11 @@
   inline-size: 100%;
 }
 
-.docs-demo-layout--popover.simple-demo-row {
+.docs-demo-frame--popover.docs-demo-row {
   align-items: flex-start;
 }
 
-.docs-demo-layout--popover [data-doc-component="popover"][data-open="true"] [role="dialog"] {
+.docs-demo-frame--popover [data-doc-component="popover"][data-open="true"] [role="dialog"] {
   inset: auto;
   margin-block-start: var(--popover-panel-offset);
   position: relative;
@@ -137,7 +137,7 @@
   max-inline-size: none;
 }
 
-.simple-viewport-demo {
+.docs-viewport-demo {
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;

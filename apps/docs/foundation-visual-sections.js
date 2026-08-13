@@ -1,4 +1,4 @@
-import { referenceSection, referenceSummaryGrid } from "./reference-layout.js?v=1";
+import { referenceSection, referenceSummaryGrid } from "./reference-layout.js?v=6";
 import { componentDemo } from "./component-demo.js?v=61";
 
 let foundationCopy = {};

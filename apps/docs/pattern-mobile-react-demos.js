@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -6,6 +6,15 @@ function escapeAttribute(value) {
 
 function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
+function mobileReactDemoSection(title, body) {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: "wide pattern-mobile-panel",
+    source: "pattern-mobile-react-demos",
+  });
 }
 
 const sheetItems = [
@@ -31,7 +40,7 @@ export function mobileReactPatternOverviewDemo(patternId) {
 }
 
 function bottomSheetReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Contextual bottom sheet</h2>${patternReactDemo("bottom-sheet", {
+  return mobileReactDemoSection("Contextual bottom sheet", patternReactDemo("bottom-sheet", {
     label: "Fuel purchase actions",
     description: "Mobile contextual actions stay delegated to Drawer/List/Button contracts.",
     density: "md",
@@ -44,11 +53,11 @@ function bottomSheetReactPanel() {
     validation: { label: "Context", message: "3 actions available for this purchase.", state: "info", live: true },
     drawer: { side: "bottom", label: "Fuel purchase actions" },
     "data-pattern-demo": "bottom-sheet",
-  }, "open")}</section>`;
+  }, "open"));
 }
 
 function fullscreenSheetReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Mobile station edit</h2>${patternReactDemo("fullscreen-sheet", {
+  return mobileReactDemoSection("Mobile station edit", patternReactDemo("fullscreen-sheet", {
     label: "Station policy",
     description: "A full-screen task flow using Stepper, fields, validation, actions, and feedback.",
     density: "md",
@@ -69,11 +78,11 @@ function fullscreenSheetReactPanel() {
     closeAction: { key: "close", label: "Close", variant: "ghost", icon: "close" },
     feedback: { label: "Draft saved locally", description: "Changes are ready to review.", tone: "info" },
     "data-pattern-demo": "fullscreen-sheet",
-  }, "dirty")}</section>`;
+  }, "dirty"));
 }
 
 function swipeActionsReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Row swipe actions</h2>${patternReactDemo("swipe-actions", {
+  return mobileReactDemoSection("Row swipe actions", patternReactDemo("swipe-actions", {
     label: "Fuel purchase actions",
     density: "md",
     state: "revealed",
@@ -85,11 +94,11 @@ function swipeActionsReactPanel() {
     ],
     feedback: { label: "Actions revealed", description: "Keyboard fallbacks remain available.", tone: "info" },
     "data-pattern-demo": "swipe-actions",
-  }, "revealed")}</section>`;
+  }, "revealed"));
 }
 
 function quickActionsGridReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Card shortcut grid</h2>${patternReactDemo("quick-actions-grid", {
+  return mobileReactDemoSection("Card shortcut grid", patternReactDemo("quick-actions-grid", {
     label: "Card shortcuts",
     density: "md",
     state: "default",
@@ -98,11 +107,11 @@ function quickActionsGridReactPanel() {
     confirmation: { label: "Freeze card?", description: "The driver cannot use this card until it is reactivated.", tone: "danger", actions: [{ key: "confirm", label: "Freeze card", intent: "danger" }, { key: "cancel", label: "Cancel", variant: "secondary" }] },
     feedback: { label: "4 shortcuts available", description: "Permission-blocked actions stay visible with explanation.", tone: "info" },
     "data-pattern-demo": "quick-actions-grid",
-  })}</section>`;
+  }));
 }
 
 function drawerAdapterReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-mobile-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Responsive drawer adapter</h2>${patternReactDemo("drawer-adapter", {
+  return mobileReactDemoSection("Responsive drawer adapter", patternReactDemo("drawer-adapter", {
     label: "Vehicle inspector",
     description: "Drawer adapts shell, list, menu, and task content without a parallel overlay implementation.",
     density: "md",
@@ -117,5 +126,5 @@ function drawerAdapterReactPanel() {
     actions: [{ key: "risk", label: "Open risk review", variant: "secondary", icon: "report" }, { key: "close", label: "Close drawer", variant: "secondary" }],
     feedback: { label: "Drawer adapted", description: "Responsive mode keeps one Drawer contract.", tone: "success" },
     "data-pattern-demo": "drawer-adapter",
-  }, "responsive")}</section>`;
+  }, "responsive"));
 }

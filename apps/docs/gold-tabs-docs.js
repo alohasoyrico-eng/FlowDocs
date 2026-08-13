@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderTabsGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, tabsDemoFromData); }
 export function tabsDemo(label = "Navigation", variant = "default", state = "default", itemCount = 3) { return simpleDemo("tabs", { ariaLabel: label, variant, state, itemCount }); }

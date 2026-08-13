@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -6,6 +6,15 @@ function escapeAttribute(value) {
 
 function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
+function desktopReactDemoSection(title, body) {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: "wide pattern-desktop-panel",
+    source: "pattern-desktop-react-demos",
+  });
 }
 
 const vehicleRows = [
@@ -35,7 +44,7 @@ export function desktopReactPatternOverviewDemo(patternId) {
 }
 
 function kpiCardReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Dashboard KPI card</h2>${patternReactDemo("kpi-card", {
+  return desktopReactDemoSection("Dashboard KPI card", patternReactDemo("kpi-card", {
     label: "Fuel spend",
     value: "$84.2k",
     unit: "MXN",
@@ -49,11 +58,11 @@ function kpiCardReactPanel() {
     tag: { label: "Policy", tone: "warning", icon: "rule" },
     action: { key: "investigate", label: "Investigate", icon: "troubleshoot", variant: "secondary" },
     "data-pattern-demo": "kpi-card",
-  })}</section>`;
+  }));
 }
 
 function chartWrapperReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Chart module with summary</h2>${patternReactDemo("chart-wrapper", {
+  return desktopReactDemoSection("Chart module with summary", patternReactDemo("chart-wrapper", {
     label: "Fuel spend trend",
     description: "Chart, summary metric, table fallback, and actions stay in one governed pattern.",
     density: "md",
@@ -65,11 +74,11 @@ function chartWrapperReactPanel() {
     primaryAction: { key: "export", label: "Export", icon: "download", variant: "secondary" },
     table: { label: "Chart data summary", rows: [{ id: "jan", period: "Jan", spend: "$62k" }, { id: "feb", period: "Feb", spend: "$70k" }, { id: "mar", period: "Mar", spend: "$84k" }], columns: [{ key: "period", label: "Period" }, { key: "spend", label: "Spend", align: "right" }] },
     "data-pattern-demo": "chart-wrapper",
-  })}</section>`;
+  }));
 }
 
 function virtualDataTableReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Operational data table</h2>${patternReactDemo("virtual-data-table", {
+  return desktopReactDemoSection("Operational data table", patternReactDemo("virtual-data-table", {
     label: "Vehicle operations",
     description: "Sortable, selectable, paginated table without a parallel docs table implementation.",
     density: "sm",
@@ -87,11 +96,11 @@ function virtualDataTableReactPanel() {
     selection: { enabled: true, label: "Select vehicles", rowLabel: "Select row" },
     bulkActions: [{ key: "review", label: "Mark review", icon: "fact_check" }, { key: "export", label: "Export", variant: "secondary", icon: "download" }],
     "data-pattern-demo": "virtual-data-table",
-  })}</section>`;
+  }));
 }
 
 function advancedFiltersReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Advanced filters</h2>${patternReactDemo("advanced-filters", {
+  return desktopReactDemoSection("Advanced filters", patternReactDemo("advanced-filters", {
     label: "Vehicle filters",
     description: "Saved views, fields, applied chips, validation, and feedback are composed from Flow.",
     density: "md",
@@ -109,11 +118,11 @@ function advancedFiltersReactPanel() {
     resetAction: { key: "reset", label: "Reset", variant: "secondary", icon: "restart_alt" },
     savedViews: { triggerLabel: "Saved views", label: "Saved filter views", items: [{ key: "high-risk", label: "High risk" }, { key: "north", label: "North fleet" }] },
     "data-pattern-demo": "advanced-filters",
-  })}</section>`;
+  }));
 }
 
 function columnConfiguratorReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Column configuration</h2>${patternReactDemo("column-configurator", {
+  return desktopReactDemoSection("Column configuration", patternReactDemo("column-configurator", {
     label: "Vehicle columns",
     description: "Column visibility persists without inventing a docs-only chooser.",
     density: "sm",
@@ -135,11 +144,11 @@ function columnConfiguratorReactPanel() {
     resetAction: { key: "reset", label: "Reset", variant: "secondary", icon: "restart_alt" },
     validation: { label: "Column status", message: "One optional column is hidden.", state: "warning" },
     "data-pattern-demo": "column-configurator",
-  })}</section>`;
+  }));
 }
 
 function rolesAndPermissionsReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Roles and permissions</h2>${patternReactDemo("roles-and-permissions", {
+  return desktopReactDemoSection("Roles and permissions", patternReactDemo("roles-and-permissions", {
     label: "Fleet access matrix",
     description: "Permission changes remain auditable and confirmation-aware.",
     density: "sm",
@@ -156,11 +165,11 @@ function rolesAndPermissionsReactPanel() {
     audit: { label: "Last change", description: "Manager approval enabled.", meta: "Today 09:42 - Admin", status: "Logged", icon: "manage_history" },
     actions: [{ key: "save", label: "Save roles", icon: "save" }, { key: "reset", label: "Reset", variant: "secondary", icon: "restart_alt" }],
     "data-pattern-demo": "roles-and-permissions",
-  })}</section>`;
+  }));
 }
 
 function bulkActionsReactPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Bulk actions toolbar</h2>${patternReactDemo("bulk-actions", {
+  return desktopReactDemoSection("Bulk actions toolbar", patternReactDemo("bulk-actions", {
     label: "Vehicle bulk actions",
     density: "sm",
     state: "selected",
@@ -173,5 +182,5 @@ function bulkActionsReactPanel() {
     overflow: { triggerLabel: "More bulk actions", label: "More bulk actions", items: [{ key: "assign", label: "Assign owner" }, { key: "archive", label: "Archive" }] },
     feedback: { label: "2 rows selected", description: "Actions reflect eligibility and permissions.", tone: "info" },
     "data-pattern-demo": "bulk-actions",
-  })}</section>`;
+  }));
 }

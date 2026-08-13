@@ -1,4 +1,5 @@
 import { componentDemo } from "./component-demo.js?v=61";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
 
 let html = String.raw;
 let icon = () => "";
@@ -16,8 +17,8 @@ export function configureComponentFoundationTrace(nextDeps) {
 
 export function artifactFoundationTracePanel(entry, artifactType) {
   const rows = artifactFoundationTraceRows(entry, artifactType);
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
+  return documentationSectionIsland({
+    bodyHtml: html`
       <span class="eyebrow">${ui("reference.foundationTrace")}</span>
       <h2>${ui("reference.howFoundationsGovern")} ${entry.title}</h2>
       <p>${entry.title} must be implemented through foundation decisions before it becomes a component, pattern, or template surface.</p>
@@ -28,8 +29,11 @@ export function artifactFoundationTracePanel(entry, artifactType) {
           )
           .join("")}
       </div>
-    </section>
-  `;
+    `,
+    className: "artifact-detail-surface wide",
+    template: "artifact-detail",
+    source: "artifactFoundationTracePanel",
+  });
 }
 
 function artifactFoundationTraceRows(entry, artifactType) {

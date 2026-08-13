@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderAnimatedMomentGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, animatedMomentDemoFromData); }
 export function animatedMomentDemo(label = "Animated Moment", state = "default") { return simpleDemo("animated-moment", { label, state }); }

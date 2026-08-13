@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderCardExpiryInputGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, cardExpiryInputDemoFromData); }
 export function cardExpiryInputDemo(label = "Expiry date", value = "12/28", state = "default") { return simpleDemo("card-expiry-input", { label, value, state }); }

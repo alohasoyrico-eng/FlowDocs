@@ -20,17 +20,17 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 34rem), 1fr));
 }
 
-.detail-page .button-demo-grid.docs-demo-grid--wide,
-.reference-doc .button-demo-grid.docs-demo-grid--wide {
+.detail-page .docs-demo-matrix.docs-demo-grid--wide,
+.reference-doc .docs-demo-matrix.docs-demo-grid--wide {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 34rem), 1fr));
 }
 
-.docs-demo-grid--wide.state-behavior-grid {
+.docs-demo-grid--wide.docs-demo-matrix--state {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 38rem), 1fr));
 }
 
-.detail-page .button-demo-grid.docs-demo-grid--wide.state-behavior-grid,
-.reference-doc .button-demo-grid.docs-demo-grid--wide.state-behavior-grid {
+.detail-page .docs-demo-matrix.docs-demo-grid--wide.docs-demo-matrix--state,
+.reference-doc .docs-demo-matrix.docs-demo-grid--wide.docs-demo-matrix--state {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 38rem), 1fr));
 }
 
@@ -47,8 +47,8 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.detail-page .button-demo-grid.docs-demo-grid--full,
-.reference-doc .button-demo-grid.docs-demo-grid--full {
+.detail-page .docs-demo-matrix.docs-demo-grid--full,
+.reference-doc .docs-demo-matrix.docs-demo-grid--full {
   grid-template-columns: minmax(0, 1fr);
 }
 
@@ -56,45 +56,45 @@
   min-block-size: var(--sys-frame-doc-panel-min-sm);
 }
 
-.docs-demo-layout--wide.responsive-actions-demo,
-.docs-demo-layout--wide.viewport-doc-grid {
+.docs-demo-frame--wide.responsive-actions-demo,
+.docs-demo-frame--wide.docs-viewport-matrix {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 32rem), 1fr));
 }
 
-.docs-demo-layout--wide.simple-scenario {
+.docs-demo-frame--wide.simple-scenario {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.detail-page .docs-demo-layout--wide.responsive-actions-demo,
-.detail-page .docs-demo-layout--wide.viewport-doc-grid,
-.detail-page .docs-demo-layout--wide.simple-scenario,
-.reference-doc .docs-demo-layout--wide.responsive-actions-demo,
-.reference-doc .docs-demo-layout--wide.viewport-doc-grid,
-.reference-doc .docs-demo-layout--wide.simple-scenario {
+.detail-page .docs-demo-frame--wide.responsive-actions-demo,
+.detail-page .docs-demo-frame--wide.docs-viewport-matrix,
+.detail-page .docs-demo-frame--wide.simple-scenario,
+.reference-doc .docs-demo-frame--wide.responsive-actions-demo,
+.reference-doc .docs-demo-frame--wide.docs-viewport-matrix,
+.reference-doc .docs-demo-frame--wide.simple-scenario {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 32rem), 1fr));
 }
 
-.docs-demo-layout--full.responsive-actions-demo,
-.docs-demo-layout--full.viewport-doc-grid,
-.docs-demo-layout--full.simple-scenario {
+.docs-demo-frame--full.responsive-actions-demo,
+.docs-demo-frame--full.docs-viewport-matrix,
+.docs-demo-frame--full.simple-scenario {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.detail-page .docs-demo-layout--full.responsive-actions-demo,
-.detail-page .docs-demo-layout--full.viewport-doc-grid,
-.detail-page .docs-demo-layout--full.simple-scenario,
-.reference-doc .docs-demo-layout--full.responsive-actions-demo,
-.reference-doc .docs-demo-layout--full.viewport-doc-grid,
-.reference-doc .docs-demo-layout--full.simple-scenario {
+.detail-page .docs-demo-frame--full.responsive-actions-demo,
+.detail-page .docs-demo-frame--full.docs-viewport-matrix,
+.detail-page .docs-demo-frame--full.simple-scenario,
+.reference-doc .docs-demo-frame--full.responsive-actions-demo,
+.reference-doc .docs-demo-frame--full.docs-viewport-matrix,
+.reference-doc .docs-demo-frame--full.simple-scenario {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.docs-demo-layout--wide.simple-demo-row,
-.docs-demo-layout--wide.button-stack,
-.docs-demo-layout--wide.simple-viewport-demo,
-.docs-demo-layout--full.simple-demo-row,
-.docs-demo-layout--full.button-stack,
-.docs-demo-layout--full.simple-viewport-demo {
+.docs-demo-frame--wide.docs-demo-row,
+.docs-demo-frame--wide.button-stack,
+.docs-demo-frame--wide.docs-viewport-demo,
+.docs-demo-frame--full.docs-demo-row,
+.docs-demo-frame--full.button-stack,
+.docs-demo-frame--full.docs-viewport-demo {
   min-inline-size: 0;
   overflow-x: auto;
 }

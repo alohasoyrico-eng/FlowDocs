@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderDatePickerGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, datePickerDemoFromData); }
 export function datePickerDemo(label = "Service date", value = "18 Jul 2026", state = "default") { return simpleDemo("date-picker", { label, value, state }); }

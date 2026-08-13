@@ -45,7 +45,8 @@ function checkStaticHygiene() {
 
     lines.forEach((lineText, index) => {
       const line = index + 1;
-      if (/\b(?:eds|f[l]ow)-|\.eds-|\.f[l]ow-|--eds-|--f[l]ow-/.test(lineText) && !isAuditScript && !isImplementationStatusInventory) {
+      const isFlowDataAttribute = /["'\[]data-flow-/.test(lineText);
+      if (/\b(?:eds|f[l]ow)-|\.eds-|\.f[l]ow-|--eds-|--f[l]ow-/.test(lineText) && !isFlowDataAttribute && !isAuditScript && !isImplementationStatusInventory) {
         add("errors", file, line, "Inherited prefixed naming is not allowed.");
       }
 

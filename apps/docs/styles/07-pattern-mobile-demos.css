@@ -11,7 +11,7 @@
   max-inline-size: 100%;
 }
 
-.pattern-mobile-demo {
+.docs-mobile-pattern-preview {
   position: relative;
   display: grid;
   gap: var(--sys-space-4);
@@ -22,7 +22,7 @@
   background: var(--sys-energy-surface-primary);
 }
 
-.pattern-mobile-demo [hidden] {
+.docs-mobile-pattern-preview [hidden] {
   display: none;
 }
 
@@ -101,7 +101,7 @@
 }
 
 @media (max-width: 760px) {
-  .pattern-mobile-demo,
+  .docs-mobile-pattern-preview,
   .pattern-fullscreen-sheet-demo__sheet,
   .pattern-drawer-adapter-demo__drawer {
     padding: var(--sys-space-3);
@@ -127,7 +127,7 @@
     padding-inline: var(--sys-space-4);
   }
 
-  .pattern-mobile-demo {
+  .docs-mobile-pattern-preview {
     margin-inline: calc(var(--sys-space-2) * -1);
     border-inline: 0;
     border-radius: 0;

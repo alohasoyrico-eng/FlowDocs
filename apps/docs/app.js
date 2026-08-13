@@ -1,9 +1,10 @@
-import { artifactCard, artifactTypeLabel, docsLinkCard, configureCatalogRenderers, groupCollection, label } from "./catalog-renderers.js";
+import { artifactCard, artifactTypeLabel, docsLinkCard, configureCatalogRenderers, groupCollection, label } from "./catalog-renderers.js?v=2";
 import { loadDocsContent } from "./content-sources.js?v=203";
-import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=59";
-import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=295";
+import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=71";
+import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=298";
 import { applyLocalizedChrome, configureDocsChrome, setupLanguageToggle } from "./docs-chrome.js?v=3";
-import { renderCollectionContent, renderDetailContent, renderShell } from "./docs-layout.js?v=225";
+import { renderCollectionContent, renderDetailContent, renderReferenceDetailContent, renderShell } from "./docs-layout.js?v=232";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
 import {
   applyDocsContent,
   artifactContract,
@@ -32,35 +33,21 @@ import {
 } from "./docs-state.js";
 import { artifactFoundationTracePanel, configureFamilyComponentDocs, familyComponentTabs } from "./family-component-docs.js?v=4";
 import { configureFoundationReference, foundationReferenceContent, foundationRoles, foundationSubtitle } from "./foundation-reference.js?v=1";
-import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDemo, breadcrumbsDemo, buttonDemo, cardDemo, cardExpiryInputDemo, cardNumberInputDemo, cardSecurityCodeInputDemo, cardSummaryDemo, checkboxDemo, chipDemo, comboboxDemo, configureGoldComponentDocs, countrySelectorDemo, demoCell, dialogDemo, drawerDemo, emptyStateDemo, errorPanelDemo, floatingActionButtonDemo, goldComponentDocumentationTabs, iconButtonDemo, inlineValidationDemo, animatedMomentDemo, menuDemo, motionBoundaryDemo, movementRowDemo, paginationDemo, popoverDemo, progressIndicatorDemo, quickActionDemo, radioButtonDemo, selectDemo, skeletonDemo, spinnerDemo, sliderDemo, stepperDemo, switchDemo, tableDemo, tabsDemo, tabsDemoFromData, tagDemo, textAreaDemo, inputDemo, toastDemo, tooltipDemo, treeViewDemo } from "./gold-component-docs.js?v=325";
-import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=1";
-import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=3";
+import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDemo, breadcrumbsDemo, buttonDemo, cardDemo, cardExpiryInputDemo, cardNumberInputDemo, cardSecurityCodeInputDemo, cardSummaryDemo, checkboxDemo, chipDemo, comboboxDemo, configureGoldComponentDocs, countrySelectorDemo, demoCell, dialogDemo, drawerDemo, emptyStateDemo, errorPanelDemo, floatingActionButtonDemo, goldComponentDocumentationTabs, iconButtonDemo, inlineValidationDemo, animatedMomentDemo, menuDemo, motionBoundaryDemo, movementRowDemo, paginationDemo, popoverDemo, progressIndicatorDemo, quickActionDemo, radioButtonDemo, selectDemo, skeletonDemo, spinnerDemo, sliderDemo, stepperDemo, switchDemo, tableDemo, tabsDemo, tabsDemoFromData, tagDemo, textAreaDemo, inputDemo, toastDemo, tooltipDemo, treeViewDemo } from "./gold-component-docs.js?v=334";
+import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=2";
+import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=5";
 import { collectionIcon, configureIconSystem, icon, iconFor, tabIcon } from "./icon-system.js?v=199";
-import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=2";
-import {
-  configurePrimitiveReference,
-  primitiveApiReferenceSection,
-  primitiveLiveDemoSection,
-  primitivePurposeSection,
-  primitiveResponsibilitiesReferenceSection,
-  primitiveSpecMatrixSection,
-  primitiveTokenReferenceSection,
-} from "./primitive-reference.js?v=1";
-import {
-  configureReferenceLayout,
-  referenceCallout,
-  referenceCodeBlock,
-  referenceDivider,
-  referenceHeader,
-  referencePeerNav,
-  referenceSection,
-} from "./reference-layout.js?v=1";
-import { setupContrastToggle, setupGridOverlay, toggleContrastState, toggleGridOverlay, updateGridOverlay } from "./shell-controls.js?v=2";
+import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=4";
+import { configurePrimitiveReference, primitiveApiReferenceSection, primitiveLiveDemoSection, primitivePurposeSection, primitiveResponsibilitiesReferenceSection, primitiveSpecMatrixSection, primitiveTokenReferenceSection } from "./primitive-reference.js?v=1";
+import { configureReferenceLayout, referenceCallout, referenceCodeBlock, referenceDivider, referenceHeader, referencePeerNav, referenceSection } from "./reference-layout.js?v=6";
+import { setupReactComponentIslands } from "./react-component-islands.js?v=47";
+import { setupContrastToggle, setupGridOverlay, toggleContrastState, toggleGridOverlay, updateGridOverlay } from "./shell-controls.js?v=4";
 import { escapeHtml, html, interpolateList, referenceTemplate, slug } from "./utils.js";
-import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=2";
+import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=3";
 
 const $ = (selector) => document.querySelector(selector);
 const app = $("#app");
+let afterShellRender = () => {};
 window.__systemBoot = { status: "starting" };
 
 function route() {
@@ -73,6 +60,7 @@ function render() {
   configureLocalizedRenderers();
   const current = route();
   delete document.body.dataset.navOpen;
+  afterShellRender = (root) => setupReactComponentIslands(root);
   if (current.collection === "home") renderHome();
   else if (current.collection === "stack") renderStack();
   else if (current.collection === "foundations" && !current.id) {
@@ -85,7 +73,7 @@ function render() {
   else if (collections[current.collection] && current.id) renderDetail(current.collection, current.id);
   else if (collections[current.collection]) renderCollection(current.collection);
   else renderHome();
-  renderDocsShell(current);
+  renderDocsShell(current, { pageMarkup: app.innerHTML, afterRender: afterShellRender });
   app.focus({ preventScroll: true });
   requestAnimationFrame(() => requestAnimationFrame(updateGridOverlay));
 }
@@ -107,7 +95,10 @@ function shell(content, active = "") {
 
 function renderHome() {
   app.innerHTML = shell(renderHomeContent({ docsLinkCard, collections, findAny, homeContent, html, icon, slug, stack, ui }), "home");
-  hydrateHomeHeroIllustration(app);
+  afterShellRender = (root) => {
+    setupReactComponentIslands(root);
+    requestAnimationFrame(() => hydrateHomeHeroIllustration(root));
+  };
 }
 
 function renderCollection(collection) {
@@ -140,57 +131,69 @@ function renderDetail(collection, id) {
   const tabs = detailTabs(collection, entry);
   app.innerHTML = shell(renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }), collection);
 
-  const tabShell = document.querySelector('[data-react-component="detail-shell-tabs"]');
-  const activateTab = (tabId) => {
-    const selected = tabs.find((tab) => tab.id === tabId);
-    if (!selected) return;
-    $("#tabPanel").innerHTML = selected.body;
+  afterShellRender = (root) => {
+    setupReactComponentIslands(root);
+    const tabShell = document.querySelector('[data-react-component="docs-artifact-detail-template"], [data-react-component="detail-shell-tabs"]');
+    const activateTab = (tabId) => {
+      const selected = tabs.find((tab) => tab.id === tabId);
+      if (!selected) return;
+      $("#tabPanel").innerHTML = selected.body;
+      setupReactComponentIslands($("#tabPanel"));
+      setupDocumentationInteractions(interactionDeps());
+    };
+    tabShell?.addEventListener("docs-detail-tab-change", (event) => activateTab(event.detail?.tabId));
     setupDocumentationInteractions(interactionDeps());
   };
-  tabShell?.addEventListener("docs-detail-tab-change", (event) => activateTab(event.detail?.tabId));
-  setupDocumentationInteractions(interactionDeps());
 }
 
 function renderFoundationDetail(entry) {
   app.innerHTML = shell(
-    html`
-      <article class="reference-doc foundation-deep-dive" data-doc-primitive="foundation-reference-page" data-detail="foundations:${entry.id}">
-        <div class="reference-main">
-          ${referenceHeader("foundations", entry, { chapter: "Foundation Deep Dive", subtitle: foundationSubtitle(entry) })}
-          ${referenceDivider()}
-          <div class="reference-stack">
-            ${foundationReferenceContent(entry)}
-          </div>
-        </div>
-      </article>
-    `,
+    renderReferenceDetailContent({
+      artifactTypeLabel,
+      bodyHtml: html`<div class="reference-stack">${foundationReferenceContent(entry)}</div>`,
+      collection: "foundations",
+      entry,
+      id: entry.id,
+      label,
+      referencePageMarker: "foundation-reference-page",
+      ui,
+    }),
     "foundations",
   );
-  setupDocumentationInteractions(interactionDeps());
+  afterShellRender = (root) => {
+    setupReactComponentIslands(root);
+    setupDocumentationInteractions(interactionDeps());
+  };
 }
 
 function renderPrimitiveDetail(entry) {
   app.innerHTML = shell(
-    html`
-      <article class="reference-doc primitive-deep-dive" data-doc-primitive="primitive-reference-page" data-detail="primitives:${entry.id}">
-        <div class="reference-main">
-          ${referenceHeader("primitives", entry, { chapter: "Primitive Deep Dive", subtitle: "L2 implementation primitive" })}
+    renderReferenceDetailContent({
+      artifactTypeLabel,
+      bodyHtml: html`
+        <div class="reference-stack">
+          ${primitivePurposeSection(entry)}
           ${referenceDivider()}
-          <div class="reference-stack">
-            ${primitivePurposeSection(entry)}
-            ${referenceDivider()}
-            ${primitiveLiveDemoSection(entry)}
-            ${primitiveResponsibilitiesReferenceSection(entry)}
-            ${primitiveApiReferenceSection(entry)}
-            ${primitiveSpecMatrixSection(entry)}
-            ${primitiveTokenReferenceSection(entry)}
-          </div>
+          ${primitiveLiveDemoSection(entry)}
+          ${primitiveResponsibilitiesReferenceSection(entry)}
+          ${primitiveApiReferenceSection(entry)}
+          ${primitiveSpecMatrixSection(entry)}
+          ${primitiveTokenReferenceSection(entry)}
         </div>
-      </article>
-    `,
+      `,
+      collection: "primitives",
+      entry,
+      id: entry.id,
+      label,
+      referencePageMarker: "primitive-reference-page",
+      ui,
+    }),
     "primitives",
   );
-  setupDocumentationInteractions(interactionDeps());
+  afterShellRender = (root) => {
+    setupReactComponentIslands(root);
+    setupDocumentationInteractions(interactionDeps());
+  };
 }
 
 function renderStack() {
@@ -200,6 +203,7 @@ function renderStack() {
 
 function visualExampleDeps() {
   return {
+    documentationSectionIsland,
     html,
     icon,
     iconButtonDemo,
@@ -369,14 +373,18 @@ async function boot() {
     setupGridOverlay({ ui });
     setupGlobalDocumentInteractions();
     setupLanguageToggle();
-    renderDocsShell(route());
     window.__systemBoot.status = "rendering";
     render();
     window.__systemBoot.status = "ready";
   } catch (error) {
     window.__systemBoot = { status: "failed", message: error?.message ?? String(error), stack: error?.stack ?? "" };
     console.error(ui("shell.bootFailedLog"), error);
-    app.innerHTML = `<main class="section"><section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h1>${ui("shell.bootFailedTitle")}</h1><p>${escapeHtml(window.__systemBoot.message)}</p></section></main>`;
+    app.innerHTML = `<main class="section">${documentationSectionIsland({
+      bodyHtml: `<h1>${ui("shell.bootFailedTitle")}</h1><p>${escapeHtml(window.__systemBoot.message)}</p>`,
+      className: "artifact-detail-surface wide",
+      template: "artifact-detail",
+      source: "bootFailure",
+    })}</main>`;
   }
 }
 

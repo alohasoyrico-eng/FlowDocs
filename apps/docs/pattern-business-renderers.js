@@ -1,4 +1,4 @@
-import { html, slug } from "./detail-tabs-core.js?v=5";
+import { html, slug } from "./detail-tabs-core.js?v=10";
 
 function attrText(attrs = {}) {
   return Object.entries(attrs)

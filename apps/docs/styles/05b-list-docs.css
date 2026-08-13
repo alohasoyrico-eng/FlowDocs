@@ -1,10 +1,10 @@
-.docs-demo-layout--list.simple-demo-row {
+.docs-demo-frame--list.docs-demo-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 24rem), 1fr));
   align-items: stretch;
   inline-size: 100%;
 }
 
-.docs-demo-layout--list [data-doc-component="list"] {
+.docs-demo-frame--list [data-doc-component="list"] {
   inline-size: 100%;
 }

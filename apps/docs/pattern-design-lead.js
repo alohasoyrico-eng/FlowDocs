@@ -1,4 +1,5 @@
-import { artifactRoleGrid, html } from "./detail-tabs-core.js?v=5";
+import { artifactRoleGrid, html } from "./detail-tabs-core.js?v=10";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
 
 export function patternDesignLeadPanel(entry) {
   if (entry.id === "sidebar") return sidebarDesignLeadPanel();
@@ -27,8 +28,8 @@ function topbarDesignLeadPanel() {
 }
 
 function designLeadPanel(title, copy, rules) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-design-lead" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
+  return documentationSectionIsland({
+    bodyHtml: html`
       <span class="eyebrow">Design</span>
       <h2>${title}</h2>
       <p>${copy}</p>
@@ -36,6 +37,9 @@ function designLeadPanel(title, copy, rules) {
         className: "pattern-design-lead-grid",
         items: rules.map(([name, rule]) => ({ icon: "rule", title: name, copy: rule })),
       })}
-    </section>
-  `;
+    `,
+    className: "artifact-detail-surface wide pattern-design-lead",
+    template: "artifact-detail",
+    source: "patternDesignLeadPanel",
+  });
 }

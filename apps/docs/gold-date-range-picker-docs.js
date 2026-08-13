@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderDateRangePickerGoldSection(entry, section) {
   return renderSimpleGoldSection(entry, section, dateRangePickerDemoFromData);

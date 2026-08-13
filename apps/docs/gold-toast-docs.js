@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderToastGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, toastDemoFromData); }
 export function toastDemo(label = "Card limit updated.", description = "Changes are live for assigned drivers.", tone = "success", variant = "status", state = "visible", iconName = "check_circle", dismissible = true, actionLabel = "") { return simpleDemo("toast", { label, description, tone, variant, state, icon: iconName, dismissible, actionLabel }); }

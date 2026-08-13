@@ -1,6 +1,6 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 import { componentDemo } from "./component-demo.js?v=60";
-import { journeyReactPatternOverviewDemo } from "./pattern-journey-react-demos.js?v=2";
+import { journeyReactPatternOverviewDemo } from "./pattern-journey-react-demos.js?v=3";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -19,6 +19,15 @@ function patternReactDemo(pattern, props, state = "default", variant = "standard
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="true" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
 }
 
+function journeyDemoSection(title, body) {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: "wide pattern-journey-panel",
+    source: "pattern-journey-demos",
+  });
+}
+
 export function journeyPatternOverviewDemo(patternId) {
   const reactDemo = journeyReactPatternOverviewDemo(patternId);
   if (reactDemo) return reactDemo;
@@ -29,10 +38,7 @@ export function journeyPatternOverviewDemo(patternId) {
 }
 
 function authJourneyDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Recoverable sign-in</h2>
+  return journeyDemoSection("Recoverable sign-in", html`
       ${patternReactDemo("authentication-login-biometrics-and-otp", {
         label: "Recoverable sign-in",
         description: "Used for OTP and account recovery.",
@@ -42,15 +48,11 @@ function authJourneyDemoPanel() {
         recovery: { label: "Authentication needs review", description: "Retry OTP or use account recovery before continuing.", action: { label: "Review recovery" } },
         "data-pattern-demo": "authentication-login-biometrics-and-otp",
       })}
-    </section>
-  `;
+  `);
 }
 
 function driverOnboardingDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Driver mobile setup</h2>
+  return journeyDemoSection("Driver mobile setup", html`
       <div class="pattern-driver-onboarding pattern-journey-demo pattern-journey-demo--mobile" data-driver-onboarding-demo data-journey-step="0">
         <div data-journey-stepper>
           ${packageDemo("stepper", { current: 0, steps: [{ label: "Identity", description: "Phone" }, { label: "Trust", description: "Device" }, { label: "Ready", description: "Start" }] })}
@@ -73,8 +75,7 @@ function driverOnboardingDemoPanel() {
         </footer>
         <div data-driver-toast hidden>${packageDemo("toast", { label: "Driver setup complete", description: "Mobile onboarding is ready for first use.", tone: "success" })}</div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function fleetManagerOnboardingDemoPanel() {
@@ -82,10 +83,7 @@ function fleetManagerOnboardingDemoPanel() {
     { id: "jmx-214-b", plate: "JMX-214-B", driver: "Ana Sosa", status: "Ready", spend: "$842" },
     { id: "kld-901-c", plate: "KLD-901-C", driver: "Luis Vera", status: "Needs role", spend: "$631" },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-journey-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Fleet manager workspace setup</h2>
+  return journeyDemoSection("Fleet manager workspace setup", html`
       <div class="pattern-fleet-onboarding pattern-journey-demo" data-fleet-onboarding-demo data-journey-step="0">
         <div data-journey-stepper>
           ${packageDemo("stepper", { current: 0, steps: [{ label: "Workspace", description: "Profile" }, { label: "Fleet", description: "Import" }, { label: "Access", description: "Roles" }] })}
@@ -118,6 +116,5 @@ function fleetManagerOnboardingDemoPanel() {
         </footer>
         <div data-fleet-toast hidden>${packageDemo("toast", { label: "Workspace setup saved", description: "The fleet manager can continue into templates.", tone: "success" })}</div>
       </div>
-    </section>
-  `;
+  `);
 }

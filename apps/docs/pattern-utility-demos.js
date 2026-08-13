@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 import { componentDemo } from "./component-demo.js?v=60";
 
 function packageDemo(component, demo = {}, attrs = {}) {
@@ -16,6 +16,14 @@ function escapeAttribute(value) {
 
 function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
+function utilityDemoSection(eyebrow, title, body) {
+  return artifactDocumentationSection({
+    body: `<span class="eyebrow">${eyebrow}</span><h2>${title}</h2>${body}`,
+    className: "wide pattern-utility-panel",
+    source: "pattern-utility-demos",
+  });
 }
 
 export function utilityPatternOverviewDemo(patternId) {
@@ -37,10 +45,7 @@ export function utilityPatternOverviewDemo(patternId) {
 }
 
 function checkboxGroupDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">React pattern demo</span>
-      <h2>Policy scope selection</h2>
+  return utilityDemoSection("React pattern demo", "Policy scope selection", html`
       ${patternReactDemo("checkbox-group", {
         label: "Apply policy to",
         helper: "Surface owns the group boundary; Checkbox owns each binary option.",
@@ -58,15 +63,11 @@ function checkboxGroupDemoPanel() {
         validation: { label: "Policy scope", message: "At least one active scope is required before saving.", state: "warning" },
         "data-pattern-demo": "checkbox-group",
       })}
-    </section>
-  `;
+    `);
 }
 
 function radioGroupDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">React pattern demo</span>
-      <h2>Approval routing choice</h2>
+  return utilityDemoSection("React pattern demo", "Approval routing choice", html`
       ${patternReactDemo("radio-group", {
         label: "Route high-risk changes to",
         helper: "Radio Group owns one decision; Radio Button owns each choice.",
@@ -83,15 +84,11 @@ function radioGroupDemoPanel() {
         validation: { label: "Approval route", message: "Pick one route before publishing the change.", state: "warning" },
         "data-pattern-demo": "radio-group",
       })}
-    </section>
-  `;
+    `);
 }
 
 function ganttChartDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">React pattern demo</span>
-      <h2>Rollout schedule</h2>
+  return utilityDemoSection("React pattern demo", "Rollout schedule", html`
       ${patternReactDemo("gantt-chart", {
         label: "Fleet migration rollout",
         description: "Tasks, milestones, dependencies, chart summary, and table evidence share one chart wrapper boundary.",
@@ -117,15 +114,11 @@ function ganttChartDemoPanel() {
         primaryAction: { label: "Review schedule", icon: "calendar_month" },
         "data-pattern-demo": "gantt-chart",
       })}
-    </section>
-  `;
+    `);
 }
 
 function waterfallChartDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">React pattern demo</span>
-      <h2>Spend bridge</h2>
+  return utilityDemoSection("React pattern demo", "Spend bridge", html`
       ${patternReactDemo("waterfall-chart", {
         label: "Monthly spend bridge",
         description: "Variance analysis keeps deltas, totals, summary badges, and table rows in one chart pattern.",
@@ -143,15 +136,11 @@ function waterfallChartDemoPanel() {
         primaryAction: { label: "Export bridge", icon: "download" },
         "data-pattern-demo": "waterfall-chart",
       })}
-    </section>
-  `;
+    `);
 }
 
 function polarChartDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">React pattern demo</span>
-      <h2>Fleet mix by risk</h2>
+  return utilityDemoSection("React pattern demo", "Fleet mix by risk", html`
       ${patternReactDemo("polar-chart", {
         label: "Risk distribution",
         description: "Segment summaries, table evidence, and recovery states stay inside the chart pattern.",
@@ -168,15 +157,11 @@ function polarChartDemoPanel() {
         primaryAction: { label: "Inspect segment", icon: "pie_chart" },
         "data-pattern-demo": "polar-chart",
       })}
-    </section>
-  `;
+    `);
 }
 
 function preferenceManagementDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">React pattern demo</span>
-      <h2>Workspace preferences</h2>
+  return utilityDemoSection("React pattern demo", "Workspace preferences", html`
       ${patternReactDemo("preference-management", {
         label: "Workspace preferences",
         description: "Preference Management composes Settings, Form Section, and Confirmation Dialog without owning local controls.",
@@ -221,15 +206,11 @@ function preferenceManagementDemoPanel() {
         },
         "data-pattern-demo": "preference-management",
       })}
-    </section>
-  `;
+    `);
 }
 
 function snackbarProviderDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Shared feedback queue</h2>
+  return utilityDemoSection("Interactive demo", "Shared feedback queue", html`
       ${patternReactDemo("snackbar-provider", {
         label: "Shared feedback queue",
         density: "md",
@@ -237,8 +218,7 @@ function snackbarProviderDemoPanel() {
         action: { label: "Queue feedback", icon: "add_alert" },
         "data-pattern-demo": "snackbar-provider",
       })}
-    </section>
-  `;
+    `);
 }
 
 function timelineDemoPanel() {
@@ -271,10 +251,7 @@ function timelineDemoPanel() {
       icon: "route",
     },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Fleet activity timeline</h2>
+  return utilityDemoSection("Interactive demo", "Fleet activity timeline", html`
       ${patternReactDemo("timeline", {
         label: "Fleet activity timeline",
         description: "Filter operational events without creating a second timeline structure in Docs.",
@@ -283,15 +260,11 @@ function timelineDemoPanel() {
         events,
         "data-timeline-demo": "react",
       })}
-    </section>
-  `;
+    `);
 }
 
 function sectionHeaderDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Dense section entry</h2>
+  return utilityDemoSection("Interactive demo", "Dense section entry", html`
       <div class="pattern-section-header-demo pattern-utility-demo" data-section-header-demo>
         <header class="pattern-section-header-demo__header">
           <div>
@@ -306,13 +279,11 @@ function sectionHeaderDemoPanel() {
           </div>
         </header>
       </div>
-    </section>
-  `;
+    `);
 }
 
 function pullToRefreshDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Refreshable movement feed</h2>
+  return utilityDemoSection("Interactive demo", "Refreshable movement feed", html`
       ${patternReactDemo("pull-to-refresh", {
         label: "Refreshable movement feed",
         description: "Recent movements update without replacing the governed feed surface.",
@@ -321,12 +292,11 @@ function pullToRefreshDemoPanel() {
         list: { label: "Recent movements", items: [{ label: "Fuel purchase", meta: "Station 24 - Today", value: "$842", icon: "local_gas_station" }, { label: "Receipt synced", meta: "Route 18 - Yesterday", value: "Done", icon: "receipt_long" }] },
         "data-pattern-demo": "pull-to-refresh",
       })}
-    </section>`;
+    `);
 }
 
 function avatarGroupDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Accountable team group</h2>
+  return utilityDemoSection("Interactive demo", "Accountable team group", html`
       ${patternReactDemo("avatar-group", {
         label: "Accountable team group",
         density: "md",
@@ -341,12 +311,11 @@ function avatarGroupDemoPanel() {
         action: { label: "Review team", icon: "groups" },
         "data-pattern-demo": "avatar-group",
       })}
-    </section>`;
+    `);
 }
 
 function transferListDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Assign vehicles to policy</h2>
+  return utilityDemoSection("Interactive demo", "Assign vehicles to policy", html`
       ${patternReactDemo("transfer-list", {
         label: "Assign vehicles to policy",
         density: "md",
@@ -362,12 +331,11 @@ function transferListDemoPanel() {
         moveToSourceAction: { label: "Move back", icon: "arrow_back" },
         "data-pattern-demo": "transfer-list",
       })}
-    </section>`;
+    `);
 }
 
 function dragSortableListDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Dashboard module order</h2>
+  return utilityDemoSection("Interactive demo", "Dashboard module order", html`
       ${patternReactDemo("drag-sortable-list", {
         label: "Dashboard order",
         density: "md",
@@ -382,12 +350,11 @@ function dragSortableListDemoPanel() {
         resetAction: { label: "Reset order", icon: "restart_alt" },
         "data-pattern-demo": "drag-sortable-list",
       })}
-    </section>`;
+    `);
 }
 
 function calendarViewDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Interactive demo</span><h2>Maintenance calendar</h2>
+  return utilityDemoSection("Interactive demo", "Maintenance calendar", html`
       ${patternReactDemo("calendar-view", {
         label: "Maintenance calendar",
         density: "md", selectedDate: "2026-07-18", timezoneLabel: "America/Mexico_City",
@@ -395,5 +362,5 @@ function calendarViewDemoPanel() {
         events: [{ key: "brake", label: "Brake inspection", description: "JMX-214-B · 09:00", time: "09:00", owner: "Ana Sosa", icon: "event", status: "warning", statusLabel: "Due" }, { key: "policy", label: "Policy renewal", description: "Fleet North · 14:00", time: "14:00", owner: "Luis Vera", icon: "event_available", status: "success", statusLabel: "Review" }],
         detail: { triggerLabel: "Review schedule", placement: "bottom" }, "data-pattern-demo": "calendar-view",
       })}
-    </section>`;
+    `);
 }

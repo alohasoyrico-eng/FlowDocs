@@ -1,4 +1,4 @@
-import { simpleDemo, renderSimpleGoldSection } from "./gold-simple-component-docs.js?v=255";
+import { simpleDemo, renderSimpleGoldSection } from "./gold-simple-component-docs.js?v=260";
 
 export function countrySelectorDemo(value = "MX", state = "default", inline = false) {
   return simpleDemo("country-selector", { value, state, inline });

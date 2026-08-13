@@ -3,6 +3,7 @@ import { AgentWorkspace } from "./generated/react/templates/AgentWorkspace.js?v=
 import { ConfigurationConsole } from "./generated/react/templates/ConfigurationConsole.js?v=1";
 import { DriverCardWallet } from "./generated/react/templates/DriverCardWallet.js?v=1";
 import { DriverMobileApp } from "./generated/react/templates/DriverMobileApp.js?v=1";
+import { DocsArtifactDetailTemplate } from "./generated/react/templates/DocsArtifactDetailTemplate.js?v=1";
 import { FleetDashboardSuite } from "./generated/react/templates/FleetDashboardSuite.js?v=1";
 import { FleetManagerDesktop } from "./generated/react/templates/FleetManagerDesktop.js?v=1";
 import { InternalOperationsConsole } from "./generated/react/templates/InternalOperationsConsole.js?v=1";
@@ -14,6 +15,7 @@ export const templateReactComponents = {
   "configuration-console": ConfigurationConsole,
   "driver-card-wallet": DriverCardWallet,
   "driver-mobile-app": DriverMobileApp,
+  "docs-artifact-detail-template": DocsArtifactDetailTemplate,
   "fleet-dashboard-suite": FleetDashboardSuite,
   "fleet-manager-desktop": FleetManagerDesktop,
   "internal-operations-console": InternalOperationsConsole,
@@ -115,11 +117,35 @@ function SettingsWorkspaceIsland({ initialProps }) {
   });
 }
 
+function DocsArtifactDetailTemplateIsland({ initialProps, mountNode }) {
+  const { bodyHtml = "", ...props } = initialProps;
+  const [selectedTabKey, setSelectedTabKey] = React.useState(initialProps.selectedTabKey ?? initialProps.tabs?.[0]?.key ?? "");
+  React.useEffect(() => {
+    document.dispatchEvent(new CustomEvent("docs-react-slot-html-mounted", { bubbles: true }));
+  }, [bodyHtml]);
+  return React.createElement(DocsArtifactDetailTemplate, {
+    ...props,
+    selectedTabKey,
+    body: React.createElement("div", {
+      "data-flowdocs-html-slot": "artifact-detail.body",
+      dangerouslySetInnerHTML: { __html: bodyHtml },
+    }),
+    onSelectedTabChange: (key, event) => {
+      setSelectedTabKey(key);
+      mountNode?.dispatchEvent(new CustomEvent("docs-detail-tab-change", {
+        bubbles: true,
+        detail: { tabId: key, sourceEvent: event?.type },
+      }));
+    },
+  });
+}
+
 export const templateReactIslandWrappers = {
   "agent-workspace": AgentWorkspaceIsland,
   "configuration-console": selectableTemplateIsland(ConfigurationConsole, "selectedModule"),
   "driver-card-wallet": selectableTemplateIsland(DriverCardWallet, "selectedSection"),
   "driver-mobile-app": selectableTemplateIsland(DriverMobileApp, "selectedTab"),
+  "docs-artifact-detail-template": DocsArtifactDetailTemplateIsland,
   "fleet-dashboard-suite": selectableTemplateIsland(FleetDashboardSuite, "selectedDashboard"),
   "fleet-manager-desktop": selectableTemplateIsland(FleetManagerDesktop, "selectedDashboard"),
   "internal-operations-console": selectableTemplateIsland(InternalOperationsConsole, "selectedModule"),

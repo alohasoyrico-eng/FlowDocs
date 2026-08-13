@@ -1,18 +1,14 @@
+import { escapeHtml } from "./utils.js";
+
 export function renderShell({ active = "", collectionIcon, collections, content, current, html, icon, iconFor, label, ui }) {
-  return html`
-    <div class="app-shell">
-      <aside id="docsReactShellSidebar" class="sidebar docs-react-shell-sidebar-mount" data-doc-shell-boundary="react-sidebar" aria-label="${ui("shell.designNavigation")}">
-      </aside>
-      <div class="content-shell density-responsive">${content}</div>
-    </div>
-  `;
+  return content;
 }
 
 export function renderCollectionContent({ artifactCard, collection, collections, collectionMeta, groupCollection, html, label }) {
   const meta = collectionMeta[collection];
   const groups = groupCollection(collections[collection]);
   return html`
-    <section class="page-hero">
+    <section class="docs-page-intro">
       <p class="kicker">${meta.singular}s</p>
       <h1>${label(collection)}</h1>
       <p>${meta.intro}</p>
@@ -36,57 +32,64 @@ export function renderCollectionContent({ artifactCard, collection, collections,
   `;
 }
 
-function escapeAttribute(value) {
-  return String(value ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+function detailMetadataItems({ artifactTypeLabel, collection, componentImplementationStatus, entry }) {
+  const implementationLabel = componentImplementationLabel(collection, entry, componentImplementationStatus);
+  return [
+    { label: artifactTypeLabel(collection), kind: "tag", variant: "metadata", tone: "neutral" },
+    { label: entry.platform, kind: "tag", variant: "metadata", tone: "neutral" },
+    implementationLabel ? { label: implementationLabel, kind: "tag", variant: "metadata", tone: "neutral" } : null,
+    ...(entry.audiences ?? []).map((audience) => ({ label: audience, kind: "tag", variant: "metadata", tone: "neutral" })),
+  ].filter(Boolean);
 }
 
-function detailShellTabsIsland({ entry, tabs, ui }) {
+function docsArtifactDetailTemplateIsland({ artifactTypeLabel, bodyHtml = "", className = "detail-page", collection, componentImplementationStatus, contentClassName = "detail-layout", entry, id, label, referencePageMarker = "", tabs = [], ui }) {
   const props = {
     label: `${entry.title} ${ui("shell.sections")}`,
-    selectedKey: tabs[0]?.id ?? "",
-    variant: "default",
-    className: "detail-tabs detail-tablist",
-    "data-doc-template": "detail-shell",
-    "data-doc-control-bridge": "detail-shell-tabs",
-    "data-component-source": "flow",
-    items: tabs.map((tab, index) => ({
+    artifactType: artifactTypeLabel(collection),
+    title: entry.title,
+    description: entry.summary,
+    density: "md",
+    className: "detail-page",
+    contentClassName: "detail-layout",
+    "data-doc-primitive": "detail-page-shell",
+    "data-detail": `${collection}:${id}`,
+    breadcrumbs: [
+      { id: "home", label: ui("shell.home"), href: "#/home" },
+      { id: collection, label: label(collection), href: `#/${collection}` },
+      { id: entry.id, label: entry.title, current: true },
+    ],
+    metadata: detailMetadataItems({ artifactTypeLabel, collection, componentImplementationStatus, entry }),
+    tabs: tabs.map((tab, index) => ({
       key: tab.id,
       label: tab.label,
       selected: index === 0,
     })),
+    selectedTabKey: tabs[0]?.id ?? "",
+    bodyHtml: bodyHtml || tabs[0]?.body || "",
+    className,
+    contentClassName,
   };
-  return `<span class="docs-react-island docs-detail-tabs-island" data-react-component="detail-shell-tabs" data-component-source="react" data-doc-component="tabs" data-doc-template="detail-shell" data-doc-control-bridge="detail-shell-tabs" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
+  return `<div class="docs-react-island docs-artifact-detail-template-island" data-react-component="docs-artifact-detail-template" data-component-source="react-template" data-doc-template="artifact-detail" data-flowdocs-boundary="docs-artifact-detail-template" data-doc-primitive="detail-page-shell" ${referencePageMarker ? `data-doc-reference-page="${escapeHtml(referencePageMarker)}"` : ""} data-detail="${escapeHtml(`${collection}:${id}`)}" data-react-props="${escapeHtml(JSON.stringify(props))}"></div>`;
 }
 
 export function renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }) {
-  const implementationLabel = componentImplementationLabel(collection, entry, componentImplementationStatus);
-  return html`
-    <article class="detail-page" data-doc-primitive="detail-page-shell" data-detail="${collection}:${id}">
-      <header class="detail-hero">
-        <div class="detail-hero-content">
-          <nav class="docs-breadcrumbs" aria-label="${ui("shell.breadcrumbs")}">
-            <a href="#/home">${ui("shell.home")}</a>
-            <span>/</span>
-            <a href="#/${collection}">${label(collection)}</a>
-            <span>/</span>
-            <strong>${entry.title}</strong>
-          </nav>
-          <h1>${entry.title}</h1>
-          <p class="detail-summary">${entry.summary}</p>
-          <div class="detail-meta-row" aria-label="${ui("shell.artifactMetadata")}">
-            <span class="tag detail-meta-tag" data-variant="metadata" data-tone="neutral">${artifactTypeLabel(collection)}</span>
-            <span class="tag detail-meta-tag" data-variant="platform" data-tone="neutral">${entry.platform}</span>
-            ${implementationLabel ? `<span class="tag detail-meta-tag" data-variant="metadata" data-tone="neutral">${implementationLabel}</span>` : ""}
-            ${entry.audiences.map((audience) => `<span class="tag detail-meta-tag" data-variant="metadata" data-tone="neutral">${audience}</span>`).join("")}
-          </div>
-        </div>
-      </header>
-      <div class="detail-layout">
-        ${detailShellTabsIsland({ entry, tabs, ui })}
-        <section class="tab-panel" id="tabPanel">${tabs[0].body}</section>
-      </div>
-    </article>
-  `;
+  return docsArtifactDetailTemplateIsland({ artifactTypeLabel, collection, componentImplementationStatus, entry, id, label, tabs, ui });
+}
+
+export function renderReferenceDetailContent({ artifactTypeLabel, bodyHtml, collection, entry, id, label, referencePageMarker, ui }) {
+  return docsArtifactDetailTemplateIsland({
+    artifactTypeLabel,
+    bodyHtml,
+    className: `reference-doc ${collection === "foundations" ? "foundation-deep-dive" : "primitive-deep-dive"}`,
+    collection,
+    contentClassName: "reference-main",
+    entry,
+    id,
+    label,
+    referencePageMarker,
+    tabs: [],
+    ui,
+  });
 }
 
 function componentImplementationLabel(collection, entry, componentImplementationStatus) {

@@ -1,9 +1,9 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, docsLinkCard, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=5";
-import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=52";
-import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
-import { focusedPatternDesignPanels } from "./pattern-focused-design.js?v=25";
-import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=2";
-import { patternMielTabs } from "./pattern-miel-tabs.js?v=7";
+import { artifactContract, artifactDetailTable, artifactDocumentationSection, artifactFoundationTracePanel, docsLinkCard, componentAgentSpec, componentCopy, examplePanel, findComponent, findPattern, foundationExample, foundationRoles, html, iconFor, interpolateList, journeyCopy, primitiveExample, referenceCopy, referenceTemplate, slug, templateBlueprintFallbacks, templateBlueprints, threeTabs, ui, visualPanel, listPanel, accessibilityPanel, engineeringPanel, specPanel, guidelinesPanel, agentPanel } from "./detail-tabs-core.js?v=10";
+import { hasPatternSource, patternContractTabs } from "./pattern-contract-tabs.js?v=59";
+import { patternBuildGatePanel } from "./pattern-build-gates.js?v=5";
+import { focusedPatternDesignPanels } from "./pattern-focused-design.js?v=26";
+import { shellPatternOverviewDemo } from "./pattern-shell-react-demos.js?v=3";
+import { patternMielTabs } from "./pattern-miel-tabs.js?v=8";
 import { componentDemo } from "./component-demo.js?v=61";
 
 export function patternTabs(entry) {
@@ -40,6 +40,15 @@ export function patternExamplePanel(entry) {
   return examplePanel(entry);
 }
 
+function patternSection(title, body, className = "wide") {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className,
+    source: "pattern-tabs",
+  });
+}
+
 function sidebarContractPanel() {
   const rows = [
     ["groups", "SidebarGroup[]", "yes", "Parent collections with icon, label, optional Badge count, and children."],
@@ -49,7 +58,7 @@ function sidebarContractPanel() {
     ["footer", "SidebarFooter", "optional", "Separate utility region for account, help, version, workspace, or environment."],
     ["responsiveMode", "persistent | drawer", "yes", "Breakpoint behavior coordinated with Topbar menu access."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>${ui("contract.pattern")}</h2>${artifactDetailTable({ columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")], rows })}</section>`;
+  return patternSection(ui("contract.pattern"), artifactDetailTable({ columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")], rows }));
 }
 
 function topbarContractPanel() {
@@ -63,7 +72,7 @@ function topbarContractPanel() {
     ["account", "AvatarMenuSlot", "optional", "Avatar component plus Menu for settings, workspace, profile, sign out."],
     ["responsiveMode", "full | compact | mobile", "yes", "Defines which slots stay visible, compress, or move to sidebar/drawer."]
   ];
-  return html`<section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><h2>${ui("contract.pattern")}</h2>${artifactDetailTable({ columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")], rows })}</section>`;
+  return patternSection(ui("contract.pattern"), artifactDetailTable({ columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")], rows }));
 }
 
 export function journeyPanel(entry) {
@@ -93,15 +102,12 @@ export function journeyPanel(entry) {
 export function screensPanel(entry) {
   const contract = artifactContract(entry);
   const componentsUsed = contract?.componentDependencies ?? entry.componentsUsed ?? [];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("reference.screensComponents")}</h2>
+  return patternSection(ui("reference.screensComponents"), html`
       <p>These are the expected building blocks for ${entry.title}. Each one should link to its component contract before implementation.</p>
       <div class="relation-grid">
         ${componentsUsed.map((name) => docsLinkCard("components", slug(name), "widgets", name, findComponent(name)?.summary ?? "Component contract.")).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 export function metricsPanel(entry) {
@@ -122,14 +128,10 @@ export function researchPanel(entry) {
 
 export function patternStandardPanel(entry) {
   const contract = artifactContract(entry);
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide reference-section" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">${ui("reference.patternStandard")}</span>
-      <h2>${entry.title} playbook</h2>
+  return patternSection(`${entry.title} playbook`, html`
       <p>${entry.summary}</p>
       <p>${contract?.purpose ?? referenceCopy.pattern?.fallbackPurpose}</p>
-    </section>
-  `;
+  `, "wide reference-section");
 }
 
 export function patternDecisionTreePanel(entry) {
@@ -137,14 +139,11 @@ export function patternDecisionTreePanel(entry) {
   const decisions = contract?.decisionTree?.map((item, index) => [`Decision ${index + 1}`, item]) ?? [
     ...(referenceCopy.pattern?.fallbackDecisions ?? []),
   ].map((row) => row.map((value) => referenceTemplate(value, entry)));
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("reference.decisionTree")}</h2>
+  return patternSection(ui("reference.decisionTree"), html`
       <div class="architecture-chain">
         ${decisions.map(([name, copy], index) => patternDocCard(name, copy, index)).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function patternDocCard(title, detail, index) {
@@ -167,13 +166,10 @@ export function patternContractPanel(entry) {
         ["successMetrics", "Metric[]", "yes", contract.successMetrics?.join(" · ") ?? ""],
       ]
     : (referenceCopy.pattern?.fallbackContractRows ?? []).map((row) => row.map((value) => referenceTemplate(value, entry, { componentsUsed: (entry.componentsUsed ?? []).join(", ") })));
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>${ui("contract.pattern")}</h2>
+  return patternSection(ui("contract.pattern"), html`
       ${artifactDetailTable({
         columns: [ui("table.field"), ui("table.type"), ui("table.required"), ui("table.notes")],
         rows,
       })}
-    </section>
-  `;
+  `);
 }

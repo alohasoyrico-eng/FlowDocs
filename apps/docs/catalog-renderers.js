@@ -1,4 +1,5 @@
 import { componentDemo } from "./component-demo.js?v=61";
+import { artifactMetadataBar } from "./artifact-metadata-bar.js?v=2";
 
 let deps = {};
 
@@ -18,7 +19,7 @@ export function docsLinkCard(collection, id, symbol, title, summary, meta = "") 
   const layerClass = collection === "stack" ? "stack-link" : collection.slice(0, -1);
   const metaItems = (Array.isArray(meta) ? meta : [meta]).filter(Boolean);
   return html`
-    <a class="docs-link-card ${layerClass}" data-doc-primitive="docs-link-card" href="${href}">
+    <a class="docs-artifact-link ${layerClass}" data-doc-boundary="artifact-link-card" href="${href}">
       ${componentDemo("card", {
         title,
         detail: summary,
@@ -28,9 +29,7 @@ export function docsLinkCard(collection, id, symbol, title, summary, meta = "") 
         composition: "standard",
         fullWidth: true,
       })}
-      ${metaItems.length
-        ? `<span class="card-meta-row" aria-label="Card metadata">${metaItems.map((item) => componentDemo("tag", { label: item, variant: "metadata", tone: "neutral" })).join("")}</span>`
-        : ""}
+      ${artifactMetadataBar(metaItems, { ariaLabel: "Card metadata" })}
     </a>
   `;
 }

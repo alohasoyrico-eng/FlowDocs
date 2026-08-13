@@ -7,6 +7,7 @@ function summarizeInventory(inventory) {
   const foundationPrimitiveReadiness = inventory.foundationPrimitiveDetailSurfaceReadiness ?? {};
   const flowDocsV2Pages = inventory.flowDocsV2Pages ?? {};
   const visualDebt = inventory.docsVisualDebt ?? [];
+  const templateBoundaryDebt = inventory.docsTemplateBoundaryDebt ?? {};
   return {
     demoQuality: {
       foundations: demoQuality.foundations ?? 0,
@@ -53,6 +54,21 @@ function summarizeInventory(inventory) {
       total: entry.total,
       files: entry.files,
     })),
+    docsTemplateBoundaryDebt: {
+      mode: templateBoundaryDebt.mode ?? "unknown",
+      boundaries: (templateBoundaryDebt.boundaries ?? []).map((entry) => ({
+        id: entry.id,
+        owner: entry.owner,
+        total: entry.total,
+        files: entry.files,
+      })),
+      strictFindings: (templateBoundaryDebt.strictFindings ?? []).map((entry) => ({
+        id: entry.id,
+        owner: entry.owner,
+        total: entry.total,
+        files: entry.files,
+      })),
+    },
   };
 }
 

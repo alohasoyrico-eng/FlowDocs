@@ -1,0 +1,1529 @@
+{
+  "schema": "flow-docs-template-cascade-crosswalk.v1",
+  "scope": "FlowDocs documentation-page templates, not product templates",
+  "date": "2026-08-13",
+  "baseline": {
+    "flowDocsCommit": "e3ac668",
+    "flowCommit": "3bf65830",
+    "flowDocsCounts": {
+      "foundations": 11,
+      "primitives": 24,
+      "components": 60,
+      "patterns": 63,
+      "productTemplates": 9
+    },
+    "flowDocumentationTemplatesFound": 2,
+    "flowDocumentationTemplatesImplemented": [
+      "DocsShellTemplate",
+      "DocsArtifactDetailTemplate"
+    ],
+    "finding": "Flow now exports DocsShellTemplate and DocsArtifactDetailTemplate. FlowDocs consumes the common detail shell through Flow, but specialized documentation page templates such as DocsHomeTemplate, ReferenceDetailTemplate, ComponentDetailTemplate, PatternDetailTemplate, and TemplateDetailTemplate still need to move from local renderers to Flow-owned contracts."
+  },
+  "migrationGovernance": {
+    "iteration": 35,
+    "purpose": "Prevent the docs-template migration from creating new arbitrary variants, duplicate wrappers, or another parallel documentation system.",
+    "decisionOrder": [
+      {
+        "step": 1,
+        "rule": "Reuse existing Flow artifact",
+        "passWhen": "A foundation, primitive, component, pattern, or product template already owns the semantics, state, accessibility, and responsive behavior."
+      },
+      {
+        "step": 2,
+        "rule": "Use docs-template private slot",
+        "passWhen": "The behavior is documentation-specific page composition and does not need to be public outside documentation templates."
+      },
+      {
+        "step": 3,
+        "rule": "Promote to documentation pattern",
+        "passWhen": "The behavior repeats across at least three documentation templates and coordinates multiple Flow artifacts, interaction state, navigation, or QA boundaries."
+      },
+      {
+        "step": 4,
+        "rule": "Promote to component",
+        "passWhen": "The behavior is a bounded UI object with independent semantics, accessibility, props, states, tests, and use outside one template slot."
+      },
+      {
+        "step": 5,
+        "rule": "Create a new variant or composition",
+        "passWhen": "An existing public artifact needs a stable reusable semantic mode that cannot be expressed through current props, state, tone, density, composition, or slots."
+      },
+      {
+        "step": 6,
+        "rule": "Reject local wrapper",
+        "passWhen": "The proposed structure is only visual decoration, layout convenience, or a docs-only alias for an existing Flow artifact."
+      }
+    ],
+    "newVariantCriteria": [
+      "The variant changes public artifact semantics, not only visual treatment.",
+      "The variant changes anatomy, accessibility role, state precedence, interaction, or responsive behavior.",
+      "The variant is useful in product surfaces outside FlowDocs.",
+      "The current public props cannot express it without ambiguity or misuse.",
+      "The variant can be documented in specs with states, tokens, rejectIf, examples, and tests.",
+      "The variant name describes a durable job, not a page or visual nickname."
+    ],
+    "newVariantRejectIf": [
+      "The request is only a docs card, docs panel, hero tint, grid, spacing, or background treatment.",
+      "The behavior can be expressed with Card variant/composition/state, Surface role/tone/elevation, Tag/Badge tone, Table/List semantics, or a docs-template slot.",
+      "The use appears only in a single documentation page family.",
+      "The proposed name is docs-specific, decorative, or implementation-specific."
+    ],
+    "ownershipDefinitions": {
+      "foundation": "A cross-system decision layer such as Voice, Frame, Depth, State, Tone, Growth, Symbol, Iconography, Energy, Momentum, or Accessibility.",
+      "primitive": "An implementation-facing semantic contract that prevents raw CSS or raw values, such as Surface, Typography, Spacing, Density, Breakpoints, Focus, Color, or Motion timing.",
+      "component": "A bounded reusable UI object with public props, anatomy, states, accessibility, and tests.",
+      "pattern": "A reusable interaction or composition behavior that coordinates multiple components/primitives and owns state or workflow semantics.",
+      "productTemplate": "A complete product surface template such as FleetDashboardSuite or DriverMobileApp.",
+      "documentationTemplate": "A Flow-owned page template used by FlowDocs to render documentation content without local page composition.",
+      "templatePrivateSlot": "A named slot inside a documentation template used to preserve docs-specific content structures without creating a public component or pattern."
+    },
+    "definitionOfDone": [
+      "Every docs page family maps to a Flow-owned documentation template.",
+      "Every universal block maps to an existing Flow artifact, new docs pattern/component candidate, or template private slot.",
+      "No new foundation or primitive is added without evidence that existing layers cannot own the behavior.",
+      "No new component variant is added without satisfying newVariantCriteria.",
+      "FlowDocs keeps content, routing, localization, and data adapters; Flow owns page structure and reusable UI composition.",
+      "Local wrappers such as docs-section-surface, docs-link-card, local demo frames, and local matrix grids have a migration owner before implementation starts.",
+      "Audits fail when a migrated page family reintroduces local HTML wrappers for a role owned by Flow.",
+      "QA covers desktop, mobile, dark mode, density, focus, keyboard navigation, and visual parity for each migrated documentation template."
+    ],
+    "phaseGate": {
+      "beforeImplementation": [
+        "This crosswalk is valid JSON and versioned.",
+        "Each universal block has a recommended owner.",
+        "Each new public candidate has a reason and layer.",
+        "Each private slot has a template owner."
+      ],
+      "beforeFlowDocsMigration": [
+        "Documentation templates exist in Flow.",
+        "Supporting public candidates are implemented or explicitly deferred.",
+        "FlowDocs adapters can pass content models without rendering local structural HTML.",
+        "Audit rules exist for local wrapper regression."
+      ]
+    }
+  },
+  "existingFlowCoverage": {
+    "foundations": {
+      "newRequired": [],
+      "reused": [
+        "energy",
+        "voice",
+        "frame",
+        "depth",
+        "momentum",
+        "state",
+        "tone",
+        "growth",
+        "symbol",
+        "iconography",
+        "accessibility"
+      ],
+      "assessment": "No new foundation is required for documentation templates. Documentation is covered by existing decision layers: Voice for copy, Frame for layout rhythm, Depth for hierarchy, Growth for escalation, State/Tone for feedback, and Accessibility for navigation and readable contracts."
+    },
+    "primitives": {
+      "newRequired": [],
+      "reused": [
+        "surface",
+        "typography",
+        "spacing",
+        "radius",
+        "elevation",
+        "color",
+        "density",
+        "focus",
+        "breakpoints",
+        "loading",
+        "disabled",
+        "message",
+        "measurement",
+        "research",
+        "iconography"
+      ],
+      "candidatesToWatch": [
+        {
+          "id": "documentation-content-model",
+          "decision": "do-not-add-yet",
+          "reason": "This should be a template data contract first. It should become a primitive only if documentation content structure must be shared outside docs templates."
+        }
+      ],
+      "assessment": "Current primitives cover the implementation needs. Missing behavior should resolve as components or patterns, not new primitive tokens."
+    },
+    "components": {
+      "reused": [
+        "breadcrumbs",
+        "tabs",
+        "tag",
+        "badge",
+        "button",
+        "icon-button",
+        "card",
+        "table",
+        "list",
+        "chip",
+        "tooltip",
+        "empty-state",
+        "error-panel",
+        "skeleton",
+        "progress-indicator",
+        "spinner",
+        "inline-validation",
+        "accordion"
+      ],
+      "newCandidates": [
+        {
+          "id": "code-block",
+          "priority": "high",
+          "neededBy": [
+            "ComponentDetailTemplate",
+            "PatternDetailTemplate",
+            "TemplateDetailTemplate",
+            "ReferenceDetailTemplate"
+          ],
+          "currentLocalEvidence": [
+            "apps/docs/reference-layout.js: referenceCodeBlock",
+            "apps/docs/gold-component-core.js: pre JSON agent spec",
+            "apps/docs/gold-icon-button-docs.js: playground markup pre",
+            "apps/docs/primitive-tabs.js: token code tags"
+          ],
+          "reason": "Docs need governed code/snippet rendering, copy affordance, line wrapping, contrast, density, language labels, and accessible naming. Today this is raw pre/code markup in local renderers.",
+          "preferredLayer": "component"
+        },
+        {
+          "id": "copy-button",
+          "priority": "medium",
+          "neededBy": [
+            "CodeBlock",
+            "ComponentDetailTemplate",
+            "TemplateDetailTemplate"
+          ],
+          "currentLocalEvidence": [
+            "No governed clipboard component found in Flow component catalog"
+          ],
+          "reason": "If CodeBlock exposes copy, the action should use a governed component or Button/IconButton variant rather than local DOM handlers.",
+          "preferredLayer": "component-or-button-pattern"
+        }
+      ]
+    },
+    "patterns": {
+      "reused": [
+        "topbar",
+        "sidebar",
+        "search",
+        "section-header",
+        "toolbar",
+        "command-palette",
+        "status-feedback-view",
+        "virtual-data-table",
+        "chart-wrapper",
+        "advanced-filters",
+        "filter-chip-group",
+        "timeline"
+      ],
+      "newCandidates": [
+        {
+          "id": "documentation-page-shell",
+          "priority": "high",
+          "neededBy": [
+            "DocsShellTemplate"
+          ],
+          "currentLocalEvidence": [
+            "apps/docs/docs-layout.js: renderShell",
+            "apps/docs/docs-shell-react.js: renderDocsTopbar/renderDocsSidebar",
+            "apps/docs/index.html: static topbar mount and sidebar mount"
+          ],
+          "reason": "The docs shell coordinates Topbar, Sidebar, responsive navigation, route state, search, theme, and content region. Current implementation is split between HTML shell and React islands.",
+          "preferredLayer": "pattern"
+        },
+        {
+          "id": "documentation-hero",
+          "priority": "medium",
+          "neededBy": [
+            "DocsHomeTemplate",
+            "DocsCollectionTemplate",
+            "ReferenceDetailTemplate",
+            "ComponentDetailTemplate",
+            "PatternDetailTemplate",
+            "TemplateDetailTemplate"
+          ],
+          "currentLocalEvidence": [
+            "apps/docs/home-stack-renderers.js: hero",
+            "apps/docs/docs-layout.js: page-hero/detail-hero",
+            "apps/docs/reference-layout.js: referenceHeader"
+          ],
+          "reason": "Hero/header composition repeats across docs pages with breadcrumbs, metadata, summary, status tags, and actions. Existing SectionHeader may cover part of this, but not the full docs route context.",
+          "preferredLayer": "pattern-or-template-private-slot"
+        },
+        {
+          "id": "documentation-section",
+          "priority": "high",
+          "neededBy": [
+            "allDocumentationTemplates"
+          ],
+          "currentLocalEvidence": [
+            "apps/docs/reference-layout.js: referenceSection",
+            "apps/docs/foundation-tabs.js: docs-section-surface sections",
+            "apps/docs/primitive-tabs.js: docs-section-surface sections",
+            "apps/docs/pattern-tabs.js: docs-section-surface sections",
+            "apps/docs/template-tabs.js: docs-section-surface sections",
+            "apps/docs/gold-component-core.js: componentDetailSectionAttrs"
+          ],
+          "reason": "Docs repeatedly create section surfaces with local class/data conventions. This should be a governed section pattern or private docs-template primitive over Surface + SectionHeader.",
+          "preferredLayer": "pattern"
+        },
+        {
+          "id": "demo-preview-frame",
+          "priority": "high",
+          "neededBy": [
+            "ComponentDetailTemplate",
+            "PatternDetailTemplate",
+            "TemplateDetailTemplate",
+            "PrimitiveDetailTemplate"
+          ],
+          "currentLocalEvidence": [
+            "apps/docs/gold-component-core.js: demoCell/componentDetailDemoGrid",
+            "apps/docs/template-react-demos.js: docs-template-demo island wrapper",
+            "apps/docs/pattern-mobile-demos.js: pattern-mobile-demo wrappers",
+            "apps/docs/pattern-desktop-demos.js and pattern-desktop-react-demos.js"
+          ],
+          "reason": "Demos need a stable governed viewport/frame contract for density, responsive sizing, loading/error states, and visual QA. Current wrappers are local to docs.",
+          "preferredLayer": "pattern"
+        },
+        {
+          "id": "on-this-page-nav",
+          "priority": "medium",
+          "neededBy": [
+            "ReferenceDetailTemplate",
+            "ComponentDetailTemplate",
+            "PatternDetailTemplate",
+            "TemplateDetailTemplate"
+          ],
+          "currentLocalEvidence": [
+            "apps/docs/reference-layout.js: referencePeerNav",
+            "apps/docs/docs-layout.js: detail tabs route panel",
+            "No reusable Flow pattern found for anchor/section navigation"
+          ],
+          "reason": "Long documentation pages need section navigation independent from global Sidebar and Tabs. Breadcrumbs and Sidebar do not fully cover page-local anchors.",
+          "preferredLayer": "pattern"
+        },
+        {
+          "id": "artifact-metadata-bar",
+          "priority": "medium",
+          "neededBy": [
+            "DocsCollectionTemplate",
+            "ReferenceDetailTemplate",
+            "ComponentDetailTemplate",
+            "PatternDetailTemplate",
+            "TemplateDetailTemplate"
+          ],
+          "currentLocalEvidence": [
+            "apps/docs/docs-layout.js: detail-meta-row",
+            "apps/docs/catalog-renderers.js: card-meta-row",
+            "apps/docs/reference-layout.js: reference-badge/reference-subtitle"
+          ],
+          "reason": "Artifact metadata repeats as tags/badges across cards and detail pages. It can reuse Tag/Badge but needs one governed composition contract.",
+          "preferredLayer": "pattern-or-template-private-slot"
+        }
+      ]
+    }
+  },
+  "documentationTemplatesRequired": [
+    {
+      "id": "DocsShellTemplate",
+      "existsInFlow": true,
+      "currentFlowDocsRenderers": [
+        "apps/docs/docs-shell-react.js: renderDocsShell consumes generated/react/templates/DocsShellTemplate",
+        "apps/docs/docs-layout.js: renderShell now delegates content to DocsShellTemplate",
+        "apps/docs/index.html: single app mount and module entry"
+      ],
+      "preserveAsContentSource": [
+        "route model",
+        "catalog counts",
+        "localized shell labels",
+        "navigation groups"
+      ],
+      "flowCascade": {
+        "foundations": [
+          "frame",
+          "depth",
+          "state",
+          "accessibility",
+          "voice"
+        ],
+        "primitives": [
+          "surface",
+          "spacing",
+          "breakpoints",
+          "density",
+          "focus",
+          "color",
+          "typography"
+        ],
+        "components": [
+          "button",
+          "icon-button",
+          "input",
+          "badge",
+          "avatar"
+        ],
+        "patterns": [
+          "topbar",
+          "sidebar",
+          "search",
+          "command-palette",
+          "documentation-page-shell"
+        ],
+        "newCandidates": [
+          "documentation-page-shell"
+        ]
+      },
+      "migrationRisk": "high",
+      "reason": "Shell owns responsive navigation, theme/search state, and content layout. Existing shell is split between static HTML, local layout markup, and React islands."
+    },
+    {
+      "id": "DocsHomeTemplate",
+      "existsInFlow": false,
+      "currentFlowDocsRenderers": [
+        "apps/docs/home-stack-renderers.js: renderHomeContent"
+      ],
+      "preserveAsContentSource": [
+        "homeContent.hero",
+        "homeContent.coverage",
+        "homeContent.documentationStatus",
+        "homeContent.visualMigration",
+        "homeContent.architecture",
+        "homeContent.fastPaths"
+      ],
+      "flowCascade": {
+        "foundations": [
+          "voice",
+          "frame",
+          "depth",
+          "growth",
+          "accessibility"
+        ],
+        "primitives": [
+          "surface",
+          "typography",
+          "spacing",
+          "breakpoints",
+          "density",
+          "iconography"
+        ],
+        "components": [
+          "button",
+          "card",
+          "badge",
+          "tag",
+          "progress-indicator"
+        ],
+        "patterns": [
+          "section-header",
+          "documentation-hero",
+          "documentation-section",
+          "artifact-metadata-bar"
+        ],
+        "newCandidates": [
+          "documentation-hero",
+          "documentation-section",
+          "artifact-metadata-bar"
+        ]
+      },
+      "migrationRisk": "medium",
+      "reason": "Home content is mostly structured and preservable, but current hero/cards/grids are local docs composition."
+    },
+    {
+      "id": "DocsCollectionTemplate",
+      "existsInFlow": false,
+      "currentFlowDocsRenderers": [
+        "apps/docs/docs-layout.js: renderCollectionContent",
+        "apps/docs/catalog-renderers.js: artifactCard/docsLinkCard/groupCollection"
+      ],
+      "preserveAsContentSource": [
+        "catalog entries",
+        "collectionMeta",
+        "grouping rules",
+        "artifact metadata"
+      ],
+      "flowCascade": {
+        "foundations": [
+          "voice",
+          "frame",
+          "depth",
+          "state",
+          "accessibility"
+        ],
+        "primitives": [
+          "surface",
+          "spacing",
+          "breakpoints",
+          "density",
+          "focus"
+        ],
+        "components": [
+          "card",
+          "tag",
+          "badge",
+          "breadcrumbs",
+          "empty-state",
+          "skeleton"
+        ],
+        "patterns": [
+          "section-header",
+          "search",
+          "toolbar",
+          "artifact-metadata-bar",
+          "documentation-section"
+        ],
+        "newCandidates": [
+          "artifact-metadata-bar",
+          "documentation-section"
+        ]
+      },
+      "migrationRisk": "medium",
+      "reason": "Collection cards already use some Flow demos for tags, but card/grid/page hierarchy is local."
+    },
+    {
+      "id": "ReferenceDetailTemplate",
+      "covers": [
+        "FoundationDetailTemplate",
+        "PrimitiveDetailTemplate"
+      ],
+      "existsInFlow": false,
+      "currentFlowDocsRenderers": [
+        "apps/docs/reference-layout.js",
+        "apps/docs/foundation-tabs.js",
+        "apps/docs/foundation-reference.js",
+        "apps/docs/primitive-tabs.js",
+        "apps/docs/primitive-reference.js"
+      ],
+      "preserveAsContentSource": [
+        "foundation reference copy",
+        "primitive reference copy",
+        "token chains",
+        "roles",
+        "responsibilities",
+        "API/spec rows"
+      ],
+      "flowCascade": {
+        "foundations": [
+          "voice",
+          "frame",
+          "depth",
+          "state",
+          "symbol",
+          "accessibility"
+        ],
+        "primitives": [
+          "surface",
+          "typography",
+          "spacing",
+          "breakpoints",
+          "density",
+          "message",
+          "research",
+          "measurement"
+        ],
+        "components": [
+          "breadcrumbs",
+          "tabs",
+          "table",
+          "list",
+          "badge",
+          "tag",
+          "card",
+          "code-block"
+        ],
+        "patterns": [
+          "section-header",
+          "documentation-hero",
+          "documentation-section",
+          "on-this-page-nav",
+          "demo-preview-frame"
+        ],
+        "newCandidates": [
+          "code-block",
+          "documentation-hero",
+          "documentation-section",
+          "on-this-page-nav",
+          "demo-preview-frame"
+        ]
+      },
+      "migrationRisk": "high",
+      "reason": "Foundation/primitive pages contain the densest local reference helpers and raw code/token grids. The content is preservable, but the structure should move into Flow templates."
+    },
+    {
+      "id": "ComponentDetailTemplate",
+      "existsInFlow": "partial-via-DocsArtifactDetailTemplate",
+      "currentFlowDocsRenderers": [
+        "apps/docs/docs-layout.js: renderDetailContent consumes DocsArtifactDetailTemplate island",
+        "apps/docs/detail-tabs.js",
+        "apps/docs/gold-component-core.js",
+        "apps/docs/gold-*-docs.js",
+        "apps/docs/component-demo.js",
+        "apps/docs/component-detail-renderer-governance.json"
+      ],
+      "preserveAsContentSource": [
+        "component specs",
+        "component copy",
+        "demo data",
+        "governed custom renderer exceptions",
+        "API props",
+        "foundation traces",
+        "tests and guidelines"
+      ],
+      "flowCascade": {
+        "foundations": [
+          "voice",
+          "frame",
+          "depth",
+          "state",
+          "tone",
+          "growth",
+          "accessibility"
+        ],
+        "primitives": [
+          "surface",
+          "typography",
+          "spacing",
+          "density",
+          "focus",
+          "breakpoints",
+          "message"
+        ],
+        "components": [
+          "breadcrumbs",
+          "tabs",
+          "table",
+          "list",
+          "tag",
+          "badge",
+          "card",
+          "accordion",
+          "code-block",
+          "copy-button"
+        ],
+        "patterns": [
+          "section-header",
+          "documentation-section",
+          "artifact-metadata-bar",
+          "demo-preview-frame",
+          "on-this-page-nav",
+          "status-feedback-view"
+        ],
+        "newCandidates": [
+          "code-block",
+          "copy-button",
+          "documentation-section",
+          "artifact-metadata-bar",
+          "demo-preview-frame",
+          "on-this-page-nav"
+        ]
+      },
+      "migrationRisk": "very-high",
+      "reason": "Component detail is the largest duplicated surface. It contains shared sections plus component-specific exceptions. A Flow template must support governed slots before removing local renderers."
+    },
+    {
+      "id": "PatternDetailTemplate",
+      "existsInFlow": "partial-via-DocsArtifactDetailTemplate",
+      "currentFlowDocsRenderers": [
+        "apps/docs/pattern-tabs.js",
+        "apps/docs/pattern-*-demos.js",
+        "apps/docs/pattern-react-*-islands.js",
+        "apps/docs/pattern-contract-tabs.js",
+        "apps/docs/pattern-miel-tabs.js"
+      ],
+      "preserveAsContentSource": [
+        "pattern specs",
+        "pattern copy",
+        "pattern demos",
+        "contract rows",
+        "journeys",
+        "failure modes",
+        "research and metrics"
+      ],
+      "flowCascade": {
+        "foundations": [
+          "voice",
+          "frame",
+          "depth",
+          "state",
+          "tone",
+          "growth",
+          "accessibility"
+        ],
+        "primitives": [
+          "surface",
+          "typography",
+          "spacing",
+          "density",
+          "focus",
+          "breakpoints",
+          "message"
+        ],
+        "components": [
+          "breadcrumbs",
+          "tabs",
+          "table",
+          "list",
+          "tag",
+          "badge",
+          "code-block"
+        ],
+        "patterns": [
+          "section-header",
+          "documentation-section",
+          "artifact-metadata-bar",
+          "demo-preview-frame",
+          "on-this-page-nav",
+          "status-feedback-view"
+        ],
+        "newCandidates": [
+          "code-block",
+          "documentation-section",
+          "artifact-metadata-bar",
+          "demo-preview-frame",
+          "on-this-page-nav"
+        ]
+      },
+      "migrationRisk": "very-high",
+      "reason": "Pattern pages mix React package demos, local HTML demos, and custom interactions. The template must provide strict demo slot rules and reject local pattern substitutes."
+    },
+    {
+      "id": "TemplateDetailTemplate",
+      "existsInFlow": "partial-via-DocsArtifactDetailTemplate",
+      "currentFlowDocsRenderers": [
+        "apps/docs/template-tabs.js",
+        "apps/docs/template-react-demos.js",
+        "apps/docs/template-react-islands.js",
+        "apps/docs/template-desktop-demos.js",
+        "apps/docs/template-desktop-interactions.js"
+      ],
+      "preserveAsContentSource": [
+        "template blueprint content",
+        "product template preview props",
+        "state matrix",
+        "screen system",
+        "IA/navigation/data panels"
+      ],
+      "flowCascade": {
+        "foundations": [
+          "voice",
+          "frame",
+          "depth",
+          "state",
+          "tone",
+          "growth",
+          "accessibility"
+        ],
+        "primitives": [
+          "surface",
+          "typography",
+          "spacing",
+          "density",
+          "focus",
+          "breakpoints"
+        ],
+        "components": [
+          "breadcrumbs",
+          "tabs",
+          "table",
+          "list",
+          "tag",
+          "badge",
+          "card",
+          "code-block"
+        ],
+        "patterns": [
+          "section-header",
+          "documentation-section",
+          "artifact-metadata-bar",
+          "demo-preview-frame",
+          "on-this-page-nav"
+        ],
+        "productTemplatesConsumed": [
+          "driver-mobile-app",
+          "fleet-manager-desktop",
+          "driver-card-wallet",
+          "routes-and-stations",
+          "fleet-dashboard-suite",
+          "configuration-console",
+          "agent-workspace",
+          "internal-operations-console",
+          "settings-workspace"
+        ],
+        "newCandidates": [
+          "code-block",
+          "documentation-section",
+          "artifact-metadata-bar",
+          "demo-preview-frame",
+          "on-this-page-nav"
+        ]
+      },
+      "migrationRisk": "high",
+      "reason": "This page can consume real product templates, but the docs detail wrapper, panels, state matrix, and preview frame are still local."
+    }
+  ],
+  "universalBlocksInventory": {
+    "definition": "Local FlowDocs structures that behave like reusable building blocks across documentation pages. These should be mapped to existing Flow artifacts first, then to documentation templates/patterns only when no existing Flow contract owns the behavior.",
+    "sourceEvidence": {
+      "filesScanned": 209,
+      "highFrequencySignals": [
+        {
+          "selectorOrHelper": "docs-section-surface",
+          "count": 155
+        },
+        {
+          "selectorOrHelper": "reference-doc",
+          "count": 146
+        },
+        {
+          "selectorOrHelper": "detail-page",
+          "count": 142
+        },
+        {
+          "selectorOrHelper": "surface",
+          "count": 141
+        },
+        {
+          "selectorOrHelper": "detail-section-surface",
+          "count": 127
+        },
+        {
+          "selectorOrHelper": "button-demo-grid",
+          "count": 36
+        },
+        {
+          "selectorOrHelper": "viewport-doc-grid",
+          "count": 33
+        },
+        {
+          "selectorOrHelper": "pattern-utility-panel",
+          "count": 30
+        },
+        {
+          "selectorOrHelper": "voice-type-sample",
+          "count": 26
+        },
+        {
+          "selectorOrHelper": "docs-package-demo",
+          "count": 24
+        },
+        {
+          "selectorOrHelper": "detail-tablist",
+          "count": 23
+        },
+        {
+          "selectorOrHelper": "responsive-actions-demo",
+          "count": 22
+        },
+        {
+          "selectorOrHelper": "playground-layout",
+          "count": 16
+        },
+        {
+          "selectorOrHelper": "state-behavior-grid",
+          "count": 15
+        }
+      ]
+    },
+    "blocks": [
+      {
+        "id": "docs-shell-layout",
+        "currentExamples": [
+          "app-shell",
+          "content-shell",
+          "docs-react-shell-sidebar-mount",
+          "docs-react-shell-topbar-mount",
+          "docs-grid-overlay"
+        ],
+        "currentFiles": [
+          "apps/docs/docs-layout.js",
+          "apps/docs/docs-shell-react.js",
+          "apps/docs/index.html",
+          "apps/docs/styles/01-shell-01.css",
+          "apps/docs/styles/01-shell-02.css",
+          "apps/docs/styles/01-shell-react.css"
+        ],
+        "existingFlowArtifacts": [
+          "Topbar pattern",
+          "Sidebar pattern",
+          "Search pattern",
+          "Command Palette pattern",
+          "Surface primitive"
+        ],
+        "recommendedOwner": "DocsShellTemplate + documentation-page-shell pattern",
+        "migrationDecision": "Promote. Shell layout must stop being static docs HTML plus islands."
+      },
+      {
+        "id": "page-hero-and-detail-header",
+        "currentExamples": [
+          "hero",
+          "page-hero",
+          "detail-hero",
+          "reference-header",
+          "reference-title-row",
+          "kicker",
+          "lede",
+          "detail-summary"
+        ],
+        "currentFiles": [
+          "apps/docs/home-stack-renderers.js",
+          "apps/docs/docs-layout.js",
+          "apps/docs/reference-layout.js",
+          "apps/docs/styles/01-shell-hero.css",
+          "apps/docs/styles/02-doc-layout.css",
+          "apps/docs/styles/03a-reference-core-01.css"
+        ],
+        "existingFlowArtifacts": [
+          "SectionHeader pattern",
+          "Breadcrumbs component",
+          "Tag component",
+          "Badge component",
+          "Surface primitive"
+        ],
+        "recommendedOwner": "documentation-hero pattern, used by all docs templates",
+        "migrationDecision": "Promote. Existing SectionHeader may be reused internally but does not own route breadcrumbs, metadata, hero actions, and visual treatment together."
+      },
+      {
+        "id": "section-surface",
+        "currentExamples": [
+          "docs-section-surface",
+          "detail-section-surface",
+          "foundation-primitive-detail-surface",
+          "reference-section-block",
+          "pattern-mobile-panel",
+          "pattern-desktop-panel",
+          "template-desktop-panel",
+          "pattern-utility-panel"
+        ],
+        "currentFiles": [
+          "apps/docs/detail-tabs-core.js",
+          "apps/docs/reference-layout.js",
+          "apps/docs/foundation-tabs.js",
+          "apps/docs/primitive-tabs.js",
+          "apps/docs/pattern-tabs.js",
+          "apps/docs/template-tabs.js",
+          "apps/docs/pattern-*-demos.js"
+        ],
+        "existingFlowArtifacts": [
+          "Surface primitive",
+          "SectionHeader pattern"
+        ],
+        "recommendedOwner": "documentation-section pattern",
+        "migrationDecision": "Promote. It is the most repeated local wrapper and should become a governed Flow docs artifact."
+      },
+      {
+        "id": "card-based-doc-composition",
+        "currentExamples": [
+          "docsLinkCard",
+          "artifactCard",
+          "componentDetailRationaleCard",
+          "artifactListCard",
+          "mielCard",
+          "foundationVisualCard",
+          "voiceTokenCard",
+          "frameTokenCard",
+          "blueprint-grid cards",
+          "relation-grid cards"
+        ],
+        "currentFiles": [
+          "apps/docs/catalog-renderers.js",
+          "apps/docs/detail-tabs-core.js",
+          "apps/docs/gold-component-core.js",
+          "apps/docs/gold-card-docs.js",
+          "apps/docs/template-tabs.js",
+          "apps/docs/pattern-miel-tabs.js",
+          "apps/docs/foundation-visual-sections.js"
+        ],
+        "existingFlowArtifacts": [
+          "Card component",
+          "Tag component",
+          "Badge component"
+        ],
+        "recommendedOwner": "DocsCollectionTemplate, ComponentDetailTemplate, PatternDetailTemplate, TemplateDetailTemplate, ReferenceDetailTemplate",
+        "migrationDecision": "Classify, do not create Card variants by default. Preserve Card as the component; move docs-specific card roles into template slots or documentation patterns."
+      },
+      {
+        "id": "metadata-badge-row",
+        "currentExamples": [
+          "detail-meta-row",
+          "card-meta-row",
+          "reference-badge",
+          "tag detail-meta-tag",
+          "kicker",
+          "eyebrow",
+          "status labels"
+        ],
+        "currentFiles": [
+          "apps/docs/docs-layout.js",
+          "apps/docs/catalog-renderers.js",
+          "apps/docs/reference-layout.js",
+          "apps/docs/detail-tabs-core.js"
+        ],
+        "existingFlowArtifacts": [
+          "Tag component",
+          "Badge component",
+          "Breadcrumbs component"
+        ],
+        "recommendedOwner": "artifact-metadata-bar pattern or docs-template private slot",
+        "migrationDecision": "Promote if reused across templates; otherwise keep as private slot in docs templates. Do not leave raw spans."
+      },
+      {
+        "id": "catalog-and-content-grids",
+        "currentExamples": [
+          "catalog-grid",
+          "group-block",
+          "coverage-grid",
+          "doc-status-grid",
+          "layer-grid",
+          "spotlight-grid",
+          "stack-grid",
+          "relation-grid",
+          "blueprint-grid"
+        ],
+        "currentFiles": [
+          "apps/docs/docs-layout.js",
+          "apps/docs/home-stack-renderers.js",
+          "apps/docs/template-tabs.js",
+          "apps/docs/styles/02-doc-layout.css"
+        ],
+        "existingFlowArtifacts": [
+          "Surface primitive",
+          "Card component",
+          "List component"
+        ],
+        "recommendedOwner": "DocsHomeTemplate, DocsCollectionTemplate, TemplateDetailTemplate",
+        "migrationDecision": "Template-owned layout slots. Do not promote every grid to a component; promote only the reusable layout contract."
+      },
+      {
+        "id": "demo-frame-and-island-wrapper",
+        "currentExamples": [
+          "docs-package-demo",
+          "docs-pattern-demo",
+          "docs-template-demo",
+          "demo-cell",
+          "simple-demo-row",
+          "component-standard-demo",
+          "pattern-mobile-demo",
+          "pattern-desktop-demo",
+          "template-desktop-panel",
+          "template desktop demo islands"
+        ],
+        "currentFiles": [
+          "apps/docs/component-demo.js",
+          "apps/docs/gold-component-core.js",
+          "apps/docs/gold-simple-component-docs.js",
+          "apps/docs/pattern-*-demos.js",
+          "apps/docs/template-react-demos.js",
+          "apps/docs/template-react-islands.js"
+        ],
+        "existingFlowArtifacts": [
+          "Surface primitive",
+          "Skeleton component",
+          "ErrorPanel component",
+          "StatusFeedbackView pattern"
+        ],
+        "recommendedOwner": "demo-preview-frame pattern",
+        "migrationDecision": "Promote. This is a core migration blocker because demos currently define local frames, density, state, and visual boundaries."
+      },
+      {
+        "id": "variant-state-responsive-matrices",
+        "currentExamples": [
+          "button-demo-grid",
+          "states-grid",
+          "state-behavior-grid",
+          "viewport-doc-grid",
+          "responsive-actions-demo",
+          "container-demo",
+          "density-contract-grid",
+          "button-matrix",
+          "state matrix"
+        ],
+        "currentFiles": [
+          "apps/docs/gold-button-docs.js",
+          "apps/docs/gold-card-docs.js",
+          "apps/docs/gold-checkbox-docs.js",
+          "apps/docs/gold-icon-button-docs.js",
+          "apps/docs/gold-input-docs.js",
+          "apps/docs/gold-radio-button-docs.js",
+          "apps/docs/gold-select-docs.js",
+          "apps/docs/gold-switch-docs.js",
+          "apps/docs/gold-simple-component-docs.js",
+          "apps/docs/template-tabs.js"
+        ],
+        "existingFlowArtifacts": [
+          "Tabs component",
+          "Table component",
+          "Card component",
+          "Surface primitive"
+        ],
+        "recommendedOwner": "ComponentDetailTemplate + demo-preview-frame; TemplateDetailTemplate for template state matrix",
+        "migrationDecision": "Promote as matrix slots. Do not create one component per matrix unless the same interaction appears outside documentation."
+      },
+      {
+        "id": "playground-composition",
+        "currentExamples": [
+          "playground-layout",
+          "playground-controls",
+          "playground-preview",
+          "playground-check",
+          "data-component-playground",
+          "data-component-preview",
+          "data-component-markup"
+        ],
+        "currentFiles": [
+          "apps/docs/gold-button-docs.js",
+          "apps/docs/gold-card-docs.js",
+          "apps/docs/gold-checkbox-docs.js",
+          "apps/docs/gold-combobox-docs.js",
+          "apps/docs/gold-icon-button-docs.js",
+          "apps/docs/gold-input-docs.js",
+          "apps/docs/gold-select-docs.js",
+          "apps/docs/component-demo-interactions.js"
+        ],
+        "existingFlowArtifacts": [
+          "FormSection pattern",
+          "Checkbox component",
+          "RadioButton component",
+          "Switch component",
+          "Select component",
+          "Tabs component",
+          "CodeBlock candidate"
+        ],
+        "recommendedOwner": "ComponentDetailTemplate playground slot; possible documentation-playground pattern if reused beyond components",
+        "migrationDecision": "Promote cautiously. It may need a new documentation pattern, but it should first be a ComponentDetailTemplate slot."
+      },
+      {
+        "id": "code-snippet-and-token-rendering",
+        "currentExamples": [
+          "referenceCodeBlock",
+          "reference-code",
+          "token-list code",
+          "data-component-markup pre",
+          "agent spec pre",
+          "voice code samples"
+        ],
+        "currentFiles": [
+          "apps/docs/reference-layout.js",
+          "apps/docs/primitive-tabs.js",
+          "apps/docs/gold-component-core.js",
+          "apps/docs/gold-icon-button-docs.js",
+          "apps/docs/styles/03a-reference-core-03.css"
+        ],
+        "existingFlowArtifacts": [
+          "Typography primitive",
+          "Surface primitive",
+          "Button/IconButton components"
+        ],
+        "recommendedOwner": "CodeBlock component + optional copy-button",
+        "migrationDecision": "Promote. This is one of the few clear component candidates because code rendering is a reusable bounded UI object."
+      },
+      {
+        "id": "reference-tables-and-spec-matrices",
+        "currentExamples": [
+          "artifactDetailTable",
+          "referenceMatrixGrid",
+          "referenceRuleGrid",
+          "reference-spec-grid",
+          "specification matrix",
+          "API props table",
+          "contract rows"
+        ],
+        "currentFiles": [
+          "apps/docs/detail-tabs-core.js",
+          "apps/docs/reference-layout.js",
+          "apps/docs/foundation-reference.js",
+          "apps/docs/primitive-reference.js",
+          "apps/docs/pattern-tabs.js",
+          "apps/docs/template-tabs.js",
+          "apps/docs/gold-component-core.js"
+        ],
+        "existingFlowArtifacts": [
+          "Table component",
+          "VirtualDataTable pattern",
+          "List component"
+        ],
+        "recommendedOwner": "ReferenceDetailTemplate, ComponentDetailTemplate, PatternDetailTemplate, TemplateDetailTemplate",
+        "migrationDecision": "Use Table/List where semantic. Promote only the documentation matrix wrapper as a template slot."
+      },
+      {
+        "id": "callout-status-and-alert-composition",
+        "currentExamples": [
+          "referenceCallout",
+          "reference-callout",
+          "product-alert",
+          "status cards",
+          "reduced motion note",
+          "validation/recovery panels"
+        ],
+        "currentFiles": [
+          "apps/docs/reference-layout.js",
+          "apps/docs/foundation-explorer.js",
+          "apps/docs/foundation-visual-sections.js",
+          "apps/docs/detail-tabs-core.js",
+          "apps/docs/pattern-tabs.js"
+        ],
+        "existingFlowArtifacts": [
+          "InlineValidation component",
+          "ErrorPanel component",
+          "Toast component",
+          "StatusFeedbackView pattern",
+          "Surface primitive"
+        ],
+        "recommendedOwner": "documentation-section pattern with feedback slot",
+        "migrationDecision": "Reuse feedback artifacts. Do not create local alert/card variants."
+      },
+      {
+        "id": "local-navigation-and-tabs",
+        "currentExamples": [
+          "detail-tablist",
+          "detail-tabs",
+          "referencePeerNav",
+          "reference-peer-nav",
+          "docs-breadcrumbs",
+          "tabPanel",
+          "detail-shell-tabs island"
+        ],
+        "currentFiles": [
+          "apps/docs/docs-layout.js",
+          "apps/docs/detail-tabs.js",
+          "apps/docs/reference-layout.js",
+          "apps/docs/styles/04m-tabs-docs.css",
+          "apps/docs/styles/05-catalog-and-examples-01.css"
+        ],
+        "existingFlowArtifacts": [
+          "Tabs component",
+          "Breadcrumbs component",
+          "Sidebar pattern"
+        ],
+        "recommendedOwner": "on-this-page-nav pattern + docs templates; Tabs/Breadcrumbs reused internally",
+        "migrationDecision": "Promote page-local navigation. Current Tab/Breadcrumb use is partial and still locally wired."
+      },
+      {
+        "id": "foundation-visual-specimens",
+        "currentExamples": [
+          "voice-type-sample",
+          "swatch-demo",
+          "motion-duration-list",
+          "motion-easing-list",
+          "motion-stagger-grid",
+          "frame-spacing-demo",
+          "frame-grid-demo",
+          "frame-density-cards",
+          "density-decision-demo"
+        ],
+        "currentFiles": [
+          "apps/docs/foundation-visual-sections.js",
+          "apps/docs/foundation-explorer.js",
+          "apps/docs/primitive-reference.js",
+          "apps/docs/styles/03a-reference-core-03.css",
+          "apps/docs/styles/03b-foundation-reference-01.css",
+          "apps/docs/styles/03c-motion-reference-01.css"
+        ],
+        "existingFlowArtifacts": [
+          "Color primitive",
+          "Typography primitive",
+          "Spacing primitive",
+          "Breakpoints primitive",
+          "Density primitive",
+          "MotionBoundary component",
+          "AnimatedMoment component",
+          "Card component"
+        ],
+        "recommendedOwner": "ReferenceDetailTemplate specimen slots; possible Specimen pattern only if reused across docs template families",
+        "migrationDecision": "Template-owned first. Do not create primitive variants just because docs need specimens."
+      },
+      {
+        "id": "pattern-demo-families",
+        "currentExamples": [
+          "pattern-mobile-panel",
+          "pattern-desktop-panel",
+          "pattern-utility-panel",
+          "pattern-operational panels",
+          "pattern-shell panels",
+          "pattern-journey demos",
+          "pattern-miel-panel"
+        ],
+        "currentFiles": [
+          "apps/docs/pattern-mobile-demos.js",
+          "apps/docs/pattern-mobile-react-demos.js",
+          "apps/docs/pattern-desktop-demos.js",
+          "apps/docs/pattern-desktop-react-demos.js",
+          "apps/docs/pattern-operational-demos.js",
+          "apps/docs/pattern-shell-react-demos.js",
+          "apps/docs/pattern-journey-demos.js",
+          "apps/docs/pattern-miel-tabs.js"
+        ],
+        "existingFlowArtifacts": [
+          "The 63 Flow patterns",
+          "Surface primitive",
+          "StatusFeedbackView pattern",
+          "DemoPreviewFrame candidate"
+        ],
+        "recommendedOwner": "PatternDetailTemplate + demo-preview-frame",
+        "migrationDecision": "Promote. Pattern demos need governed wrappers and state/variant slots; pattern behavior should stay in Flow patterns."
+      },
+      {
+        "id": "template-preview-and-module-layouts",
+        "currentExamples": [
+          "docs-template-demo",
+          "template-desktop-panel",
+          "blueprint-grid",
+          "nav-model",
+          "button-matrix",
+          "template state matrix",
+          "module blueprint cards"
+        ],
+        "currentFiles": [
+          "apps/docs/template-tabs.js",
+          "apps/docs/template-react-demos.js",
+          "apps/docs/template-react-islands.js",
+          "apps/docs/template-desktop-demos.js",
+          "apps/docs/template-desktop-interactions.js"
+        ],
+        "existingFlowArtifacts": [
+          "The 9 product templates",
+          "Card component",
+          "Tag component",
+          "Table component",
+          "Surface primitive"
+        ],
+        "recommendedOwner": "TemplateDetailTemplate + demo-preview-frame",
+        "migrationDecision": "Promote. Product templates can be previewed, but documentation around them must be a docs template."
+      },
+      {
+        "id": "interaction-bridge-markup",
+        "currentExamples": [
+          "data-component-playground-input",
+          "data-pattern-demo",
+          "data-fullscreen-sheet-demo",
+          "data-swipe-actions-demo",
+          "data-column-configurator",
+          "data-roles-demo",
+          "data-demo-ready"
+        ],
+        "currentFiles": [
+          "apps/docs/component-demo-interactions.js",
+          "apps/docs/doc-interactions.js",
+          "apps/docs/pattern-*-interactions.js"
+        ],
+        "existingFlowArtifacts": [
+          "React component callbacks",
+          "Pattern props and state contracts"
+        ],
+        "recommendedOwner": "DemoPreviewFrame and template-specific adapters",
+        "migrationDecision": "Audit and reduce. Interaction bridges are acceptable only as docs adapters; behavior must remain owned by Flow components/patterns."
+      }
+    ],
+    "candidateArtifactsAddedByThisInventory": {
+      "components": [
+        "code-block",
+        "copy-button"
+      ],
+      "patterns": [
+        "documentation-page-shell",
+        "documentation-hero",
+        "documentation-section",
+        "demo-preview-frame",
+        "on-this-page-nav",
+        "artifact-metadata-bar"
+      ],
+      "templateSlotsOrPrivateContracts": [
+        "docs-card-composition-slots",
+        "docs-grid-layout-slots",
+        "docs-specimen-slots",
+        "docs-playground-slot",
+        "docs-feedback-slot",
+        "docs-template-preview-slot"
+      ],
+      "explicitNonGoals": [
+        "Do not create new Card variants for every docs card use.",
+        "Do not create new foundations for docs visual treatments.",
+        "Do not create new primitives for every grid/specimen.",
+        "Do not preserve local HTML wrappers once a Flow docs template owns the role."
+      ]
+    }
+  },
+  "summary": {
+    "documentationTemplatesNeeded": 7,
+    "newFoundationsNeeded": 0,
+    "newPrimitivesNeeded": 0,
+    "newComponentsCandidates": [
+      "code-block",
+      "copy-button"
+    ],
+    "newPatternsCandidates": [
+      "documentation-page-shell",
+      "documentation-hero",
+      "documentation-section",
+      "demo-preview-frame",
+      "on-this-page-nav",
+      "artifact-metadata-bar"
+    ],
+    "highestRiskTemplates": [
+      "ComponentDetailTemplate",
+      "PatternDetailTemplate",
+      "ReferenceDetailTemplate"
+    ],
+    "visualSystemGaps": {
+      "includedAfterFollowUp": true,
+      "assessment": "The first pass undercounted visual-system debt. Background treatments, grid texture/overlay behavior, typography samples, and docs-only variant/state matrices must be governed by Flow documentation templates and supporting artifacts.",
+      "backgroundTreatment": {
+        "newFoundationRequired": false,
+        "newPrimitiveRequired": false,
+        "recommendedOwner": "documentation-hero or documentation-page-shell pattern over existing Energy, Depth, Frame, Surface, Color, and Breakpoints contracts",
+        "currentLocalEvidence": [
+          "apps/docs/styles/01-shell-01.css: docs-grid-overlay and grid overlay color treatment",
+          "apps/docs/styles/02-doc-layout.css: home/coverage/status background treatments",
+          "apps/docs/styles/03a-reference-core-01.css and 03a-reference-core-02.css: reference detail background treatments",
+          "apps/docs/styles/03b-foundation-reference-01.css and 03b-foundation-reference-02.css: foundation detail background treatments"
+        ],
+        "notes": "No literal linear-gradient or radial-gradient source match was found in the current files, but the documentation still owns color-mix backgrounds, red/blue overlay cues, and grid texture behavior locally. Those must be promoted into a governed docs visual treatment instead of staying as page CSS."
+      },
+      "gridTextureAndOverlay": {
+        "newFoundationRequired": false,
+        "newPrimitiveRequired": false,
+        "recommendedOwner": "documentation-page-shell pattern, with Frame/Breakpoints tokens as the source of grid metrics",
+        "currentLocalEvidence": [
+          "apps/docs/styles/01-shell-01.css: .docs-grid-overlay",
+          "apps/docs/index.html: .docs-grid-overlay DOM",
+          "apps/docs/generated/docs-content.bundle.json: grid labels and shell grid controls"
+        ],
+        "risk": "medium",
+        "reason": "The grid overlay is currently a docs shell feature. It should be explicit in DocsShellTemplate rather than incidental static DOM/CSS."
+      },
+      "typographySamples": {
+        "newFoundationRequired": false,
+        "newPrimitiveRequired": false,
+        "recommendedOwner": "ReferenceDetailTemplate plus a possible TypographySpecimen component only if reused outside reference docs",
+        "currentLocalEvidence": [
+          "apps/docs/foundation-visual-sections.js: voice-type-sample",
+          "apps/docs/styles/03a-reference-core-03.css: voice-type-sample data-style variants"
+        ],
+        "risk": "medium",
+        "reason": "Typography samples are legitimate documentation content, but their specimen rendering is currently docs-local."
+      },
+      "componentAndPatternVariants": {
+        "newFoundationRequired": false,
+        "newPrimitiveRequired": false,
+        "recommendedOwners": [
+          "ComponentDetailTemplate",
+          "PatternDetailTemplate",
+          "demo-preview-frame",
+          "documentation-section"
+        ],
+        "currentLocalEvidence": [
+          "apps/docs/gold-simple-component-docs.js: variants, states, variant-state-behavior, viewport-organization",
+          "apps/docs/gold-switch-docs.js: custom variants/states/matrix rendering",
+          "apps/docs/gold-icon-button-docs.js: custom variants/states/playground/viewport rendering",
+          "apps/docs/pattern-mobile-react-demos.js and pattern-*-demos.js: data-demo-variant/data-demo-state wrappers",
+          "apps/docs/styles/04m-tabs-docs.css: docs-only tab variant/state selectors"
+        ],
+        "risk": "high",
+        "reason": "The docs repeatedly render variant, state, responsive, playground, and viewport matrices with local wrappers. These are not new foundations, but they require governed ComponentDetailTemplate/PatternDetailTemplate slots and a DemoPreviewFrame pattern."
+      },
+      "cardVariantAndCompositionDebt": {
+        "newFoundationRequired": false,
+        "newPrimitiveRequired": false,
+        "flowCardContract": {
+          "variants": [
+            "default",
+            "minimal",
+            "elevated",
+            "ghost"
+          ],
+          "compositions": [
+            "standard",
+            "compact",
+            "media",
+            "stats"
+          ],
+          "states": [
+            "default",
+            "hover",
+            "focus",
+            "selected",
+            "loading",
+            "error",
+            "disabled",
+            "muted",
+            "interactive"
+          ]
+        },
+        "currentLocalEvidence": [
+          "apps/docs/catalog-renderers.js: docsLinkCard/artifactCard wraps Flow Card inside docs-link-card",
+          "apps/docs/detail-tabs-core.js: artifactCard/artifactListCard repeatedly maps docs content to minimal Card",
+          "apps/docs/gold-component-core.js: componentDetailRationaleCard creates rationale card composition",
+          "apps/docs/gold-card-docs.js: card-reference-composition-demo, card-stats-grid, card-compact-stack, card-ghost-context, card-mini-grid",
+          "apps/docs/template-tabs.js: blueprint-grid uses Flow Card for template modules",
+          "apps/docs/pattern-miel-tabs.js: mielCard/mielRuleCard uses Flow Card for agent decision groups",
+          "apps/docs/foundation-visual-sections.js: foundationVisualCard/voiceTokenCard/frameTokenCard maps foundation specimens to Flow Card"
+        ],
+        "classification": [
+          {
+            "case": "Flow Card variants/compositions",
+            "decision": "reuse-existing-component-contract",
+            "owner": "Card component",
+            "examples": [
+              "default/minimal/elevated/ghost",
+              "standard/compact/media/stats"
+            ]
+          },
+          {
+            "case": "Documentation link card",
+            "decision": "promote-to-pattern-or-docs-template-slot",
+            "owner": "DocsCollectionTemplate + artifact-metadata-bar",
+            "examples": [
+              "docsLinkCard",
+              "artifactCard",
+              "card-meta-row"
+            ]
+          },
+          {
+            "case": "Documentation rationale/guideline/decision cards",
+            "decision": "promote-to-documentation-section-slot",
+            "owner": "ComponentDetailTemplate/PatternDetailTemplate",
+            "examples": [
+              "componentDetailRationaleCard",
+              "artifactListCard",
+              "mielRuleCard"
+            ]
+          },
+          {
+            "case": "Card-specific reference compositions",
+            "decision": "keep-as-card-doc-content-but-render-through-ComponentDetailTemplate",
+            "owner": "ComponentDetailTemplate + demo-preview-frame",
+            "examples": [
+              "card-stats-grid",
+              "card-compact-stack",
+              "card-ghost-context",
+              "card-reference-composition-demo"
+            ]
+          },
+          {
+            "case": "Template/module cards",
+            "decision": "promote-to-TemplateDetailTemplate-module-slot",
+            "owner": "TemplateDetailTemplate",
+            "examples": [
+              "blueprint-grid",
+              "relation-grid"
+            ]
+          },
+          {
+            "case": "Foundation visual specimen cards",
+            "decision": "promote-to-ReferenceDetailTemplate-specimen-slot",
+            "owner": "ReferenceDetailTemplate",
+            "examples": [
+              "foundationVisualCard",
+              "voiceTokenCard",
+              "frameTokenCard"
+            ]
+          }
+        ],
+        "risk": "high",
+        "reason": "Flow Card itself has a strong contract, but FlowDocs uses Card as a generic documentation composition primitive in many places. Those uses should not become new Card variants automatically; they should be governed by docs templates or documentation patterns so Card does not absorb page-layout responsibility."
+      }
+    },
+    "recommendedNextStep": "Review this cascade crosswalk before implementation. If accepted, create Flow contracts/specs for the new documentation templates and high-priority supporting artifacts before migrating FlowDocs renderers."
+  }
+}

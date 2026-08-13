@@ -24,7 +24,7 @@ body::before {
   outline: var(--sys-a11y-outline-reset);
 }
 
-.layout-grid-overlay {
+.docs-grid-overlay {
   --frame-grid-overlay-left: var(--sys-frame-min-width-control);
   --frame-grid-overlay-right: var(--sys-frame-min-width-control);
   --frame-grid-overlay-outer-left: var(--sys-frame-min-width-control);
@@ -41,11 +41,24 @@ body::before {
   pointer-events: none;
 }
 
-.layout-grid-overlay[hidden] {
-  display: none;
+.docs-grid-overlay[hidden] {
+  display: none !important;
+  inline-size: 0;
+  block-size: 0;
+  overflow: hidden;
 }
 
-.layout-grid-overlay__columns {
+.docs-grid-overlay[hidden] * {
+  display: none !important;
+}
+
+.docs-grid-overlay[hidden] *::before,
+.docs-grid-overlay[hidden] *::after {
+  content: none !important;
+  display: none !important;
+}
+
+.docs-grid-overlay__columns {
   position: fixed;
   inset-block: var(--frame-grid-overlay-top) 0;
   inset-inline-start: var(--frame-grid-overlay-column-left);
@@ -55,8 +68,8 @@ body::before {
   gap: var(--frame-grid-overlay-gap);
 }
 
-.layout-grid-overlay__columns::before,
-.layout-grid-overlay__columns::after {
+.docs-grid-overlay__columns::before,
+.docs-grid-overlay__columns::after {
   content: "";
   position: fixed;
   inset-block: var(--frame-grid-overlay-top) 0;
@@ -64,25 +77,25 @@ body::before {
   border-inline-end: var(--sys-frame-border-thin) dashed color-mix(in srgb, var(--sys-energy-status-error) 42%, transparent);
 }
 
-.layout-grid-overlay__columns::before {
+.docs-grid-overlay__columns::before {
   inset-inline-start: var(--frame-grid-overlay-outer-left);
   inline-size: max(var(--sys-frame-min-width-control), calc(var(--frame-grid-overlay-column-left) - var(--frame-grid-overlay-outer-left)));
 }
 
-.layout-grid-overlay__columns::after {
+.docs-grid-overlay__columns::after {
   inset-inline-start: calc(var(--frame-grid-overlay-column-left) + var(--frame-grid-overlay-column-width));
   inline-size: max(var(--sys-frame-min-width-control), calc(var(--frame-grid-overlay-outer-right) - var(--frame-grid-overlay-column-left) - var(--frame-grid-overlay-column-width)));
   border-inline-end: 0;
   border-inline-start: var(--sys-frame-border-thin) dashed color-mix(in srgb, var(--sys-energy-status-error) 42%, transparent);
 }
 
-.layout-grid-overlay__column {
+.docs-grid-overlay__column {
   min-inline-size: 0;
   background: color-mix(in srgb, var(--sys-energy-action-primary) 10%, transparent);
   border-inline: var(--sys-frame-border-thin) solid color-mix(in srgb, var(--sys-energy-action-primary) 18%, transparent);
 }
 
-.layout-grid-overlay__info {
+.docs-grid-overlay__info {
   position: fixed;
   inset-block-start: calc(var(--frame-grid-overlay-top) + var(--sys-space-md));
   inset-inline-start: calc(var(--frame-grid-overlay-left) + var(--frame-grid-overlay-margin));
@@ -143,7 +156,7 @@ input {
 
 .brand,
 .top-actions,
-.hero-actions,
+.docs-intro-actions,
 .pill-row,
 .token-list {
   display: inline-flex;

@@ -1,4 +1,7 @@
 import { componentDemo } from "./component-demo.js?v=61";
+import { demoPreviewFrameIsland } from "./demo-preview-frame-island.js?v=1";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
+import { docsCodeBlock } from "./docs-code-block.js?v=2";
 
 let componentCopy = {};
 let componentDocs = {};
@@ -43,21 +46,52 @@ function escapeAttribute(value) {
 }
 
 export function demoCell(label, content) {
-  return `<div class="demo-cell" data-density-context="md"><h3 class="demo-cell__title">${label}</h3><div class="demo-cell__body">${content}</div></div>`;
+  return demoPreviewFrameIsland({
+    label,
+    previewHtml: `<div class="demo-cell__body">${content}</div>`,
+    className: "demo-cell",
+    density: "md",
+    attrs: 'data-density-context="md"',
+    source: "demoCell",
+  });
+}
+
+export function demoPlaygroundFrame({ label, controlsHtml = "", controlsAttrs = "", controlsTag = "div", previewHtml = "", sourceHtml = "", className = "", attrs = "", source = "demoPlaygroundFrame" } = {}) {
+  const controlsElement = controlsTag === "form" ? "form" : "div";
+  return demoPreviewFrameIsland({
+    label,
+    controlsHtml: controlsHtml ? `<${controlsElement} class="playground-controls" ${controlsAttrs}>${controlsHtml}</${controlsElement}>` : "",
+    previewHtml: `<div class="docs-playground-preview">${previewHtml}</div>`,
+    sourceHtml,
+    kind: "playground",
+    state: "interactive",
+    className: ["docs-playground-layout", className].filter(Boolean).join(" "),
+    attrs,
+    source,
+  });
+}
+
+export function demoViewportFrame({ label, previewHtml = "", density = "md", layout = "inline", className = "", attrs = "", source = "demoViewportFrame" } = {}) {
+  return demoPreviewFrameIsland({
+    label,
+    previewHtml,
+    kind: "viewport",
+    state: String(layout).includes("mobile") ? "viewport-mobile" : "viewport-desktop",
+    density,
+    className: ["docs-viewport-demo", className].filter(Boolean).join(" "),
+    attrs: `data-density-context="${escapeAttribute(density)}" data-demo-layout="${escapeAttribute(layout)}" ${attrs}`.trim(),
+    source,
+  });
 }
 
 function componentDetailSection({ component, section, className = "", attrs = "", children = "" } = {}) {
-  const surfaceAttrs = componentDetailSectionAttrs({ component, section, className, attrs });
-  return html`
-    <section ${surfaceAttrs}>
-      ${children}
-    </section>
-  `;
-}
-
-function componentDetailSectionAttrs({ component, section, className = "", attrs = "" } = {}) {
-  const classes = ["surface", "docs-section-surface", "component-detail-surface", "wide", className].filter(Boolean).join(" ");
-  return `class="${classes}" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-surface-focus-mode="none" data-surface-breakpoint="base" data-state="default" data-doc-template="component-detail" data-component-id="${escapeAttribute(component)}" data-component-section="${escapeAttribute(section)}" ${attrs}`;
+  return documentationSectionIsland({
+    bodyHtml: children,
+    className: ["component-detail-surface", "wide", className].filter(Boolean).join(" "),
+    template: "component-detail",
+    attrs: `data-component-id="${escapeAttribute(component)}" data-component-section="${escapeAttribute(section)}" ${attrs}`,
+    source: "componentDetailSection",
+  });
 }
 
 function componentDetailTable({ component, section, className = "", columns = [], rows = [] } = {}) {
@@ -79,7 +113,7 @@ function docsTableProps({ label = "Documentation table", columns = [], rows = []
   };
 }
 
-function componentDetailDemoGrid({ items = [], className = "button-demo-grid states-grid" } = {}) {
+function componentDetailDemoGrid({ items = [], className = "docs-demo-matrix states-grid" } = {}) {
   return html`
     <div class="${className}">
       ${items.map((item) => demoCell(item.label, item.content)).join("")}
@@ -218,7 +252,7 @@ export function componentMielPanel(entry) {
       section: "miel-machine-contract",
       children: html`
       <h2>${ui("miel.machineContract")}</h2>
-      <pre>${JSON.stringify(agentSpec, null, 2)}</pre>
+      ${docsCodeBlock(JSON.stringify(agentSpec, null, 2))}
       `,
     })}
   `;
@@ -241,7 +275,6 @@ export {
   componentDetailPropsRowsTable,
   componentDetailRationaleCard,
   componentDetailSection,
-  componentDetailSectionAttrs,
   componentDetailTable,
   componentDetailTestsListContent,
   componentDetailTestsContent,

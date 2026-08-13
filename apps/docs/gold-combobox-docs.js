@@ -13,9 +13,10 @@ import {
   simpleTestPanel,
   simpleVariantsPanel,
   simpleViewportOrganizationPanel,
-} from "./gold-simple-component-docs.js?v=255";
-import { componentDetailRationaleCard, componentDetailSectionAttrs, componentMielPanel, componentSectionCopy, componentSectionData, html, icon, ui } from "./gold-component-core.js?v=214";
-import { playgroundStaticControls } from "./gold-component-data.js?v=230";
+} from "./gold-simple-component-docs.js?v=260";
+import { docsSourceMarkupSlot } from "./docs-code-block.js?v=2";
+import { componentDetailRationaleCard, componentDetailSection, componentMielPanel, componentSectionCopy, componentSectionData, demoPlaygroundFrame, html, icon, ui } from "./gold-component-core.js?v=221";
+import { playgroundStaticControls } from "./gold-component-data.js?v=231";
 
 export function comboboxDemo(label = "Vehicle", value = "MX-4821 - Ana Gomez", state = "filled") { return simpleDemo("combobox", { label, value, state }); }
 export function comboboxDemoFromData(demo = {}) { return simpleDemo("combobox", demo); }
@@ -40,25 +41,30 @@ export function renderComboboxGoldSection(entry, section) {
   return renderers[section]?.() ?? "";
 }
 
-function comboboxSurfaceAttrs(section, className = "", attrs = "") {
-  return componentDetailSectionAttrs({ component: "combobox", section, className, attrs });
+function comboboxSection(section, children, className = "", attrs = "") {
+  return componentDetailSection({ component: "combobox", section, className, attrs, children });
 }
 
 export function comboboxOperationalExamplePanel() {
-  const scenario = componentSectionData("combobox", "operational-example").scenario;
-  return html`
-    <section ${comboboxSurfaceAttrs("operational-example", "button-operational-panel")}>
+  const scenario = componentSectionData("combobox", "operational-example").scenario ?? {
+    icon: "manage_search",
+    title: "Vehicle lookup",
+    meta: "Editable select input",
+    items: [{ label: "Vehicle", value: "MX-4821 - Ana Gomez", state: "filled" }],
+    rationaleTitle: "Why Combobox",
+    rationale: [],
+  };
+  return comboboxSection("operational-example", html`
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("combobox", "operational-example")}</p>
       <div class="simple-scenario">
         <div class="simple-console">
           <header>${icon(scenario.icon, { tone: "action", fill: true })}<div><strong>${scenario.title}</strong><small>${scenario.meta}</small></div></header>
-          <div class="simple-demo-row">${(scenario.items ?? []).map(comboboxDemoFromData).join("")}</div>
+          <div class="docs-demo-row">${(scenario.items ?? []).map(comboboxDemoFromData).join("")}</div>
         </div>
         ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
       </div>
-    </section>
-  `;
+  `, "button-operational-panel");
 }
 export function comboboxAnatomyPanel() { return simpleAnatomyPanel("combobox"); }
 export function comboboxAccessibilityPanel() { return simpleAccessibilityPanel("combobox"); }
@@ -70,19 +76,18 @@ export function comboboxResponsivePanel() { return simpleResponsivePanel("combob
 export function comboboxViewportOrganizationPanel() { return simpleViewportOrganizationPanel("combobox", comboboxDemoFromData); }
 export function comboboxPlaygroundPanel() {
   const playground = componentSectionData("combobox", "playground");
-  return html`
-    <section ${comboboxSurfaceAttrs("playground", "button-playground", 'data-component-playground="combobox" data-ready="false"')}>
+  return comboboxSection("playground", html`
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("combobox", "playground")}</p>
-      <div class="playground-layout">
-        <div class="playground-controls" aria-label="${ui("playground.comboboxControls")}">${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}</div>
-        <div class="playground-preview">
-          <div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${comboboxDemoFromData(playground.preview ?? {})}</div>
-          <pre data-component-markup>${playground.snippet ?? ""}</pre>
-        </div>
-      </div>
-    </section>
-  `;
+      ${demoPlaygroundFrame({
+        label: ui("component.playground"),
+        controlsAttrs: `aria-label="${ui("playground.comboboxControls")}"`,
+        controlsHtml: playgroundStaticControls(playground.controls ?? [], "data-component-playground-input"),
+        previewHtml: `<div data-doc-playground-preview data-density-context="${playground.preview?.density ?? "md"}">${comboboxDemoFromData(playground.preview ?? {})}</div>`,
+        sourceHtml: docsSourceMarkupSlot(playground.snippet ?? ""),
+        source: "comboboxPlaygroundPanel",
+      })}
+  `, "button-playground", 'data-component-playground="combobox" data-ready="false"');
 }
 export function comboboxContractPanel() { return simpleContractPanel("combobox"); }
 export function comboboxGuidelinesPanel() { return simpleGuidelinesPanel("combobox"); }

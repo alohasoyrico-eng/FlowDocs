@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderAccordionGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, accordionDemoFromData); }
 export function accordionDemo(label = "Documents", description = "Driver license, insurance, and vehicle inspection are ready for review.", variant = "single", state = "open") { return simpleDemo("accordion", { label, description, variant, state }); }

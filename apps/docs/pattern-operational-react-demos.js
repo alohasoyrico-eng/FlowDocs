@@ -1,4 +1,4 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 
 function escapeAttribute(value) {
   return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -6,6 +6,14 @@ function escapeAttribute(value) {
 
 function patternReactDemo(pattern, props, state = "default", variant = "standard", fullWidth = true) {
   return `<div class="docs-react-island docs-pattern-demo" data-react-component="${pattern}" data-component-source="react-pattern" data-doc-pattern="${pattern}" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
+
+function operationalDemoSection(title, body) {
+  return artifactDocumentationSection({
+    body: `<span class="eyebrow">Operational demo</span><h2>${title}</h2>${body}`,
+    className: "wide pattern-utility-panel",
+    source: "pattern-operational-react-demos",
+  });
 }
 
 const vehicleRows = [
@@ -41,7 +49,7 @@ export function operationalReactPatternOverviewDemo(patternId) {
 }
 
 function driverVehicleAdminPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Driver and vehicle administration</h2>${patternReactDemo("driver-and-vehicle-administration", {
+  return operationalDemoSection("Driver and vehicle administration", patternReactDemo("driver-and-vehicle-administration", {
     label: "Driver and vehicle administration",
     description: "Toolbar, table, quick actions, audit evidence, pagination, and dialog stay in one Flow pattern.",
     density: "sm",
@@ -57,11 +65,11 @@ function driverVehicleAdminPanel() {
     audit: { label: "Record updated", description: "Vehicle owner changed.", meta: "Today 09:42 - Admin", status: "Logged", icon: "manage_history" },
     feedback: { label: "KLD-901-C selected", description: "Quick actions reflect permissions.", tone: "info" },
     "data-pattern-demo": "driver-and-vehicle-administration",
-  }, "selected")}</section>`;
+  }, "selected"));
 }
 
 function stationDiscoveryPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Station discovery</h2>${patternReactDemo("station-discovery", {
+  return operationalDemoSection("Station discovery", patternReactDemo("station-discovery", {
     label: "Station discovery",
     description: "Search, station pins, route summary, fallback, and runtime state are Flow-owned.",
     density: "md",
@@ -77,11 +85,11 @@ function stationDiscoveryPanel() {
     search: { label: "Search stations", query: "Station 24", results: [{ key: "station-24", label: "Station 24", meta: "2.1 km - Open" }] },
     fallbackList: { reason: "Map provider unavailable", action: "Use list", items: [{ key: "station-24", label: "Station 24", meta: "2.1 km", value: "$24.10", icon: "local_gas_station" }] },
     "data-pattern-demo": "station-discovery",
-  }, "selected")}</section>`;
+  }, "selected"));
 }
 
 function kanbanBoardPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Operational Kanban</h2>${patternReactDemo("kanban-board", {
+  return operationalDemoSection("Operational Kanban", patternReactDemo("kanban-board", {
     label: "Approval workflow",
     description: "Columns, move controls, card status, limits, empty state, and save feedback are one React pattern.",
     density: "sm",
@@ -96,11 +104,11 @@ function kanbanBoardPanel() {
     ],
     actions: [{ key: "save", label: "Save order", icon: "save" }, { key: "add", label: "Add card", variant: "secondary", icon: "add" }],
     "data-pattern-demo": "kanban-board",
-  })}</section>`;
+  }));
 }
 
 function statusFeedbackViewPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Status feedback routing</h2>${patternReactDemo("status-feedback-view", {
+  return operationalDemoSection("Status feedback routing", patternReactDemo("status-feedback-view", {
     kind: "notifications",
     label: "Operations feedback",
     title: "Sync delayed",
@@ -114,11 +122,11 @@ function statusFeedbackViewPanel() {
     messages: [{ key: "retry", label: "Retry queued", description: "The user can keep working.", tone: "success" }],
     action: { key: "retry", label: "Retry", variant: "secondary" },
     "data-pattern-demo": "status-feedback-view",
-  }, "warning")}</section>`;
+  }, "warning"));
 }
 
 function paymentFormPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Payment credential flow</h2>${patternReactDemo("payment-form", {
+  return operationalDemoSection("Payment credential flow", patternReactDemo("payment-form", {
     label: "Add payment card",
     description: "Card number, expiry, CVC, amount, validation, submit and feedback are composed by Flow.",
     density: "md",
@@ -132,11 +140,11 @@ function paymentFormPanel() {
     submitAction: { key: "submit", label: "Save card", icon: "credit_card" },
     secondaryAction: { key: "cancel", label: "Cancel", variant: "secondary" },
     "data-pattern-demo": "payment-form",
-  }, "review")}</section>`;
+  }, "review"));
 }
 
 function denseOperationalListPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Dense operational list</h2>${patternReactDemo("dense-operational-list", {
+  return operationalDemoSection("Dense operational list", patternReactDemo("dense-operational-list", {
     label: "Operations queue",
     description: "Search, filters, toolbar, virtual table, bulk actions, and feedback stay delegated.",
     density: "sm",
@@ -150,7 +158,7 @@ function denseOperationalListPanel() {
     bulkActions: { label: "Queue bulk actions", selectedCount: 1, totalCount: 3, actions: [{ key: "assign", label: "Assign", icon: "person_add" }] },
     feedback: { kind: "inline", label: "1 row selected", message: "Bulk actions reflect eligibility.", state: "info" },
     "data-pattern-demo": "dense-operational-list",
-  }, "selected")}</section>`;
+  }, "selected"));
 }
 
 const operationsRows = [
@@ -173,7 +181,7 @@ const timelineEvents = [
 ];
 
 function accountOperationsPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Account operations</h2>${patternReactDemo("account-operations", {
+  return operationalDemoSection("Account operations", patternReactDemo("account-operations", {
     label: "Account operations",
     description: "Account list, detail drawer, audit timeline, metrics, and bulk actions are governed by Flow.",
     density: "sm",
@@ -192,11 +200,11 @@ function accountOperationsPanel() {
     detail: { label: "North fleet account", description: "Review owner, policy, and audit evidence.", open: true, actions: [{ key: "save", label: "Save", icon: "save" }] },
     timeline: { label: "Audit trail", events: timelineEvents, selectedKey: "owner" },
     "data-pattern-demo": "account-operations",
-  }, "detail-open")}</section>`;
+  }, "detail-open"));
 }
 
 function ticketQueuePanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Support ticket queue</h2>${patternReactDemo("ticket-queue", {
+  return operationalDemoSection("Support ticket queue", patternReactDemo("ticket-queue", {
     label: "Support ticket queue",
     description: "Alerts, dense list, drawer detail, and feedback are a single React orchestration.",
     density: "sm",
@@ -215,11 +223,11 @@ function ticketQueuePanel() {
     detail: { label: "SLA risk", description: "Escalate tickets older than one hour.", open: true, actions: [{ key: "escalate", label: "Escalate", icon: "priority_high" }] },
     feedback: { kind: "inline", label: "Escalation ready", message: "Supervisor approval is available.", state: "warning" },
     "data-pattern-demo": "ticket-queue",
-  }, "ticket-selected")}</section>`;
+  }, "ticket-selected"));
 }
 
 function caseManagementPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Case management</h2>${patternReactDemo("case-management", {
+  return operationalDemoSection("Case management", patternReactDemo("case-management", {
     label: "Case management",
     description: "Filters, case list, detail drawer, timeline, and feedback stay inside the Flow pattern.",
     density: "sm",
@@ -239,11 +247,11 @@ function caseManagementPanel() {
     timeline: { label: "Case activity", events: timelineEvents, selectedKey: "review", filtered: true },
     feedback: { kind: "inline", label: "Activity filtered", message: "Timeline reflects current evidence scope.", state: "info" },
     "data-pattern-demo": "case-management",
-  }, "detail-open")}</section>`;
+  }, "detail-open"));
 }
 
 function filterableEditableTablePanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Filterable editable table</h2>${patternReactDemo("filterable-editable-table", {
+  return operationalDemoSection("Filterable editable table", patternReactDemo("filterable-editable-table", {
     label: "Editable records",
     description: "Advanced filters, virtual table, editor drawer, and feedback form one controlled boundary.",
     density: "sm",
@@ -256,11 +264,11 @@ function filterableEditableTablePanel() {
     editor: { label: "Edit North fleet account", description: "Drawer Adapter owns the edit lifecycle.", open: true, actions: [{ key: "save", label: "Save changes", icon: "save" }] },
     feedback: { kind: "inline", label: "Unsaved changes", message: "Save or discard the current edit.", state: "warning" },
     "data-pattern-demo": "filterable-editable-table",
-  }, "editing")}</section>`;
+  }, "editing"));
 }
 
 function pricingOperationsPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Pricing operations</h2>${patternReactDemo("pricing-operations", {
+  return operationalDemoSection("Pricing operations", patternReactDemo("pricing-operations", {
     label: "Pricing operations",
     description: "Rules, queue table, approval drawer, role policy, and feedback are orchestrated by React.",
     density: "sm",
@@ -274,11 +282,11 @@ function pricingOperationsPanel() {
     rolePolicy: { label: "Approval policy", permissions: [{ key: "publish", label: "Publish prices", checked: false }, { key: "review", label: "Review exceptions", checked: true }] },
     feedback: { kind: "inline", label: "Approval required", message: "Finance reviewer must approve publication.", state: "warning" },
     "data-pattern-demo": "pricing-operations",
-  }, "pending-approval")}</section>`;
+  }, "pending-approval"));
 }
 
 function backofficeApprovalPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Backoffice approval</h2>${patternReactDemo("backoffice-approval", {
+  return operationalDemoSection("Backoffice approval", patternReactDemo("backoffice-approval", {
     label: "Backoffice approval",
     description: "Document queue, detail review, approve/reject actions, and feedback remain Flow-owned.",
     density: "sm",
@@ -291,11 +299,11 @@ function backofficeApprovalPanel() {
     detail: { label: "Vehicle document", description: "Approval creates an audit event.", open: true, actions: [{ key: "approve", label: "Approve", icon: "check" }, { key: "reject", label: "Reject", intent: "danger", icon: "close" }] },
     feedback: { kind: "inline", label: "Ready to decide", message: "Decision actions are bound to the selected document.", state: "info" },
     "data-pattern-demo": "backoffice-approval",
-  }, "detail-open")}</section>`;
+  }, "detail-open"));
 }
 
 function emailTemplateLayoutPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Email template layout</h2>${patternReactDemo("email-template-layout", {
+  return operationalDemoSection("Email template layout", patternReactDemo("email-template-layout", {
     variant: "operational-summary",
     density: "md",
     state: "ready",
@@ -313,11 +321,11 @@ function emailTemplateLayoutPanel() {
     action: { label: "Open Flow" },
     footer: "Flow operational email preview",
     "data-pattern-demo": "email-template-layout",
-  }, "ready", "operational-summary")}</section>`;
+  }, "ready", "operational-summary"));
 }
 
 function expandableDetailTablePanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Expandable detail table</h2>${patternReactDemo("expandable-detail-table", {
+  return operationalDemoSection("Expandable detail table", patternReactDemo("expandable-detail-table", {
     label: "Expandable rows",
     description: "Virtual table, expanded row state, detail drawer, and feedback are controlled by React.",
     density: "sm",
@@ -329,11 +337,11 @@ function expandableDetailTablePanel() {
     detail: { label: "Expanded row detail", description: "Detail review stays outside table row markup.", open: true, actions: [{ key: "collapse", label: "Collapse detail", variant: "secondary", icon: "unfold_less" }] },
     feedback: { kind: "inline", label: "Row expanded", message: "Detail content is synchronized with selected row.", state: "info" },
     "data-pattern-demo": "expandable-detail-table",
-  }, "expanded")}</section>`;
+  }, "expanded"));
 }
 
 function agentConversationPanel() {
-  return html`<section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail"><span class="eyebrow">Operational demo</span><h2>Agent conversation</h2>${patternReactDemo("agent-conversation", {
+  return operationalDemoSection("Agent conversation", patternReactDemo("agent-conversation", {
     label: "Agent conversation",
     description: "Chat thread, composer, handoff, and status feedback stay inside the React pattern.",
     density: "md",
@@ -350,5 +358,5 @@ function agentConversationPanel() {
     handoff: { active: true, title: "Policy handoff available", description: "Escalate to finance if the override is blocked.", action: { key: "handoff", label: "Handoff", variant: "secondary" } },
     feedback: { kind: "inline", label: "Conversation active", message: "Composer changes and send state are controlled.", state: "info" },
     "data-pattern-demo": "agent-conversation",
-  }, "active")}</section>`;
+  }, "active"));
 }

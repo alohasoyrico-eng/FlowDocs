@@ -1,6 +1,6 @@
-import { html } from "./detail-tabs-core.js?v=5";
+import { artifactDocumentationSection, html } from "./detail-tabs-core.js?v=10";
 import { componentDemo } from "./component-demo.js?v=60";
-import { desktopReactPatternOverviewDemo } from "./pattern-desktop-react-demos.js?v=2";
+import { desktopReactPatternOverviewDemo } from "./pattern-desktop-react-demos.js?v=3";
 
 function packageDemo(component, demo = {}, attrs = {}) {
   const markup = componentDemo(component, demo);
@@ -9,6 +9,15 @@ function packageDemo(component, demo = {}, attrs = {}) {
     .map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`)
     .join(" ");
   return markup.replace(/^<([a-z0-9-]+)/i, `<$1 ${attrText}`);
+}
+
+function desktopDemoSection(title, body) {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: "wide pattern-desktop-panel",
+    source: "pattern-desktop-demos",
+  });
 }
 
 export function desktopPatternOverviewDemo(patternId) {
@@ -25,10 +34,7 @@ export function desktopPatternOverviewDemo(patternId) {
 }
 
 function kpiCardDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Dashboard KPI band</h2>
+  return desktopDemoSection("Dashboard KPI band", html`
       <div class="pattern-kpi-card-demo pattern-desktop-demo" data-kpi-card-demo>
         <div class="pattern-kpi-card-demo__grid">
           ${packageDemo("kpi-tile", { label: "Fuel spend", value: "$84.2k", delta: "+12% vs last week", tone: "warning", icon: "local_gas_station" })}
@@ -40,8 +46,7 @@ function kpiCardDemoPanel() {
           ${packageDemo("button", { label: "Investigate exceptions", icon: "troubleshoot" }, { "data-kpi-investigate": "" })}
         </footer>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function chartWrapperDemoPanel() {
@@ -50,10 +55,7 @@ function chartWrapperDemoPanel() {
     { id: "feb", period: "Feb", spend: "$70k", variance: "+9%" },
     { id: "mar", period: "Mar", spend: "$84k", variance: "+12%" },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Chart module with accessible summary</h2>
+  return desktopDemoSection("Chart module with accessible summary", html`
       <div class="pattern-chart-wrapper-demo pattern-desktop-demo" data-chart-wrapper-demo>
         <header class="pattern-chart-wrapper-demo__header">
           ${packageDemo("kpi-tile", { label: "Fuel trend", value: "84%", delta: "Compared with last quarter", tone: "info" })}
@@ -66,8 +68,7 @@ function chartWrapperDemoPanel() {
           ${packageDemo("table", { label: "Chart data summary", rows, columns: [{ key: "period", label: "Period" }, { key: "spend", label: "Spend", align: "right" }, { key: "variance", label: "Variance", align: "right" }] })}
         </div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function virtualDataTableDemoPanel() {
@@ -81,10 +82,7 @@ function virtualDataTableDemoPanel() {
     { id: "lpa-009-g", plate: "LPA-009-G", driver: "Sofia Rios", status: { label: "Active", tone: "success" }, region: "Central", spend: "$299", spendValue: 299 },
     { id: "vtc-660-h", plate: "VTC-660-H", driver: "Bruno Diaz", status: { label: "Frozen", tone: "danger" }, region: "West", spend: "$86", spendValue: 86 },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Operational data table</h2>
+  return desktopDemoSection("Operational data table", html`
       <div class="pattern-virtual-table-demo pattern-desktop-demo" data-virtual-table-demo data-page="1" data-page-size="5" data-status="all">
         <div class="pattern-virtual-table-demo__toolbar">
           ${packageDemo("input", { label: "Search vehicles", placeholder: "Plate, driver, or status" }, { "data-virtual-table-search": "" })}
@@ -132,8 +130,7 @@ function virtualDataTableDemoPanel() {
           ${packageDemo("pagination", { page: 1, pageCount: 2, label: "Vehicle operation pages", density: "sm" }, { "data-virtual-table-pagination": "" })}
         </footer>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function advancedFiltersDemoPanel() {
@@ -143,10 +140,7 @@ function advancedFiltersDemoPanel() {
     { id: "central-review", vehicle: "MTR-330-A", driver: "Iris Mora", region: "Central", status: "Review", period: "2026-07-14" },
     { id: "west-frozen", vehicle: "PZN-118-D", driver: "Noe Ruiz", region: "West", status: "Frozen", period: "2026-07-08" },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Dashboard filter set</h2>
+  return desktopDemoSection("Dashboard filter set", html`
       <div class="pattern-advanced-filters-demo pattern-desktop-demo" data-advanced-filters-demo data-applied="false">
         <div class="pattern-advanced-filters-demo__controls">
           ${packageDemo("select", { label: "Region", value: "all", options: [{ label: "All regions", value: "all" }, { label: "North", value: "North" }, { label: "Central", value: "Central" }, { label: "West", value: "West" }] }, { "data-advanced-filter": "region" })}
@@ -186,8 +180,7 @@ function advancedFiltersDemoPanel() {
           ${packageDemo("inline-validation", { label: "Filters", message: "Filters applied to dashboard and table modules.", state: "success" })}
         </div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function columnConfiguratorDemoPanel() {
@@ -203,10 +196,7 @@ function columnConfiguratorDemoPanel() {
     { key: "region", label: "Region", priority: "tertiary" },
     { key: "spend", label: "Spend", mono: true, align: "right", priority: "tertiary" },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Column visibility controls</h2>
+  return desktopDemoSection("Column visibility controls", html`
       <div class="pattern-column-config-demo pattern-desktop-demo" data-column-config-demo>
         <div class="pattern-column-config-demo__layout">
           <aside class="pattern-column-config-demo__panel" aria-label="Column controls">
@@ -227,8 +217,7 @@ function columnConfiguratorDemoPanel() {
         </footer>
         <div data-column-feedback hidden>${packageDemo("toast", { label: "Columns applied", description: "The table view was updated.", tone: "success" })}</div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function rolesAndPermissionsDemoPanel() {
@@ -237,10 +226,7 @@ function rolesAndPermissionsDemoPanel() {
     { id: "cards", capability: "Freeze cards", manager: { label: "Enabled", tone: "success" }, finance: { label: "Review", tone: "warning" }, support: { label: "Review", tone: "warning" } },
     { id: "roles", capability: "Manage roles", manager: { label: "Blocked", tone: "danger" }, finance: { label: "Blocked", tone: "danger" }, support: { label: "Blocked", tone: "danger" } },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Permission review matrix</h2>
+  return desktopDemoSection("Permission review matrix", html`
       <div class="pattern-roles-demo pattern-desktop-demo" data-roles-demo data-dirty="false">
         <div class="pattern-roles-demo__toolbar">
           ${packageDemo("badge", { label: "3 roles", tone: "neutral", variant: "standard" })}
@@ -256,8 +242,7 @@ function rolesAndPermissionsDemoPanel() {
         ${packageDemo("audit-event", { label: "Permission review ready", description: "No unpublished permission changes.", meta: "Fleet admin", status: "Current", icon: "admin_panel_settings" }, { "data-roles-audit": "" })}
         <div data-roles-toast hidden>${packageDemo("toast", { label: "Permissions saved", description: "Role changes were logged for audit.", tone: "success" })}</div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function driverVehicleAdministrationDemoPanel() {
@@ -271,10 +256,7 @@ function driverVehicleAdministrationDemoPanel() {
     { id: "kld-901-c", plate: "KLD-901-C", status: "Review", driver: "Luis Vera", action: "Documents" },
     { id: "mtr-330-a", plate: "MTR-330-A", status: "Maintenance", driver: "Unassigned", action: "Recover" },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-desktop-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Driver and vehicle lifecycle</h2>
+  return desktopDemoSection("Driver and vehicle lifecycle", html`
       <div class="pattern-admin-demo pattern-desktop-demo" data-admin-demo data-view="drivers">
         <div class="pattern-admin-demo__switcher">
           ${packageDemo("button", { label: "Drivers", icon: "badge" }, { "data-admin-view": "drivers", "aria-pressed": "true" })}
@@ -298,6 +280,5 @@ function driverVehicleAdministrationDemoPanel() {
         </footer>
         ${packageDemo("audit-event", { label: "Lifecycle action logged", description: "Driver recovery request created for Iris Mora.", meta: "Today 10:15 - Operations", status: "Logged", icon: "manage_history" })}
       </div>
-    </section>
-  `;
+  `);
 }

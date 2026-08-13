@@ -6,10 +6,15 @@ import { mobilePatternReactComponents, mobilePatternReactIslandWrappers } from "
 import { operationalPatternReactComponents, operationalPatternReactIslandWrappers } from "./pattern-react-operational-islands.js?v=2";
 import { shellPatternReactComponents, shellPatternReactIslandWrappers } from "./pattern-react-shell-islands.js?v=2";
 import { AuthenticationLoginBiometricsAndOtp } from "./generated/react/patterns/AuthenticationLoginBiometricsAndOtp.js?v=1";
+import { ArtifactMetadataBar } from "./generated/react/patterns/ArtifactMetadataBar.js?v=1";
 import { AvatarGroup } from "./generated/react/patterns/AvatarGroup.js?v=1";
 import { CalendarView } from "./generated/react/patterns/CalendarView.js?v=1";
 import { ChartLegendItem } from "./generated/react/patterns/ChartLegendItem.js?v=1";
 import { CheckboxGroup } from "./generated/react/patterns/CheckboxGroup.js?v=1";
+import { DemoPreviewFrame } from "./generated/react/patterns/DemoPreviewFrame.js?v=1";
+import { DocumentationPrimitiveDemo } from "./generated/react/patterns/DocumentationPrimitiveDemo.js?v=1";
+import { DocumentationReferenceGrid } from "./generated/react/patterns/DocumentationReferenceGrid.js?v=1";
+import { DocumentationTokenGrid } from "./generated/react/patterns/DocumentationTokenGrid.js?v=1";
 import { DragSortableList } from "./generated/react/patterns/DragSortableList.js?v=1";
 import { GanttChart } from "./generated/react/patterns/GanttChart.js?v=1";
 import { PolarChart } from "./generated/react/patterns/PolarChart.js?v=1";
@@ -20,6 +25,8 @@ import { SnackbarProvider } from "./generated/react/patterns/SnackbarProvider.js
 import { Timeline } from "./generated/react/patterns/Timeline.js?v=1";
 import { TransferList } from "./generated/react/patterns/TransferList.js?v=1";
 import { WaterfallChart } from "./generated/react/patterns/WaterfallChart.js?v=1";
+import { DocumentationHero } from "./generated/react/patterns/DocumentationHero.js?v=1";
+import { DocumentationSection } from "./generated/react/patterns/DocumentationSection.js?v=1";
 
 export const patternReactComponents = {
   ...candidatePatternReactComponents,
@@ -29,10 +36,15 @@ export const patternReactComponents = {
   ...operationalPatternReactComponents,
   ...shellPatternReactComponents,
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtp,
+  "artifact-metadata-bar": ArtifactMetadataBar,
   "avatar-group": AvatarGroup,
   "calendar-view": CalendarView,
   "chart-legend-item": ChartLegendItem,
   "checkbox-group": CheckboxGroup,
+  "demo-preview-frame": DemoPreviewFrame,
+  "documentation-primitive-demo": DocumentationPrimitiveDemo,
+  "documentation-reference-grid": DocumentationReferenceGrid,
+  "documentation-token-grid": DocumentationTokenGrid,
   "drag-sortable-list": DragSortableList,
   "gantt-chart": GanttChart,
   "polar-chart": PolarChart,
@@ -43,7 +55,31 @@ export const patternReactComponents = {
   timeline: Timeline,
   "transfer-list": TransferList,
   "waterfall-chart": WaterfallChart,
+  "documentation-hero": DocumentationHero,
+  "documentation-section": DocumentationSection,
 };
+
+function DocumentationHeroIsland({ initialProps }) {
+  const actions = (initialProps.actions ?? []).map((action) => ({
+    ...action,
+    onClick: action.href
+      ? () => {
+        window.location.hash = action.href.replace(/^#/, "");
+      }
+      : action.onClick,
+  }));
+  const visual = initialProps.visualHtml
+    ? React.createElement("div", {
+      className: "docs-intro-visual",
+      dangerouslySetInnerHTML: { __html: initialProps.visualHtml },
+    })
+    : initialProps.visual;
+  return React.createElement(DocumentationHero, {
+    ...initialProps,
+    actions,
+    visual,
+  });
+}
 
 function AuthenticationLoginBiometricsAndOtpIsland({ initialProps }) {
   const [state, setState] = React.useState(initialProps.state ?? "idle");
@@ -291,6 +327,43 @@ function CalendarViewIsland({ initialProps }) {
   });
 }
 
+function DocumentationSectionIsland({ initialProps }) {
+  const { bodyHtml = "", ...props } = initialProps;
+  React.useEffect(() => {
+    document.dispatchEvent(new CustomEvent("docs-react-slot-html-mounted", { bubbles: true }));
+  }, [bodyHtml]);
+  return React.createElement(
+    DocumentationSection,
+    props,
+    React.createElement("div", {
+      "data-flowdocs-section-body": "html-adapter",
+      dangerouslySetInnerHTML: { __html: bodyHtml },
+    }),
+  );
+}
+
+function htmlSlot(html = "", slot) {
+  return html
+    ? React.createElement("div", {
+      "data-flowdocs-html-slot": slot,
+      dangerouslySetInnerHTML: { __html: html },
+    })
+    : undefined;
+}
+
+function DemoPreviewFrameIsland({ initialProps }) {
+  const { previewHtml = "", controlsHtml = "", sourceHtml = "", ...props } = initialProps;
+  React.useEffect(() => {
+    document.dispatchEvent(new CustomEvent("docs-react-slot-html-mounted", { bubbles: true }));
+  }, [previewHtml, controlsHtml, sourceHtml]);
+  return React.createElement(DemoPreviewFrame, {
+    ...props,
+    preview: htmlSlot(previewHtml, "demo-preview-frame.preview"),
+    controls: htmlSlot(controlsHtml, "demo-preview-frame.controls"),
+    source: htmlSlot(sourceHtml, "demo-preview-frame.source"),
+  });
+}
+
 export const patternReactIslandWrappers = {
   ...candidatePatternReactIslandWrappers,
   ...desktopPatternReactIslandWrappers,
@@ -298,6 +371,9 @@ export const patternReactIslandWrappers = {
   ...mobilePatternReactIslandWrappers,
   ...operationalPatternReactIslandWrappers,
   ...shellPatternReactIslandWrappers,
+  "documentation-hero": DocumentationHeroIsland,
+  "documentation-section": DocumentationSectionIsland,
+  "demo-preview-frame": DemoPreviewFrameIsland,
   "authentication-login-biometrics-and-otp": AuthenticationLoginBiometricsAndOtpIsland,
   "calendar-view": CalendarViewIsland,
   "chart-legend-item": ChartLegendItemIsland,

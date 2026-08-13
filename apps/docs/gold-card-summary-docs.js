@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderCardSummaryGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, cardSummaryDemoFromData); }
 export function cardSummaryDemo(label = "Driver card", state = "default") { return simpleDemo("card-summary", { label, state }); }

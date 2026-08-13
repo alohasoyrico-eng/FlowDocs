@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderAvatarGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, avatarDemoFromData); }
 export function avatarDemo(name = "Ana Sosa", density = "md", status = "online", state = "default") { return simpleDemo("avatar", { name, density, status, state }); }

@@ -1,6 +1,7 @@
-import { html, slug } from "./detail-tabs-core.js?v=5";
+import { html, slug } from "./detail-tabs-core.js?v=10";
 import { componentDemo } from "./component-demo.js?v=60";
-import { operationalReactPatternOverviewDemo } from "./pattern-operational-react-demos.js?v=3";
+import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
+import { operationalReactPatternOverviewDemo } from "./pattern-operational-react-demos.js?v=4";
 
 function attrText(attrs = {}) {
   return Object.entries(attrs).map(([key, value]) => value === "" ? key : `${key}="${String(value).replace(/"/g, "&quot;")}"`).join(" ");
@@ -151,8 +152,8 @@ export function operationalPatternOverviewDemo(patternId) {
   if (reactDemo) return reactDemo;
   const demo = operationalPatterns[patternId];
   if (!demo) return "";
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-utility-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail" data-operational-pattern-demo="${patternId}">
+  return documentationSectionIsland({
+    bodyHtml: html`
       <span class="eyebrow">Operational demo</span>
       <h2>${demo.title}</h2>
       <div class="surface template-module-surface" data-flow-primitive="surface" data-surface-role="section" data-template-pattern="${slug(demo.pattern)}">
@@ -162,6 +163,10 @@ export function operationalPatternOverviewDemo(patternId) {
         </header>
         <div class="template-module-content">${demo.body()}</div>
       </div>
-    </section>
-  `;
+    `,
+    className: "artifact-detail-surface wide pattern-utility-panel",
+    template: "artifact-detail",
+    attrs: `data-operational-pattern-demo="${patternId}"`,
+    source: "operationalPatternOverviewDemo",
+  });
 }

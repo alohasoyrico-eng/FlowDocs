@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderTagGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, tagDemoFromData); }
 export function tagDemo(label = "Cross-platform", variant = "metadata", tone = "neutral", state = "default", iconName = "", interactive = false) { return simpleDemo("tag", { label, variant, tone, state, icon: iconName, interactive }); }

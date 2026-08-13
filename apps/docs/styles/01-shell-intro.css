@@ -1,0 +1,65 @@
+.docs-intro {
+  --docs-intro-copy-width: min(100%, var(--sys-frame-content-hero-copy));
+  --docs-intro-visual-width: min(100%, var(--sys-frame-content-hero-visual));
+  --docs-intro-x-breath: clamp(var(--frame-page-x), 4vw, var(--density-section-gap));
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, var(--docs-intro-copy-width)) minmax(0, var(--docs-intro-visual-width));
+  gap: clamp(var(--density-page-gap), 10vw, calc(var(--density-page-gap) + var(--density-component-gap-lg)));
+  align-items: stretch;
+  justify-content: space-between;
+  inline-size: min(100%, calc(var(--frame-page-shell) + var(--density-page-gap) + var(--density-section-gap)));
+  margin-inline: auto;
+  min-block-size: calc(100svh - var(--sys-frame-height-shell-topbar));
+  padding-block: clamp(var(--density-section-gap), 10vw, var(--density-page-gap)) var(--density-section-gap);
+  padding-inline: var(--docs-intro-x-breath);
+  overflow: visible;
+}
+
+.docs-intro-copy,
+.docs-intro > [data-flow-slot="documentation-hero.copy"] {
+  align-self: end;
+  max-inline-size: var(--docs-intro-copy-width);
+  padding-block-end: var(--density-component-gap-lg);
+  padding-inline-start: 0;
+}
+
+.docs-intro-visual,
+.docs-intro > [data-flow-slot="documentation-hero.visual"] {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: start center;
+  min-inline-size: 0;
+  justify-self: end;
+  align-self: start;
+  padding-block-start: var(--density-component-gap-lg);
+  padding-inline-end: 0;
+}
+
+.docs-intro > [data-flow-slot="documentation-hero.copy"] > [data-flow-slot="documentation-hero.header"] > p {
+  font-size: var(--font-size-lede);
+  line-height: var(--line-height-lede);
+}
+
+.docs-intro > [data-flow-slot="documentation-hero.copy"] > [data-flow-slot="documentation-hero.actions"] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--density-component-gap);
+  margin-block-start: var(--density-component-gap-lg);
+}
+
+.docs-intro-visual__asset {
+  position: relative;
+  z-index: var(--sys-depth-z-raised);
+  inline-size: var(--docs-intro-visual-width);
+  --illustration-asset-max-size: var(--docs-intro-visual-width);
+  transform: translate(0, -5%);
+}
+
+@media (min-width: 1280px) {
+  .docs-intro {
+    --docs-intro-copy-width: min(100%, calc(var(--sys-frame-content-hero-copy) + var(--sys-frame-gap-section)));
+    gap: clamp(var(--density-page-gap), 12vw, calc(var(--density-page-gap) + var(--density-section-gap)));
+  }
+}

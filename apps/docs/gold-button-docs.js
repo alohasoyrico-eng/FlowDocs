@@ -1,7 +1,8 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailFoundationCompactList, componentDetailGuidelineGroupsContent, componentDetailPropsRowsTable, componentDetailRationaleCard, componentDetailSectionAttrs, componentDetailTestsListContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, artifactContract, referenceCopy, ui } from "./gold-component-core.js?v=214";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailFoundationCompactList, componentDetailGuidelineGroupsContent, componentDetailPropsRowsTable, componentDetailRationaleCard, componentDetailSection, componentDetailTestsListContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, demoPlaygroundFrame, html, icon, artifactContract, referenceCopy, ui } from "./gold-component-core.js?v=221";
+import { docsSourceMarkupSlot } from "./docs-code-block.js?v=2";
 import { componentDemo } from "./component-demo.js?v=60";
 
-import { buttonDemoFromData, playgroundControl } from "./gold-component-data.js?v=230";
+import { buttonDemoFromData, playgroundControl } from "./gold-component-data.js?v=231";
 
 export function renderButtonGoldSection(entry, section) {
   const renderers = {
@@ -23,8 +24,8 @@ export function renderButtonGoldSection(entry, section) {
   return renderers[section]?.() ?? "";
 }
 
-function buttonSurfaceAttrs(section, className = "", attrs = "") {
-  return componentDetailSectionAttrs({ component: "button", section, className, attrs });
+function buttonSection(section, children, className = "", attrs = "") {
+  return componentDetailSection({ component: "button", section, className, attrs, children });
 }
 
 function buttonContract(entry) {
@@ -33,8 +34,7 @@ function buttonContract(entry) {
 
 function buttonOperationalExamplePanel() {
   const scenario = componentSectionData("button", "operational-example").scenario;
-  return html`
-    <section ${buttonSurfaceAttrs("operational-example", "button-operational-panel")}>
+  return buttonSection("operational-example", html`
       <h2>${ui("component.operationalExample")}</h2>
       <p>${componentSectionCopy("button", "operational-example")}</p>
       <div class="button-scenario" data-density-context="md">
@@ -50,36 +50,30 @@ function buttonOperationalExamplePanel() {
         </div>
         ${componentDetailRationaleCard(scenario.rationaleTitle ?? "Why Button", scenario.rationale ?? scenario.decisions?.map((row) => row.note) ?? [], "rule")}
       </div>
-    </section>
-  `;
+  `, "button-operational-panel");
 }
 
 function buttonAnatomyPanel(entry) {
   const anatomy = buttonContract(entry).anatomy ?? componentSectionData("button", "anatomy").items ?? [];
-  return html`
-    <section ${buttonSurfaceAttrs("anatomy")}>
+  return buttonSection("anatomy", html`
       <h2>${ui("component.anatomy")}</h2>
       ${componentDetailAnatomyGrid({ items: anatomy, iconName: "ads_click" })}
-    </section>
-  `;
+  `);
 }
 
 function buttonAccessibilitySummaryPanel(entry) {
   const contract = buttonContract(entry);
-  return html`
-    <section ${buttonSurfaceAttrs("accessibility")}>
+  return buttonSection("accessibility", html`
       ${componentDetailAccessibilityContent("button", referenceCopy.accessibility?.statePrecedenceFallback, contract.statePrecedence)}
-    </section>
-  `;
+  `);
 }
 
 function buttonViewportOrganizationPanel() {
   const groups = componentDemoData("button", "viewport-organization", "items");
-  return html`
-    <section ${buttonSurfaceAttrs("viewport-organization", "button-viewport-panel")}>
+  return buttonSection("viewport-organization", html`
       <h2>${ui("component.viewportOrganization")}</h2>
       <p>${componentSectionCopy("button", "viewport-organization")}</p>
-      <div class="viewport-doc-grid">
+      <div class="docs-viewport-matrix">
         ${groups
           .map(
             (group) => html`
@@ -93,8 +87,7 @@ function buttonViewportOrganizationPanel() {
           )
           .join("")}
       </div>
-    </section>
-  `;
+  `, "button-viewport-panel");
 }
 
 function buttonViewportSurface(group) {
@@ -128,38 +121,33 @@ function buttonViewportSurface(group) {
 
 function buttonPlaygroundPanel() {
   const playground = componentSectionData("button", "playground");
-  return html`
-    <section ${buttonSurfaceAttrs("playground", "button-playground", 'data-button-playground data-ready="false"')}>
+  return buttonSection("playground", html`
       <h2>${ui("component.playground")}</h2>
       <p>${componentSectionCopy("button", "playground")}</p>
-      <div class="playground-layout">
-        <form class="playground-controls" aria-label="${ui("playground.buttonControls")}">
-          ${(playground.controls ?? []).map((control) => playgroundControl(control, "data-button-playground-input")).join("")}
-        </form>
-        <div class="playground-preview">
-          <div data-button-preview data-density-context="${playground.preview?.density ?? "md"}">${buttonDemoFromData(playground.preview ?? {})}</div>
-          <div class="playground-warning" data-button-warning hidden></div>
-          <pre data-button-markup></pre>
-        </div>
-      </div>
-    </section>
-  `;
+      ${demoPlaygroundFrame({
+        label: ui("component.playground"),
+        controlsTag: "form",
+        controlsAttrs: `aria-label="${ui("playground.buttonControls")}"`,
+        controlsHtml: (playground.controls ?? []).map((control) => playgroundControl(control, "data-button-playground-input")).join(""),
+        previewHtml: `<div data-button-preview data-density-context="${playground.preview?.density ?? "md"}">${buttonDemoFromData(playground.preview ?? {})}</div><div class="playground-warning" data-button-warning hidden></div>`,
+        sourceHtml: docsSourceMarkupSlot("", "data-button-markup"),
+        source: "buttonPlaygroundPanel",
+      })}
+  `, "button-playground", 'data-button-playground data-ready="false"');
 }
 
 function buttonContractFromSpecPanel(entry) {
   const contract = buttonContract(entry);
   const props = (contract.props ?? []).filter((prop) => prop.name !== "density");
   const foundations = Object.entries(contract.foundations ?? {});
-  return html`
-    <section ${buttonSurfaceAttrs("api-foundations")}>
+  return buttonSection("api-foundations", html`
       <h2>${ui("build.apiAndFoundations")}</h2>
       ${componentDetailPropsRowsTable({
         columns: [ui("table.prop"), ui("table.type"), ui("table.default"), ui("table.rule")],
         rows: props.map((prop) => [prop.name, prop.type, prop.default ?? (prop.required ? "required" : "none"), prop.description]),
       })}
       ${componentDetailFoundationCompactList(foundations)}
-    </section>
-  `;
+  `);
 }
 
 function buttonGuidelinesFromSpecPanel(entry) {
@@ -169,57 +157,48 @@ function buttonGuidelinesFromSpecPanel(entry) {
     [ui("guidelines.doNot"), guidelines.dont ?? []],
     [ui("guidelines.notes"), guidelines.info ?? []],
   ].map(([title, items]) => ({ title, items }));
-  return html`
-    <section ${buttonSurfaceAttrs("guidelines")}>
+  return buttonSection("guidelines", html`
       ${componentDetailGuidelineGroupsContent(groups)}
-    </section>
-  `;
+  `);
 }
 
 function buttonTestContractFromSpecPanel(entry) {
   const tests = (buttonContract(entry).tests ?? []).filter((item) => !/density/i.test(item));
   const rejectIf = (buttonContract(entry).rejectIf ?? []).filter((item) => !/density/i.test(item));
-  return html`
-    <section ${buttonSurfaceAttrs("tests-rejection-rules")}>
+  return buttonSection("tests-rejection-rules", html`
       ${componentDetailTestsListContent({ mustTest: tests, rejectIf })}
-    </section>
-  `;
+  `);
 }
 
 function buttonStatesPanel() {
   const states = componentDemoData("button", "states");
-  return html`
-    <section ${buttonSurfaceAttrs("states")}>
+  return buttonSection("states", html`
       <h2>${ui("component.states")}</h2>
       <p>${componentSectionCopy("button", "states")}</p>
-      <div class="button-demo-grid states-grid">
+      <div class="docs-demo-matrix states-grid">
         ${states.map((demo) => demoCell(demo.label, buttonDemoFromData(demo.button))).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function buttonVariantsPanel() {
   const variants = componentDemoData("button", "variants");
-  return html`
-    <section ${buttonSurfaceAttrs("variants")}>
+  return buttonSection("variants", html`
       <h2>${ui("component.variants")}</h2>
       <p>${componentSectionCopy("button", "variants")}</p>
-      <div class="button-demo-grid variant-grid">
+      <div class="docs-demo-matrix variant-grid">
         ${variants.map((demo) => demoCell(demo.label, buttonDemoFromData(demo.button))).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function buttonStateVariantMatrixPanel() {
   const rows = componentDemoData("button", "variant-state-behavior", "rows");
   const states = componentDemoData("button", "variant-state-behavior", "states");
-  return html`
-    <section ${buttonSurfaceAttrs("variant-state-behavior")}>
+  return buttonSection("variant-state-behavior", html`
       <h2>${ui("component.variantStateBehavior")}</h2>
       <p>${componentSectionCopy("button", "variant-state-behavior")}</p>
-      <div class="button-demo-grid state-behavior-grid">
+      <div class="docs-demo-matrix docs-demo-matrix--state">
         ${rows
           .flatMap((row) =>
             states.map((state) =>
@@ -228,14 +207,12 @@ function buttonStateVariantMatrixPanel() {
           )
           .join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function buttonFullWidthPanel() {
   const items = componentDemoData("button", "full-width", "items");
-  return html`
-    <section ${buttonSurfaceAttrs("full-width")}>
+  return buttonSection("full-width", html`
       <h2>${ui("component.fullWidth")}</h2>
       <p>${componentSectionCopy("button", "full-width")}</p>
       <div class="full-width-demo">
@@ -248,14 +225,12 @@ function buttonFullWidthPanel() {
           </div>
         `).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function buttonResponsivePanel() {
   const examples = componentDemoData("button", "responsive-layout-patterns", "examples");
-  return html`
-    <section ${buttonSurfaceAttrs("responsive-layout-patterns")}>
+  return buttonSection("responsive-layout-patterns", html`
       <h2>${ui("component.responsiveLayoutPatterns")}</h2>
       <p>${componentSectionCopy("button", "responsive-layout-patterns")}</p>
       <div class="responsive-actions-demo">
@@ -266,8 +241,7 @@ function buttonResponsivePanel() {
           </article>
         `).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 export function buttonDemo(label, variant = "primary", intent = "", size = "", iconName = "", state = "", density = "", trailingIcon = "") {

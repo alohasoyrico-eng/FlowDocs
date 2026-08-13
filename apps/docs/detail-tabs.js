@@ -1,10 +1,10 @@
-import { componentDocs, familyComponentTabs, goldComponentDocumentationTabs, configureDetailTabsContext } from "./detail-tabs-core.js?v=5";
-import { foundationTabs } from "./foundation-tabs.js?v=3";
-import { primitiveTabs } from "./primitive-tabs.js?v=3";
-import { patternTabs } from "./pattern-tabs.js?v=59";
-import { templateTabs } from "./template-tabs.js?v=15";
+import { componentDocs, familyComponentTabs, goldComponentDocumentationTabs, configureDetailTabsContext } from "./detail-tabs-core.js?v=10";
+import { foundationTabs } from "./foundation-tabs.js?v=7";
+import { primitiveTabs } from "./primitive-tabs.js?v=6";
+import { patternTabs } from "./pattern-tabs.js?v=68";
+import { templateTabs } from "./template-tabs.js?v=18";
 
-export { accessibilityPanel, agentPanel, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs-core.js?v=5";
+export { accessibilityPanel, agentPanel, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs-core.js?v=10";
 
 export function configureDetailTabs(nextDeps) {
   configureDetailTabsContext(nextDeps);

@@ -1,5 +1,6 @@
-import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, html, icon, ui } from "./gold-component-core.js?v=214";
-import { playgroundStaticControls } from "./gold-component-data.js?v=230";
+import { componentDetailAccessibilityContent, componentDetailAnatomyGrid, componentDetailApiPropsTable, componentDetailGuidelinesContent, componentDetailRationaleCard, componentDetailSection, componentDetailTestsContent, componentMielPanel, componentSectionCopy, componentSectionData, componentDemoData, demoCell, demoPlaygroundFrame, demoViewportFrame, html, icon, ui } from "./gold-component-core.js?v=221";
+import { playgroundStaticControls } from "./gold-component-data.js?v=231";
+import { docsSourceMarkupSlot } from "./docs-code-block.js?v=2";
 import { componentDemo } from "./component-demo.js?v=61";
 
 export function simpleDemo(component, demo = {}) {
@@ -24,8 +25,14 @@ const fullDemoComponents = new Set([
   "table",
 ]);
 
+const legacyDemoFrameClassMap = new Map([
+  [["simple", "demo-row"].join("-"), "docs-demo-row"],
+  [["simple", "viewport-demo"].join("-"), "docs-viewport-demo"],
+  [["docs", "demo-layout"].join("-"), "docs-demo-frame"],
+]);
+
 function demoGridClass(component, mode = "states") {
-  const classes = ["button-demo-grid", mode === "matrix" ? "state-behavior-grid" : "states-grid"];
+  const classes = ["docs-demo-matrix", mode === "matrix" ? "docs-demo-matrix--state" : "states-grid"];
   if (wideDemoComponents.has(component)) classes.push("docs-demo-grid--wide");
   if (fullDemoComponents.has(component)) classes.push("docs-demo-grid--full");
   if (component === "tabs") classes.push("tabs-doc-demo-grid");
@@ -34,10 +41,18 @@ function demoGridClass(component, mode = "states") {
 }
 
 function demoLayoutClass(component, baseClass = "") {
-  const classes = [baseClass, `docs-demo-layout--${component}`];
-  if (wideDemoComponents.has(component)) classes.push("docs-demo-layout--wide");
-  if (fullDemoComponents.has(component)) classes.push("docs-demo-layout--full");
+  const classes = [normalizeDemoFrameClass(baseClass), `docs-demo-frame--${component}`];
+  if (wideDemoComponents.has(component)) classes.push("docs-demo-frame--wide");
+  if (fullDemoComponents.has(component)) classes.push("docs-demo-frame--full");
   return classes.filter(Boolean).join(" ");
+}
+
+function normalizeDemoFrameClass(className = "") {
+  return String(className)
+    .split(/\s+/)
+    .map((name) => legacyDemoFrameClassMap.get(name) ?? name)
+    .filter(Boolean)
+    .join(" ");
 }
 
 export function simpleOperationalExamplePanel(component, demoFromData) {
@@ -60,7 +75,7 @@ export function simpleOperationalExamplePanel(component, demoFromData) {
       <div class="${demoLayoutClass(component, "simple-scenario")}">
         <div class="simple-console" data-density-context="md">
           <header>${icon(scenario.icon, { tone: "action", fill: true })}<div><strong>${scenario.title}</strong><small>${scenario.meta}</small></div></header>
-          <div class="${demoLayoutClass(component, "simple-demo-row")}">${demos.map(demoFromData).join("")}</div>
+          <div class="${demoLayoutClass(component, "docs-demo-row")}">${demos.map(demoFromData).join("")}</div>
         </div>
         ${componentDetailRationaleCard(scenario.rationaleTitle, scenario.rationale ?? [], "rule")}
         ${semanticDecision}
@@ -102,22 +117,22 @@ export function simpleFullWidthPanel(component, demoFromData) {
   if (component === "toast") {
     return componentDetailSection({ component, section: "full-width", children: html`<h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy(component, "full-width")}</p><div class="responsive-actions-demo toast-full-width-demo">${items.map((item) => `<article data-doc-primitive="component-demo-container"><strong>${item.label}</strong><div class="toast-region-demo" data-toast-align="${item.align ?? "end"}">${content(item)}</div></article>`).join("")}</div>` });
   }
-  return componentDetailSection({ component, section: "full-width", children: html`<h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy(component, "full-width")}</p><div class="${demoLayoutClass(component, "responsive-actions-demo")}">${items.map((item) => `<article data-doc-primitive="component-demo-container"><strong>${item.label}</strong><div class="${demoLayoutClass(component, item.layout === "row" ? "simple-demo-row" : "button-stack")}">${content(item)}</div></article>`).join("")}</div>` });
+  return componentDetailSection({ component, section: "full-width", children: html`<h2>${ui("component.fullWidth")}</h2><p>${componentSectionCopy(component, "full-width")}</p><div class="${demoLayoutClass(component, "responsive-actions-demo")}">${items.map((item) => `<article data-doc-primitive="component-demo-container"><strong>${item.label}</strong><div class="${demoLayoutClass(component, item.layout === "row" ? "docs-demo-row" : "button-stack")}">${content(item)}</div></article>`).join("")}</div>` });
 }
 
 export function simpleResponsivePanel(component, demoFromData) {
   const examples = componentDemoData(component, "responsive-layout-patterns", "examples");
-  return componentDetailSection({ component, section: "responsive-layout-patterns", children: html`<h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy(component, "responsive-layout-patterns")}</p><div class="${demoLayoutClass(component, "responsive-actions-demo")}">${examples.map((example) => `<article data-doc-primitive="component-demo-container" data-density-context="${example.density ?? "md"}"><strong>${example.label}</strong><div class="${demoLayoutClass(component, example.layout ?? "simple-demo-row")}">${(example.demos ?? []).map((demo) => demoFromData({ ...demo, density: demo.density ?? example.density })).join("")}</div></article>`).join("")}</div>` });
+  return componentDetailSection({ component, section: "responsive-layout-patterns", children: html`<h2>${ui("component.responsiveLayoutPatterns")}</h2><p>${componentSectionCopy(component, "responsive-layout-patterns")}</p><div class="${demoLayoutClass(component, "responsive-actions-demo")}">${examples.map((example) => `<article data-doc-primitive="component-demo-container" data-density-context="${example.density ?? "md"}"><strong>${example.label}</strong><div class="${demoLayoutClass(component, example.layout ?? "docs-demo-row")}">${(example.demos ?? []).map((demo) => demoFromData({ ...demo, density: demo.density ?? example.density })).join("")}</div></article>`).join("")}</div>` });
 }
 
 export function simpleViewportOrganizationPanel(component, demoFromData) {
   const items = componentDemoData(component, "viewport-organization", "items");
-  return componentDetailSection({ component, section: "viewport-organization", className: "button-viewport-panel", children: html`<h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy(component, "viewport-organization")}</p><div class="${demoLayoutClass(component, "viewport-doc-grid")}">${items.map((item) => `<article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}"><header>${icon(item.icon)}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.layout}</code><div class="${demoLayoutClass(component, "simple-viewport-demo")}" data-demo-layout="${item.layout ?? "inline"}">${demoFromData({ ...(item.demo ?? {}), density: item.demo?.density ?? item.density })}</div></article>`).join("")}</div>` });
+  return componentDetailSection({ component, section: "viewport-organization", className: "button-viewport-panel", children: html`<h2>${ui("component.viewportOrganization")}</h2><p>${componentSectionCopy(component, "viewport-organization")}</p><div class="${demoLayoutClass(component, "docs-viewport-matrix")}">${items.map((item) => `<article data-doc-primitive="component-viewport-demo" data-density-context="${item.density}"><header>${icon(item.icon)}<h3>${item.title}</h3></header><p>${item.rule}</p><code>${item.layout}</code>${demoViewportFrame({ label: item.title, previewHtml: demoFromData({ ...(item.demo ?? {}), density: item.demo?.density ?? item.density }), density: item.density, layout: item.layout ?? "inline", className: demoLayoutClass(component, ""), source: "simpleViewportOrganizationPanel" })}</article>`).join("")}</div>` });
 }
 
 export function simplePlaygroundPanel(component, demoFromData) {
   const playground = componentSectionData(component, "playground");
-  return componentDetailSection({ component, section: "playground", className: "button-playground", attrs: `data-component-playground="${component}"`, children: html`<h2>${ui("component.playground")}</h2><p>${componentSectionCopy(component, "playground")}</p><div class="playground-layout"><div class="playground-controls" role="group" aria-label="${ui(`playground.${component.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())}Controls`)}">${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}</div><div class="playground-preview"><div data-component-preview data-density-context="${playground.preview?.density ?? "md"}">${demoFromData(playground.preview ?? {})}</div><pre data-component-markup>${playground.snippet ?? ""}</pre></div></div>` });
+  return componentDetailSection({ component, section: "playground", className: "button-playground", attrs: `data-component-playground="${component}"`, children: html`<h2>${ui("component.playground")}</h2><p>${componentSectionCopy(component, "playground")}</p>${demoPlaygroundFrame({ label: ui("component.playground"), controlsHtml: `<div role="group" aria-label="${ui(`playground.${component.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())}Controls`)}">${playgroundStaticControls(playground.controls ?? [], "data-component-playground-input")}</div>`, previewHtml: `<div data-doc-playground-preview data-density-context="${playground.preview?.density ?? "md"}">${demoFromData(playground.preview ?? {})}</div>`, sourceHtml: docsSourceMarkupSlot(playground.snippet ?? ""), source: "simplePlaygroundPanel" })}` });
 }
 
 export function simpleGuidelinesPanel(component) {

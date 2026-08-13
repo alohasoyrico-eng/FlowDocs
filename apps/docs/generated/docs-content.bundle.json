@@ -4518,6 +4518,24 @@
       "Internal Operations Console",
       "Settings Workspace"
     ],
+    "documentationTemplates": [
+      "Docs Shell Template",
+      "Docs Home Template",
+      "Docs Collection Template",
+      "Reference Detail Template",
+      "Component Detail Template",
+      "Pattern Detail Template",
+      "Template Detail Template"
+    ],
+    "status": "contract-only",
+    "sourceAudit": "FlowDocs docs/audits/docs-template-cascade-crosswalk.json",
+    "governance": [
+      "Documentation templates are Flow-owned page composition contracts.",
+      "FlowDocs keeps routing, content data, localization, and adapters.",
+      "FlowDocs must not own structural UI wrappers once a documentation template owns the role.",
+      "Documentation templates must reuse existing foundations and primitives before adding public artifacts.",
+      "Documentation-specific slots do not become public components unless they satisfy public variant or component criteria."
+    ],
     "patterns": [
       "Search",
       "Autocomplete",
@@ -25918,6 +25936,487 @@
             "Presets trigger data refresh directly."
           ]
         },
+        "code-block": {
+          "id": "code-block",
+          "name": "Code Block",
+          "layer": "Component",
+          "platform": "Cross-platform",
+          "audiences": [
+            "Design",
+            "Engineering",
+            "Content",
+            "Agents"
+          ],
+          "maturityTarget": 2,
+          "status": "contract-only",
+          "purpose": "Render code, token paths, command snippets, and structured source examples with readable typography, overflow behavior, optional language metadata, and accessible copy/source affordances.",
+          "anatomy": [
+            {
+              "part": "Container",
+              "rule": "Surface that owns border, background, radius, density, and overflow without page-local wrappers.",
+              "tokens": [
+                "comp.code-block.*",
+                "sys.surface.*",
+                "sys.frame.*"
+              ]
+            },
+            {
+              "part": "Header",
+              "rule": "Optional metadata row for language, filename, status, or copy action.",
+              "tokens": [
+                "sys.typography.*",
+                "sys.spacing.*"
+              ]
+            },
+            {
+              "part": "Code content",
+              "rule": "Monospace readable content with preserved whitespace, wrapping policy, and scroll behavior.",
+              "tokens": [
+                "sys.typography.*",
+                "sys.color.*"
+              ]
+            },
+            {
+              "part": "Copy action",
+              "rule": "Optional Copy Button composes the copy behavior and feedback.",
+              "tokens": [
+                "comp.copy-button.*",
+                "sys.state.*"
+              ]
+            }
+          ],
+          "variants": [
+            {
+              "id": "block",
+              "description": "Full-width snippet or source example."
+            },
+            {
+              "id": "inline-group",
+              "description": "Compact grouped token or command snippets."
+            },
+            {
+              "id": "specimen",
+              "description": "Documentation specimen for tokens, APIs, or generated outputs."
+            }
+          ],
+          "states": [
+            "default",
+            "wrapped",
+            "scrollable",
+            "with-header",
+            "with-copy",
+            "copied",
+            "error",
+            "disabled"
+          ],
+          "statePrecedence": "disabled > error > copied > with-copy > with-header > scrollable > wrapped > default",
+          "foundations": {
+            "Voice": {
+              "status": "covered",
+              "decision": "Use clear labels for language, filename, and copy feedback.",
+              "tokens": [
+                "sys.voice.*"
+              ],
+              "behavior": "Users understand what the snippet represents before copying.",
+              "example": "React example.",
+              "test": "Verify visible or accessible label describes source context.",
+              "rejectIf": "Snippet context is only implied by visual placement."
+            },
+            "Frame": {
+              "status": "covered",
+              "decision": "Use Flow spacing, radius, density, and overflow rules.",
+              "tokens": [
+                "comp.code-block.*",
+                "sys.frame.*"
+              ],
+              "behavior": "Long snippets do not break the page layout.",
+              "example": "API props table code cell.",
+              "test": "Verify mobile overflow and wrapping behavior.",
+              "rejectIf": "The code block causes horizontal page overflow."
+            },
+            "Depth": {
+              "status": "covered",
+              "decision": "Use surface hierarchy rather than decorative shadows.",
+              "tokens": [
+                "sys.depth.*",
+                "sys.surface.*"
+              ],
+              "behavior": "Code reads as reference content, not a floating card.",
+              "example": "Component API source snippet.",
+              "test": "Verify surface contrast in light and dark modes.",
+              "rejectIf": "Depth is used as decoration."
+            },
+            "State": {
+              "status": "covered",
+              "decision": "Expose copied, error, disabled, wrapped, and scrollable states explicitly.",
+              "tokens": [
+                "sys.state.*"
+              ],
+              "behavior": "Snippet state and copy feedback are machine-readable.",
+              "example": "Copied source feedback.",
+              "test": "Verify copied and error messages are announced.",
+              "rejectIf": "Copy feedback is visual-only."
+            },
+            "Accessibility": {
+              "status": "covered",
+              "decision": "Provide code semantics, readable contrast, keyboard access to copy action, and non-color feedback.",
+              "tokens": [
+                "sys.accessibility.*"
+              ],
+              "behavior": "Keyboard and assistive technology users can read and copy snippets.",
+              "example": "Token output code block.",
+              "test": "Verify accessible label, focus order, contrast, and copy feedback.",
+              "rejectIf": "Raw pre/code is used without labeling or overflow governance."
+            }
+          },
+          "primitiveDependencies": [
+            "Color",
+            "Typography",
+            "Spacing",
+            "Radius",
+            "Surface",
+            "Density",
+            "Focus",
+            "Disabled",
+            "Breakpoints",
+            "Message"
+          ],
+          "componentDependencies": [
+            "Copy Button",
+            "Badge",
+            "Tag",
+            "Inline Validation"
+          ],
+          "tokenDependencies": [
+            "comp.code-block.*",
+            "comp.copy-button.*",
+            "sys.frame.*",
+            "sys.surface.*",
+            "sys.typography.*",
+            "sys.state.*",
+            "sys.accessibility.*"
+          ],
+          "props": [
+            {
+              "name": "code",
+              "type": "string",
+              "required": true,
+              "notes": "Raw code or token text to render."
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "required": false,
+              "notes": "Language or source type label."
+            },
+            {
+              "name": "filename",
+              "type": "string",
+              "required": false,
+              "notes": "Optional source filename."
+            },
+            {
+              "name": "copyable",
+              "type": "boolean",
+              "required": false,
+              "notes": "When true, compose Copy Button."
+            },
+            {
+              "name": "wrap",
+              "type": "boolean",
+              "required": false,
+              "notes": "Controls wrapping versus horizontal scroll."
+            },
+            {
+              "name": "variant",
+              "type": "'block' | 'inline-group' | 'specimen'",
+              "required": false,
+              "notes": "Snippet layout role."
+            }
+          ],
+          "productExamples": [
+            {
+              "context": "FlowDocs component detail",
+              "example": "API prop examples and generated usage snippets."
+            },
+            {
+              "context": "FlowDocs reference detail",
+              "example": "Token path and generated Style Dictionary output."
+            },
+            {
+              "context": "Email Template Layout",
+              "example": "OTP/security code presentation remains an email pattern, not the public Code Block component."
+            }
+          ],
+          "guidelines": {
+            "do": [
+              "Use for source, token, command, API, or generated-output snippets.",
+              "Provide a language or context label when the code is not obvious.",
+              "Compose Copy Button for copyable snippets."
+            ],
+            "dont": [
+              "Do not use raw pre/code as a page-local visual block.",
+              "Do not use for OTP/security codes inside email templates.",
+              "Do not let long snippets resize page layout."
+            ],
+            "info": [
+              "Email OTP code blocks remain governed by Email Template Layout because email HTML has channel-specific constraints."
+            ]
+          },
+          "tests": [
+            "Accessible label and readable contrast.",
+            "Mobile overflow or wrapping behavior.",
+            "Dark mode surface and code color.",
+            "Copy Button composition when copyable.",
+            "Copied and error feedback announcement.",
+            "No page-level horizontal overflow."
+          ],
+          "agentInstructions": [
+            "Use Code Block for documentation code snippets, token paths, commands, and generated output.",
+            "Do not copy the internal EmailTemplateLayout CodeBlock as the public component contract.",
+            "Reject local raw pre/code wrappers once Code Block exists."
+          ],
+          "rejectIf": [
+            "The use is an email OTP/security code block.",
+            "Raw pre/code is styled locally after Code Block is available.",
+            "Long content breaks mobile layout.",
+            "Copy feedback is visual-only.",
+            "The snippet lacks context when copied text could be ambiguous."
+          ]
+        },
+        "copy-button": {
+          "id": "copy-button",
+          "name": "Copy Button",
+          "layer": "Component",
+          "platform": "Cross-platform",
+          "audiences": [
+            "Design",
+            "Engineering",
+            "Content",
+            "Agents"
+          ],
+          "maturityTarget": 2,
+          "status": "contract-only",
+          "purpose": "Copy a specific value or source snippet to the clipboard with clear accessible name, success/error feedback, disabled state, and no ambiguity about what will be copied.",
+          "anatomy": [
+            {
+              "part": "Button root",
+              "rule": "Native button semantics with Flow button or icon-button behavior.",
+              "tokens": [
+                "comp.button.*",
+                "comp.icon-button.*",
+                "comp.copy-button.*"
+              ]
+            },
+            {
+              "part": "Label or icon",
+              "rule": "Visible label or icon-only mode must have a clear accessible name.",
+              "tokens": [
+                "sys.voice.*",
+                "sys.iconography.*"
+              ]
+            },
+            {
+              "part": "Feedback",
+              "rule": "Copied and error feedback is exposed through text and live announcement.",
+              "tokens": [
+                "sys.state.*",
+                "sys.message.*"
+              ]
+            }
+          ],
+          "variants": [
+            {
+              "id": "text",
+              "description": "Visible text button for explicit copy actions."
+            },
+            {
+              "id": "icon",
+              "description": "Compact icon-only copy action with required accessible name."
+            },
+            {
+              "id": "inline",
+              "description": "Small action paired with token, command, or metadata value."
+            }
+          ],
+          "states": [
+            "default",
+            "hover",
+            "focus",
+            "pressed",
+            "copied",
+            "error",
+            "disabled",
+            "loading"
+          ],
+          "statePrecedence": "disabled > loading > error > copied > pressed > focus > hover > default",
+          "foundations": {
+            "Voice": {
+              "status": "covered",
+              "decision": "Use labels that name the copied value or source.",
+              "tokens": [
+                "sys.voice.*"
+              ],
+              "behavior": "Users understand the copy target before activation.",
+              "example": "Copy token path.",
+              "test": "Verify accessible name includes copy target when needed.",
+              "rejectIf": "The label is only 'Copy' when multiple copy targets are present."
+            },
+            "Frame": {
+              "status": "covered",
+              "decision": "Use Flow button/icon-button sizing and density.",
+              "tokens": [
+                "comp.copy-button.*",
+                "comp.button.*",
+                "comp.icon-button.*",
+                "sys.frame.*"
+              ],
+              "behavior": "Copy actions fit inline or header contexts without resizing layout.",
+              "example": "Code block header copy action.",
+              "test": "Verify layout stability after copied feedback.",
+              "rejectIf": "Feedback changes control size unpredictably."
+            },
+            "State": {
+              "status": "covered",
+              "decision": "Resolve disabled, loading, error, copied, pressed, focus, and hover states.",
+              "tokens": [
+                "sys.state.*",
+                "sys.message.*"
+              ],
+              "behavior": "Clipboard success and failure are explicit and recoverable.",
+              "example": "Copy fails because clipboard API is unavailable.",
+              "test": "Verify copied/error state timing and announcement.",
+              "rejectIf": "Failures are silent."
+            },
+            "Accessibility": {
+              "status": "covered",
+              "decision": "Preserve native button semantics, focus, accessible name, live feedback, and disabled behavior.",
+              "tokens": [
+                "sys.accessibility.*"
+              ],
+              "behavior": "Keyboard and assistive technology users can copy and receive feedback.",
+              "example": "Copy code snippet button.",
+              "test": "Verify name, role, focus, disabled, and live feedback.",
+              "rejectIf": "Copy is implemented as a div/span or visual icon only."
+            }
+          },
+          "primitiveDependencies": [
+            "Color",
+            "Typography",
+            "Spacing",
+            "Radius",
+            "Iconography",
+            "Duration",
+            "Motion Curves",
+            "Density",
+            "Focus",
+            "Disabled",
+            "Message"
+          ],
+          "componentDependencies": [
+            "Button",
+            "Icon Button",
+            "Inline Validation",
+            "Tooltip"
+          ],
+          "tokenDependencies": [
+            "comp.copy-button.*",
+            "comp.button.*",
+            "comp.icon-button.*",
+            "sys.voice.*",
+            "sys.state.*",
+            "sys.message.*",
+            "sys.accessibility.*"
+          ],
+          "props": [
+            {
+              "name": "value",
+              "type": "string",
+              "required": true,
+              "notes": "Exact text copied to clipboard."
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "required": false,
+              "notes": "Visible label for text variant."
+            },
+            {
+              "name": "ariaLabel",
+              "type": "string",
+              "required": "conditional",
+              "notes": "Required for icon or ambiguous contexts."
+            },
+            {
+              "name": "variant",
+              "type": "'text' | 'icon' | 'inline'",
+              "required": false,
+              "notes": "Visual/action density."
+            },
+            {
+              "name": "feedbackDuration",
+              "type": "number",
+              "required": false,
+              "notes": "Duration for copied feedback, using Duration/Motion contracts."
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "required": false,
+              "notes": "Blocks copy and exposes disabled state."
+            }
+          ],
+          "productExamples": [
+            {
+              "context": "Code Block",
+              "example": "Copy a source snippet."
+            },
+            {
+              "context": "Artifact Metadata Bar",
+              "example": "Copy a token path or package import."
+            },
+            {
+              "context": "FlowDocs detail pages",
+              "example": "Copy API prop examples without local buttons."
+            }
+          ],
+          "guidelines": {
+            "do": [
+              "Name the copied target when there are multiple copy actions.",
+              "Use icon variant only with an accessible name.",
+              "Provide copied and error feedback."
+            ],
+            "dont": [
+              "Do not silently fail when clipboard access is unavailable.",
+              "Do not use generic labels for multiple copy targets.",
+              "Do not implement copy as a local span or div."
+            ],
+            "info": [
+              "Copy Button composes Button or Icon Button semantics; it exists because clipboard state and feedback need a reusable contract."
+            ]
+          },
+          "tests": [
+            "Native button semantics.",
+            "Accessible name for icon and ambiguous contexts.",
+            "Copied feedback announcement.",
+            "Clipboard error feedback.",
+            "Disabled non-interaction.",
+            "Layout stability after state change.",
+            "No local copy controls in migrated docs pages."
+          ],
+          "agentInstructions": [
+            "Use Copy Button for clipboard actions in documentation templates and code blocks.",
+            "Do not create local copy controls in FlowDocs.",
+            "Reject ambiguous copy labels when multiple values can be copied."
+          ],
+          "rejectIf": [
+            "The action copies an unclear or changing value.",
+            "The control has no accessible name.",
+            "Clipboard errors are not exposed.",
+            "The copy action is implemented with local HTML instead of Button or Icon Button semantics.",
+            "State feedback changes layout size unpredictably."
+          ]
+        },
         "button": {
           "layer": "Component",
           "platform": "Cross-platform",
@@ -42966,6 +43465,844 @@
             "A Card wraps the contribution chart group.",
             "A template owns step selection or cumulative state directly."
           ]
+        },
+        "documentation-page-shell": {
+          "layer": "Pattern",
+          "patternKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "Researchers",
+            "Agents"
+          ],
+          "purpose": "Coordinate documentation page chrome, responsive content rails, background treatment, grid overlay, and page-level navigation boundaries without FlowDocs owning shell markup.",
+          "governingFoundations": [
+            "Accessibility",
+            "Depth",
+            "Frame",
+            "State",
+            "Voice"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus",
+            "Color",
+            "Typography"
+          ],
+          "componentDependencies": [
+            "Button",
+            "Icon Button",
+            "Badge",
+            "Breadcrumbs"
+          ],
+          "patternDependencies": [
+            "Topbar",
+            "Sidebar",
+            "Search",
+            "Command Palette"
+          ],
+          "templateDependencies": [
+            "Docs Shell Template",
+            "Docs Home Template",
+            "Docs Collection Template",
+            "Reference Detail Template",
+            "Component Detail Template",
+            "Pattern Detail Template",
+            "Template Detail Template"
+          ],
+          "states": [
+            "desktop",
+            "mobile",
+            "sidebar-open",
+            "sidebar-closed",
+            "search-open",
+            "dark",
+            "light",
+            "grid-overlay-visible",
+            "loading"
+          ],
+          "slots": [
+            {
+              "name": "shellContent",
+              "owner": "template",
+              "uses": [
+                "Surface",
+                "Breakpoints"
+              ],
+              "required": true,
+              "purpose": "Hosts the active documentation template content without adding local page wrappers."
+            },
+            {
+              "name": "backgroundTreatment",
+              "owner": "pattern",
+              "uses": [
+                "Surface",
+                "Color",
+                "Frame"
+              ],
+              "required": "conditional",
+              "purpose": "Owns documentation background color, grid texture, and overlay behavior from existing tokens."
+            },
+            {
+              "name": "navigationBoundary",
+              "owner": "pattern",
+              "uses": [
+                "Topbar",
+                "Sidebar",
+                "Search"
+              ],
+              "required": true,
+              "purpose": "Defines the boundary between shell navigation and page content."
+            }
+          ],
+          "entryConditions": [
+            "A documentation page needs shell navigation, topbar, content rail, background treatment, or grid overlay.",
+            "The page is rendered by FlowDocs but structure must be owned by Flow.",
+            "Responsive shell behavior must remain consistent across documentation templates."
+          ],
+          "decisionTree": [
+            "Use Docs Shell Template for the complete shell.",
+            "Use Documentation Page Shell as the reusable shell pattern inside docs templates.",
+            "Use Topbar, Sidebar, and Search for their dedicated interaction responsibilities.",
+            "Do not create a new foundation or primitive for docs-only background treatment unless existing Frame, Surface, Color, and Breakpoints cannot express it."
+          ],
+          "failureModes": [
+            "FlowDocs owns static shell HTML or local shell CSS after this pattern exists.",
+            "Grid overlay metrics or background treatment are unmanaged local CSS.",
+            "Sidebar close behavior is duplicated outside the hamburger trigger.",
+            "Topbar search width is controlled by docs-specific local overrides."
+          ],
+          "successMetrics": [
+            "All documentation templates render inside one governed shell boundary.",
+            "Mobile navigation, search, theme, and active route state behave consistently.",
+            "Page background and grid texture can be changed through Flow tokens and pattern slots."
+          ],
+          "accessibility": [
+            "Expose one navigation landmark for primary docs navigation.",
+            "Keep sidebar toggle focusable and reversible with the same control on mobile.",
+            "Preserve skip-link and heading order across templates.",
+            "Do not communicate active state by color alone."
+          ],
+          "tests": [
+            "Desktop, mobile, dark, light, sidebar-open, sidebar-closed, and search-open states are covered.",
+            "Topbar and Sidebar do not duplicate drawer ownership.",
+            "No migrated docs page reintroduces local shell wrappers."
+          ],
+          "agentInstructions": [
+            "Do not hardcode FlowDocs shell DOM.",
+            "Keep DocsShellTemplate as the template owner and this pattern as the reusable shell behavior.",
+            "Reject docs-only background or grid CSS that bypasses Flow primitives."
+          ],
+          "rejectIf": [
+            "The page shell is implemented with local FlowDocs HTML wrappers.",
+            "The grid texture or red/blue background treatment is an unmanaged CSS effect.",
+            "Navigation counts, active state, or shell labels are static strings disconnected from the content model.",
+            "Topbar, Sidebar, or Search behavior is reimplemented inside a docs template."
+          ]
+        },
+        "documentation-hero": {
+          "layer": "Pattern",
+          "patternKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "Agents"
+          ],
+          "purpose": "Coordinate documentation page hero content, metadata, calls to action, and governed background treatment without creating local hero markup per page.",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "Depth",
+            "Energy",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Breakpoints",
+            "Color",
+            "Density"
+          ],
+          "componentDependencies": [
+            "Button",
+            "Badge",
+            "Tag",
+            "Card",
+            "Progress Indicator"
+          ],
+          "patternDependencies": [
+            "Artifact Metadata Bar",
+            "Documentation Section"
+          ],
+          "templateDependencies": [
+            "Docs Home Template",
+            "Reference Detail Template",
+            "Component Detail Template",
+            "Pattern Detail Template",
+            "Template Detail Template"
+          ],
+          "states": [
+            "default",
+            "with-actions",
+            "with-metadata",
+            "with-status",
+            "dark",
+            "mobile",
+            "loading"
+          ],
+          "slots": [
+            {
+              "name": "title",
+              "owner": "primitive",
+              "uses": [
+                "Typography"
+              ],
+              "required": true,
+              "purpose": "Owns the page title with correct heading level supplied by the template."
+            },
+            {
+              "name": "metadata",
+              "owner": "pattern",
+              "uses": [
+                "Artifact Metadata Bar",
+                "Badge",
+                "Tag"
+              ],
+              "required": "conditional",
+              "purpose": "Renders maturity, layer, platform, status, and counts without local pill systems."
+            },
+            {
+              "name": "actions",
+              "owner": "component",
+              "uses": [
+                "Button"
+              ],
+              "required": "conditional",
+              "purpose": "Renders primary and secondary hero actions through Flow buttons."
+            },
+            {
+              "name": "backgroundTreatment",
+              "owner": "pattern",
+              "uses": [
+                "Surface",
+                "Color",
+                "Frame"
+              ],
+              "required": "conditional",
+              "purpose": "Owns hero tint, depth, and documentation texture using existing tokens."
+            }
+          ],
+          "entryConditions": [
+            "A documentation page needs a first-screen or detail-header introduction.",
+            "The hero includes status, metadata, action, or background treatment.",
+            "The hero must adapt across documentation templates."
+          ],
+          "decisionTree": [
+            "Use plain heading when the page only needs a title.",
+            "Use Documentation Hero when heading, metadata, action, or visual treatment must be coordinated.",
+            "Use Artifact Metadata Bar for compact metadata rows inside the hero.",
+            "Do not create a new Card variant for hero containers."
+          ],
+          "failureModes": [
+            "Hero background is page-local CSS.",
+            "Metadata is rendered as custom pills instead of Badge/Tag/Artifact Metadata Bar.",
+            "Hero typography bypasses Flow typography primitives.",
+            "Hero actions bypass Button."
+          ],
+          "successMetrics": [
+            "Hero hierarchy remains readable and consistent across docs pages.",
+            "Metadata and actions are reusable without local wrappers.",
+            "Background treatment can be governed from Flow contracts."
+          ],
+          "accessibility": [
+            "Use one visible h1 per documentation page.",
+            "Keep actions keyboard reachable.",
+            "Do not hide status or metadata behind color-only cues."
+          ],
+          "tests": [
+            "Covers title-only, metadata, actions, status, dark, mobile, and loading states.",
+            "Rejects unmanaged gradient/grid CSS in migrated pages.",
+            "Checks heading order and action focus order."
+          ],
+          "agentInstructions": [
+            "Do not invent a docs hero component in FlowDocs.",
+            "Treat background treatments as governed slots, not new foundations by default.",
+            "Use existing Card, Badge, Tag, and Button contracts when needed."
+          ],
+          "rejectIf": [
+            "The hero requires a docs-only component to render basic title, copy, metadata, or actions.",
+            "Background treatment is a local CSS implementation detail.",
+            "Metadata chips are custom spans.",
+            "The hero creates a new public variant without satisfying variant criteria."
+          ]
+        },
+        "documentation-section": {
+          "layer": "Pattern",
+          "patternKind": "Documentation",
+          "implementationStatus": "runtime-preview",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "QA",
+            "Agents"
+          ],
+          "purpose": "Coordinate documentation sections, section surfaces, local headings, content density, guidelines, callouts, and grouped evidence without FlowDocs owning section wrappers.",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "Depth",
+            "State",
+            "Tone",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus",
+            "Message"
+          ],
+          "componentDependencies": [
+            "Card",
+            "Table",
+            "List",
+            "Badge",
+            "Tag",
+            "Accordion",
+            "Empty State"
+          ],
+          "patternDependencies": [
+            "Section Header",
+            "Artifact Metadata Bar"
+          ],
+          "templateDependencies": [
+            "Docs Home Template",
+            "Docs Collection Template",
+            "Reference Detail Template",
+            "Component Detail Template",
+            "Pattern Detail Template",
+            "Template Detail Template"
+          ],
+          "states": [
+            "default",
+            "dense",
+            "callout",
+            "matrix",
+            "empty",
+            "loading",
+            "error",
+            "dark",
+            "mobile"
+          ],
+          "slots": [
+            {
+              "name": "header",
+              "owner": "pattern",
+              "uses": [
+                "Section Header"
+              ],
+              "required": "conditional",
+              "purpose": "Provides local title, description, status, and actions."
+            },
+            {
+              "name": "body",
+              "owner": "template",
+              "uses": [
+                "Surface",
+                "Typography",
+                "Spacing"
+              ],
+              "required": true,
+              "purpose": "Hosts documentation content without creating a local docs panel."
+            },
+            {
+              "name": "matrix",
+              "owner": "component",
+              "uses": [
+                "Table",
+                "Badge",
+                "Tag"
+              ],
+              "required": "conditional",
+              "purpose": "Renders variant, state, token, dependency, or QA matrices through governed components."
+            },
+            {
+              "name": "cards",
+              "owner": "component",
+              "uses": [
+                "Card"
+              ],
+              "required": "conditional",
+              "purpose": "Allows card composition inside template slots without creating docs-only Card variants."
+            }
+          ],
+          "entryConditions": [
+            "A docs page needs a reusable section boundary.",
+            "Content needs a heading, matrix, card group, callout, or evidence block.",
+            "The section appears across more than one documentation template."
+          ],
+          "decisionTree": [
+            "Use plain content when no reusable boundary is needed.",
+            "Use Documentation Section when heading, surface, grouped content, callout, or matrix structure repeats.",
+            "Use Table for structured matrices and Card for bounded repeated items.",
+            "Use template private slots for docs-only composition that is not public."
+          ],
+          "failureModes": [
+            "docs-section-surface or detail-section-surface remains as local FlowDocs structure.",
+            "Cards are used as generic nested page sections.",
+            "Matrices use local div grids after Table/List can own the role.",
+            "Callouts communicate status by color alone."
+          ],
+          "successMetrics": [
+            "Migrated pages share section structure and density.",
+            "Local wrapper count decreases instead of moving names around.",
+            "Section content remains data-driven from FlowDocs adapters."
+          ],
+          "accessibility": [
+            "Maintain heading order from the host template.",
+            "Use semantic tables/lists for structured data.",
+            "Expose callout tone and status in text."
+          ],
+          "tests": [
+            "Covers default, dense, callout, matrix, empty, loading, dark, and mobile states.",
+            "Fails when migrated pages use docs-section-surface or local matrix wrappers.",
+            "Checks Table/List semantics for structured content."
+          ],
+          "agentInstructions": [
+            "Do not create a new primitive for every documentation section layout.",
+            "Use this pattern to replace docs-section-surface and detail-section-surface.",
+            "Reject Card variants that only describe docs section visuals."
+          ],
+          "rejectIf": [
+            "FlowDocs creates local section wrapper classes for a migrated page.",
+            "A section contains another page-level card wrapper.",
+            "Matrix content is rendered through local div grids when Table/List is appropriate.",
+            "A new Card variant is proposed only for documentation section styling."
+          ]
+        },
+        "demo-preview-frame": {
+          "layer": "Pattern",
+          "patternKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Developers",
+            "Product Designers",
+            "QA",
+            "Agents"
+          ],
+          "purpose": "Frame live examples, specimens, viewport demos, playgrounds, and visual QA targets while preserving the boundary between Flow artifacts and FlowDocs content data.",
+          "governingFoundations": [
+            "Accessibility",
+            "Frame",
+            "Depth",
+            "State",
+            "Tone"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus",
+            "Loading",
+            "Disabled",
+            "Typography"
+          ],
+          "componentDependencies": [
+            "Card",
+            "Button",
+            "Icon Button",
+            "Badge",
+            "Tag",
+            "Code Block",
+            "Copy Button",
+            "Skeleton",
+            "Error Panel"
+          ],
+          "patternDependencies": [
+            "Documentation Section",
+            "Toolbar"
+          ],
+          "templateDependencies": [
+            "Reference Detail Template",
+            "Component Detail Template",
+            "Pattern Detail Template",
+            "Template Detail Template"
+          ],
+          "states": [
+            "default",
+            "interactive",
+            "static",
+            "viewport-mobile",
+            "viewport-desktop",
+            "loading",
+            "error",
+            "unsupported",
+            "dark",
+            "density-compact"
+          ],
+          "slots": [
+            {
+              "name": "preview",
+              "owner": "template",
+              "uses": [
+                "Surface",
+                "Card"
+              ],
+              "required": true,
+              "purpose": "Hosts the actual demo artifact without local structural wrappers."
+            },
+            {
+              "name": "controls",
+              "owner": "component",
+              "uses": [
+                "Button",
+                "Icon Button",
+                "Toolbar"
+              ],
+              "required": "conditional",
+              "purpose": "Provides density, theme, viewport, or state controls for demos."
+            },
+            {
+              "name": "source",
+              "owner": "component",
+              "uses": [
+                "Code Block",
+                "Copy Button"
+              ],
+              "required": "conditional",
+              "purpose": "Renders code and copy actions through governed components."
+            },
+            {
+              "name": "fallback",
+              "owner": "component",
+              "uses": [
+                "Skeleton",
+                "Error Panel"
+              ],
+              "required": "conditional",
+              "purpose": "Owns loading, error, unsupported, or missing-demo states."
+            }
+          ],
+          "entryConditions": [
+            "A documentation page needs to show a live component, pattern, template, specimen, or viewport example.",
+            "The example requires controls, source, loading, error, or QA frame boundaries.",
+            "The frame repeats across component, pattern, reference, or template details."
+          ],
+          "decisionTree": [
+            "Use direct inline content for simple text-only examples.",
+            "Use Demo Preview Frame for live UI examples, viewport previews, playgrounds, or code-linked demos.",
+            "Use Code Block and Copy Button for source snippets.",
+            "Do not create per-artifact demo wrappers inside FlowDocs."
+          ],
+          "failureModes": [
+            "Demo frames are implemented as local docs-demo-layout wrappers.",
+            "Source code uses raw pre/code without Code Block governance.",
+            "Loading or error demos bypass Skeleton or Error Panel.",
+            "Viewport frames are visually fixed and fail mobile layout."
+          ],
+          "successMetrics": [
+            "Component, pattern, and template demos share framing behavior.",
+            "Visual QA can target stable frame boundaries.",
+            "Demo controls remain accessible and token-driven."
+          ],
+          "accessibility": [
+            "Label interactive demos and controls.",
+            "Keep focus inside demo controls predictable.",
+            "Provide text fallback for unsupported or failed demos.",
+            "Do not trap keyboard focus in preview content unless the demo requires modal behavior."
+          ],
+          "tests": [
+            "Covers static, interactive, mobile viewport, desktop viewport, loading, error, dark, and density states.",
+            "Fails when migrated pages use local docs-demo-layout wrappers.",
+            "Checks source slot uses Code Block and Copy Button when source is shown."
+          ],
+          "agentInstructions": [
+            "Do not hand-roll demo frame markup in FlowDocs.",
+            "Keep demo artifact behavior separate from frame behavior.",
+            "Reject visual-only frame variants that are not tied to state, viewport, or source behavior."
+          ],
+          "rejectIf": [
+            "A docs page creates a local demo frame wrapper after this pattern is available.",
+            "Demo source is copied with local buttons or raw pre/code.",
+            "The frame owns the component or pattern being demonstrated.",
+            "Viewport examples cannot be tested at mobile and desktop sizes."
+          ]
+        },
+        "on-this-page-nav": {
+          "layer": "Pattern",
+          "patternKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "Researchers",
+            "Agents"
+          ],
+          "purpose": "Coordinate local page navigation across documentation sections, tabs, anchors, active section state, and responsive collapse without duplicating Sidebar or Tabs behavior.",
+          "governingFoundations": [
+            "Accessibility",
+            "Frame",
+            "Depth",
+            "State",
+            "Voice"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus",
+            "Color"
+          ],
+          "componentDependencies": [
+            "Tabs",
+            "Button",
+            "Icon Button",
+            "Badge"
+          ],
+          "patternDependencies": [
+            "Sidebar",
+            "Documentation Page Shell"
+          ],
+          "templateDependencies": [
+            "Reference Detail Template",
+            "Component Detail Template",
+            "Pattern Detail Template"
+          ],
+          "states": [
+            "default",
+            "sticky",
+            "collapsed",
+            "active-section",
+            "overflow",
+            "mobile",
+            "dark"
+          ],
+          "slots": [
+            {
+              "name": "items",
+              "owner": "template",
+              "uses": [
+                "Tabs",
+                "Button"
+              ],
+              "required": true,
+              "purpose": "Maps page sections or tab groups to navigable items."
+            },
+            {
+              "name": "activeIndicator",
+              "owner": "component",
+              "uses": [
+                "Tabs",
+                "Badge"
+              ],
+              "required": "conditional",
+              "purpose": "Shows active section or status without color-only state."
+            },
+            {
+              "name": "mobileToggle",
+              "owner": "component",
+              "uses": [
+                "Icon Button"
+              ],
+              "required": "conditional",
+              "purpose": "Collapses local page navigation when viewport cannot support a rail."
+            }
+          ],
+          "entryConditions": [
+            "A long documentation detail page needs local section navigation.",
+            "A page mixes tabs, anchors, or section groups.",
+            "Local navigation must not become primary app navigation."
+          ],
+          "decisionTree": [
+            "Use Tabs for short mutually exclusive panels.",
+            "Use On This Page Nav for long pages with anchorable sections.",
+            "Use Sidebar for app-level navigation only.",
+            "Use Documentation Page Shell to position the local navigation rail."
+          ],
+          "failureModes": [
+            "Local nav duplicates Sidebar responsibilities.",
+            "Tabs and anchor nav are both active for the same content without a clear hierarchy.",
+            "Active section is color-only.",
+            "Mobile local navigation has no collapse or focus recovery."
+          ],
+          "successMetrics": [
+            "Users can scan long docs pages and jump to sections.",
+            "Active section state remains clear in desktop and mobile.",
+            "Local navigation never changes app route ownership."
+          ],
+          "accessibility": [
+            "Use nav landmarks only when the host page can distinguish local nav from primary nav.",
+            "Keep anchor targets focusable or announceable.",
+            "Preserve keyboard traversal and visible focus."
+          ],
+          "tests": [
+            "Covers default, sticky, collapsed, active-section, overflow, mobile, and dark states.",
+            "Verifies Sidebar and On This Page Nav landmarks are distinct.",
+            "Checks active section is not color-only."
+          ],
+          "agentInstructions": [
+            "Do not use Sidebar for local page anchors.",
+            "Do not create custom tablists inside FlowDocs.",
+            "Ask before mixing tabs and anchor navigation on the same content group."
+          ],
+          "rejectIf": [
+            "The local nav changes app route groups.",
+            "A docs page implements custom tablist or anchor wrappers.",
+            "Active section state depends only on color.",
+            "Mobile local nav cannot be opened, closed, and refocused predictably."
+          ]
+        },
+        "artifact-metadata-bar": {
+          "layer": "Pattern",
+          "patternKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "PMs",
+            "Agents"
+          ],
+          "purpose": "Render compact metadata for Flow artifacts such as layer, platform, maturity, status, counts, dependencies, and ownership without local pill or card-meta wrappers.",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "State",
+            "Tone",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Density",
+            "Focus",
+            "Color"
+          ],
+          "componentDependencies": [
+            "Badge",
+            "Tag",
+            "Chip",
+            "Tooltip",
+            "Button"
+          ],
+          "patternDependencies": [
+            "Documentation Section"
+          ],
+          "templateDependencies": [
+            "Docs Home Template",
+            "Docs Collection Template",
+            "Documentation Hero",
+            "Reference Detail Template",
+            "Component Detail Template",
+            "Pattern Detail Template",
+            "Template Detail Template"
+          ],
+          "states": [
+            "default",
+            "compact",
+            "overflow",
+            "interactive",
+            "loading",
+            "empty",
+            "dark",
+            "mobile"
+          ],
+          "slots": [
+            {
+              "name": "items",
+              "owner": "component",
+              "uses": [
+                "Badge",
+                "Tag",
+                "Chip"
+              ],
+              "required": true,
+              "purpose": "Renders metadata values with Flow status and tag components."
+            },
+            {
+              "name": "explanations",
+              "owner": "component",
+              "uses": [
+                "Tooltip"
+              ],
+              "required": "conditional",
+              "purpose": "Explains compact metadata labels without visible text duplication."
+            },
+            {
+              "name": "actions",
+              "owner": "component",
+              "uses": [
+                "Button"
+              ],
+              "required": "conditional",
+              "purpose": "Supports metadata-driven actions such as filter, inspect, or copy link."
+            }
+          ],
+          "entryConditions": [
+            "A docs template needs to show artifact metadata repeatedly.",
+            "Metadata includes status, layer, platform, maturity, ownership, dependency, count, or QA signals.",
+            "The metadata must be compact but still accessible."
+          ],
+          "decisionTree": [
+            "Use Badge or Tag directly for one-off metadata.",
+            "Use Artifact Metadata Bar when multiple metadata values repeat across docs cards, heroes, or detail headers.",
+            "Use Tooltip only when compact labels require explanation.",
+            "Do not create docs-specific pill wrappers."
+          ],
+          "failureModes": [
+            "Metadata chips are custom spans.",
+            "Status or maturity is color-only.",
+            "Overflow wraps unpredictably in mobile cards.",
+            "Metadata is embedded in each docs card implementation."
+          ],
+          "successMetrics": [
+            "Metadata rendering is consistent across home, collections, and details.",
+            "Cards and heroes can use the same metadata contract.",
+            "Metadata remains readable and accessible at compact sizes."
+          ],
+          "accessibility": [
+            "Expose abbreviated metadata with accessible labels.",
+            "Do not rely on color alone for status.",
+            "Preserve readable order when metadata wraps."
+          ],
+          "tests": [
+            "Covers default, compact, overflow, interactive, loading, empty, dark, and mobile states.",
+            "Fails when migrated pages use local card-meta-row or custom pill wrappers.",
+            "Checks accessible names for compact metadata items."
+          ],
+          "agentInstructions": [
+            "Use this pattern for repeated artifact metadata.",
+            "Do not promote every docs metadata layout to a Card variant.",
+            "Ask before metadata implies maturity, compliance, or release readiness."
+          ],
+          "rejectIf": [
+            "Metadata is rendered with local pill classes.",
+            "Status, maturity, or readiness is color-only.",
+            "A docs card duplicates metadata layout internally after this pattern exists.",
+            "The pattern becomes a general product status bar without product use evidence."
+          ]
         }
       },
       "templates": {
@@ -43755,6 +45092,742 @@
             "Template renders a reply field without Chat Composer.",
             "Template handles recovery with custom overlays instead of Status Feedback View.",
             "Template bypasses Surface, density, state, or token ownership."
+          ]
+        },
+        "docs-shell-template": {
+          "layer": "Template",
+          "templateKind": "Documentation",
+          "implementationStatus": "runtime-preview",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "Researchers",
+            "Agents"
+          ],
+          "purpose": "Provide the Flow-owned documentation shell so FlowDocs can render navigation, search, theme, responsive layout, and page chrome without local structural wrappers.",
+          "maturityTarget": "governed",
+          "governingFoundations": [
+            "Frame",
+            "Depth",
+            "State",
+            "Accessibility",
+            "Voice"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus",
+            "Color",
+            "Typography"
+          ],
+          "componentDependencies": [
+            "Button",
+            "Icon Button",
+            "Input",
+            "Badge",
+            "Avatar"
+          ],
+          "patternDependencies": [
+            "Topbar",
+            "Sidebar",
+            "Search",
+            "Command Palette",
+            "Documentation Page Shell"
+          ],
+          "documentationSlots": [
+            {
+              "name": "brand",
+              "owner": "DocsShellTemplate",
+              "uses": [
+                "Surface",
+                "Typography"
+              ]
+            },
+            {
+              "name": "primaryNavigation",
+              "owner": "Sidebar",
+              "uses": [
+                "Sidebar",
+                "Badge"
+              ]
+            },
+            {
+              "name": "topbar",
+              "owner": "Topbar",
+              "uses": [
+                "Topbar",
+                "Search",
+                "Icon Button"
+              ]
+            },
+            {
+              "name": "page",
+              "owner": "Documentation Page Shell",
+              "uses": [
+                "Surface",
+                "Breakpoints"
+              ]
+            }
+          ],
+          "preservedContentSources": [
+            "route model",
+            "catalog counts",
+            "localized shell labels",
+            "navigation groups"
+          ],
+          "states": [
+            "desktop",
+            "mobile",
+            "sidebar-open",
+            "sidebar-closed",
+            "search-open",
+            "dark",
+            "light",
+            "loading"
+          ],
+          "qualityGates": [
+            "The mobile hamburger controls sidebar open and close without a second close button.",
+            "Search uses available topbar space at supported breakpoints.",
+            "Dark mode changes shell and content surfaces from Flow tokens.",
+            "Sidebar counts come from the catalog model, not static shell text."
+          ],
+          "rejectIf": [
+            "FlowDocs hardcodes shell layout as static HTML outside this template.",
+            "Topbar and Sidebar both own the same drawer trigger.",
+            "The shell uses raw colors, spacing, or local card wrappers instead of Flow primitives.",
+            "The grid overlay or background treatment is injected as unmanaged page CSS."
+          ]
+        },
+        "docs-home-template": {
+          "layer": "Template",
+          "templateKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "Agents"
+          ],
+          "purpose": "Render the documentation home page from Flow-owned hero, section, status, and collection composition while FlowDocs supplies content data.",
+          "maturityTarget": "governed",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "Depth",
+            "Growth",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Iconography"
+          ],
+          "componentDependencies": [
+            "Button",
+            "Card",
+            "Badge",
+            "Tag",
+            "Progress Indicator"
+          ],
+          "patternDependencies": [
+            "Section Header",
+            "Documentation Hero",
+            "Documentation Section",
+            "Artifact Metadata Bar"
+          ],
+          "documentationSlots": [
+            {
+              "name": "hero",
+              "owner": "Documentation Hero",
+              "uses": [
+                "Surface",
+                "Button",
+                "Badge"
+              ]
+            },
+            {
+              "name": "coverageSummary",
+              "owner": "Documentation Section",
+              "uses": [
+                "Card",
+                "Progress Indicator",
+                "Tag"
+              ]
+            },
+            {
+              "name": "statusPanels",
+              "owner": "Documentation Section",
+              "uses": [
+                "Card",
+                "Badge"
+              ]
+            }
+          ],
+          "preservedContentSources": [
+            "homeContent.hero",
+            "homeContent.coverage",
+            "homeContent.documentationStatus",
+            "homeContent.visualMigration",
+            "homeContent.architecture",
+            "homeContent.fastPaths"
+          ],
+          "states": [
+            "default",
+            "loading",
+            "empty",
+            "degraded-content",
+            "dark",
+            "mobile"
+          ],
+          "qualityGates": [
+            "Hero background treatment is governed by Documentation Hero and existing foundations.",
+            "Cards use Card composition through template slots, not new Card variants by default.",
+            "Status and coverage data can change without editing template markup."
+          ],
+          "rejectIf": [
+            "The home page defines a parallel card system.",
+            "Background gradients, grid texture, or hero tint are local unmanaged CSS.",
+            "A docs-only card treatment is promoted to a public Card variant without satisfying variant criteria."
+          ]
+        },
+        "docs-collection-template": {
+          "layer": "Template",
+          "templateKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "Agents"
+          ],
+          "purpose": "Render documentation collection pages from catalog entries, metadata, filters, and grouped artifact cards without local docs link-card wrappers.",
+          "maturityTarget": "governed",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "Depth",
+            "State",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus"
+          ],
+          "componentDependencies": [
+            "Card",
+            "Tag",
+            "Badge",
+            "Breadcrumbs",
+            "Empty State",
+            "Skeleton"
+          ],
+          "patternDependencies": [
+            "Section Header",
+            "Search",
+            "Toolbar",
+            "Artifact Metadata Bar",
+            "Documentation Section"
+          ],
+          "documentationSlots": [
+            {
+              "name": "collectionHeader",
+              "owner": "Section Header",
+              "uses": [
+                "Breadcrumbs",
+                "Badge"
+              ]
+            },
+            {
+              "name": "artifactGrid",
+              "owner": "Docs Collection Template",
+              "uses": [
+                "Card",
+                "Artifact Metadata Bar"
+              ]
+            },
+            {
+              "name": "emptyState",
+              "owner": "Empty State",
+              "uses": [
+                "Empty State"
+              ]
+            }
+          ],
+          "preservedContentSources": [
+            "catalog entries",
+            "collectionMeta",
+            "grouping rules",
+            "artifact metadata"
+          ],
+          "states": [
+            "default",
+            "filtered",
+            "loading",
+            "empty",
+            "error",
+            "mobile"
+          ],
+          "qualityGates": [
+            "Artifact cards are Card compositions inside a template slot.",
+            "Filtering and empty states reuse Search, Toolbar, Empty State, and Skeleton.",
+            "Collection counts and metadata come from catalog data."
+          ],
+          "rejectIf": [
+            "FlowDocs reintroduces docs-link-card or artifact-card as unmanaged local wrappers.",
+            "Collection cards create new Card variants for docs-only visual roles.",
+            "Filter or search controls bypass Flow Search and Toolbar contracts."
+          ]
+        },
+        "reference-detail-template": {
+          "layer": "Template",
+          "templateKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "covers": [
+            "Foundation Detail Template",
+            "Primitive Detail Template"
+          ],
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "Agents"
+          ],
+          "purpose": "Render foundation and primitive reference pages through governed reference sections, specimens, token chains, and API/spec tables.",
+          "maturityTarget": "governed",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "Depth",
+            "State",
+            "Symbol",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Message",
+            "Research",
+            "Measurement"
+          ],
+          "componentDependencies": [
+            "Breadcrumbs",
+            "Tabs",
+            "Table",
+            "List",
+            "Badge",
+            "Tag",
+            "Card",
+            "Code Block"
+          ],
+          "patternDependencies": [
+            "Section Header",
+            "Documentation Hero",
+            "Documentation Section",
+            "On This Page Nav",
+            "Demo Preview Frame"
+          ],
+          "documentationSlots": [
+            {
+              "name": "specimen",
+              "owner": "docs-specimen-slots",
+              "uses": [
+                "Card",
+                "Typography",
+                "Surface"
+              ]
+            },
+            {
+              "name": "tokenTable",
+              "owner": "Documentation Section",
+              "uses": [
+                "Table",
+                "Code Block"
+              ]
+            },
+            {
+              "name": "localNavigation",
+              "owner": "On This Page Nav",
+              "uses": [
+                "Tabs",
+                "Focus"
+              ]
+            }
+          ],
+          "preservedContentSources": [
+            "foundation reference copy",
+            "primitive reference copy",
+            "token chains",
+            "roles",
+            "responsibilities",
+            "API/spec rows"
+          ],
+          "states": [
+            "default",
+            "tabbed",
+            "loading",
+            "missing-specimen",
+            "dark",
+            "mobile"
+          ],
+          "qualityGates": [
+            "Foundation and primitive pages do not render local specimen cards.",
+            "Token/code displays use Code Block or a governed table slot.",
+            "Reference tabs preserve keyboard and focus behavior."
+          ],
+          "rejectIf": [
+            "A foundation or primitive page creates unmanaged visual specimens.",
+            "Reference content hardcodes typography, color, spacing, or table structure outside Flow slots.",
+            "Code or token examples render as raw pre/code without Code Block governance."
+          ]
+        },
+        "component-detail-template": {
+          "layer": "Template",
+          "templateKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "QA",
+            "Agents"
+          ],
+          "purpose": "Render component documentation through governed detail sections, demos, variants, states, API tables, guidelines, playgrounds, and QA evidence.",
+          "maturityTarget": "governed",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "Depth",
+            "State",
+            "Tone",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus",
+            "Loading",
+            "Disabled"
+          ],
+          "componentDependencies": [
+            "Breadcrumbs",
+            "Tabs",
+            "Table",
+            "Card",
+            "Badge",
+            "Tag",
+            "Button",
+            "Icon Button",
+            "Code Block",
+            "Copy Button"
+          ],
+          "patternDependencies": [
+            "Section Header",
+            "Documentation Section",
+            "Demo Preview Frame",
+            "On This Page Nav",
+            "Artifact Metadata Bar"
+          ],
+          "documentationSlots": [
+            {
+              "name": "demo",
+              "owner": "Demo Preview Frame",
+              "uses": [
+                "Surface",
+                "Card",
+                "Code Block"
+              ]
+            },
+            {
+              "name": "variantMatrix",
+              "owner": "Component Detail Template",
+              "uses": [
+                "Table",
+                "Tag",
+                "Badge"
+              ]
+            },
+            {
+              "name": "playground",
+              "owner": "docs-playground-slot",
+              "uses": [
+                "Demo Preview Frame",
+                "Button",
+                "Icon Button"
+              ]
+            },
+            {
+              "name": "api",
+              "owner": "Documentation Section",
+              "uses": [
+                "Table",
+                "Code Block",
+                "Copy Button"
+              ]
+            }
+          ],
+          "preservedContentSources": [
+            "component specs",
+            "component copy",
+            "demo data",
+            "governed custom renderer exceptions",
+            "API props",
+            "variant and state matrices",
+            "QA evidence"
+          ],
+          "states": [
+            "default",
+            "demo-loading",
+            "demo-error",
+            "missing-contract",
+            "deprecated",
+            "mobile",
+            "dark"
+          ],
+          "qualityGates": [
+            "Every component detail page uses this template or an explicit governed exception.",
+            "Custom renderers are slots inside the template boundary, not full page renderers.",
+            "Variant, state, responsive, and API sections share template-owned structure.",
+            "Demo frames support visual parity checks in light, dark, mobile, density, and focus states."
+          ],
+          "rejectIf": [
+            "A component page owns its own tabs, section cards, demo frames, or API tables.",
+            "A docs-only card or matrix style becomes a public component variant without satisfying variant criteria.",
+            "A custom renderer bypasses the template boundary.",
+            "Examples use local raw HTML wrappers after a slot owner exists."
+          ]
+        },
+        "pattern-detail-template": {
+          "layer": "Template",
+          "templateKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "Researchers",
+            "Agents"
+          ],
+          "purpose": "Render pattern documentation through governed sections for scenario, dependencies, interactive demos, states, behavior, accessibility, and implementation evidence.",
+          "maturityTarget": "governed",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "Depth",
+            "State",
+            "Growth",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus",
+            "Message"
+          ],
+          "componentDependencies": [
+            "Breadcrumbs",
+            "Tabs",
+            "Table",
+            "Card",
+            "Badge",
+            "Tag",
+            "Button",
+            "Code Block"
+          ],
+          "patternDependencies": [
+            "Section Header",
+            "Documentation Section",
+            "Demo Preview Frame",
+            "On This Page Nav",
+            "Artifact Metadata Bar"
+          ],
+          "documentationSlots": [
+            {
+              "name": "scenario",
+              "owner": "Documentation Section",
+              "uses": [
+                "Card",
+                "Tag"
+              ]
+            },
+            {
+              "name": "demo",
+              "owner": "Demo Preview Frame",
+              "uses": [
+                "Surface",
+                "Card"
+              ]
+            },
+            {
+              "name": "dependencyMap",
+              "owner": "Documentation Section",
+              "uses": [
+                "Table",
+                "Badge"
+              ]
+            },
+            {
+              "name": "behaviorMatrix",
+              "owner": "Pattern Detail Template",
+              "uses": [
+                "Table",
+                "Tag"
+              ]
+            }
+          ],
+          "preservedContentSources": [
+            "pattern specs",
+            "pattern copy",
+            "pattern demo data",
+            "dependency evidence",
+            "states and behavior contracts",
+            "QA evidence"
+          ],
+          "states": [
+            "default",
+            "demo-loading",
+            "demo-error",
+            "missing-dependency",
+            "deprecated",
+            "mobile",
+            "dark"
+          ],
+          "qualityGates": [
+            "Pattern demos use template slots and Flow artifacts instead of local wrapper systems.",
+            "Dependencies are declared and visible before implementation examples.",
+            "Pattern behavior, states, and accessibility are documented through shared sections."
+          ],
+          "rejectIf": [
+            "A pattern page creates its own shell, section cards, or demo frame.",
+            "A pattern demo implements fake components or local variants instead of consuming Flow artifacts.",
+            "Pattern dependencies are implied by markup instead of declared in the template content model."
+          ]
+        },
+        "template-detail-template": {
+          "layer": "Template",
+          "templateKind": "Documentation",
+          "implementationStatus": "contract-only",
+          "platform": "Web documentation",
+          "audiences": [
+            "Product Designers",
+            "Developers",
+            "Content Designers",
+            "PMs",
+            "Agents"
+          ],
+          "purpose": "Render product template documentation through governed module previews, dependency maps, permissions, states, data ownership, and QA evidence.",
+          "maturityTarget": "governed",
+          "governingFoundations": [
+            "Voice",
+            "Frame",
+            "Depth",
+            "State",
+            "Tone",
+            "Accessibility"
+          ],
+          "primitiveDependencies": [
+            "Surface",
+            "Typography",
+            "Spacing",
+            "Breakpoints",
+            "Density",
+            "Focus",
+            "Loading"
+          ],
+          "componentDependencies": [
+            "Breadcrumbs",
+            "Tabs",
+            "Table",
+            "Card",
+            "Badge",
+            "Tag",
+            "Button",
+            "Code Block"
+          ],
+          "patternDependencies": [
+            "Section Header",
+            "Documentation Section",
+            "Demo Preview Frame",
+            "Artifact Metadata Bar"
+          ],
+          "documentationSlots": [
+            {
+              "name": "modulePreview",
+              "owner": "docs-template-preview-slot",
+              "uses": [
+                "Card",
+                "Demo Preview Frame"
+              ]
+            },
+            {
+              "name": "dependencyMap",
+              "owner": "Documentation Section",
+              "uses": [
+                "Table",
+                "Tag",
+                "Badge"
+              ]
+            },
+            {
+              "name": "stateAndPermissionMatrix",
+              "owner": "Template Detail Template",
+              "uses": [
+                "Table",
+                "Badge"
+              ]
+            }
+          ],
+          "preservedContentSources": [
+            "product template specs",
+            "template blueprint content",
+            "modules",
+            "permissions",
+            "states",
+            "data sources",
+            "telemetry",
+            "quality gates"
+          ],
+          "states": [
+            "default",
+            "module-loading",
+            "missing-template",
+            "permission-filtered",
+            "deprecated",
+            "mobile",
+            "dark"
+          ],
+          "qualityGates": [
+            "Product template documentation does not redefine product template behavior.",
+            "Module cards are template slots over Card, not new Card variants.",
+            "Dependencies, states, permissions, and telemetry are visible from the contract."
+          ],
+          "rejectIf": [
+            "Template docs implement product module behavior locally.",
+            "Module previews create docs-only component variants.",
+            "Permissions, data, states, or telemetry are omitted from the detail page."
           ]
         },
         "internal-operations-console": {
@@ -91214,7 +93287,8 @@
         "playground.spinnerControls": "Spinner playground controls",
         "playground.comboboxControls": "Combobox playground controls",
         "playground.countrySelectorControls": "Country Selector playground controls",
-        "playground.dateRangePickerControls": "Date Range Picker playground controls"
+        "playground.dateRangePickerControls": "Date Range Picker playground controls",
+        "shell.closeNavigation": "Close navigation"
       },
       "es": {
         "shell.skipToContent": "Saltar al contenido",
@@ -91422,7 +93496,8 @@
         "playground.spinnerControls": "Controles de prueba de Spinner",
         "playground.comboboxControls": "Controles de prueba de Combobox",
         "playground.countrySelectorControls": "Controles de prueba de Country Selector",
-        "playground.dateRangePickerControls": "Controles de prueba de Date Range Picker"
+        "playground.dateRangePickerControls": "Controles de prueba de Date Range Picker",
+        "shell.closeNavigation": "Cerrar navegacion"
       }
     }
   }

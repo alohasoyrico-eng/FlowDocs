@@ -1,13 +1,13 @@
-import { artifactContract, artifactDetailTable, artifactFoundationTracePanel, artifactVariantGrid, docsLinkCard, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=5";
+import { artifactContract, artifactDetailTable, artifactDocumentationSection, artifactFoundationTracePanel, artifactVariantGrid, docsLinkCard, findComponent, html, icon, slug, teamsPanel, ui, listPanel } from "./detail-tabs-core.js?v=10";
 import { componentDemo } from "./component-demo.js?v=60";
 import { patternCopy } from "./docs-state.js";
-import { patternBuildGatePanel } from "./pattern-build-gates.js?v=4";
-import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=27";
-import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=7";
-import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=8";
-import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=9";
-import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=4";
-import { operationalPatternOverviewDemo } from "./pattern-operational-demos.js?v=4";
+import { patternBuildGatePanel } from "./pattern-build-gates.js?v=5";
+import { candidatePatternOverviewDemo } from "./pattern-candidate-demos.js?v=28";
+import { desktopPatternOverviewDemo } from "./pattern-desktop-demos.js?v=8";
+import { mobilePatternOverviewDemo } from "./pattern-mobile-demos.js?v=11";
+import { utilityPatternOverviewDemo } from "./pattern-utility-demos.js?v=10";
+import { journeyPatternOverviewDemo } from "./pattern-journey-demos.js?v=6";
+import { operationalPatternOverviewDemo } from "./pattern-operational-demos.js?v=5";
 
 export function hasPatternSource(entry) {
   return Boolean(patternSource(entry));
@@ -27,18 +27,26 @@ function patternSource(entry) {
   return patternCopy?.patterns?.[entry.id] ?? null;
 }
 
+function patternContractSection(className, title, body, attrs = "") {
+  return artifactDocumentationSection({
+    title,
+    body,
+    className: ["wide", className].filter(Boolean).join(" "),
+    attrs,
+    source: "pattern-contract-tabs",
+  });
+}
+
 function patternContractOverview(entry) {
   const source = patternSource(entry);
   return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-stage-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Pattern contract</span>
-      <h2>${entry.title}</h2>
+    ${patternContractSection("pattern-stage-panel", entry.title, html`
       <p>${source.purpose ?? entry.summary}</p>
       <div class="pattern-variant-grid">
         ${patternInfoCard("Use when", source.useWhen)}
         ${patternInfoCard("Review before use", source.doNotUseWithoutReview)}
       </div>
-    </section>
+    `)}
     ${patternOverviewDemo(entry.id)}
     ${patternDependencyPanel(entry, source)}
   `;
@@ -68,10 +76,7 @@ function bulkActionsDemoPanel() {
     { id: "kld-901-c", plate: "KLD-901-C", driver: "Luis Vera", status: "Review", spend: "$631" },
     { id: "mtr-330-a", plate: "MTR-330-A", driver: "Iris Mora", status: "Frozen", spend: "$120" },
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-bulk-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Bulk action selection</h2>
+  return patternContractSection("pattern-bulk-demo-panel", "Bulk action selection", html`
       <div class="pattern-bulk-demo" data-pattern-bulk-actions data-selected-count="0">
         <div class="pattern-bulk-demo__toolbar" data-bulk-toolbar hidden>
           <strong><span data-bulk-count>0</span> selected</strong>
@@ -109,15 +114,11 @@ function bulkActionsDemoPanel() {
           ${packageDemo("toast", { label: "Bulk action queued", description: "Selected vehicles are being processed.", tone: "success" }, { "data-pattern-toast": "bulk" })}
         </div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function multiStepFormDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-multi-step-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Vehicle request wizard</h2>
+  return patternContractSection("pattern-multi-step-panel", "Vehicle request wizard", html`
       <div class="pattern-multi-step" data-multi-step-demo data-step-index="0">
         <div data-stepper>${packageDemo("stepper", { current: 0, steps: [{ label: "Vehicle", description: "Basic data" }, { label: "Limit", description: "Policy" }, { label: "Review", description: "Submit" }] })}</div>
         <div class="pattern-multi-step__body">
@@ -146,17 +147,13 @@ function multiStepFormDemoPanel() {
           ${packageDemo("toast", { label: "Draft saved", description: "Progress is available for resume.", tone: "success" }, { "data-pattern-toast": "multi-step" })}
         </div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function stepSummaryCard(title, value, key) { return packageDemo("card", { title, value, variant: "minimal", composition: "stats", fullWidth: true }, { "data-step-summary-card": key, "data-step-summary": key }); }
 
 function settingsDemoPanel() {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-settings-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Workspace settings</h2>
+  return patternContractSection("pattern-settings-panel", "Workspace settings", html`
       <div class="pattern-settings-demo" data-settings-demo data-dirty="false">
         <div class="pattern-settings-demo__section">
           <header>
@@ -195,8 +192,7 @@ function settingsDemoPanel() {
           ${packageDemo("toast", { label: "Settings saved", description: "Workspace preferences are up to date.", tone: "success" }, { "data-pattern-toast": "settings" })}
         </div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function helpCenterDemoPanel() {
@@ -205,10 +201,7 @@ function helpCenterDemoPanel() {
     ["fuel", "Fuel alerts", "Set threshold alerts for stations, spend, and exceptions.", "Operations", "alerts fuel stations"],
     ["roles", "Roles and access", "Review workspace permissions before inviting operators.", "Security", "roles access permissions"],
   ];
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-help-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <span class="eyebrow">Interactive demo</span>
-      <h2>Help center search</h2>
+  return patternContractSection("pattern-help-panel", "Help center search", html`
       <div class="pattern-help-demo" data-help-demo>
         <label class="pattern-help-demo__search">
           ${packageDemo("input", { label: "Search help articles", placeholder: "Search articles, tags, or keywords", type: "search" }, { "data-help-search-control": "" })}
@@ -236,8 +229,7 @@ function helpCenterDemoPanel() {
           </div>
         </div>
       </div>
-    </section>
-  `;
+  `);
 }
 
 function patternInfoCard(title, items = []) {
@@ -252,9 +244,7 @@ function patternDependencyPanel(entry, source) {
   const patterns = contract?.patternDependencies ?? [];
   const tokens = contract?.tokenDependencies ?? entry.tokens ?? [];
   const primitiveSlots = (source.slots ?? []).filter((row) => primitives.includes(row[1]));
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>Design System dependencies</h2>
+  return patternContractSection("", "Design System dependencies", html`
       ${dependencyGroup("Foundations", foundations, (name) =>
         docsLinkCard("foundations", slug(name), "foundation", name, "Governing foundation consumed by this pattern contract."),
       )}
@@ -273,8 +263,7 @@ function patternDependencyPanel(entry, source) {
           <div class="token-list">${tokens.map((token) => `<code>${token}</code>`).join("")}</div>
         </div>
       ` : ""}
-    </section>
-  `;
+  `);
 }
 
 function dependencyGroup(title, items, renderItem) {
@@ -308,44 +297,33 @@ function patternContractDesign(entry) {
 }
 
 function patternFoundationPanel(source) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>Foundations consumed</h2>
+  return patternContractSection("pattern-rule-panel", "Foundations consumed", html`
       ${artifactDetailTable({
         columns: ["Foundation", "Type", "Required", "Rule"],
         rows: (source.foundations ?? []).map(([name, rule]) => [name, "Foundation", "Required", rule]),
       })}
-    </section>
-  `;
+  `);
 }
 
 function patternSlotContractPanel(source) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>Slot contract</h2>
+  return patternContractSection("pattern-rule-panel", "Slot contract", html`
       ${artifactDetailTable({
         columns: ["Slot", "Type", "Required", "Notes"],
         rows: source.slots ?? [],
       })}
-    </section>
-  `;
+  `);
 }
 
 function patternVariantPanel(source) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-design-section pattern-design-demo-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>Variants and states</h2>
+  return patternContractSection("pattern-design-section pattern-design-demo-panel", "Variants and states", html`
       ${artifactVariantGrid({
         items: (source.variants ?? []).map(([title, status, copy]) => ({ title, status, copy })),
       })}
-    </section>
-  `;
+  `);
 }
 
 function patternMotionPanel(source) {
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-rule-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail">
-      <h2>Motion contract</h2>
+  return patternContractSection("pattern-rule-panel", "Motion contract", html`
       <div class="architecture-chain">
         ${(source.motion ?? []).map(([name, rule], index) => packageDemo("card", {
           title: name,
@@ -356,8 +334,7 @@ function patternMotionPanel(source) {
           fullWidth: true,
         })).join("")}
       </div>
-    </section>
-  `;
+  `);
 }
 
 function patternContractBuild(entry) {
@@ -374,11 +351,9 @@ function patternContractBuild(entry) {
 function patternContractMiel(entry) {
   const source = patternSource(entry);
   const miel = source.miel ?? {};
-  return html`
-    <section class="surface docs-section-surface detail-section-surface wide pattern-miel-panel" data-surface-role="section" data-surface-elevation="none" data-surface-tone="default" data-doc-template="artifact-detail" data-pattern-doc="miel">
+  return patternContractSection("pattern-miel-panel", `${entry.title} MIEL`, html`
       <header class="pattern-miel-header">
         <span class="eyebrow">MIEL</span>
-        <h2>${entry.title} MIEL</h2>
         <p>Agent boundary, human checkpoints, and pattern rejection rules.</p>
       </header>
       <div class="pattern-miel-grid">
@@ -389,8 +364,7 @@ function patternContractMiel(entry) {
       <div class="pattern-miel-bottom">
         ${packageDemo("card", { title: ui("miel.handoff"), detail: miel.handoff ?? "", variant: "minimal", composition: "standard", fullWidth: true })}
       </div>
-    </section>
-  `;
+  `, `data-pattern-doc="miel"`);
 }
 
 function patternMielCard(title, items) {

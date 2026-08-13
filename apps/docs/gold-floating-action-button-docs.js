@@ -1,4 +1,4 @@
-import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=255";
+import { renderSimpleGoldSection, simpleDemo } from "./gold-simple-component-docs.js?v=260";
 
 export function renderFloatingActionButtonGoldSection(entry, section) { return renderSimpleGoldSection(entry, section, floatingActionButtonDemoFromData); }
 export function floatingActionButtonDemo(label = "Add movement", state = "default") { return simpleDemo("floating-action-button", { label, state, variant: "extended" }); }
