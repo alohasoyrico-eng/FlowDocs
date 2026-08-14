@@ -50,6 +50,7 @@ function checkDocsShellBoundary() {
   const patternShellRenderersFile = path.join(docsAppDir, "pattern-shell-renderers.js");
   const templateDesktopDemosFile = path.join(docsAppDir, "template-desktop-demos.js");
   const docsStylesFile = path.join(docsAppDir, "styles.css");
+  const docsReactShellStylesFile = path.join(docsAppDir, "styles/01-shell-react.css");
   const forbiddenShellStyleFiles = [
     "styles/07-pattern-focused-demos.css",
     "styles/07-pattern-sidebar-slots.css",
@@ -175,6 +176,7 @@ function checkDocsShellBoundary() {
     '"aria-expanded": String(navigationOpen)',
     '"aria-controls": "docs-shell-sidebar-nav"',
     "drawer: false",
+    '.docs-react-shell-topbar [data-flow-slot=\\"search-results\\"] [data-key]',
   ]) {
     if (!shell.includes(required)) add("errors", docsShellReactFile, 1, `Docs shell React boundary is missing Flow shell contract: ${required}.`);
   }
@@ -184,9 +186,30 @@ function checkDocsShellBoundary() {
     '"aria-controls": "docsReactShellSidebar"',
     'drawer: { label: ui("shell.designNavigation")',
     'closeLabel: ui("shell.designNavigation")',
+    ".docs-react-shell-search-results [data-key]",
   ]) {
     if (shell.includes(forbidden)) {
       add("errors", docsShellReactFile, lineOf(shell, forbidden), `Docs shell must use the real sidebar mount and the topbar hamburger as the only mobile navigation control: ${forbidden}.`);
+    }
+  }
+
+  const shellStyles = read(docsReactShellStylesFile);
+  for (const required of [
+    "grid-template-columns: minmax(min(18rem, 100%), 1fr) max-content;",
+    ".docs-react-shell-topbar > [data-doc-shell-slot=\"search-field\"]",
+    "grid-column: 1;",
+    ".docs-react-shell-topbar > [data-flow-slot=\"topbar-actions\"]",
+    "grid-column: 2;",
+    ".docs-react-shell-topbar > [data-flow-slot=\"search-results\"]",
+  ]) {
+    if (!shellStyles.includes(required)) add("errors", docsReactShellStylesFile, 1, `Docs shell CSS is missing responsive Flow shell contract: ${required}.`);
+  }
+  for (const forbidden of [
+    "grid-template-columns: minmax(0, 1fr) minmax(min(18rem, 100%), 38rem) minmax(max-content, 1fr);",
+    ".docs-react-shell-topbar > .docs-react-shell-search-results",
+  ]) {
+    if (shellStyles.includes(forbidden)) {
+      add("errors", docsReactShellStylesFile, lineOf(shellStyles, forbidden), `Docs shell CSS must not target obsolete shell layout/search contract: ${forbidden}.`);
     }
   }
 

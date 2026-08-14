@@ -29,7 +29,7 @@ export function docsLinkCard(collection, id, symbol, title, summary, meta = "") 
         composition: "standard",
         fullWidth: true,
       })}
-      ${artifactMetadataBar(metaItems, { ariaLabel: "Card metadata" })}
+      ${artifactMetadataBar(metaItems, { ariaLabel: "Card metadata", className: "card-meta-row" })}
     </a>
   `;
 }

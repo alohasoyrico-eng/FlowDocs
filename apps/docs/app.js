@@ -37,7 +37,7 @@ import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDe
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=2";
 import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=5";
 import { collectionIcon, configureIconSystem, icon, iconFor, tabIcon } from "./icon-system.js?v=199";
-import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=4";
+import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=7";
 import { configurePrimitiveReference, primitiveApiReferenceSection, primitiveLiveDemoSection, primitivePurposeSection, primitiveResponsibilitiesReferenceSection, primitiveSpecMatrixSection, primitiveTokenReferenceSection } from "./primitive-reference.js?v=1";
 import { configureReferenceLayout, referenceCallout, referenceCodeBlock, referenceDivider, referenceHeader, referencePeerNav, referenceSection } from "./reference-layout.js?v=6";
 import { setupReactComponentIslands } from "./react-component-islands.js?v=47";
@@ -46,7 +46,8 @@ import { escapeHtml, html, interpolateList, referenceTemplate, slug } from "./ut
 import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=3";
 
 const $ = (selector) => document.querySelector(selector);
-const app = $("#app");
+const shellMount = $("#app");
+let app = shellMount;
 let afterShellRender = () => {};
 window.__systemBoot = { status: "starting" };
 
@@ -59,22 +60,29 @@ function route() {
 function render() {
   configureLocalizedRenderers();
   const current = route();
+  const previousRenderTarget = app;
+  const pageRenderTarget = document.createElement("main");
+  pageRenderTarget.id = "app"; app = pageRenderTarget;
   delete document.body.dataset.navOpen;
   afterShellRender = (root) => setupReactComponentIslands(root);
   if (current.collection === "home") renderHome();
   else if (current.collection === "stack") renderStack();
   else if (current.collection === "foundations" && !current.id) {
+    app = previousRenderTarget;
     window.location.hash = "#/foundations/energy";
     return;
   } else if (current.collection === "primitives" && !current.id) {
+    app = previousRenderTarget;
     window.location.hash = "#/primitives/color";
     return;
   }
   else if (collections[current.collection] && current.id) renderDetail(current.collection, current.id);
   else if (collections[current.collection]) renderCollection(current.collection);
   else renderHome();
-  renderDocsShell(current, { pageMarkup: app.innerHTML, afterRender: afterShellRender });
-  app.focus({ preventScroll: true });
+  const pageMarkup = app.innerHTML;
+  app = previousRenderTarget;
+  renderDocsShell(current, { pageMarkup, afterRender: afterShellRender }); // staging replaces renderDocsShell(current, { pageMarkup: app.innerHTML, afterRender: afterShellRender })
+  shellMount.focus({ preventScroll: true });
   requestAnimationFrame(() => requestAnimationFrame(updateGridOverlay));
 }
 
@@ -115,10 +123,7 @@ function renderDetail(collection, id) {
     renderHome();
     return;
   }
-  const routeAliases = {
-    foundations: { motion: "momentum" },
-    components: { "otp-input": "code-input" },
-  };
+  const routeAliases = { foundations: { motion: "momentum" }, components: { "otp-input": "code-input" } };
   const normalizedId = routeAliases[collection]?.[id] ?? id;
   if (normalizedId !== id) {
     window.location.hash = `#/${collection}/${normalizedId}`;
@@ -126,24 +131,26 @@ function renderDetail(collection, id) {
   }
   const entry = collections[collection].find((candidate) => candidate.id === normalizedId);
   if (!entry) return renderCollection(collection);
-  if (collection === "foundations") return renderFoundationDetail(entry);
-  if (collection === "primitives") return renderPrimitiveDetail(entry);
-  const tabs = detailTabs(collection, entry);
-  app.innerHTML = shell(renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }), collection);
+  if (collection === "foundations") renderFoundationDetail(entry);
+  else if (collection === "primitives") renderPrimitiveDetail(entry);
+  else {
+    const tabs = detailTabs(collection, entry);
+    app.innerHTML = shell(renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }), collection);
 
-  afterShellRender = (root) => {
-    setupReactComponentIslands(root);
-    const tabShell = document.querySelector('[data-react-component="docs-artifact-detail-template"], [data-react-component="detail-shell-tabs"]');
-    const activateTab = (tabId) => {
-      const selected = tabs.find((tab) => tab.id === tabId);
-      if (!selected) return;
-      $("#tabPanel").innerHTML = selected.body;
-      setupReactComponentIslands($("#tabPanel"));
+    afterShellRender = (root) => {
+      setupReactComponentIslands(root);
+      const tabShell = document.querySelector('[data-react-component="docs-artifact-detail-template"], [data-react-component="detail-shell-tabs"]');
+      const activateTab = (tabId) => {
+        const selected = tabs.find((tab) => tab.id === tabId);
+        if (!selected) return;
+        $("#tabPanel").innerHTML = selected.body;
+        setupReactComponentIslands($("#tabPanel"));
+        setupDocumentationInteractions(interactionDeps());
+      };
+      tabShell?.addEventListener("docs-detail-tab-change", (event) => activateTab(event.detail?.tabId));
       setupDocumentationInteractions(interactionDeps());
     };
-    tabShell?.addEventListener("docs-detail-tab-change", (event) => activateTab(event.detail?.tabId));
-    setupDocumentationInteractions(interactionDeps());
-  };
+  }
 }
 
 function renderFoundationDetail(entry) {
@@ -379,7 +386,7 @@ async function boot() {
   } catch (error) {
     window.__systemBoot = { status: "failed", message: error?.message ?? String(error), stack: error?.stack ?? "" };
     console.error(ui("shell.bootFailedLog"), error);
-    app.innerHTML = `<main class="section">${documentationSectionIsland({
+    shellMount.innerHTML = `<main class="section">${documentationSectionIsland({
       bodyHtml: `<h1>${ui("shell.bootFailedTitle")}</h1><p>${escapeHtml(window.__systemBoot.message)}</p>`,
       className: "artifact-detail-surface wide",
       template: "artifact-detail",

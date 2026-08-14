@@ -238,7 +238,7 @@ export function artifactVariantGrid({ className = "", items = [] } = {}) {
 }
 
 function artifactCard({ title, detail, status, iconName } = {}) {
-  return componentDemo("card", { title, detail, status, icon: iconName ? icon(iconName) : undefined, variant: "minimal", composition: "standard", fullWidth: true });
+  return componentDemo("card", { title, detail, status, icon: iconName, variant: "minimal", composition: "standard", fullWidth: true });
 }
 
 function artifactListCard(title, items) {

@@ -29,12 +29,12 @@
 }
 
 .layer-grid article,
-.documentation-section,
+[data-flow-pattern="documentation-section"],
 .stack-card {
   padding: var(--sys-frame-padding-container);
 }
 
-.documentation-section {
+[data-flow-pattern="documentation-section"] {
   box-sizing: border-box;
   display: grid;
   gap: var(--sys-frame-gap-component-lg);
@@ -44,9 +44,9 @@
   overflow-wrap: anywhere;
 }
 
-.documentation-section > [data-flow-slot="documentation-section.body"] > h2,
-.documentation-section > [data-flow-slot="documentation-section.body"] > h3,
-.documentation-section > [data-flow-slot="documentation-section.body"] > p {
+[data-flow-pattern="documentation-section"] > [data-flow-slot="documentation-section.body"] > h2,
+[data-flow-pattern="documentation-section"] > [data-flow-slot="documentation-section.body"] > h3,
+[data-flow-pattern="documentation-section"] > [data-flow-slot="documentation-section.body"] > p {
   min-inline-size: 0;
   max-inline-size: 100%;
   margin-block-end: 0;

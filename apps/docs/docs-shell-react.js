@@ -1,6 +1,6 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { DocsShellTemplate } from "./generated/react/templates/DocsShellTemplate.js?v=1";
+import { DocsShellTemplate } from "./generated/react/templates/DocsShellTemplate.js?v=2";
 
 let currentLocale = () => "en";
 let render = () => {};
@@ -17,6 +17,7 @@ let toggleGridOverlay = () => false;
 let shellRoot;
 let lastPageMarkup = "";
 let lastAfterRender = () => {};
+let lastCurrentRoute = {};
 const state = {
   searchQuery: "",
   searchOpen: false,
@@ -39,6 +40,7 @@ export function configureDocsShell(nextDeps) {
 export function renderDocsShell(current, options = {}) {
   const mount = document.querySelector("#app");
   if (!mount) return;
+  lastCurrentRoute = current;
   if (typeof options.pageMarkup === "string") lastPageMarkup = options.pageMarkup;
   if (typeof options.afterRender === "function") lastAfterRender = options.afterRender;
   if (mount.nodeType !== 1) {
@@ -46,6 +48,7 @@ export function renderDocsShell(current, options = {}) {
     lastAfterRender(mount);
     return;
   }
+  ensureSearchKeyboard();
   shellRoot ||= createRoot(mount);
   shellRoot.render(React.createElement(DocsShellTemplate, docsShellProps(current), React.createElement(DocsPageSlot, {
     markup: lastPageMarkup,
@@ -57,6 +60,7 @@ function topbarProps(current) {
   const contrastEnabled = document.body.dataset.contrast === "quiet";
   const gridVisible = !document.querySelector("#docsGridOverlay")?.hidden;
   const results = searchResults(state.searchQuery);
+  const resultItems = results.map(({ href, ...item }) => item);
   const navigationOpen = document.body.dataset.navOpen === "true";
   return {
     label: ui("shell.primaryNavigation"),
@@ -83,26 +87,24 @@ function topbarProps(current) {
         state.searchOpen = Boolean(value);
         renderDocsShell(current);
       },
-      delegate: state.searchOpen
+      results: state.searchOpen ? resultItems : [],
+      resultsLabel: ui("shell.searchResults"),
+      resultsClassName: "docs-react-shell-search-results",
+      empty: state.searchOpen
         ? {
-          label: ui("shell.searchResults"),
-          className: "docs-react-shell-search-results",
-          query: state.searchQuery,
-          results,
-          empty: {
-            title: ui("shell.noSearchResults"),
-            description: ui("shell.searchPlaceholder"),
-          },
-          onResultSelect: (key) => {
-            const match = results.find((result) => result.key === key);
-            if (!match?.href) return;
-            state.searchQuery = "";
-            state.searchOpen = false;
-            window.location.hash = match.href.replace(/^#/, "");
-            renderDocsShell(current);
-          },
+          title: ui("shell.noSearchResults"),
+          description: ui("shell.searchPlaceholder"),
+          icon: "search_off",
         }
         : undefined,
+      onResultSelect: (key) => {
+        const match = results.find((result) => result.key === key);
+        if (!match?.href) return;
+        state.searchQuery = "";
+        state.searchOpen = false;
+        window.location.hash = match.href.replace(/^#/, "");
+        renderDocsShell(current);
+      },
     },
     actions: [
       {
@@ -153,11 +155,10 @@ function sidebarProps(current) {
   return {
     label: ui("shell.designNavigation"),
     density: "md",
-    className: "sidebar docs-react-shell-sidebar-mount",
+    className: "docs-react-shell-sidebar-mount",
     id: "docs-shell-sidebar-nav",
     activeKey: activeRouteKey(current),
     groups: sidebarGroups(current),
-    collapseAction: { label: ui("shell.designNavigation"), ariaLabel: ui("shell.designNavigation"), "data-doc-shell-slot": "collapse-action" },
     drawer: false,
     drawerOpen: navigationOpen,
     mobileDrawer: navigationOpen,
@@ -168,6 +169,38 @@ function sidebarProps(current) {
     },
     "data-doc-shell-consumer": "react-sidebar",
   };
+}
+
+let searchKeyboardBound = false;
+
+function ensureSearchKeyboard() {
+  if (searchKeyboardBound) return;
+  searchKeyboardBound = true;
+  document.addEventListener("keydown", (event) => {
+    if (!state.searchOpen) return;
+    const active = document.activeElement;
+    const searchInput = document.querySelector(".docs-react-shell-topbar [data-doc-shell-slot=\"search-field\"] input");
+    const resultButtons = [...document.querySelectorAll(".docs-react-shell-topbar [data-flow-slot=\"search-results\"] [data-key]")];
+    const isSearchInput = active === searchInput;
+    const activeResultIndex = resultButtons.indexOf(active);
+    const isResult = activeResultIndex >= 0;
+    if (!isSearchInput && !isResult) return;
+    if (event.key === "Escape") {
+      state.searchQuery = "";
+      state.searchOpen = false;
+      event.preventDefault();
+      renderDocsShell(lastCurrentRoute);
+      return;
+    }
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    if (!resultButtons.length) return;
+    event.preventDefault();
+    const direction = event.key === "ArrowDown" ? 1 : -1;
+    const nextIndex = isSearchInput
+      ? direction > 0 ? 0 : resultButtons.length - 1
+      : (activeResultIndex + direction + resultButtons.length) % resultButtons.length;
+    resultButtons[nextIndex]?.focus();
+  });
 }
 
 function docsShellProps(current) {

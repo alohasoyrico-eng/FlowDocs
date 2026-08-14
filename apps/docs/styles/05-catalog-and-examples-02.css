@@ -221,7 +221,7 @@
   text-align: center;
 }
 
-.documentation-section.wide {
+[data-flow-pattern="documentation-section"].wide {
   grid-column: 1 / -1;
 }
 

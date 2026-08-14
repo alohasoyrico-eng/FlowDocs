@@ -140,6 +140,20 @@ function reactCodeInputDemo(demo = {}) {
   return `<span class="docs-react-island docs-package-demo" data-react-component="code-input" data-component-source="react" data-doc-component="code-input" data-demo-variant="${escapeAttribute(variant)}" data-demo-state="${escapeAttribute(state)}" data-variant="${escapeAttribute(variant)}" data-state="${escapeAttribute(state)}" data-full-width="${String(Boolean(demo.fullWidth))}" data-react-props="${escapeAttribute(JSON.stringify(props))}"></span>`;
 }
 
+function reactCodeBlockDemo(demo = {}) {
+  const props = componentDemoProps("code-block", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "block";
+  return reactIsland("code-block", props, state, variant, props.fullWidth);
+}
+
+function reactCopyButtonDemo(demo = {}) {
+  const props = componentDemoProps("copy-button", demo);
+  const state = props.state ?? demo.state ?? "default";
+  const variant = props.variant ?? demo.variant ?? "text";
+  return reactIsland("copy-button", props, state, variant, props.fullWidth);
+}
+
 function reactPhoneInputDemo(demo = {}) {
   const props = componentDemoProps("phone-input", demo);
   const state = props.state ?? demo.state ?? "default";
@@ -259,8 +273,10 @@ export function componentDemo(component, demo = {}) {
   if (component === "chat-message") return reactChatMessageDemo(demo);
   if (component === "chat-thread") return reactChatThreadDemo(demo);
   if (component === "chip") return reactChipDemo(demo);
+  if (component === "code-block") return reactCodeBlockDemo(demo);
   if (component === "code-input") return reactCodeInputDemo(demo);
   if (component === "combobox") return reactComboboxDemo(demo);
+  if (component === "copy-button") return reactCopyButtonDemo(demo);
   if (component === "country-selector") return reactCountrySelectorDemo(demo);
   if (component === "date-picker") return reactDatePickerDemo(demo);
   if (component === "date-range-picker") return reactDateRangePickerDemo(demo);

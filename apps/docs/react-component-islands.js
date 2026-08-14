@@ -22,6 +22,7 @@ import { Chip } from "./generated/react/Chip.js?v=1";
 import { CodeBlock } from "./generated/react/CodeBlock.js?v=1";
 import { CodeInput } from "./generated/react/CodeInput.js?v=1";
 import { Combobox } from "./generated/react/Combobox.js?v=1";
+import { CopyButton } from "./generated/react/CopyButton.js?v=1";
 import { CountrySelector } from "./generated/react/CountrySelector.js?v=1";
 import { DatePicker } from "./generated/react/DatePicker.js?v=1";
 import { DateRangePicker } from "./generated/react/DateRangePicker.js?v=1";
@@ -87,6 +88,7 @@ const mounted = new WeakMap(); let detailTabHydrationReady = false; const reactC
   "code-block": CodeBlock,
   "code-input": CodeInput,
   combobox: Combobox,
+  "copy-button": CopyButton,
   "country-selector": CountrySelector,
   "date-picker": DatePicker,
   "date-range-picker": DateRangePicker,

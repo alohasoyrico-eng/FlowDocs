@@ -766,9 +766,9 @@ function checkFlowDocsV2PagesReadiness() {
   const expectedCounts = {
     foundations: 11,
     primitives: 24,
-    components: 60,
+    components: 62,
     patterns: 63,
-    templates: 9,
+    templates: 17,
   };
   const detailRoutes = Object.values(collectionCounts).reduce((total, count) => total + count, 0);
   const expectedDetailRoutes = Object.values(expectedCounts).reduce((total, count) => total + count, 0);

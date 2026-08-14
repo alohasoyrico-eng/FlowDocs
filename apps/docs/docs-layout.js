@@ -35,10 +35,10 @@ export function renderCollectionContent({ artifactCard, collection, collections,
 function detailMetadataItems({ artifactTypeLabel, collection, componentImplementationStatus, entry }) {
   const implementationLabel = componentImplementationLabel(collection, entry, componentImplementationStatus);
   return [
-    { label: artifactTypeLabel(collection), kind: "tag", variant: "metadata", tone: "neutral" },
-    { label: entry.platform, kind: "tag", variant: "metadata", tone: "neutral" },
-    implementationLabel ? { label: implementationLabel, kind: "tag", variant: "metadata", tone: "neutral" } : null,
-    ...(entry.audiences ?? []).map((audience) => ({ label: audience, kind: "tag", variant: "metadata", tone: "neutral" })),
+    { label: artifactTypeLabel(collection), kind: "tag", variant: "metadata", tone: "neutral", "data-doc-class": "detail-meta-tag" },
+    { label: entry.platform, kind: "tag", variant: "metadata", tone: "neutral", "data-doc-class": "detail-meta-tag" },
+    implementationLabel ? { label: implementationLabel, kind: "tag", variant: "metadata", tone: "neutral", "data-doc-class": "detail-meta-tag" } : null,
+    ...(entry.audiences ?? []).map((audience) => ({ label: audience, kind: "tag", variant: "metadata", tone: "neutral", "data-doc-class": "detail-meta-tag" })),
   ].filter(Boolean);
 }
 

@@ -8,7 +8,6 @@
 @import "./styles/01-shell-01.css?v=219";
 @import "./styles/01-shell-icons.css?v=199";
 @import "./styles/01-shell-02.css?v=227";
-@import "./styles/01-shell-react.css?v=3";
 @import "./styles/01-shell-intro.css?v=2";
 @import "./styles/02-doc-layout.css?v=197";
 @import "./styles/03a-reference-core-01.css?v=193";
@@ -63,3 +62,4 @@
 @import "./styles/06-responsive-01.css?v=206";
 @import "./styles/06-responsive-02.css?v=224";
 @import "./styles/08-template-desktop-demos.css?v=15";
+@import "./styles/01-shell-react.css?v=5";

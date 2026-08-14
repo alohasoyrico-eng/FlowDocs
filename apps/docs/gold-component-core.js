@@ -144,7 +144,7 @@ function componentDetailChecklist(items = []) {
 }
 
 function componentDocCard({ title, detail, status, iconName } = {}) {
-  return componentDemo("card", { title, detail, status, icon: iconName ? icon(iconName, { tone: "action", fill: true }) : undefined, variant: "minimal", composition: "standard", fullWidth: true });
+  return componentDemo("card", { title, detail, status, icon: iconName, variant: "minimal", composition: "standard", fullWidth: true });
 }
 
 function componentDocListCard(title, items) {

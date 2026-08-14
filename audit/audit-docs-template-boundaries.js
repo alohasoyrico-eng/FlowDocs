@@ -92,6 +92,29 @@ const governedBoundaries = [
   },
 ];
 
+const allowedBoundaryConsumers = [
+  {
+    id: "on-this-page-nav",
+    files: new Set(["apps/docs/stateful-component-interactions.js"]),
+    patterns: [/\.docs-detail-tabs-nav/g, /\.detail-tablist/g],
+  },
+  {
+    id: "artifact-metadata-bar",
+    files: new Set(["apps/docs/catalog-renderers.js"]),
+    patterns: [/artifactMetadataBar/g, /card-meta-row/g],
+  },
+  {
+    id: "copy-button",
+    files: new Set(["apps/docs/component-demo.js"]),
+    patterns: [/componentDemoProps\("copy-button"/g, /reactIsland\("copy-button"/g, /component === "copy-button"/g],
+  },
+  {
+    id: "copy-button",
+    files: new Set(["apps/docs/react-component-islands.js"]),
+    patterns: [/import \{ CopyButton \}/g, /"copy-button": CopyButton/g],
+  },
+];
+
 function walkFiles(dir, matcher, output = []) {
   if (!fs.existsSync(dir)) return output;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -114,12 +137,32 @@ function relative(file) {
   return path.relative(process.cwd(), file).replace(/\\/g, "/");
 }
 
+function isAllowedBoundaryConsumer(check, fileKey, text, match) {
+  const allow = allowedBoundaryConsumers.find((entry) => entry.id === check.id && entry.files.has(fileKey));
+  if (!allow) return false;
+  const lineStart = text.lastIndexOf("\n", match.index) + 1;
+  const lineEnd = text.indexOf("\n", match.index);
+  const line = text.slice(lineStart, lineEnd === -1 ? text.length : lineEnd);
+  return allow.patterns.some((pattern) => {
+    pattern.lastIndex = 0;
+    if (pattern.test(line)) return true;
+    pattern.lastIndex = 0;
+    let allowedMatch;
+    while ((allowedMatch = pattern.exec(text))) {
+      if (allowedMatch.index === match.index) return true;
+    }
+    return false;
+  });
+}
+
 function collectMatches(file, text, check) {
   const matches = [];
+  const fileKey = relative(file);
   for (const entry of check.patterns) {
     entry.pattern.lastIndex = 0;
     let match;
     while ((match = entry.pattern.exec(text))) {
+      if (isAllowedBoundaryConsumer(check, fileKey, text, match)) continue;
       matches.push({
         label: entry.label,
         line: lineForIndex(text, match.index),
@@ -131,10 +174,12 @@ function collectMatches(file, text, check) {
 
 function collectStrictMatches(file, text, check) {
   const matches = [];
+  const fileKey = relative(file);
   for (const entry of check.strictPatterns ?? check.patterns) {
     entry.pattern.lastIndex = 0;
     let match;
     while ((match = entry.pattern.exec(text))) {
+      if (isAllowedBoundaryConsumer(check, fileKey, text, match)) continue;
       matches.push({
         label: entry.label,
         line: lineForIndex(text, match.index),

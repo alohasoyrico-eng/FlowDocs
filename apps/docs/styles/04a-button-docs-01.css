@@ -136,22 +136,28 @@
   gap: var(--density-section-gap);
 }
 
-:is(.detail-page, .reference-doc) .documentation-section {
+:is(.detail-page, .reference-doc) [data-flow-pattern="documentation-section"] {
   gap: var(--density-subsection-gap);
   padding: var(--density-surface-padding);
   background: color-mix(in srgb, var(--sys-energy-surface-primary) 94%, transparent);
   box-shadow: none;
 }
 
-:is(.detail-page, .reference-doc) .documentation-section > [data-flow-slot="documentation-section.body"] > h2,
-:is(.detail-page, .reference-doc) .documentation-section > [data-flow-slot="documentation-section.body"] > h3 {
+:is(.detail-page, .reference-doc) [data-flow-pattern="documentation-section"][data-doc-template="component-detail"] {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+:is(.detail-page, .reference-doc) [data-flow-pattern="documentation-section"] > [data-flow-slot="documentation-section.body"] > h2,
+:is(.detail-page, .reference-doc) [data-flow-pattern="documentation-section"] > [data-flow-slot="documentation-section.body"] > h3 {
   font-size: var(--density-doc-heading-size);
   line-height: var(--density-doc-heading-line-height);
 }
 
-:is(.detail-page, .reference-doc) .documentation-section > [data-flow-slot="documentation-section.body"] > p,
-:is(.detail-page, .reference-doc) .documentation-section li,
-:is(.detail-page, .reference-doc) .documentation-section dd {
+:is(.detail-page, .reference-doc) [data-flow-pattern="documentation-section"] > [data-flow-slot="documentation-section.body"] > p,
+:is(.detail-page, .reference-doc) [data-flow-pattern="documentation-section"] li,
+:is(.detail-page, .reference-doc) [data-flow-pattern="documentation-section"] dd {
   font-size: var(--density-doc-body-size);
   line-height: var(--density-doc-body-line-height);
 }
@@ -289,6 +295,12 @@
 
 :is(.detail-page, .reference-doc) .button-decision-list article {
   padding: var(--density-card-padding);
+}
+
+:is(.detail-page, .reference-doc) :is(.component-detail-anatomy-grid, .checklist-grid) [data-variant="minimal"] {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 :is(.detail-page, .reference-doc) .playground-controls {

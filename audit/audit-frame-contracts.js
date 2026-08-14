@@ -63,7 +63,9 @@ function extractCssBlocks(css, selector) {
 }
 
 function requireCss(selector, rules) {
-  const cssText = readDocsCss();
+  const generatedComponentsCssFile = path.join(docsAppDir, "generated/components.css");
+  const generatedComponentsCss = fs.existsSync(generatedComponentsCssFile) ? read(generatedComponentsCssFile) : "";
+  const cssText = `${readDocsCss()}\n${generatedComponentsCss}`;
   const body = extractCssBlock(cssText, selector);
   if (!body) {
     add("errors", cssFile, 1, `Frame layout contract missing selector: ${selector}.`);
@@ -180,7 +182,7 @@ function checkFrameLayoutContract() {
     [/min-inline-size:\s*0;/, "Tab panel must be shrinkable inside the Frame shell."],
     [/max-inline-size:\s*100%;/, "Tab panel must not exceed the Frame shell."],
   ]);
-  requireCss(".documentation-section", [
+  requireCss('[data-flow-pattern="documentation-section"]', [
     [/min-inline-size:\s*0;/, "Documentation Surface sections must be shrinkable inside Frame."],
     [/max-inline-size:\s*100%;/, "Documentation Surface sections must not exceed Frame."],
     [/overflow-wrap:\s*anywhere;/, "Documentation Surface sections must protect Frame from long content overflow."],

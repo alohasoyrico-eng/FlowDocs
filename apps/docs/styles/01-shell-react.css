@@ -26,7 +26,7 @@
   z-index: var(--sys-depth-z-sticky);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
-  gap: var(--space-3);
+  gap: var(--sys-space-3);
   align-items: center;
   padding: var(--sys-space-md) clamp(var(--sys-space-lg), 4vw, var(--sys-frame-gap-component));
   border-bottom: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
@@ -49,7 +49,7 @@
 }
 
 .docs-shell-topbar {
-  gap: var(--space-3);
+  gap: var(--sys-space-3);
 }
 
 .docs-react-shell-topbar-mount {
@@ -61,15 +61,26 @@
 
 .docs-react-shell-topbar {
   align-items: center;
-  display: flex;
-  gap: var(--space-2);
+  display: grid;
+  gap: var(--sys-space-2);
+  grid-template-columns: minmax(min(18rem, 100%), 1fr) max-content;
   inline-size: 100%;
   min-width: 0;
 }
 
 .docs-react-shell-topbar > [data-doc-shell-slot="search-field"] {
-  flex: 1 1 min(48rem, 100%);
-  min-width: min(18rem, 100%);
+  grid-column: 1;
+  inline-size: 100%;
+  min-width: 0;
+}
+
+.docs-react-shell-topbar > [data-flow-slot="topbar-actions"] {
+  align-items: center;
+  display: flex;
+  gap: var(--sys-space-2);
+  grid-column: 2;
+  justify-self: end;
+  min-inline-size: max-content;
 }
 
 .docs-react-shell-topbar > [data-doc-shell-slot="search-field"] > [data-field-label] {
@@ -83,43 +94,66 @@
   white-space: nowrap;
 }
 
-.docs-react-shell-topbar > .docs-react-shell-search-results {
-  background: var(--color-surface);
-  border: var(--component-border-width) solid var(--color-border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  inset-block-start: calc(var(--sys-frame-height-shell-topbar) + var(--sys-frame-height-control-sm) + var(--sys-space-sm));
-  inset-inline: clamp(var(--space-3), 5vw, var(--space-8));
-  inline-size: min(32rem, calc(100vw - (var(--space-8) * 2)));
-  max-block-size: min(28rem, calc(100vh - var(--sys-frame-height-shell-topbar) - var(--sys-frame-height-control-sm) - var(--space-6)));
+.docs-react-shell-topbar > [data-flow-slot="search-results"] {
+  background: var(--sys-energy-surface-primary);
+  border: var(--component-border-width) solid var(--sys-energy-border-default);
+  border-radius: var(--sys-frame-radius-container);
+  box-shadow: var(--sys-depth-elevation-2);
+  inset-block-start: calc(var(--sys-frame-height-shell-topbar) + var(--sys-frame-height-control-sm) + var(--sys-space-sm)) !important;
+  inset-inline: 50% auto !important;
+  inline-size: min(38rem, calc(100vw - (var(--sys-space-8) * 2))) !important;
+  left: 50% !important;
+  max-block-size: min(28rem, calc(100vh - var(--sys-frame-height-shell-topbar) - var(--sys-frame-height-control-sm) - var(--sys-space-xl))) !important;
+  min-inline-size: min(38rem, calc(100vw - (var(--sys-space-8) * 2))) !important;
   overflow: auto;
-  padding: var(--space-3);
-  position: fixed;
-  z-index: 40;
+  padding: var(--sys-space-3) !important;
+  position: fixed !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: min(38rem, calc(100vw - (var(--sys-space-8) * 2))) !important;
+  z-index: 40 !important;
 }
 
-.docs-react-shell-topbar > .docs-react-shell-search-results > label {
-  display: none;
-}
-
-.docs-react-shell-topbar > .docs-react-shell-search-results > [data-full-width][data-field] {
-  display: none;
+.docs-react-shell-topbar > [data-flow-slot="search-results"] > * {
+  margin: 0;
 }
 
 .docs-react-shell-topbar > [data-doc-shell-slot="navigation-action"] {
   display: none;
 }
 
-.docs-react-shell-sidebar-mount {
-  overflow: hidden;
+.docs-react-shell-topbar > [data-doc-shell-slot="navigation-action"].icon-button {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  min-block-size: var(--sys-frame-height-control-sm);
+  min-inline-size: var(--sys-frame-height-control-sm);
 }
 
-.docs-react-shell-sidebar-mount[data-doc-shell-consumer="react-sidebar"],
-.docs-react-shell-sidebar-mount > [data-doc-shell-consumer="react-sidebar"] {
-  block-size: 100%;
+.docs-react-shell-sidebar-mount {
+  align-self: start;
+  background: color-mix(in srgb, var(--sys-energy-surface-secondary) 72%, transparent);
+  block-size: calc(100svh - var(--sys-frame-height-shell-topbar));
+  border-inline-end: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
+  backdrop-filter: blur(var(--sys-depth-blur-topbar));
+  overflow: hidden;
+  position: sticky;
+  inset-block-start: var(--sys-frame-height-shell-topbar);
+}
+
+.docs-react-shell-sidebar-mount[data-doc-shell-consumer="react-sidebar"] {
+  block-size: calc(100svh - var(--sys-frame-height-shell-topbar));
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--sys-space-3);
+  min-block-size: 0;
+}
+
+.docs-react-shell-sidebar-mount > [data-doc-shell-consumer="react-sidebar"] {
+  block-size: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-space-3);
   min-block-size: 0;
 }
 
@@ -129,29 +163,51 @@
 }
 
 .docs-react-shell-sidebar-mount [aria-label$="groups"] {
+  background: transparent;
   block-size: 100%;
   border: 0;
+  border-radius: 0;
   box-shadow: none;
   min-block-size: 0;
   overflow: auto;
-  padding: 0;
+  padding: var(--sys-space-lg) var(--sys-space-md);
 }
 
 .docs-react-shell-sidebar-mount [aria-label$="groups"] > div {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--sys-space-xs);
+}
+
+.docs-react-shell-sidebar-mount [data-flow-slot="group-accordion"] {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.docs-react-shell-sidebar-mount [data-accordion-item],
+.docs-react-shell-sidebar-mount [data-accordion-trigger],
+.docs-react-shell-sidebar-mount [data-accordion-panel] {
+  border-color: transparent;
+}
+
+.docs-react-shell-sidebar-mount [data-accordion-trigger] {
+  background: transparent;
+  min-block-size: var(--sys-frame-height-control-sm);
+  padding-inline: 0;
 }
 
 .docs-react-shell-sidebar-mount [data-accordion-panel] > :first-child > :first-child {
   display: grid;
-  gap: var(--space-1);
-  padding-block: var(--space-1) var(--space-2);
+  gap: var(--sys-space-1);
+  padding-block: var(--sys-space-xs) var(--sys-space-sm);
 }
 
 .docs-react-shell-sidebar-mount [data-sidebar-route] {
   align-items: center;
   display: grid;
-  gap: var(--space-1);
+  gap: var(--sys-space-1);
   grid-template-columns: minmax(0, 1fr) auto;
 }
 
@@ -161,10 +217,13 @@
 
 .docs-react-shell-sidebar-mount [data-sidebar-route] > button {
   justify-content: flex-start;
+  min-block-size: var(--sys-frame-height-control-sm);
+  padding-inline: var(--sys-space-md);
 }
 
 @media (max-width: 991px) {
-  body[data-nav-open="true"] {
+  body[data-nav-open="true"],
+  body:has(.docs-react-shell-template[data-sidebar-open="true"]) {
     overflow: hidden;
   }
 
@@ -186,24 +245,33 @@
 
   .docs-react-shell-sidebar-mount {
     block-size: calc(100svh - var(--sys-frame-height-shell-topbar));
-    inline-size: min(var(--sys-frame-sidebar-expanded), calc(100vw - var(--space-6)));
+    inline-size: min(var(--sys-frame-sidebar-expanded), calc(100vw - var(--sys-space-xl)));
     inset-block-start: var(--sys-frame-height-shell-topbar);
-    inset-inline-start: 0;
-    max-inline-size: calc(100vw - var(--space-3));
+    inset-inline-start: var(--sys-space-3);
+    inset-inline-end: auto;
+    max-inline-size: calc(100vw - var(--sys-space-3));
     opacity: 0;
     pointer-events: none;
     position: fixed;
-    transform: translateX(-100%);
+    transform: translateX(calc(-100% - var(--sys-space-3)));
     transition:
       opacity var(--sys-momentum-transition-touch),
       transform var(--sys-momentum-transition-touch);
     z-index: var(--sys-depth-z-overlay);
   }
 
-  body[data-nav-open="true"] .docs-react-shell-sidebar-mount {
+  body[data-nav-open="true"] .docs-react-shell-sidebar-mount,
+  .docs-react-shell-template[data-sidebar-open="true"] .docs-react-shell-sidebar-mount {
     opacity: 1;
     pointer-events: auto;
     transform: translateX(0);
+  }
+
+  body[data-nav-open="false"] .docs-react-shell-sidebar-mount,
+  .docs-react-shell-template[data-sidebar-open="false"] .docs-react-shell-sidebar-mount {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(calc(-100% - var(--sys-space-3)));
   }
 
   .docs-react-shell-topbar > [data-doc-shell-slot="navigation-action"] {
@@ -211,37 +279,109 @@
   }
 
   .docs-react-shell-topbar > [data-doc-shell-slot="search-field"] {
-    flex: 1 1 auto;
+    flex: 1 1 min(var(--sys-frame-content-search-min), 100%);
     min-width: 0;
   }
 
-  .docs-react-shell-topbar__action {
+  .docs-react-shell-topbar > [data-flow-slot="topbar-actions"] {
     flex: 0 0 auto;
   }
 }
 
 @media (max-width: 575px) {
   .docs-shell-topbar {
-    gap: var(--space-2);
+    gap: var(--sys-space-2);
   }
 
   .docs-react-shell-topbar {
-    gap: var(--space-1);
+    display: contents;
+  }
+
+  .docs-react-shell-template > [data-flow-slot="shell-header"] {
+    grid-template-columns: auto minmax(0, 1fr) repeat(3, auto);
+  }
+
+  .docs-react-shell-template > [data-flow-slot="shell-header"] > [data-flow-slot="brand"] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .docs-react-shell-topbar > [data-doc-shell-slot="navigation-action"] {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .docs-react-shell-topbar > [data-doc-shell-slot="search-field"] {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .docs-react-shell-topbar > [data-flow-slot="topbar-actions"] {
+    align-items: center;
+    display: flex;
+    gap: var(--sys-space-1);
+    grid-column: 3 / -1;
+    grid-row: 1;
+    justify-self: end;
   }
 
   .docs-react-shell-topbar__action[data-doc-shell-action="language"],
   .docs-react-shell-topbar__action[data-doc-shell-action="grid"] {
-    display: none;
+    display: inline-flex;
   }
 
-  .docs-react-shell-topbar > .docs-react-shell-search-results {
-    inset-block-start: calc(var(--sys-frame-height-shell-topbar-mobile) + var(--sys-frame-height-control-sm) + var(--sys-space-sm));
-    inset-inline: var(--space-2);
+  body[data-nav-open="false"] .docs-react-shell-sidebar-mount,
+  .docs-react-shell-template[data-sidebar-open="false"] .docs-react-shell-sidebar-mount {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(calc(-100% - var(--sys-space-3)));
+  }
+
+  body[data-nav-open="true"] .docs-react-shell-sidebar-mount,
+  .docs-react-shell-template[data-sidebar-open="true"] .docs-react-shell-sidebar-mount {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  .docs-react-shell-topbar > [data-flow-slot="search-results"] {
+    inset-block-start: calc(var(--sys-frame-height-shell-topbar-mobile) + var(--sys-frame-height-control-sm) + var(--sys-space-sm)) !important;
+    inset-inline: var(--sys-space-2) auto !important;
+    inline-size: calc(100vw - (var(--sys-space-2) * 2)) !important;
+    left: var(--sys-space-2) !important;
+    min-inline-size: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    width: calc(100vw - (var(--sys-space-2) * 2)) !important;
   }
 
   .docs-react-shell-sidebar-mount {
-    block-size: calc(100svh - var(--sys-frame-height-shell-topbar-mobile));
-    inline-size: min(20rem, calc(100vw - var(--space-4)));
-    inset-block-start: var(--sys-frame-height-shell-topbar-mobile);
+    block-size: calc(100svh - var(--sys-frame-height-shell-topbar-mobile) - var(--sys-space-xl));
+    inline-size: min(20rem, calc(100vw - var(--sys-space-4))) !important;
+    inset-block-start: calc(var(--sys-frame-height-shell-topbar-mobile) + var(--sys-space-3));
+    inset-inline-end: auto !important;
+    inset-inline-start: var(--sys-space-2) !important;
+    border-radius: var(--sys-frame-radius-container);
+    left: var(--sys-space-2) !important;
+    max-inline-size: calc(100vw - var(--sys-space-4)) !important;
+    right: auto !important;
+    width: min(20rem, calc(100vw - var(--sys-space-4))) !important;
+  }
+
+  .docs-react-shell-sidebar-mount[data-doc-shell-consumer="react-sidebar"] {
+    block-size: calc(100svh - var(--sys-frame-height-shell-topbar-mobile) - var(--sys-space-xl));
+  }
+
+  body[data-nav-open="false"] .docs-react-shell-sidebar-mount,
+  .docs-react-shell-template[data-sidebar-open="false"] .docs-react-shell-sidebar-mount {
+    transform: translateX(calc(-100% - var(--sys-space-3)));
+  }
+
+  body[data-nav-open="true"] .docs-react-shell-sidebar-mount,
+  .docs-react-shell-template[data-sidebar-open="true"] .docs-react-shell-sidebar-mount {
+    inline-size: min(20rem, calc(100vw - var(--sys-space-4))) !important;
+    transform: translateX(0);
   }
 }

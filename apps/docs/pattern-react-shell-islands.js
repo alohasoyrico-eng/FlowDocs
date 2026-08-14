@@ -15,15 +15,18 @@ function SidebarIsland({ initialProps }) {
   const [collapsed, setCollapsed] = React.useState(Boolean(initialProps.collapsed));
   const [activeKey, setActiveKey] = React.useState(initialProps.activeKey ?? "overview");
   const [drawerOpen, setDrawerOpen] = React.useState(Boolean(initialProps.drawerOpen));
+  const canCollapse = Boolean(initialProps.collapseAction || initialProps.onCollapse);
   return React.createElement(Sidebar, {
     ...initialProps,
     collapsed,
     activeKey,
     drawerOpen,
-    onCollapse: (nextCollapsed, event) => {
-      setCollapsed(Boolean(nextCollapsed));
-      initialProps.onCollapse?.(nextCollapsed, event);
-    },
+    onCollapse: canCollapse
+      ? (nextCollapsed, event) => {
+        setCollapsed(Boolean(nextCollapsed));
+        initialProps.onCollapse?.(nextCollapsed, event);
+      }
+      : undefined,
     onDrawerOpenChange: (nextOpen, event) => {
       setDrawerOpen(Boolean(nextOpen));
       initialProps.onDrawerOpenChange?.(nextOpen, event);
