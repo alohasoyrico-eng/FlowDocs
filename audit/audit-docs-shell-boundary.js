@@ -158,7 +158,7 @@ function checkDocsShellBoundary() {
   const app = read(docsAppFile);
   for (const required of [
     "configureDocsShell",
-    "renderDocsShell(current, { pageMarkup: app.innerHTML, afterRender: afterShellRender })",
+    "renderDocsShell(current, { pageContent: currentPageContent, afterRender: afterShellRender })",
     "./docs-shell-react.js",
   ]) {
     if (!app.includes(required)) add("errors", docsAppFile, 1, `Docs app is missing shell React integration: ${required}.`);
@@ -172,7 +172,9 @@ function checkDocsShellBoundary() {
     'from "./generated/react/templates/DocsShellTemplate.js',
     "React.createElement(DocsShellTemplate",
     '"data-doc-shell-consumer": "docs-shell-template"',
-    "function DocsPageSlot",
+    "function LegacyHtmlPageSlot",
+    '"data-legacy-html-slot": "page"',
+    '"data-legacy-html-exit": "typed-react-page-children"',
     '"aria-expanded": String(navigationOpen)',
     '"aria-controls": "docs-shell-sidebar-nav"',
     "drawer: false",

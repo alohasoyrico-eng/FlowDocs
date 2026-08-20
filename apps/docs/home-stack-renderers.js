@@ -1,5 +1,12 @@
 import { componentDemo } from "./component-demo.js?v=61";
-import { documentationHeroIsland } from "./documentation-hero-island.js?v=1";
+
+function escapeAttribute(value) {
+  return String(value ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function docsHomeTemplateIsland(props) {
+  return `<div class="docs-react-island docs-home-template-island" data-react-component="docs-home-template" data-component-source="react-template" data-doc-template="docs-home-template" data-flowdocs-boundary="docs-home-template" data-react-props="${escapeAttribute(JSON.stringify(props))}"></div>`;
+}
 
 export function renderHomeContent({ docsLinkCard, collections, findAny, homeContent, html, slug, stack, ui }) {
   const home = homeContent ?? {};
@@ -15,46 +22,31 @@ export function renderHomeContent({ docsLinkCard, collections, findAny, homeCont
       data-alt=""
     ></div>
   `;
-  return html`
-    ${documentationHeroIsland({
-      kicker: home.hero?.kicker ?? "",
-      title: home.hero?.title ?? ui("shell.home"),
-      description: home.hero?.lede ?? "",
-      actions: (home.hero?.actions ?? []).map((action, index) => ({
-        key: action.label,
-        label: action.label,
-        icon: action.icon,
-        href: action.href,
-        variant: action.variant === "primary" || index === 0 ? "primary" : "secondary",
-      })),
-      visualHtml: heroVisual,
-      template: "docs-home-template",
-      source: "home-stack-renderers",
-    })}
-    <section class="section tight">
-      <div class="section-head">
-        <p class="kicker">${home.coverage?.kicker ?? ""}</p>
-        <h2>${home.coverage?.title ?? ""}</h2>
-        <p>${home.coverage?.copy ?? ""}</p>
-      </div>
+  const coverageHtml = html`
+    <div class="section-head">
+      <p class="kicker">${home.coverage?.kicker ?? ""}</p>
+      <h2>${home.coverage?.title ?? ""}</h2>
+      <p>${home.coverage?.copy ?? ""}</p>
+    </div>
       <div class="coverage-grid">
         ${(home.coverage?.items ?? [])
           .map((item) => homeCard({ title: item.label, value: String(collectionCount(item.collection)), detail: item.reference, status: item.status, composition: "stats" }))
           .join("")}
       </div>
-    </section>
-    <section class="section tight">
-      <div class="section-head">
-        <p class="kicker">${home.documentationStatus?.kicker ?? ""}</p>
-        <h2>${home.documentationStatus?.title ?? ""}</h2>
-        <p>${home.documentationStatus?.copy ?? ""}</p>
-      </div>
+  `;
+  const statusHtml = html`
+    <div class="section-head">
+      <p class="kicker">${home.documentationStatus?.kicker ?? ""}</p>
+      <h2>${home.documentationStatus?.title ?? ""}</h2>
+      <p>${home.documentationStatus?.copy ?? ""}</p>
+    </div>
       <div class="doc-status-grid">
         ${(home.documentationStatus?.items ?? [])
           .map((item) => homeCard({ title: item.status, detail: item.detail, status: item.layer }))
           .join("")}
       </div>
-    </section>
+  `;
+  const childrenHtml = html`
     <section class="section tight">
       <div class="section-head">
         <p class="kicker">${home.visualMigration?.kicker ?? ""}</p>
@@ -91,6 +83,22 @@ export function renderHomeContent({ docsLinkCard, collections, findAny, homeCont
       </div>
     </section>
   `;
+  return docsHomeTemplateIsland({
+    title: home.hero?.title ?? ui("shell.home"),
+    description: home.hero?.lede ?? "",
+    density: "md",
+    state: "default",
+    className: "docs-home-template--flowdocs",
+    coverageHtml,
+    heroVisualHtml: heroVisual,
+    statusHtml,
+    childrenHtml,
+    metadata: [
+      { label: home.hero?.kicker ?? "", kind: "tag", variant: "metadata", tone: "neutral" },
+    ].filter((item) => item.label),
+    "data-doc-template": "docs-home-template",
+    "data-flowdocs-template-source": "home-stack-renderers",
+  });
 }
 
 export function renderStackContent({ html, referenceCopy, stack }) {

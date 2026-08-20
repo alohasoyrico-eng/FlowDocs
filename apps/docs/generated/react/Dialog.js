@@ -3,6 +3,7 @@ import { dialogPlatformContract } from "../components/platforms/index.js?v=1";
 import { Button } from "./Button.js";
 import { IconButton } from "./IconButton.js";
 import { Input } from "./Input.js";
+import { focusableElements } from "./internal/focus.js";
 import { flowStateProps, flowToneProps, flowVariantProps, normalizeFlowValue, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 const validVariants = new Set(["confirmation", "destructive", "form", "review", "success"]);
 const validStates = new Set(["open", "focus", "closing", "default", "closed"]);
@@ -41,6 +42,7 @@ export const Dialog = forwardRef(function Dialog({ label, description, triggerLa
     const reactId = useId();
     const triggerRef = useRef(null);
     const closeRef = useRef(null);
+    const panelRef = useRef(null);
     const resolvedVariant = normalizeFlowValue(variant, validVariants, "confirmation");
     const resolvedTone = resolveTone(tone, resolvedVariant);
     const resolvedDensity = normalizeFlowDensity(density);
@@ -59,6 +61,14 @@ export const Dialog = forwardRef(function Dialog({ label, description, triggerLa
     const hasTrigger = Boolean(triggerLabel);
     const sourceFields = Array.isArray(fields) ? fields : [];
     const visibleFields = sourceFields.filter((field) => field?.label && hasStableFieldName(field));
+    const focusInitialElement = () => {
+        if (closeRef.current) {
+            closeRef.current?.focus();
+            return;
+        }
+        const target = focusableElements(panelRef.current)[0] ?? panelRef.current;
+        target?.focus();
+    };
     const setOpen = (nextOpen, { restoreFocus = false, event } = {}) => {
         const normalizedOpen = Boolean(nextOpen);
         if (!isOpenControlled)
@@ -67,16 +77,37 @@ export const Dialog = forwardRef(function Dialog({ label, description, triggerLa
             setInteractionState(normalizedOpen ? "open" : "closed");
         onOpenChange?.(normalizedOpen, event);
         if (normalizedOpen)
-            requestAnimationFrame(() => closeRef.current?.focus());
+            requestAnimationFrame(focusInitialElement);
         if (restoreFocus)
             requestAnimationFrame(() => triggerRef.current?.focus());
     };
     const closeDialog = ({ restoreFocus = true, event } = {}) => setOpen(false, { restoreFocus, event });
     const onKeyDown = (event) => {
-        if (event.key !== "Escape")
+        if (event.key === "Escape") {
+            event.preventDefault();
+            closeDialog({ event });
             return;
-        event.preventDefault();
-        closeDialog({ event });
+        }
+        if (event.key !== "Tab" || !isOpen)
+            return;
+        const focusables = focusableElements(panelRef.current);
+        if (!focusables.length) {
+            event.preventDefault();
+            panelRef.current?.focus();
+            return;
+        }
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement;
+        if (event.shiftKey && (active === first || !panelRef.current?.contains(active))) {
+            event.preventDefault();
+            last.focus();
+            return;
+        }
+        if (!event.shiftKey && active === last) {
+            event.preventDefault();
+            first.focus();
+        }
     };
     const sourceActions = Array.isArray(actions) ? actions : [];
     const resolvedActions = sourceActions.filter((action) => action?.label && action.key !== undefined && action.key !== null && action.key !== "");
@@ -112,11 +143,13 @@ export const Dialog = forwardRef(function Dialog({ label, description, triggerLa
         },
         onKeyDown,
     }, React.createElement("section", {
+        ref: panelRef,
         className: "dialog__panel",
         id: dialogId,
         role: "dialog",
         "aria-modal": "true",
         "aria-labelledby": titleId,
+        tabIndex: -1,
         onClick: (event) => event.stopPropagation(),
     }, React.createElement("header", { className: "dialog__header" }, resolvedIcon ? React.createElement("span", { className: "dialog__icon", "aria-hidden": "true" }, resolvedIcon) : null, React.createElement("div", { className: "dialog__content" }, React.createElement("h3", { id: titleId }, label), description ? React.createElement("p", null, description) : null), closeLabel ? React.createElement(IconButton, {
         ref: closeRef,
@@ -144,14 +177,14 @@ export const Dialog = forwardRef(function Dialog({ label, description, triggerLa
         : null, resolvedActions.length
         ? React.createElement("footer", null, resolvedActions.map((action, index) => {
             const actionLabel = action.label;
-            const needsDangerIntent = action.intent == null && resolvedTone === "danger" && index === 0;
+            const needsDangerIntent = action.intent == null && resolvedTone === "danger" && index === resolvedActions.length - 1;
             const { variant: actionVariantValue, intent: actionIntent, density: actionDensity, key: actionKey, ...actionProps } = action;
             return React.createElement(Button, {
                 ...actionProps,
                 key: action.key,
                 label: actionLabel,
                 ...(actionDensity ?? resolvedDensity ? { density: (actionDensity ?? resolvedDensity) } : {}),
-                variant: buttonVariantForAction(action, index === 0 ? "primary" : "secondary"),
+                variant: buttonVariantForAction(action, index === resolvedActions.length - 1 ? "primary" : "secondary"),
                 ...(actionVariantValue === "danger" || needsDangerIntent || actionIntent ? { intent: actionVariantValue === "danger" ? "danger" : needsDangerIntent ? "danger" : actionIntent } : {}),
                 "data-overlay-close": "",
                 "data-key": actionKey,

@@ -184,7 +184,7 @@
 
 .template-dashboard-switcher [data-template-component="button"] {
   padding-inline: var(--sys-space-3);
-  text-transform: capitalize;
+  text-transform: var(--component-text-transform-none);
 }
 
 .template-desktop-demo [hidden] {
@@ -214,7 +214,7 @@
   inline-size: auto;
   padding: 0;
   border: 0;
-  background: transparent;
+  background: var(--component-surface-transparent);
 }
 
 .template-desktop-fullscreen__bar > strong {

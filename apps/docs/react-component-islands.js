@@ -63,8 +63,9 @@ import { Toast } from "./generated/react/Toast.js?v=1";
 import { Tooltip } from "./generated/react/Tooltip.js?v=1";
 import { TreeView } from "./generated/react/TreeView.js?v=1";
 import { TextArea } from "./generated/react/TextArea.js?v=1";
+import { docsTemplateReactComponents, docsTemplateReactIslandWrappers } from "./docs-template-islands.js?v=1";
 import { patternReactComponents, patternReactIslandWrappers } from "./pattern-react-islands.js?v=39";
-import { templateReactComponents, templateReactIslandWrappers } from "./template-react-islands.js?v=2";
+import { templateReactComponents, templateReactIslandWrappers } from "./template-react-islands.js?v=3";
 const mounted = new WeakMap(); let detailTabHydrationReady = false; const reactComponents = {
   accordion: Accordion,
   "animated-moment": AnimatedMoment,
@@ -129,6 +130,7 @@ const mounted = new WeakMap(); let detailTabHydrationReady = false; const reactC
   tooltip: Tooltip,
   "tree-view": TreeView,
   "text-area": TextArea,
+  ...docsTemplateReactComponents,
   ...patternReactComponents,
   ...templateReactComponents,
 };
@@ -327,25 +329,6 @@ function TabsIsland({ initialProps }) {
   });
 }
 
-function DetailShellTabsIsland({ initialProps, mountNode }) {
-  const fallbackKey = initialProps.items?.find?.((item) => item.selected)?.key
-    ?? initialProps.items?.[0]?.key
-    ?? "";
-  const [selectedKey, setSelectedKey] = React.useState(initialProps.selectedKey ?? fallbackKey);
-  return React.createElement(Tabs, {
-    ...initialProps,
-    selectedKey,
-    onValueChange: (nextKey, event) => {
-      setSelectedKey(nextKey);
-      mountNode?.dispatchEvent(new CustomEvent("docs-detail-tab-change", {
-        bubbles: true,
-        detail: { tabId: nextKey },
-      }));
-      initialProps.onValueChange?.(nextKey, event);
-    },
-  });
-}
-
 function SliderIsland({ initialProps }) {
   const [value, setValue] = React.useState(initialProps.value ?? 0);
   return React.createElement(Slider, {
@@ -370,18 +353,15 @@ const reactIslandWrappers = {
   "segmented-control": SegmentedControlIsland, "radio-button": RadioButtonIsland,
   switch: SwitchIsland, tabs: TabsIsland, slider: SliderIsland,
   "text-area": TextAreaIsland,
-  "detail-shell-tabs": DetailShellTabsIsland,
+  ...docsTemplateReactIslandWrappers,
   "chat-composer": ChatComposerIsland,
   ...patternReactIslandWrappers,
   ...templateReactIslandWrappers,
 };
 
-function parseProps(node) { try { return JSON.parse(node.dataset.reactProps ?? "{}"); } catch { return {}; } }
-
-export function setupReactComponentIslands(root = document) {
+function parseProps(node) { try { return JSON.parse(node.dataset.reactProps ?? "{}"); } catch { return {}; } } export function setupReactComponentIslands(root = document) {
   if (!detailTabHydrationReady && typeof document !== "undefined") {
     detailTabHydrationReady = true;
-    document.addEventListener("docs-detail-tab-change", () => window.requestAnimationFrame(() => setupReactComponentIslands(document.querySelector("#tabPanel") ?? document)));
     document.addEventListener("docs-react-slot-html-mounted", () => window.requestAnimationFrame(() => setupReactComponentIslands(document.querySelector("#tabPanel") ?? document)));
   }
   for (const node of Array.from(root.querySelectorAll?.("[data-react-component]:not([data-react-mounted='true'])") ?? [])) {

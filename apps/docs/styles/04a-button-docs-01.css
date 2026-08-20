@@ -144,8 +144,8 @@
 }
 
 :is(.detail-page, .reference-doc) [data-flow-pattern="documentation-section"][data-doc-template="component-detail"] {
-  background: transparent;
-  border-color: transparent;
+  background: var(--component-surface-transparent);
+  border-color: var(--component-border-transparent);
   box-shadow: none;
 }
 
@@ -298,8 +298,8 @@
 }
 
 :is(.detail-page, .reference-doc) :is(.component-detail-anatomy-grid, .checklist-grid) [data-variant="minimal"] {
-  background: transparent;
-  border-color: transparent;
+  background: var(--component-surface-transparent);
+  border-color: var(--component-border-transparent);
   box-shadow: none;
 }
 

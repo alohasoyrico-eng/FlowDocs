@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import { avatarPlatformContract } from "../components/platforms/index.js?v=1";
 import { flowStateProps, normalizeFlowDensity, flowDensityProps, flowRestProps } from "./internal/props.js";
 const validStatuses = new Set(["none", "online", "busy", "offline"]);
-const validStates = new Set(["default", "disabled", "unknown"]);
+const validStates = new Set(["default", "online", "busy", "offline", "disabled", "unknown"]);
 function initialsFromName(name) {
     return String(name ?? "")
         .split(" ")

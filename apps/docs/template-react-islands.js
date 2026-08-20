@@ -7,6 +7,7 @@ import { DocsArtifactDetailTemplate } from "./generated/react/templates/DocsArti
 import { FleetDashboardSuite } from "./generated/react/templates/FleetDashboardSuite.js?v=1";
 import { FleetManagerDesktop } from "./generated/react/templates/FleetManagerDesktop.js?v=1";
 import { InternalOperationsConsole } from "./generated/react/templates/InternalOperationsConsole.js?v=1";
+import { ReferenceDetailTemplate } from "./generated/react/templates/ReferenceDetailTemplate.js?v=1";
 import { RoutesAndStations } from "./generated/react/templates/RoutesAndStations.js?v=1";
 import { SettingsWorkspace } from "./generated/react/templates/SettingsWorkspace.js?v=1";
 
@@ -19,9 +20,20 @@ export const templateReactComponents = {
   "fleet-dashboard-suite": FleetDashboardSuite,
   "fleet-manager-desktop": FleetManagerDesktop,
   "internal-operations-console": InternalOperationsConsole,
+  "reference-detail-template": ReferenceDetailTemplate,
   "routes-and-stations": RoutesAndStations,
   "settings-workspace": SettingsWorkspace,
 };
+
+function LegacyHtmlContentSlot({ markup = "", slot = "content", exit = "typed-react-children" }) {
+  return React.createElement("div", {
+    "data-legacy-html-slot": slot,
+    "data-legacy-html-owner": "FlowDocs",
+    "data-legacy-html-exit": exit,
+    "data-legacy-html-slot-status": "active",
+    dangerouslySetInnerHTML: { __html: markup },
+  });
+}
 
 function selectableTemplateIsland(Component, propName, stateName = "loaded") {
   return function SelectableTemplateIsland({ initialProps }) {
@@ -117,27 +129,50 @@ function SettingsWorkspaceIsland({ initialProps }) {
   });
 }
 
-function DocsArtifactDetailTemplateIsland({ initialProps, mountNode }) {
-  const { bodyHtml = "", ...props } = initialProps;
+function DocsArtifactDetailTemplateIsland({ initialProps }) {
+  const { bodyHtml = "", tabBodiesHtml = {}, ...props } = initialProps;
   const [selectedTabKey, setSelectedTabKey] = React.useState(initialProps.selectedTabKey ?? initialProps.tabs?.[0]?.key ?? "");
+  const selectedBodyHtml = tabBodiesHtml[selectedTabKey] ?? bodyHtml;
   React.useEffect(() => {
     document.dispatchEvent(new CustomEvent("docs-react-slot-html-mounted", { bubbles: true }));
-  }, [bodyHtml]);
+  }, [selectedBodyHtml]);
   return React.createElement(DocsArtifactDetailTemplate, {
     ...props,
     selectedTabKey,
     body: React.createElement("div", {
       "data-flowdocs-html-slot": "artifact-detail.body",
-      dangerouslySetInnerHTML: { __html: bodyHtml },
+      "data-legacy-html-slot": "tab",
+      "data-legacy-html-owner": "FlowDocs",
+      "data-legacy-html-exit": "typed-react-tab-children",
+      "data-legacy-html-slot-status": "active",
+      dangerouslySetInnerHTML: { __html: selectedBodyHtml },
     }),
     onSelectedTabChange: (key, event) => {
       setSelectedTabKey(key);
-      mountNode?.dispatchEvent(new CustomEvent("docs-detail-tab-change", {
-        bubbles: true,
-        detail: { tabId: key, sourceEvent: event?.type },
-      }));
+      initialProps.onSelectedTabChange?.(key, event);
     },
   });
+}
+
+function ReferenceDetailTemplateIsland({ initialProps }) {
+  const { bodyHtml = "", specimenHtml = "", ...props } = initialProps;
+  React.useEffect(() => {
+    document.dispatchEvent(new CustomEvent("docs-react-slot-html-mounted", { bubbles: true }));
+  }, [bodyHtml, specimenHtml]);
+  return React.createElement(ReferenceDetailTemplate, {
+    ...props,
+    specimen: specimenHtml
+      ? React.createElement(LegacyHtmlContentSlot, {
+        markup: specimenHtml,
+        slot: "reference-specimen",
+        exit: "typed-reference-specimen",
+      })
+      : undefined,
+  }, React.createElement(LegacyHtmlContentSlot, {
+    markup: bodyHtml,
+    slot: "reference-body",
+    exit: "typed-reference-sections",
+  }));
 }
 
 export const templateReactIslandWrappers = {
@@ -149,6 +184,7 @@ export const templateReactIslandWrappers = {
   "fleet-dashboard-suite": selectableTemplateIsland(FleetDashboardSuite, "selectedDashboard"),
   "fleet-manager-desktop": selectableTemplateIsland(FleetManagerDesktop, "selectedDashboard"),
   "internal-operations-console": selectableTemplateIsland(InternalOperationsConsole, "selectedModule"),
+  "reference-detail-template": ReferenceDetailTemplateIsland,
   "routes-and-stations": RoutesAndStationsIsland,
   "settings-workspace": SettingsWorkspaceIsland,
 };

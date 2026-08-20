@@ -37,7 +37,7 @@
 .reference-peer-nav > strong {
   color: var(--sys-energy-text-secondary);
   font-size: var(--ref-voice-size-3);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .reference-peer-nav nav {
@@ -82,7 +82,7 @@
   color: var(--sys-energy-status-error);
   font-size: var(--ref-voice-size-3);
   font-weight: var(--ref-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .reference-title-row {
@@ -136,7 +136,7 @@
 }
 
 .reference-header p {
-  max-width: 68rem;
+  max-width: var(--sys-frame-content-callout);
   margin: 0;
   color: var(--sys-energy-text-secondary);
   font-size: var(--ref-voice-size-7);
@@ -206,7 +206,7 @@
 
 .reference-section-head p,
 .reference-lede {
-  max-width: 72rem;
+  max-width: calc(var(--sys-frame-content-callout) + var(--sys-frame-gap-component-lg));
   margin: 0;
   color: var(--sys-energy-text-secondary);
   font-size: var(--ref-voice-size-7);
@@ -347,7 +347,7 @@
   padding: var(--ref-frame-space-1) var(--ref-frame-space-3);
   border: 0;
   border-radius: calc(var(--sys-frame-radius-container) - var(--ref-frame-space-micro));
-  background: transparent;
+  background: var(--component-surface-transparent);
   color: var(--sys-energy-text-secondary);
   font-size: var(--ref-voice-size-3);
   font-weight: var(--ref-voice-weight-bold);

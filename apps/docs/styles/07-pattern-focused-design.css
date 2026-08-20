@@ -13,7 +13,7 @@
   margin: 0;
   color: var(--sys-energy-status-error);
   font-weight: var(--sys-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .pattern-design-demo-grid {

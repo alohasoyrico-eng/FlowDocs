@@ -43,6 +43,7 @@
   --component-pointer-events-none: none;
   --component-text-decoration-none: none;
   --component-focus-ring: var(--sys-focus-ring);
+  --component-outline-none: 0;
   --component-surface-contrast-min: var(--sys-accessibility-contrast-surface);
   --component-focus-ring-width: var(--sys-frame-border-indicator);
   --component-focus-ring-offset: var(--sys-focus-ring-offset);
@@ -55,6 +56,25 @@
   --component-radius-md-plus-half-sm: calc(var(--component-radius-md) + var(--component-radius-sm) / 2);
   --component-radius-md-emphasis: calc(var(--component-radius-md) * 1.5);
   --component-radius-none: 0;
+  --component-control-frame-size-sm: var(--sys-space-9);
+  --component-control-frame-size-md: var(--component-control-min-size);
+  --component-control-frame-size-lg: calc(var(--sys-space-12) + var(--sys-space-xs));
+  --component-control-frame-font-size-sm: var(--component-font-size-small);
+  --component-control-frame-font-size-md: var(--component-font-size-label);
+  --component-control-frame-font-size-lg: var(--component-font-size-body);
+  --component-control-frame-padding-action-sm: var(--component-space-lg);
+  --component-control-frame-padding-action-md: var(--component-density-control-padding-x);
+  --component-control-frame-padding-action-lg: calc(var(--component-space-xl) + var(--component-space-xs));
+  --component-control-frame-padding-field-sm: var(--component-space-lg);
+  --component-control-frame-padding-field-md: var(--component-space-lg);
+  --component-control-frame-padding-field-lg: var(--component-space-lg);
+  --component-control-frame-padding-navigation-sm: var(--component-space-xs);
+  --component-control-frame-padding-navigation-md: var(--component-space-xs);
+  --component-control-frame-padding-navigation-lg: var(--component-space-sm);
+  --component-control-frame-radius-action: var(--component-radius-pill);
+  --component-control-frame-radius-field: var(--component-radius-control);
+  --component-control-frame-radius-icon: var(--component-radius-pill);
+  --component-control-frame-radius-navigation: var(--component-radius-sm);
   --component-ratio-half: var(--sys-frame-ratio-half);
   --component-ratio-square: 1;
   --component-field-gap: var(--sys-frame-gap-element);
@@ -128,6 +148,8 @@
   --component-animation-name-pulse: component-pulse;
   --component-color-action: var(--sys-color-action);
   --component-color-action-hover: var(--sys-color-action-hover);
+  --component-color-action-indicator: var(--component-color-action);
+  --component-color-action-indicator-text: var(--component-color-action-text);
   --component-color-action-text: var(--sys-color-action-text);
   --component-color-bg: var(--sys-energy-surface-primary);
   --component-color-border: var(--sys-color-border);
@@ -144,6 +166,15 @@
   --component-color-text-muted: var(--sys-color-text-muted);
   --component-color-text-subtle: var(--sys-color-text-subtle);
   --component-color-warning: var(--sys-color-warning);
+  --component-color-action-pressed: var(--sys-color-action-pressed);
+  --component-color-danger-hover: var(--sys-color-danger-hover);
+  --component-color-danger-pressed: var(--sys-color-danger-pressed);
+  --component-color-danger-surface-hover: var(--sys-color-danger-surface-hover);
+  --component-color-danger-surface-pressed: var(--sys-color-danger-surface-pressed);
+  --component-color-danger-border-hover: var(--sys-color-danger-border-hover);
+  --component-color-danger-border-pressed: var(--sys-color-danger-border-pressed);
+  --component-color-warning-hover: var(--sys-color-warning-hover);
+  --component-color-warning-pressed: var(--sys-color-warning-pressed);
   --component-content-size-xs: calc(var(--component-control-min-size) * 4);
   --component-content-size-sm: calc(var(--component-control-min-size) * 6);
   --component-content-size-md: calc(var(--component-control-min-size) * 8);
@@ -186,6 +217,50 @@
   --component-action-min-inline-size-lg: var(--sys-frame-content-action-min-inline-lg);
   --component-action-min-block-size-md: var(--sys-frame-content-action-min-block-md);
   --component-action-min-block-size-lg: var(--sys-frame-content-action-min-block-lg);
+  --component-action-bg-primary: var(--component-color-action);
+  --component-action-fg-primary: var(--component-color-action-text);
+  --component-action-bg-primary-hover: var(--component-color-action-hover);
+  --component-action-bg-primary-pressed: var(--component-tone-action-bg-pressed);
+  --component-action-bg-secondary: var(--component-color-surface);
+  --component-action-border-secondary: var(--component-color-text);
+  --component-action-fg-secondary: var(--component-color-text);
+  --component-action-bg-secondary-hover: var(--component-color-surface-raised);
+  --component-action-bg-secondary-pressed: var(--component-tone-action-surface-pressed);
+  --component-action-border-secondary-hover: var(--component-tone-action-border-hover);
+  --component-action-border-secondary-pressed: var(--component-tone-action-border-pressed);
+  --component-action-bg-tertiary: var(--component-color-surface-raised);
+  --component-action-border-tertiary: var(--component-border-transparent);
+  --component-action-fg-tertiary: var(--component-color-text);
+  --component-action-bg-tertiary-hover: var(--component-color-surface);
+  --component-action-bg-tertiary-pressed: var(--component-tone-action-subtle-bg-pressed);
+  --component-action-border-tertiary-hover: var(--component-tone-action-subtle-border-hover);
+  --component-action-border-tertiary-pressed: var(--component-tone-action-subtle-border-pressed);
+  --component-action-bg-outlined: var(--component-color-surface);
+  --component-action-border-outlined: var(--component-color-border);
+  --component-action-fg-outlined: var(--component-color-text);
+  --component-action-border-outlined-hover: var(--component-tone-action-border-hover);
+  --component-action-bg-outlined-pressed: var(--component-tone-action-subtle-bg-pressed);
+  --component-action-border-outlined-pressed: var(--component-tone-action-border-pressed);
+  --component-action-bg-ghost: var(--component-surface-transparent);
+  --component-action-border-ghost: var(--component-border-transparent);
+  --component-action-fg-ghost: var(--component-color-text);
+  --component-action-bg-ghost-hover: var(--component-color-surface-raised);
+  --component-action-bg-ghost-pressed: var(--component-tone-action-surface-pressed);
+  --component-action-bg-danger: var(--component-color-danger);
+  --component-action-fg-danger: var(--component-color-action-text);
+  --component-action-bg-danger-hover: var(--component-tone-danger-bg-hover);
+  --component-action-bg-danger-pressed: var(--component-tone-danger-bg-pressed);
+  --component-action-bg-warning: var(--component-color-warning);
+  --component-action-fg-warning: var(--component-energy-status-warning-foreground);
+  --component-action-bg-warning-hover: var(--component-tone-warning-bg-hover);
+  --component-action-bg-warning-pressed: var(--component-tone-warning-bg-pressed);
+  --component-action-bg-danger-secondary: var(--component-color-surface);
+  --component-action-border-danger-secondary: var(--component-color-danger);
+  --component-action-fg-danger-secondary: var(--component-color-danger);
+  --component-action-bg-danger-secondary-hover: var(--component-tone-danger-surface-hover);
+  --component-action-bg-danger-secondary-pressed: var(--component-tone-danger-surface-pressed);
+  --component-action-border-danger-secondary-hover: var(--component-tone-danger-border-hover);
+  --component-action-border-danger-secondary-pressed: var(--component-tone-danger-border-pressed);
   --component-card-chip-block-size-sm: var(--sys-frame-content-card-chip-block-sm);
   --component-card-chip-block-size-md: var(--sys-frame-content-card-chip-block-md);
   --component-card-chip-block-size-lg: var(--sys-frame-content-card-chip-block-lg);
@@ -212,6 +287,43 @@
   --component-navigation-target-size-lg: var(--sys-frame-content-navigation-target-lg);
   --component-navigation-ellipsis-inline-size: var(--sys-frame-content-navigation-ellipsis-inline);
   --component-option-min-block-size: var(--sys-frame-content-option-min-block);
+  --component-option-row-min-block-size-sm: calc(var(--component-option-min-block-size) + var(--component-space-md));
+  --component-option-row-min-block-size-md: calc(var(--component-option-min-block-size) + var(--component-space-xl));
+  --component-option-row-min-block-size-lg: calc(var(--component-option-min-block-size) + var(--component-space-xl) + var(--component-space-md));
+  --component-option-row-padding-inline-sm: var(--component-space-lg);
+  --component-option-row-padding-inline-md: var(--component-space-xl);
+  --component-option-row-padding-inline-lg: calc(var(--component-space-xl) + var(--component-space-sm));
+  --component-option-row-gap: var(--component-space-sm);
+  --component-option-row-radius: calc(var(--component-control-frame-radius-field) - var(--component-frame-space-micro));
+  --component-option-row-color: var(--component-color-text);
+  --component-option-row-hover-bg: color-mix(in srgb, var(--component-color-action) 9%, transparent);
+  --component-option-row-active-bg: color-mix(in srgb, var(--component-color-action) 6%, transparent);
+  --component-option-row-active-ring: color-mix(in srgb, var(--component-color-action) 35%, transparent);
+  --component-option-row-selected-bg: color-mix(in srgb, var(--component-color-action) 12%, var(--component-color-surface));
+  --component-option-row-selected-color: var(--component-color-text);
+  --component-option-row-selected-weight: var(--component-font-weight-semibold);
+  --component-option-row-disabled-bg: color-mix(in srgb, var(--component-color-text-muted) 8%, transparent);
+  --component-option-row-disabled-color: var(--component-color-text-muted);
+  --component-option-row-disabled-opacity: var(--component-opacity-visible);
+  --component-option-row-check-size-sm: var(--component-density-icon-size-sm);
+  --component-option-row-check-size-md: var(--component-density-icon-size-md);
+  --component-option-row-check-size-lg: var(--component-density-icon-size-lg);
+  --component-option-row-check-size: var(--component-option-row-check-size-md);
+  --component-overlay-panel-bg: var(--component-color-surface);
+  --component-overlay-panel-border: var(--component-color-border);
+  --component-overlay-panel-depth: var(--component-depth-popover);
+  --component-overlay-panel-offset: var(--component-space-xs);
+  --component-overlay-panel-radius: var(--component-control-frame-radius-field);
+  --component-overlay-panel-z-index: var(--component-z-overlay);
+  --component-listbox-gap: var(--component-space-2xs);
+  --component-listbox-padding: var(--component-space-sm);
+  --component-listbox-radius: var(--component-overlay-panel-radius);
+  --component-listbox-bg: var(--component-overlay-panel-bg);
+  --component-listbox-border: var(--component-overlay-panel-border);
+  --component-listbox-offset: var(--component-overlay-panel-offset);
+  --component-listbox-depth: var(--component-overlay-panel-depth);
+  --component-listbox-max-block-size: var(--component-content-size-lg);
+  --component-listbox-open-opacity: var(--component-opacity-visible);
   --component-segmented-control-inline-size: var(--sys-frame-content-segmented-control-inline);
   --component-code-slot-block-size-sm: var(--sys-frame-content-code-slot-block-sm);
   --component-code-slot-block-size-md: var(--sys-frame-content-code-slot-block-md);
@@ -254,6 +366,9 @@
   --component-icon-size-md-plus: var(--sys-icon-size-md-plus);
   --component-icon-size-lg: var(--sys-icon-size-lg);
   --component-icon-size-lg-plus: var(--sys-icon-size-lg-plus);
+  --component-density-icon-size-sm: var(--component-icon-size-sm);
+  --component-density-icon-size-md: var(--component-icon-size-md);
+  --component-density-icon-size-lg: var(--component-icon-size-lg);
   --component-icon-size-display-sm: var(--sys-icon-size-display-sm);
   --component-icon-size-display-md: var(--sys-icon-size-display-md);
   --component-icon-size-marker: var(--sys-icon-size-marker);
@@ -362,6 +477,7 @@
   --component-translate-rest: var(--sys-momentum-translate-rest);
   --component-translate-overlay-enter: calc(var(--sys-space-xs) * -1);
   --component-translate-overlay-exit: var(--sys-space-xs);
+  --component-translate-message-enter: calc(var(--sys-space-2) * -1);
   --component-translate-sheet-enter: var(--sys-space-10);
   --component-translate-sheet-exit: var(--sys-space-5);
   --component-rotation-expanded: var(--sys-momentum-rotate-expanded);
@@ -410,6 +526,7 @@
   --component-transform-tooltip-mobile-closed: translate(-50%, var(--component-translate-overlay-exit)) scale(var(--component-scale-quiet));
   --component-transform-tooltip-mobile-open: translate(-50%, var(--component-translate-rest)) scale(var(--component-scale-rest));
   --component-disabled-opacity: var(--sys-disabled-opacity);
+  --component-disabled-bg: var(--sys-disabled-background-color);
   --component-disabled-readable-opacity: var(--sys-disabled-readable-opacity);
   --component-disabled-surface-opacity: var(--sys-disabled-surface-opacity);
   --component-disabled-text: var(--sys-disabled-text-color);
@@ -423,6 +540,21 @@
   --component-opacity-muted: var(--sys-state-muted-opacity);
   --component-opacity-closed: var(--sys-state-closed-opacity);
   --component-opacity-visible: var(--sys-state-visible-opacity);
+  --component-tone-action-bg-pressed: var(--component-color-action-pressed);
+  --component-tone-action-surface-pressed: color-mix(in srgb, var(--component-color-action) 8%, var(--component-color-surface-raised));
+  --component-tone-action-border-hover: color-mix(in srgb, var(--component-color-action) 28%, var(--component-color-border));
+  --component-tone-action-border-pressed: color-mix(in srgb, var(--component-color-action) 48%, var(--component-color-border));
+  --component-tone-action-subtle-bg-pressed: color-mix(in srgb, var(--component-color-action) 6%, var(--component-color-surface));
+  --component-tone-action-subtle-border-hover: color-mix(in srgb, var(--component-color-action) 18%, transparent);
+  --component-tone-action-subtle-border-pressed: color-mix(in srgb, var(--component-color-action) 28%, transparent);
+  --component-tone-danger-bg-hover: var(--component-color-danger-hover);
+  --component-tone-danger-bg-pressed: var(--component-color-danger-pressed);
+  --component-tone-danger-surface-hover: var(--component-color-danger-surface-hover);
+  --component-tone-danger-surface-pressed: var(--component-color-danger-surface-pressed);
+  --component-tone-danger-border-hover: var(--component-color-danger-border-hover);
+  --component-tone-danger-border-pressed: var(--component-color-danger-border-pressed);
+  --component-tone-warning-bg-hover: var(--component-color-warning-hover);
+  --component-tone-warning-bg-pressed: var(--component-color-warning-pressed);
   --component-input-ghost-opacity: calc(var(--component-border-width) / 100);
   --component-surface-transparent: transparent;
   --component-border-transparent: transparent;
@@ -513,29 +645,38 @@
   --component-depth-frost-text: 0 var(--sys-frame-border-thin) var(--sys-space-xl) color-mix(in srgb, var(--sys-color-text) 30%, transparent);
   --component-transition-tabs-indicator: left var(--component-duration-base) var(--component-ease-state), width var(--component-duration-base) var(--component-ease-state);
   --component-gradient-stepper-marker-active: linear-gradient(145deg, color-mix(in srgb, var(--component-color-action) 78%, var(--component-color-surface)) 0%, var(--component-color-action) 62%, color-mix(in srgb, var(--component-color-action) 84%, var(--component-color-text)) 100%);
-  --component-field-control-size-sm: calc(var(--ref-frame-height-control-sm-compact) - var(--component-frame-space-micro));
-  --component-field-control-size-md: calc(var(--sys-frame-height-control-sm) - var(--component-frame-space-micro));
-  --component-field-control-size-lg: calc(var(--ref-frame-height-control-md-compact) + var(--component-frame-space-micro));
+  --component-field-control-size-sm: var(--component-control-frame-size-sm);
+  --component-field-control-size-md: var(--component-control-frame-size-md);
+  --component-field-control-size-lg: var(--component-control-frame-size-lg);
   --component-field-icon-action-size-sm: calc(var(--component-control-min-size) - var(--sys-space-xl));
   --component-field-icon-action-size-md: calc(var(--component-control-min-size) - var(--sys-space-lg));
   --component-field-icon-action-size-lg: calc(var(--component-control-min-size) - var(--sys-space-md));
+  --component-field-placeholder-fg: var(--component-color-text-muted);
+  --component-field-error-helper-fg: var(--component-color-danger);
   --component-country-flag-size: calc(var(--component-inline-size-sm) - var(--component-focus-ring-offset));
   --component-country-flag-radius: var(--component-radius-pill);
   --component-country-flag-ring: var(--component-depth-border-ring);
   --comp-input-control-size-sm: var(--component-field-control-size-sm);
   --comp-input-control-size-md: var(--component-field-control-size-md);
   --comp-input-control-size-lg: var(--component-field-control-size-lg);
-  --comp-input-control-size: var(--component-density-control-height);
-  --comp-input-icon-size-sm: var(--component-icon-size-sm-plus);
-  --comp-input-icon-size-md: var(--component-icon-size-md);
-  --comp-input-icon-size-lg: var(--component-font-size-icon-md);
-  --comp-input-icon-size: var(--component-icon-size-md);
+  --comp-input-control-size: var(--comp-input-control-size-md);
+  --comp-input-icon-size-sm: var(--component-density-icon-size-sm);
+  --comp-input-icon-size-md: var(--component-density-icon-size-md);
+  --comp-input-icon-size-lg: var(--component-density-icon-size-lg);
+  --comp-input-icon-size: var(--component-density-icon-size-md);
   --comp-input-action-size-sm: var(--component-field-icon-action-size-sm);
   --comp-input-action-size-md: var(--component-field-icon-action-size-md);
   --comp-input-action-size-lg: var(--component-field-icon-action-size-lg);
   --comp-input-action-size: calc(var(--component-density-control-height) - var(--component-space-lg));
   --comp-input-gap: var(--component-field-gap);
-  --comp-input-padding-x: var(--component-space-lg);
+  --comp-input-padding-x-sm: var(--component-control-frame-padding-field-sm);
+  --comp-input-padding-x-md: var(--component-control-frame-padding-field-md);
+  --comp-input-padding-x-lg: var(--component-control-frame-padding-field-lg);
+  --comp-input-padding-x: var(--comp-input-padding-x-md);
+  --comp-input-font-size-sm: var(--component-control-frame-font-size-sm);
+  --comp-input-font-size-md: var(--component-control-frame-font-size-md);
+  --comp-input-font-size-lg: var(--component-control-frame-font-size-lg);
+  --comp-input-font-size: var(--comp-input-font-size-md);
   --comp-input-label-fg: var(--component-color-text);
   --comp-input-label-weight: var(--component-font-weight-semibold);
   --comp-input-surface-bg: var(--component-color-surface);
@@ -544,6 +685,7 @@
   --comp-input-helper-fg: var(--component-color-text-muted);
   --comp-input-helper-weight: var(--component-font-weight-medium);
   --comp-input-helper-line-height: var(--component-line-height-snug-state);
+  --comp-input-placeholder-fg: var(--component-field-placeholder-fg);
   --comp-input-affix-fg: var(--component-color-text-muted);
   --comp-input-affix-family: var(--component-font-family-mono);
   --comp-input-affix-weight: var(--component-font-weight-semibold);
@@ -563,14 +705,19 @@
   --comp-input-focus-ring: color-mix(in srgb, var(--component-color-action) 35%, transparent);
   --comp-input-icon-fg: var(--component-color-text-muted);
   --comp-input-icon-loading-fg: var(--component-color-action);
+  --comp-input-loading-bg: color-mix(in srgb, var(--component-loading-skeleton-surface) 62%, var(--component-color-surface));
   --comp-input-error-border: var(--component-color-danger);
   --comp-input-error-bg: color-mix(in srgb, var(--component-color-danger) 9%, var(--component-color-surface));
-  --comp-input-valid-border: color-mix(in srgb, var(--component-color-success) 42%, var(--component-color-border));
+  --comp-input-error-helper-fg: var(--component-field-error-helper-fg);
+  --comp-input-info-border: color-mix(in srgb, var(--component-color-action) 42%, var(--component-color-border));
+  --comp-input-info-bg: color-mix(in srgb, var(--component-color-action) 8%, var(--component-color-surface));
+  --comp-input-success-border: color-mix(in srgb, var(--component-color-success) 42%, var(--component-color-border));
+  --comp-input-success-bg: color-mix(in srgb, var(--component-color-success) 8%, var(--component-color-surface));
   --comp-input-warning-bg: color-mix(in srgb, var(--component-color-warning) 9%, var(--component-color-surface));
   --comp-input-warning-border: color-mix(in srgb, var(--component-color-warning) 42%, var(--component-color-border));
-  --comp-input-warning-helper-fg: color-mix(in srgb, var(--component-color-warning) 72%, var(--component-color-text));
+  --comp-input-warning-helper-fg: color-mix(in srgb, var(--component-color-warning) 42%, var(--component-color-text));
   --comp-input-disabled-opacity: var(--component-disabled-readable-opacity);
-  --comp-input-disabled-bg: var(--component-color-surface-raised);
+  --comp-input-disabled-bg: var(--component-disabled-bg);
   --comp-input-open-opacity: var(--component-opacity-visible);
   --comp-text-area-min-block: var(--component-textarea-min-block);
   --comp-text-area-padding-block: var(--component-space-md);
@@ -580,6 +727,7 @@
   --comp-text-area-counter-inset-inline: var(--component-density-control-padding-x);
   --comp-text-area-bg: var(--component-color-surface);
   --comp-text-area-bg-muted: var(--component-color-surface-raised);
+  --comp-text-area-bg-loading: color-mix(in srgb, var(--component-loading-skeleton-surface) 62%, var(--component-color-surface));
   --comp-text-area-bg-error: color-mix(in srgb, var(--component-color-danger) 9%, var(--component-color-surface));
   --comp-text-area-border: var(--component-color-border);
   --comp-text-area-border-hover: color-mix(in srgb, var(--component-color-action) 24%, var(--component-color-border));
@@ -689,7 +837,7 @@
   --component-slider-touch-size-lg: var(--sys-frame-height-control-sm);
   --component-switch-track-width-sm: var(--component-control-min-size);
   --component-switch-track-width-md: var(--component-inline-size-lg);
-  --component-switch-track-width-lg: var(--component-inline-size-lg);
+  --component-switch-track-width-lg: calc(var(--component-inline-size-lg) + var(--component-space-md));
   --component-skeleton-circle-size: var(--sys-frame-content-skeleton-circle);
   --component-skeleton-row-leading-size: var(--sys-frame-content-skeleton-row-leading);
   --component-table-expander-size: var(--sys-frame-content-table-expander);
@@ -702,11 +850,11 @@
   --component-empty-state-icon-size-lg: var(--sys-frame-height-control-lg);
   --comp-checkbox-mark-size-sm: var(--component-inline-size-xs);
   --comp-checkbox-mark-size-md: var(--component-inline-size-sm);
-  --comp-checkbox-mark-size-lg: var(--component-min-text-line);
+  --comp-checkbox-mark-size-lg: var(--component-inline-size-md);
   --comp-checkbox-mark-size-compact: var(--comp-checkbox-mark-size-sm);
-  --comp-checkbox-indicator-size-sm: var(--component-icon-size-sm);
-  --comp-checkbox-indicator-size-md: var(--component-icon-size-sm-plus);
-  --comp-checkbox-indicator-size-lg: var(--component-icon-size-sm-plus);
+  --comp-checkbox-indicator-size-sm: var(--component-density-icon-size-sm);
+  --comp-checkbox-indicator-size-md: var(--component-density-icon-size-md);
+  --comp-checkbox-indicator-size-lg: var(--component-density-icon-size-lg);
   --comp-checkbox-gap-sm: var(--component-space-xs);
   --comp-checkbox-gap-md: var(--component-space-sm);
   --comp-checkbox-gap-lg: var(--component-space-md);
@@ -714,12 +862,12 @@
   --comp-checkbox-radius: var(--component-radius-sm);
   --comp-checkbox-bg: var(--component-color-surface);
   --comp-checkbox-border: var(--component-color-border);
-  --comp-checkbox-checked-bg: var(--component-color-action);
-  --comp-checkbox-checked-border: var(--component-color-action);
+  --comp-checkbox-checked-bg: var(--component-color-action-indicator);
+  --comp-checkbox-checked-border: var(--component-color-action-indicator);
   --comp-checkbox-error-bg: var(--component-color-danger);
   --comp-checkbox-error-border: var(--component-color-danger);
   --comp-checkbox-hover-border: color-mix(in srgb, var(--component-color-action) 28%, var(--component-color-border));
-  --comp-checkbox-indicator-fg: var(--component-color-action-text);
+  --comp-checkbox-indicator-fg: var(--component-color-action-indicator-text);
   --comp-checkbox-focus-width: var(--component-focus-ring-width);
   --comp-checkbox-focus-color: var(--component-color-focus);
   --comp-checkbox-focus-offset: var(--component-focus-ring-offset);
@@ -743,20 +891,20 @@
   --comp-switch-track-block-md: var(--component-badge-min-size);
   --comp-switch-track-block-lg: var(--component-inline-size-md);
   --comp-switch-track-padding: var(--component-border-width-indicator);
-  --comp-switch-thumb-size-sm: var(--component-inline-size-xs);
-  --comp-switch-thumb-size-md: var(--component-inline-size-sm);
-  --comp-switch-thumb-size-lg: var(--component-min-text-line);
-  --comp-switch-thumb-press-inline-sm: var(--component-inline-size-sm);
-  --comp-switch-thumb-press-inline-md: var(--component-min-text-line);
-  --comp-switch-thumb-press-inline-lg: var(--component-badge-min-size);
+  --comp-switch-thumb-size-sm: var(--component-icon-size-sm);
+  --comp-switch-thumb-size-md: var(--component-icon-size-md);
+  --comp-switch-thumb-size-lg: var(--component-icon-size-lg);
+  --comp-switch-thumb-press-inline-sm: var(--component-icon-size-md);
+  --comp-switch-thumb-press-inline-md: var(--component-icon-size-lg);
+  --comp-switch-thumb-press-inline-lg: calc(var(--component-icon-size-lg) + var(--component-space-sm));
   --comp-switch-gap-sm: var(--component-space-xs);
   --comp-switch-gap-md: var(--component-space-sm);
   --comp-switch-gap-lg: var(--component-space-md);
   --comp-switch-padding-block: var(--component-space-xs);
   --comp-switch-radius: var(--component-radius-pill);
   --comp-switch-track-bg: var(--component-color-border);
-  --comp-switch-track-on-bg: var(--component-color-action);
-  --comp-switch-thumb-bg: var(--component-color-action-text);
+  --comp-switch-track-on-bg: var(--component-color-action-indicator);
+  --comp-switch-thumb-bg: var(--component-color-action-indicator-text);
   --comp-switch-thumb-shadow: var(--component-depth-low);
   --comp-switch-hover-shadow: var(--component-depth-raised);
   --comp-switch-error-bg: color-mix(in srgb, var(--component-color-danger) 14%, var(--component-color-border));
@@ -779,20 +927,24 @@
   --comp-switch-disabled-opacity: var(--component-disabled-readable-opacity);
   --comp-radio-button-mark-size-sm: var(--component-inline-size-xs);
   --comp-radio-button-mark-size-md: var(--component-inline-size-sm);
-  --comp-radio-button-mark-size-lg: var(--component-min-text-line);
+  --comp-radio-button-mark-size-lg: var(--component-inline-size-md);
   --comp-radio-button-mark-size-compact: var(--comp-radio-button-mark-size-sm);
-  --comp-radio-button-indicator-scale: var(--component-ratio-half);
-  --comp-radio-button-indicator-size: calc(var(--comp-choice-current-mark-size) * var(--comp-radio-button-indicator-scale));
+  --comp-radio-button-indicator-size-sm: var(--component-space-sm);
+  --comp-radio-button-indicator-size-md: var(--component-space-md);
+  --comp-radio-button-indicator-size-lg: calc(var(--component-space-md) + var(--component-space-sm) - var(--component-space-2xs));
+  --comp-radio-button-indicator-size-compact: var(--comp-radio-button-indicator-size-sm);
   --comp-radio-button-gap-sm: var(--component-space-xs);
   --comp-radio-button-gap-md: var(--component-space-sm);
   --comp-radio-button-gap-lg: var(--component-space-md);
   --comp-radio-button-padding-block: var(--component-space-xs);
   --comp-radio-button-radius: var(--component-radius-pill);
   --comp-radio-button-bg: var(--component-color-surface);
-  --comp-radio-button-border: var(--component-color-border);
-  --comp-radio-button-selected-bg: var(--component-color-surface);
-  --comp-radio-button-selected-border: var(--component-color-action);
-  --comp-radio-button-dot-bg: var(--component-color-action);
+  --comp-radio-button-border: var(--component-color-border-strong);
+  --comp-radio-button-rest-shadow: inset 0 0 0 var(--component-border-width) color-mix(in srgb, var(--component-color-border-strong) 68%, transparent);
+  --comp-radio-button-selected-bg: color-mix(in srgb, var(--component-color-action-indicator) 12%, var(--component-color-surface));
+  --comp-radio-button-selected-border: var(--component-color-action-indicator);
+  --comp-radio-button-selected-shadow: 0 0 0 var(--component-border-width-indicator) color-mix(in srgb, var(--component-color-action-indicator) 24%, transparent);
+  --comp-radio-button-dot-bg: var(--component-color-action-indicator);
   --comp-radio-button-error-bg: color-mix(in srgb, var(--component-color-danger) 8%, var(--component-color-surface));
   --comp-radio-button-error-border: var(--component-color-danger);
   --comp-radio-button-error-dot-bg: var(--component-color-danger);
@@ -860,26 +1012,27 @@
   --comp-list-motion-ease: var(--component-ease-state);
   --component-fab-size-sm: var(--component-inline-size-lg);
   --component-fab-size-md: calc(var(--component-inline-size-lg) + var(--sys-space-sm));
-  --component-fab-size-lg: calc(var(--component-control-min-size) + var(--sys-space-xl));
+  --component-fab-size-lg: var(--sys-space-16);
   --comp-floating-action-button-size-sm: var(--component-fab-size-sm);
   --comp-floating-action-button-size-md: var(--component-fab-size-md);
   --comp-floating-action-button-size-lg: var(--component-fab-size-lg);
   --comp-floating-action-button-size: var(--component-density-control-height);
   --comp-floating-action-button-mini-size: var(--comp-floating-action-button-size-sm);
-  --comp-floating-action-button-icon-size-sm: var(--component-font-size-icon-sm);
-  --comp-floating-action-button-icon-size-md: var(--component-font-size-icon-md);
-  --comp-floating-action-button-icon-size-lg: var(--component-font-size-icon-lg);
-  --comp-floating-action-button-icon-size: var(--component-icon-size-md);
+  --comp-floating-action-button-icon-size-sm: var(--component-density-icon-size-sm);
+  --comp-floating-action-button-icon-size-md: var(--component-density-icon-size-md);
+  --comp-floating-action-button-icon-size-lg: var(--component-density-icon-size-lg);
+  --comp-floating-action-button-icon-size: var(--component-density-icon-size-md);
   --comp-floating-action-button-padding-x-sm: var(--component-space-md);
   --comp-floating-action-button-padding-x-md: var(--component-space-lg);
   --comp-floating-action-button-padding-x-lg: var(--component-space-xl);
   --comp-floating-action-button-padding-x: var(--component-density-control-padding-x);
   --comp-floating-action-button-gap: var(--component-space-sm);
   --comp-floating-action-button-radius: var(--component-radius-pill);
-  --comp-floating-action-button-bg: var(--component-color-action);
-  --comp-floating-action-button-bg-hover: var(--component-color-action-hover);
-  --comp-floating-action-button-accent-bg: var(--component-color-success);
-  --comp-floating-action-button-text: var(--component-color-action-text);
+  --comp-floating-action-button-bg: var(--component-action-bg-primary);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-primary-hover);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-primary-pressed);
+  --comp-floating-action-button-border-color: var(--component-action-border-ghost);
+  --comp-floating-action-button-text: var(--component-action-fg-primary);
   --comp-floating-action-button-shadow: var(--component-depth-raised);
   --comp-floating-action-button-shadow-hover: var(--component-depth-raised-strong);
   --comp-floating-action-button-font-weight: var(--component-font-weight-extrabold);
@@ -891,7 +1044,11 @@
   --comp-floating-action-button-focus-width: var(--component-focus-ring-width);
   --comp-floating-action-button-focus-color: var(--component-color-focus);
   --comp-floating-action-button-focus-offset: var(--component-focus-ring-offset);
+  --comp-floating-action-button-disabled-bg: var(--component-disabled-bg);
+  --comp-floating-action-button-disabled-border: var(--component-disabled-border);
+  --comp-floating-action-button-disabled-text: var(--component-disabled-text);
   --comp-floating-action-button-disabled-opacity: var(--component-disabled-readable-opacity);
+  --comp-floating-action-button-disabled-shadow: var(--component-depth-none);
   --component-error-panel-icon-size: var(--component-list-icon-box-size);
   --component-error-panel-icon-size-sm: var(--component-list-icon-box-size-sm);
   --component-error-panel-icon-size-lg: var(--component-list-icon-box-size-lg);
@@ -1179,42 +1336,45 @@
   --component-card-icon-size-lg: calc(var(--component-control-min-size) - var(--sys-space-sm));
   --component-station-pin-pointer-size: calc(var(--sys-space-sm) - var(--component-frame-space-micro));
   --component-phone-compact-control-size: var(--component-field-control-size-sm);
-  --component-date-picker-control-size-sm: var(--sys-space-9);
-  --component-date-picker-control-size-lg: calc(var(--sys-frame-height-control-sm) + var(--sys-space-xs));
+  --component-date-picker-control-size-sm: var(--component-field-control-size-sm);
+  --component-date-picker-control-size-lg: var(--component-field-control-size-lg);
   --component-date-picker-day-size-sm: var(--component-field-icon-action-size-md);
   --component-date-picker-day-size-lg: var(--component-list-icon-box-size);
-  --component-icon-button-size-sm: var(--sys-space-9);
-  --component-icon-button-size-md: var(--component-control-min-size);
-  --component-icon-button-size-lg: calc(var(--sys-space-12) + var(--sys-space-xs));
-  --component-button-size-sm: var(--sys-space-9);
-  --component-button-size-md: var(--component-control-min-size);
-  --component-button-size-lg: calc(var(--sys-frame-height-control-sm) + var(--sys-space-xs));
+  --component-icon-button-size-sm: var(--component-control-frame-size-sm);
+  --component-icon-button-size-md: var(--component-control-frame-size-md);
+  --component-icon-button-size-lg: var(--component-control-frame-size-lg);
+  --component-button-size-sm: var(--component-control-frame-size-sm);
+  --component-button-size-md: var(--component-control-frame-size-md);
+  --component-button-size-lg: var(--component-control-frame-size-lg);
   --component-segmented-control-item-min-block-sm: var(--component-button-size-sm);
   --component-segmented-control-item-min-block-lg: var(--component-button-size-lg);
   --comp-icon-button-size-sm: var(--component-icon-button-size-sm);
   --comp-icon-button-size-md: var(--component-icon-button-size-md);
   --comp-icon-button-size-lg: var(--component-icon-button-size-lg);
-  --comp-icon-button-size: var(--component-density-control-height);
-  --comp-icon-button-icon-size-sm: var(--component-icon-size-sm-plus);
-  --comp-icon-button-icon-size-md: var(--component-icon-size-md-plus);
-  --comp-icon-button-icon-size-lg: var(--component-font-size-icon-md);
-  --comp-icon-button-icon-size: var(--component-icon-size-md-plus);
+  --comp-icon-button-size: var(--component-icon-button-size-md);
+  --comp-icon-button-icon-size-sm: var(--component-density-icon-size-sm);
+  --comp-icon-button-icon-size-md: var(--component-density-icon-size-md);
+  --comp-icon-button-icon-size-lg: var(--component-density-icon-size-lg);
+  --comp-icon-button-icon-size: var(--component-density-icon-size-md);
   --comp-icon-button-badge-size: var(--component-space-2);
   --comp-icon-button-hover-scale: var(--component-scale-hover);
   --comp-icon-button-press-scale: var(--component-scale-press);
   --comp-button-size-sm: var(--component-button-size-sm);
   --comp-button-size-md: var(--component-button-size-md);
   --comp-button-size-lg: var(--component-button-size-lg);
-  --comp-button-size: var(--component-density-control-height);
-  --comp-button-padding-sm: calc(var(--component-space-md) + var(--component-frame-space-micro));
-  --comp-button-padding-md: var(--component-space-lg);
-  --comp-button-padding-lg: calc(var(--component-space-xl) + var(--component-frame-space-micro));
-  --comp-button-padding: var(--component-density-control-padding-x);
-  --comp-button-icon-size-sm: var(--component-icon-size-sm-plus);
-  --comp-button-icon-size-md: var(--component-icon-size-md);
-  --comp-button-icon-size-lg: var(--component-icon-size-md-plus);
-  --comp-button-icon-size: var(--component-icon-size-md);
-  --comp-button-font-size: var(--component-font-size-label);
+  --comp-button-size: var(--component-button-size-md);
+  --comp-button-padding-sm: var(--component-control-frame-padding-action-sm);
+  --comp-button-padding-md: var(--component-control-frame-padding-action-md);
+  --comp-button-padding-lg: var(--component-control-frame-padding-action-lg);
+  --comp-button-padding: var(--comp-button-padding-md);
+  --comp-button-icon-size-sm: var(--component-density-icon-size-sm);
+  --comp-button-icon-size-md: var(--component-density-icon-size-md);
+  --comp-button-icon-size-lg: var(--component-density-icon-size-lg);
+  --comp-button-icon-size: var(--component-density-icon-size-md);
+  --comp-button-font-size-sm: var(--component-control-frame-font-size-sm);
+  --comp-button-font-size-md: var(--component-control-frame-font-size-md);
+  --comp-button-font-size-lg: var(--component-control-frame-font-size-lg);
+  --comp-button-font-size: var(--comp-button-font-size-md);
   --comp-copy-button-feedback-gap: var(--component-space-xs);
   --comp-copy-button-feedback-opacity: var(--component-opacity-visible);
   --comp-copy-button-error-color: var(--component-color-danger);
@@ -1433,7 +1593,7 @@
   --comp-button-current-font-size: var(--comp-button-font-size);
   --comp-button-border-color: var(--component-border-transparent);
   --comp-button-border: var(--component-border-width) solid var(--comp-button-border-color);
-  --comp-button-radius: var(--component-radius-pill);
+  --comp-button-radius: var(--component-control-frame-radius-action);
   --comp-button-cursor: var(--component-cursor-pointer);
   --comp-button-display: var(--component-display-inline-flex);
   --comp-button-font-weight: var(--component-font-weight-bold);
@@ -1445,39 +1605,58 @@
   --comp-button-hover-shadow: var(--component-depth-raised);
   --comp-button-hover-transform: var(--component-transform-lift-hover);
   --comp-button-press-transform: var(--component-transform-press);
+  --comp-button-disabled-bg: var(--component-disabled-bg);
+  --comp-button-disabled-border: var(--component-disabled-border);
   --comp-button-disabled-cursor: var(--component-cursor-not-allowed);
   --comp-button-disabled-opacity: var(--component-disabled-readable-opacity);
+  --comp-button-disabled-fg: var(--component-disabled-text);
   --comp-button-transition: background-color var(--component-duration-state) var(--component-ease-state), border-color var(--component-duration-state) var(--component-ease-state), box-shadow var(--component-duration-state) var(--component-ease-state), color var(--component-duration-state) var(--component-ease-state), transform var(--component-duration-press) var(--component-ease-press);
   --comp-button-spinner-tone: currentColor;
   --comp-button-icon-color: currentColor;
-  --comp-button-bg-primary: var(--component-color-action);
-  --comp-button-fg-primary: var(--component-color-action-text);
-  --comp-button-bg-primary-hover: var(--component-color-action-hover);
-  --comp-button-bg-secondary: var(--component-color-surface);
-  --comp-button-border-secondary: var(--component-color-text);
-  --comp-button-fg-secondary: var(--component-color-text);
-  --comp-button-bg-secondary-hover: var(--component-color-surface-raised);
-  --comp-button-border-secondary-hover: color-mix(in srgb, var(--component-color-action) 28%, var(--component-color-border));
-  --comp-button-bg-danger: var(--component-color-danger);
-  --comp-button-fg-danger: var(--component-color-action-text);
-  --comp-button-bg-tertiary: var(--component-color-surface-raised);
-  --comp-button-border-tertiary: var(--component-border-transparent);
-  --comp-button-fg-tertiary: var(--component-color-text);
-  --comp-button-bg-tertiary-hover: var(--component-color-surface);
-  --comp-button-border-tertiary-hover: color-mix(in srgb, var(--component-color-action) 18%, transparent);
-  --comp-button-bg-outlined: var(--component-color-surface);
-  --comp-button-border-outlined: var(--component-color-border);
-  --comp-button-fg-outlined: var(--component-color-text);
-  --comp-button-border-outlined-hover: color-mix(in srgb, var(--component-color-action) 28%, var(--component-color-border));
-  --comp-button-bg-ghost: var(--component-surface-transparent);
-  --comp-button-border-ghost: var(--component-border-transparent);
-  --comp-button-fg-ghost: var(--component-color-text);
-  --comp-button-bg-ghost-hover: var(--component-color-surface-raised);
-  --comp-button-bg-warning: var(--component-color-warning);
-  --comp-button-fg-warning: var(--component-color-action-text);
-  --comp-button-bg-danger-secondary: var(--component-color-surface);
-  --comp-button-border-danger-secondary: var(--component-color-danger);
-  --comp-button-fg-danger-secondary: var(--component-color-danger);
+  --comp-button-bg-primary: var(--component-action-bg-primary);
+  --comp-button-fg-primary: var(--component-action-fg-primary);
+  --comp-button-bg-primary-hover: var(--component-action-bg-primary-hover);
+  --comp-button-bg-primary-pressed: var(--component-action-bg-primary-pressed);
+  --comp-button-bg-secondary: var(--component-action-bg-secondary);
+  --comp-button-border-secondary: var(--component-action-border-secondary);
+  --comp-button-fg-secondary: var(--component-action-fg-secondary);
+  --comp-button-bg-secondary-hover: var(--component-action-bg-secondary-hover);
+  --comp-button-bg-secondary-pressed: var(--component-action-bg-secondary-pressed);
+  --comp-button-border-secondary-hover: var(--component-action-border-secondary-hover);
+  --comp-button-border-secondary-pressed: var(--component-action-border-secondary-pressed);
+  --comp-button-bg-danger: var(--component-action-bg-danger);
+  --comp-button-fg-danger: var(--component-action-fg-danger);
+  --comp-button-bg-danger-hover: var(--component-action-bg-danger-hover);
+  --comp-button-bg-danger-pressed: var(--component-action-bg-danger-pressed);
+  --comp-button-bg-tertiary: var(--component-action-bg-tertiary);
+  --comp-button-border-tertiary: var(--component-action-border-tertiary);
+  --comp-button-fg-tertiary: var(--component-action-fg-tertiary);
+  --comp-button-bg-tertiary-hover: var(--component-action-bg-tertiary-hover);
+  --comp-button-bg-tertiary-pressed: var(--component-action-bg-tertiary-pressed);
+  --comp-button-border-tertiary-hover: var(--component-action-border-tertiary-hover);
+  --comp-button-border-tertiary-pressed: var(--component-action-border-tertiary-pressed);
+  --comp-button-bg-outlined: var(--component-action-bg-outlined);
+  --comp-button-border-outlined: var(--component-action-border-outlined);
+  --comp-button-fg-outlined: var(--component-action-fg-outlined);
+  --comp-button-border-outlined-hover: var(--component-action-border-outlined-hover);
+  --comp-button-bg-outlined-pressed: var(--component-action-bg-outlined-pressed);
+  --comp-button-border-outlined-pressed: var(--component-action-border-outlined-pressed);
+  --comp-button-bg-ghost: var(--component-action-bg-ghost);
+  --comp-button-border-ghost: var(--component-action-border-ghost);
+  --comp-button-fg-ghost: var(--component-action-fg-ghost);
+  --comp-button-bg-ghost-hover: var(--component-action-bg-ghost-hover);
+  --comp-button-bg-ghost-pressed: var(--component-action-bg-ghost-pressed);
+  --comp-button-bg-warning: var(--component-action-bg-warning);
+  --comp-button-fg-warning: var(--component-action-fg-warning);
+  --comp-button-bg-warning-hover: var(--component-action-bg-warning-hover);
+  --comp-button-bg-warning-pressed: var(--component-action-bg-warning-pressed);
+  --comp-button-bg-danger-secondary: var(--component-action-bg-danger-secondary);
+  --comp-button-border-danger-secondary: var(--component-action-border-danger-secondary);
+  --comp-button-fg-danger-secondary: var(--component-action-fg-danger-secondary);
+  --comp-button-bg-danger-secondary-hover: var(--component-action-bg-danger-secondary-hover);
+  --comp-button-bg-danger-secondary-pressed: var(--component-action-bg-danger-secondary-pressed);
+  --comp-button-border-danger-secondary-hover: var(--component-action-border-danger-secondary-hover);
+  --comp-button-border-danger-secondary-pressed: var(--component-action-border-danger-secondary-pressed);
   align-items: var(--comp-button-align);
   border: var(--comp-button-border);
   border-radius: var(--comp-button-radius);
@@ -1486,6 +1665,7 @@
   font-size: var(--comp-button-current-font-size);
   font-weight: var(--comp-button-font-weight);
   gap: var(--comp-button-gap);
+  block-size: var(--comp-button-current-size);
   justify-content: var(--comp-button-justify);
   min-block-size: var(--comp-button-current-size);
   min-height: var(--comp-button-current-size);
@@ -1497,14 +1677,14 @@
   --comp-button-current-size: var(--comp-button-size-sm);
   --comp-button-current-padding: var(--comp-button-padding-sm);
   --comp-button-current-icon-size: var(--comp-button-icon-size-sm);
-  --comp-button-current-font-size: var(--component-font-size-small);
+  --comp-button-current-font-size: var(--comp-button-font-size-sm);
 }
 
 .button[data-density="lg"] {
   --comp-button-current-size: var(--comp-button-size-lg);
   --comp-button-current-padding: var(--comp-button-padding-lg);
   --comp-button-current-icon-size: var(--comp-button-icon-size-lg);
-  --comp-button-current-font-size: var(--component-font-size-body);
+  --comp-button-current-font-size: var(--comp-button-font-size-lg);
 }
 
 .button[data-full-width="true"] {
@@ -1540,9 +1720,16 @@
   opacity: var(--comp-icon-button-disabled-opacity);
 }
 
-.button:disabled {
+.button:disabled:not([data-state="loading"]) {
+  background: var(--comp-button-disabled-bg);
+  border-color: var(--comp-button-disabled-border);
+  color: var(--comp-button-disabled-fg);
   cursor: var(--comp-button-disabled-cursor);
   opacity: var(--comp-button-disabled-opacity);
+}
+
+.button[data-state="loading"] {
+  cursor: var(--component-loading-busy-cursor);
 }
 
 .copy-button {
@@ -1621,6 +1808,7 @@
 }
 
 .button__icon,
+.material-symbol,
 .icon-button__icon,
 .route-summary__icon,
 .card-summary__icon,
@@ -1673,6 +1861,11 @@
   background: var(--comp-button-bg-primary-hover);
 }
 
+.button--primary:active:not(:disabled),
+.button--primary[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-button-bg-primary-pressed);
+}
+
 .button--secondary {
   background: var(--comp-button-bg-secondary);
   border-color: var(--comp-button-border-secondary);
@@ -1684,9 +1877,24 @@
   border-color: var(--comp-button-border-secondary-hover);
 }
 
+.button--secondary:active:not(:disabled),
+.button--secondary[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-button-bg-secondary-pressed);
+  border-color: var(--comp-button-border-secondary-pressed);
+}
+
 .button--danger {
   background: var(--comp-button-bg-danger);
   color: var(--comp-button-fg-danger);
+}
+
+.button--danger.button--primary:hover:not(:disabled) {
+  background: var(--comp-button-bg-danger-hover);
+}
+
+.button--danger.button--primary:active:not(:disabled),
+.button--danger.button--primary[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-button-bg-danger-pressed);
 }
 
 .button--tertiary {
@@ -1700,6 +1908,12 @@
   border-color: var(--comp-button-border-tertiary-hover);
 }
 
+.button--tertiary:active:not(:disabled),
+.button--tertiary[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-button-bg-tertiary-pressed);
+  border-color: var(--comp-button-border-tertiary-pressed);
+}
+
 .button--outlined {
   background: var(--comp-button-bg-outlined);
   border-color: var(--comp-button-border-outlined);
@@ -1708,6 +1922,12 @@
 
 .button--outlined:hover:not(:disabled) {
   border-color: var(--comp-button-border-outlined-hover);
+}
+
+.button--outlined:active:not(:disabled),
+.button--outlined[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-button-bg-outlined-pressed);
+  border-color: var(--comp-button-border-outlined-pressed);
 }
 
 .button--ghost {
@@ -1720,9 +1940,23 @@
   background: var(--comp-button-bg-ghost-hover);
 }
 
+.button--ghost:active:not(:disabled),
+.button--ghost[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-button-bg-ghost-pressed);
+}
+
 .button--warning {
   background: var(--comp-button-bg-warning);
   color: var(--comp-button-fg-warning);
+}
+
+.button--warning.button--primary:hover:not(:disabled) {
+  background: var(--comp-button-bg-warning-hover);
+}
+
+.button--warning.button--primary:active:not(:disabled),
+.button--warning.button--primary[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-button-bg-warning-pressed);
 }
 
 .button--danger.button--secondary,
@@ -1730,6 +1964,20 @@
   background: var(--comp-button-bg-danger-secondary);
   border-color: var(--comp-button-border-danger-secondary);
   color: var(--comp-button-fg-danger-secondary);
+}
+
+.button--danger.button--secondary:hover:not(:disabled),
+.button--danger.button--outlined:hover:not(:disabled) {
+  background: var(--comp-button-bg-danger-secondary-hover);
+  border-color: var(--comp-button-border-danger-secondary-hover);
+}
+
+.button--danger.button--secondary:active:not(:disabled),
+.button--danger.button--outlined:active:not(:disabled),
+.button--danger.button--secondary[data-state="pressed"]:not(:disabled),
+.button--danger.button--outlined[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-button-bg-danger-secondary-pressed);
+  border-color: var(--comp-button-border-danger-secondary-pressed);
 }
 
 .button[data-state="pressed"]:not(:disabled) {
@@ -1740,11 +1988,11 @@
   --comp-icon-button-align: var(--component-align-center);
   --comp-icon-button-current-size: var(--comp-icon-button-size);
   --comp-icon-button-current-icon-size: var(--comp-icon-button-icon-size);
-  --comp-icon-button-bg: var(--component-surface-transparent);
-  --comp-icon-button-border-color: var(--component-color-border);
+  --comp-icon-button-bg: var(--component-action-bg-ghost);
+  --comp-icon-button-border-color: var(--component-action-border-ghost);
   --comp-icon-button-border: var(--component-border-width) solid var(--comp-icon-button-border-color);
   --comp-icon-button-radius: var(--component-radius-pill);
-  --comp-icon-button-fg: var(--component-color-text);
+  --comp-icon-button-fg: var(--component-action-fg-ghost);
   --comp-icon-button-cursor: var(--component-cursor-pointer);
   --comp-icon-button-display: var(--component-display-inline-flex);
   --comp-icon-button-flex: var(--component-flex-none);
@@ -1752,18 +2000,26 @@
   --comp-icon-button-padding: var(--component-frame-space-none);
   --comp-icon-button-position: var(--component-position-relative);
   --comp-icon-button-transition: background-color var(--component-duration-state) var(--component-ease-state), border-color var(--component-duration-state) var(--component-ease-state), box-shadow var(--component-duration-state) var(--component-ease-state), color var(--component-duration-state) var(--component-ease-state), transform var(--component-duration-press) var(--component-ease-press);
-  --comp-icon-button-hover-bg: var(--component-color-surface-raised);
-  --comp-icon-button-hover-border: color-mix(in srgb, var(--component-color-action) 24%, var(--component-color-border));
+  --comp-icon-button-hover-bg: var(--component-action-bg-ghost-hover);
+  --comp-icon-button-hover-border: var(--component-action-border-outlined-hover);
   --comp-icon-button-hover-transform: scale(var(--comp-icon-button-hover-scale));
   --comp-icon-button-press-transform: scale(var(--comp-icon-button-press-scale));
-  --comp-icon-button-tonal-bg: var(--component-color-surface);
-  --comp-icon-button-primary-border: var(--component-border-transparent);
-  --comp-icon-button-primary-bg: var(--component-color-action);
-  --comp-icon-button-primary-fg: var(--component-color-action-text);
-  --comp-icon-button-primary-hover-bg: var(--component-color-action-hover);
-  --comp-icon-button-selected-border: var(--component-color-action);
-  --comp-icon-button-selected-fg: var(--component-color-action);
-  --comp-icon-button-selected-primary-fg: var(--component-color-action-text);
+  --comp-icon-button-secondary-bg: var(--component-action-bg-secondary);
+  --comp-icon-button-secondary-border: var(--component-action-border-secondary);
+  --comp-icon-button-secondary-fg: var(--component-action-fg-secondary);
+  --comp-icon-button-tertiary-bg: var(--component-action-bg-tertiary);
+  --comp-icon-button-tertiary-border: var(--component-action-border-tertiary);
+  --comp-icon-button-tertiary-fg: var(--component-action-fg-tertiary);
+  --comp-icon-button-outlined-bg: var(--component-action-bg-outlined);
+  --comp-icon-button-outlined-border: var(--component-action-border-outlined);
+  --comp-icon-button-outlined-fg: var(--component-action-fg-outlined);
+  --comp-icon-button-primary-border: var(--component-action-border-ghost);
+  --comp-icon-button-primary-bg: var(--component-action-bg-primary);
+  --comp-icon-button-primary-fg: var(--component-action-fg-primary);
+  --comp-icon-button-primary-hover-bg: var(--component-action-bg-primary-hover);
+  --comp-icon-button-selected-border: var(--component-action-bg-primary);
+  --comp-icon-button-selected-fg: var(--component-action-bg-primary);
+  --comp-icon-button-selected-primary-fg: var(--component-action-fg-primary);
   --comp-icon-button-selected-icon-variation: var(--component-icon-variation-filled-strong);
   --comp-icon-button-icon-fg: currentColor;
   --comp-icon-button-focus-ring: var(--component-focus-ring);
@@ -1817,19 +2073,31 @@
   transform: var(--comp-icon-button-press-transform);
 }
 
-.icon-button--tonal {
-  background: var(--comp-icon-button-tonal-bg);
+.icon-button--secondary {
+  background: var(--comp-icon-button-secondary-bg);
+  border-color: var(--comp-icon-button-secondary-border);
+  color: var(--comp-icon-button-secondary-fg);
 }
 
-.icon-button--primary,
-.icon-button--accent {
+.icon-button--tertiary {
+  background: var(--comp-icon-button-tertiary-bg);
+  border-color: var(--comp-icon-button-tertiary-border);
+  color: var(--comp-icon-button-tertiary-fg);
+}
+
+.icon-button--outlined {
+  background: var(--comp-icon-button-outlined-bg);
+  border-color: var(--comp-icon-button-outlined-border);
+  color: var(--comp-icon-button-outlined-fg);
+}
+
+.icon-button--primary {
   border-color: var(--comp-icon-button-primary-border);
   background: var(--comp-icon-button-primary-bg);
   color: var(--comp-icon-button-primary-fg);
 }
 
-.icon-button--primary:hover:not(:disabled),
-.icon-button--accent:hover:not(:disabled) {
+.icon-button--primary:hover:not(:disabled) {
   background: var(--comp-icon-button-primary-hover-bg);
   border-color: var(--comp-icon-button-primary-border);
 }
@@ -1839,8 +2107,7 @@
   color: var(--comp-icon-button-selected-fg);
 }
 
-.icon-button--primary[aria-pressed="true"],
-.icon-button--accent[aria-pressed="true"] {
+.icon-button--primary[aria-pressed="true"] {
   color: var(--comp-icon-button-selected-primary-fg);
 }
 
@@ -1871,6 +2138,14 @@
   --comp-field-control-size: var(--comp-input-control-size);
   --comp-field-icon-size: var(--comp-input-icon-size);
   --comp-field-icon-action-size: var(--comp-input-action-size);
+  --comp-field-message-motion-duration: var(--component-duration-state);
+  --comp-field-message-motion-ease: var(--component-ease-enter);
+  --comp-field-message-enter-transform: translateY(var(--component-translate-message-enter));
+  --comp-field-message-rest-transform: var(--component-transform-rest);
+  --comp-field-status-motion-duration: var(--component-duration-snappy);
+  --comp-field-status-motion-ease: var(--component-ease-enter);
+  --comp-field-status-enter-transform: var(--component-transform-scale-enter);
+  --comp-field-status-rest-transform: var(--component-transform-scale-rest);
   display: grid;
   gap: var(--comp-input-gap);
   inline-size: 100%;
@@ -1890,7 +2165,9 @@
   align-items: center;
   background: var(--comp-input-surface-bg);
   border: var(--component-border-width) solid var(--comp-input-surface-border);
-  border-radius: var(--component-radius-control);
+  border-radius: var(--component-control-frame-radius-field);
+  box-sizing: border-box;
+  block-size: var(--comp-field-control-size);
   color: var(--comp-input-surface-fg);
   display: flex;
   gap: var(--comp-input-gap);
@@ -1914,18 +2191,78 @@
   --comp-combobox-overlay-motion-ease: var(--component-ease-enter);
   --comp-combobox-overlay-visibility-duration: var(--component-duration-instant);
   --comp-combobox-overlay-visibility-ease: var(--component-ease-linear);
+  --comp-combobox-listbox-bg: var(--component-listbox-bg);
+  --comp-combobox-listbox-border: var(--component-listbox-border);
+  --comp-combobox-listbox-depth: var(--component-listbox-depth);
+  --comp-combobox-listbox-gap: var(--component-listbox-gap);
+  --comp-combobox-listbox-inline: min(100%, calc(100vw - (var(--component-space-md) * 2)));
+  --comp-combobox-listbox-max-block-size: var(--component-listbox-max-block-size);
+  --comp-combobox-listbox-offset: var(--component-listbox-offset);
   --comp-combobox-open-opacity: var(--component-opacity-visible);
+  --comp-combobox-listbox-padding: var(--component-listbox-padding);
+  --comp-combobox-listbox-radius: var(--component-listbox-radius);
+  --comp-combobox-loading-icon-color: var(--component-color-action);
+  --comp-combobox-loading-color: var(--component-color-text-muted);
+  --comp-combobox-loading-font-size: var(--component-font-size-caption);
+  --comp-combobox-loading-font-weight: var(--component-font-weight-semibold);
+  --comp-combobox-loading-padding-block: var(--component-space-md);
+  --comp-combobox-loading-padding-inline: var(--component-option-row-padding-inline-sm);
   --comp-combobox-empty-color: var(--component-color-text-muted);
   --comp-combobox-empty-font-size: var(--component-font-size-caption);
   --comp-combobox-empty-font-weight: var(--component-font-weight-semibold);
   --comp-combobox-empty-padding-block: var(--component-space-md);
-  --comp-combobox-empty-padding-inline: var(--component-space-sm);
+  --comp-combobox-empty-padding-inline: var(--component-option-row-padding-inline-sm);
+  --comp-combobox-option-color: var(--component-option-row-color);
+  --comp-combobox-option-gap: var(--component-option-row-gap);
+  --comp-combobox-option-hover-bg: var(--component-option-row-hover-bg);
+  --comp-combobox-option-active-bg: var(--component-option-row-active-bg);
+  --comp-combobox-option-active-ring: var(--component-option-row-active-ring);
+  --comp-combobox-option-disabled-bg: var(--component-option-row-disabled-bg);
+  --comp-combobox-option-disabled-color: var(--component-option-row-disabled-color);
+  --comp-combobox-option-disabled-opacity: var(--component-option-row-disabled-opacity);
+  --comp-combobox-option-label-font-size: var(--component-font-size-body);
+  --comp-combobox-option-label-font-weight: var(--component-font-weight-semibold);
+  --comp-combobox-option-meta-font-size: var(--component-font-size-caption);
+  --comp-combobox-option-meta-font-weight: var(--component-font-weight-semibold);
+  --comp-combobox-option-meta-opacity: var(--component-opacity-muted);
+  --comp-combobox-option-min-size-sm: var(--component-option-row-min-block-size-sm);
+  --comp-combobox-option-min-size-md: var(--component-option-row-min-block-size-md);
+  --comp-combobox-option-min-size-lg: var(--component-option-row-min-block-size-lg);
+  --comp-combobox-option-min-size: var(--comp-combobox-option-min-size-md);
+  --comp-combobox-option-padding-x-sm: var(--component-option-row-padding-inline-sm);
+  --comp-combobox-option-padding-x-md: var(--component-option-row-padding-inline-md);
+  --comp-combobox-option-padding-x-lg: var(--component-option-row-padding-inline-lg);
+  --comp-combobox-option-padding-x: var(--comp-combobox-option-padding-x-md);
+  --comp-combobox-option-radius: var(--component-option-row-radius);
+  --comp-combobox-option-selected-bg: var(--component-option-row-selected-bg);
+  --comp-combobox-option-selected-color: var(--component-option-row-selected-color);
+  --comp-combobox-option-selected-weight: var(--component-option-row-selected-weight);
+  --comp-combobox-option-check-family: "Material Symbols Rounded";
+  --comp-combobox-option-check-size-sm: var(--component-option-row-check-size-sm);
+  --comp-combobox-option-check-size-md: var(--component-option-row-check-size-md);
+  --comp-combobox-option-check-size-lg: var(--component-option-row-check-size-lg);
+  --comp-combobox-option-check-size: var(--comp-combobox-option-check-size-md);
+  --comp-combobox-option-check-weight: var(--component-icon-weight-semibold);
+  --comp-combobox-option-check-hidden-opacity: var(--component-opacity-hidden);
+  --comp-combobox-option-check-visible-opacity: var(--component-opacity-visible);
   --comp-select-chevron-size: var(--comp-combobox-chevron-size);
   --comp-select-chevron-motion-duration: var(--comp-combobox-chevron-motion-duration);
   --comp-select-chevron-motion-ease: var(--comp-combobox-chevron-motion-ease);
   --comp-select-overlay-motion-duration: var(--comp-combobox-overlay-motion-duration);
   --comp-select-overlay-motion-ease: var(--comp-combobox-overlay-motion-ease);
   cursor: text;
+}
+
+.combobox[data-density="sm"] {
+  --comp-combobox-option-min-size: var(--comp-combobox-option-min-size-sm);
+  --comp-combobox-option-padding-x: var(--comp-combobox-option-padding-x-sm);
+  --comp-combobox-option-check-size: var(--comp-combobox-option-check-size-sm);
+}
+
+.combobox[data-density="lg"] {
+  --comp-combobox-option-min-size: var(--comp-combobox-option-min-size-lg);
+  --comp-combobox-option-padding-x: var(--comp-combobox-option-padding-x-lg);
+  --comp-combobox-option-check-size: var(--comp-combobox-option-check-size-lg);
 }
 
 .combobox__input {
@@ -1936,8 +2273,119 @@
   color: var(--comp-combobox-chevron-color);
 }
 
+.combobox__clear:disabled {
+  display: none;
+}
+
+.combobox__listbox {
+  background: var(--comp-combobox-listbox-bg);
+  border: var(--component-border-width) solid var(--comp-combobox-listbox-border);
+  border-radius: var(--comp-combobox-listbox-radius);
+  box-sizing: border-box;
+  box-shadow: var(--comp-combobox-listbox-depth);
+  display: grid;
+  gap: var(--comp-combobox-listbox-gap);
+  inline-size: var(--comp-combobox-listbox-inline);
+  inset-block-start: calc(100% + var(--comp-combobox-listbox-offset));
+  inset-inline-end: 0;
+  inset-inline-start: 0;
+  max-block-size: var(--comp-combobox-listbox-max-block-size);
+  opacity: 0;
+  overflow: auto;
+  padding: var(--comp-combobox-listbox-padding);
+  pointer-events: none;
+  position: absolute;
+  transform: translateY(calc(var(--component-translate-overlay-enter) - var(--component-frame-space-micro))) scale(var(--component-scale-quiet));
+  transform-origin: top left;
+  transition:
+    opacity var(--comp-combobox-overlay-motion-duration) var(--comp-combobox-overlay-motion-ease),
+    transform var(--comp-combobox-overlay-motion-duration) var(--comp-combobox-overlay-motion-ease),
+    visibility var(--comp-combobox-overlay-visibility-duration) var(--comp-combobox-overlay-visibility-ease) var(--comp-combobox-overlay-motion-duration);
+  visibility: hidden;
+  z-index: var(--component-z-overlay);
+}
+
+.combobox__option {
+  align-items: center;
+  border-radius: var(--comp-combobox-option-radius);
+  box-sizing: border-box;
+  color: var(--comp-combobox-option-color);
+  cursor: pointer;
+  display: grid;
+  gap: var(--comp-combobox-option-gap);
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  min-block-size: var(--comp-combobox-option-min-size);
+  padding: 0 var(--comp-combobox-option-padding-x);
+  transition:
+    background-color var(--component-duration-state) var(--component-ease-state),
+    color var(--component-duration-state) var(--component-ease-state);
+}
+
+.combobox__option:hover:not([data-disabled="true"]):not([aria-disabled="true"]),
+.combobox__option:focus-visible:not([data-disabled="true"]):not([aria-disabled="true"]) {
+  background: var(--comp-combobox-option-hover-bg);
+}
+
+.combobox__option[data-active="true"]:not([data-selected="true"]):not([data-disabled="true"]):not([aria-disabled="true"]) {
+  background: var(--comp-combobox-option-active-bg);
+  outline: var(--component-focus-ring-width) solid var(--comp-combobox-option-active-ring);
+  outline-offset: calc(var(--component-focus-ring-offset) * -1);
+}
+
+.combobox__option[data-selected="true"] {
+  background: var(--comp-combobox-option-selected-bg);
+  color: var(--comp-combobox-option-selected-color);
+}
+
+.combobox__option[data-selected="true"] .combobox__option-label {
+  font-weight: var(--comp-combobox-option-selected-weight);
+}
+
+.combobox__option[data-disabled="true"],
+.combobox__option[aria-disabled="true"] {
+  background: var(--comp-combobox-option-disabled-bg);
+  color: var(--comp-combobox-option-disabled-color);
+  cursor: not-allowed;
+  opacity: var(--comp-combobox-option-disabled-opacity);
+}
+
+.combobox__option-label {
+  font-size: var(--comp-combobox-option-label-font-size);
+  font-weight: var(--comp-combobox-option-label-font-weight);
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.combobox__option-meta {
+  color: currentColor;
+  font-size: var(--comp-combobox-option-meta-font-size);
+  font-weight: var(--comp-combobox-option-meta-font-weight);
+  opacity: var(--comp-combobox-option-meta-opacity);
+}
+
+.combobox__option-check {
+  color: currentColor;
+  font-family: var(--comp-combobox-option-check-family);
+  font-size: var(--comp-combobox-option-check-size);
+  font-weight: var(--comp-combobox-option-check-weight);
+  inline-size: var(--comp-combobox-option-check-size);
+  line-height: var(--component-line-height-none);
+  opacity: var(--comp-combobox-option-check-hidden-opacity);
+  text-align: center;
+}
+
+.combobox__option[data-selected="true"] .combobox__option-check {
+  opacity: var(--comp-combobox-option-check-visible-opacity);
+}
+
 .combobox:focus-within .combobox__chevron {
   color: var(--comp-combobox-chevron-focus-color);
+}
+
+.combobox[data-state="loading"] .combobox__loading-icon {
+  color: var(--comp-combobox-loading-icon-color);
 }
 
 .combobox[data-open="true"] .combobox__chevron {
@@ -1955,6 +2403,7 @@
   visibility: visible;
 }
 
+.combobox__loading,
 .combobox__empty {
   color: var(--comp-combobox-empty-color);
   font-size: var(--comp-combobox-empty-font-size);
@@ -1963,11 +2412,20 @@
   text-align: center;
 }
 
+.combobox__loading {
+  color: var(--comp-combobox-loading-color);
+  font-size: var(--comp-combobox-loading-font-size);
+  font-weight: var(--comp-combobox-loading-font-weight);
+  padding: var(--comp-combobox-loading-padding-block) var(--comp-combobox-loading-padding-inline);
+}
+
 .field-control[data-density="sm"],
 .field[data-density="sm"] {
   --comp-field-control-size: var(--comp-input-control-size-sm);
   --comp-field-icon-size: var(--comp-input-icon-size-sm);
   --comp-field-icon-action-size: var(--comp-input-action-size-sm);
+  --comp-input-font-size: var(--comp-input-font-size-sm);
+  --comp-input-padding-x: var(--comp-input-padding-x-sm);
 }
 
 .field-control[data-density="lg"],
@@ -1975,12 +2433,17 @@
   --comp-field-control-size: var(--comp-input-control-size-lg);
   --comp-field-icon-size: var(--comp-input-icon-size-lg);
   --comp-field-icon-action-size: var(--comp-input-action-size-lg);
+  --comp-input-font-size: var(--comp-input-font-size-lg);
+  --comp-input-padding-x: var(--comp-input-padding-x-lg);
 }
 
 .field__icon {
   color: var(--comp-input-icon-fg);
   flex: none;
   font-size: var(--comp-field-icon-size);
+  transition:
+    color var(--component-duration-state) var(--component-ease-state),
+    transform var(--comp-field-status-motion-duration) var(--comp-field-status-motion-ease);
 }
 
 .field__icon--loading {
@@ -1990,10 +2453,15 @@
 
 .field-control__helper,
 .field__helper {
+  animation: field-message-enter var(--comp-field-message-motion-duration) var(--component-ease-enter) both;
   color: var(--comp-input-helper-fg);
   font-size: var(--component-font-size-caption);
   font-weight: var(--comp-input-helper-weight);
   line-height: var(--comp-input-helper-line-height);
+  transition:
+    color var(--component-duration-state) var(--component-ease-state),
+    opacity var(--comp-field-message-motion-duration) var(--comp-field-message-motion-ease),
+    transform var(--comp-field-message-motion-duration) var(--comp-field-message-motion-ease);
 }
 
 .field__prefix,
@@ -2040,6 +2508,30 @@
   --comp-input-amount-helper-color: var(--component-color-danger);
 }
 
+@keyframes field-message-enter {
+  from {
+    opacity: 0;
+    transform: var(--comp-field-message-enter-transform);
+  }
+
+  to {
+    opacity: 1;
+    transform: var(--comp-field-message-rest-transform);
+  }
+}
+
+@keyframes field-status-enter {
+  from {
+    opacity: 0;
+    transform: var(--comp-field-status-enter-transform);
+  }
+
+  to {
+    opacity: 1;
+    transform: var(--comp-field-status-rest-transform);
+  }
+}
+
 .field-action {
   align-items: center;
   background: var(--comp-input-action-bg);
@@ -2083,22 +2575,27 @@
   color: var(--comp-input-field-fg);
   flex: 1 1 auto;
   font: inherit;
-  font-size: var(--component-font-size-label);
+  font-size: var(--comp-input-font-size);
   font-weight: var(--comp-input-field-weight);
   inline-size: 100%;
   min-block-size: var(--component-min-text-line);
   min-inline-size: 0;
-  outline: none;
+  outline: var(--component-outline-none);
   padding: 0;
+}
+
+.field-input::placeholder,
+.input::placeholder {
+  color: var(--comp-input-placeholder-fg);
+  opacity: 1;
 }
 
 .text-area {
   font: inherit;
 }
 
-.field-control:hover .field-control__surface,
-.field:hover .field__control,
-.field[data-state="hover"] .field__control {
+.field-control:not([data-state="disabled"]):not([data-state="loading"]):hover .field-control__surface,
+.field:not([data-state="disabled"]):not([data-state="loading"]):hover .field__control {
   border-color: var(--comp-input-hover-border);
 }
 
@@ -2122,23 +2619,47 @@
   background: var(--comp-input-error-bg);
 }
 
-.field[data-state="valid"] .field__control {
-  border-color: var(--comp-input-valid-border);
+.field[data-state="info"] .field__control {
+  border-color: var(--comp-input-info-border);
+  background: var(--comp-input-info-bg);
+}
+
+.field[data-state="success"] .field__control {
+  border-color: var(--comp-input-success-border);
+  background: var(--comp-input-success-bg);
 }
 
 .field[data-state="warning"] .field__control {
-  background: var(--comp-input-warning-bg);
   border-color: var(--comp-input-warning-border);
-}
-
-.field[data-state="warning"] .field__helper {
-  color: var(--comp-input-warning-helper-fg);
+  background: var(--comp-input-warning-bg);
 }
 
 .field-control[data-state="error"] .field-control__helper,
 .field[data-state="error"] .field__helper,
 .field[data-state="error"] .field__icon {
-  color: var(--comp-input-error-border);
+  color: var(--comp-input-error-helper-fg);
+}
+
+.field[data-state="info"] .field__icon,
+.field[data-state="success"] .field__icon,
+.field[data-state="warning"] .field__icon,
+.field[data-state="error"] .field__icon {
+  animation: field-status-enter var(--comp-field-status-motion-duration) var(--component-ease-enter) both;
+}
+
+.field[data-state="info"] .field__helper,
+.field[data-state="info"] .field__icon {
+  color: var(--comp-input-info-border);
+}
+
+.field[data-state="success"] .field__helper,
+.field[data-state="success"] .field__icon {
+  color: var(--comp-input-success-border);
+}
+
+.field[data-state="warning"] .field__helper,
+.field[data-state="warning"] .field__icon {
+  color: var(--comp-input-warning-helper-fg);
 }
 
 .field-control[data-state="disabled"],
@@ -2149,10 +2670,13 @@
 }
 
 .field-control[data-state="disabled"] .field-control__surface,
-.field-control[data-state="loading"] .field-control__surface,
-.field[data-state="disabled"] .field__control,
-.field[data-state="loading"] .field__control {
+.field[data-state="disabled"] .field__control {
   background: var(--comp-input-disabled-bg);
+}
+
+.field-control[data-state="loading"] .field-control__surface,
+.field[data-state="loading"] .field__control {
+  background: var(--comp-input-loading-bg);
 }
 
 .field-control[data-mono="true"] .field-input,
@@ -2204,9 +2728,12 @@
   border-color: var(--comp-text-area-border-error);
 }
 
-.field[data-state="disabled"] .text-area,
-.field[data-state="loading"] .text-area {
+.field[data-state="disabled"] .text-area {
   background: var(--comp-text-area-bg-muted);
+}
+
+.field[data-state="loading"] .text-area {
+  background: var(--comp-text-area-bg-loading);
 }
 
 .text-area__counter {
@@ -2237,7 +2764,7 @@
 .choice {
   --comp-choice-current-mark-size: var(--component-inline-size-sm);
   --comp-choice-current-indicator-size: calc(var(--comp-choice-current-mark-size) / 2);
-  --comp-choice-current-indicator-font-size: var(--component-icon-size-sm-plus);
+  --comp-choice-current-indicator-font-size: var(--comp-choice-current-indicator-size);
   --comp-choice-current-indicator-variation: var(--component-icon-variation-outline-strong);
   --comp-choice-current-indicator-line-height: var(--component-line-height-none);
   --comp-choice-current-gap: var(--component-space-sm);
@@ -2264,6 +2791,8 @@
   --comp-choice-current-press-scale: var(--component-scale-press);
   --comp-choice-current-text-gap: var(--component-space-sm);
   --comp-choice-current-disabled-opacity: var(--component-disabled-readable-opacity);
+  align-items: start;
+  display: grid;
   grid-template-columns: auto 1fr;
   gap: var(--comp-choice-current-gap);
   padding-block: var(--comp-choice-current-padding-block);
@@ -2272,7 +2801,8 @@
 
 .checkbox {
   --comp-choice-current-mark-size: var(--comp-checkbox-mark-size-md);
-  --comp-choice-current-indicator-font-size: var(--comp-checkbox-indicator-size-md);
+  --comp-choice-current-indicator-size: var(--comp-checkbox-indicator-size-md);
+  --comp-choice-current-indicator-font-size: var(--comp-choice-current-indicator-size);
   --comp-choice-current-gap: var(--comp-checkbox-gap-md);
   --comp-choice-current-padding-block: var(--comp-checkbox-padding-block);
   --comp-choice-current-mark-bg: var(--comp-checkbox-bg);
@@ -2305,7 +2835,7 @@
 
 .radio {
   --comp-choice-current-mark-size: var(--comp-radio-button-mark-size-md);
-  --comp-choice-current-indicator-size: var(--comp-radio-button-indicator-size);
+  --comp-choice-current-indicator-size: var(--comp-radio-button-indicator-size-md);
   --comp-choice-current-gap: var(--comp-radio-button-gap-md);
   --comp-choice-current-padding-block: var(--comp-radio-button-padding-block);
   --comp-choice-current-mark-bg: var(--comp-radio-button-bg);
@@ -2339,45 +2869,52 @@
 
 .choice[data-density="sm"] {
   --comp-choice-current-mark-size: var(--component-inline-size-xs);
-  --comp-choice-current-indicator-font-size: var(--component-icon-size-sm);
+  --comp-choice-current-indicator-size: var(--component-icon-size-sm);
+  --comp-choice-current-indicator-font-size: var(--comp-choice-current-indicator-size);
   --comp-choice-current-gap: var(--component-space-xs);
 }
 
 .checkbox[data-density="sm"] {
   --comp-choice-current-mark-size: var(--comp-checkbox-mark-size-sm);
-  --comp-choice-current-indicator-font-size: var(--comp-checkbox-indicator-size-sm);
+  --comp-choice-current-indicator-size: var(--comp-checkbox-indicator-size-sm);
+  --comp-choice-current-indicator-font-size: var(--comp-choice-current-indicator-size);
   --comp-choice-current-gap: var(--comp-checkbox-gap-sm);
   --comp-choice-current-text-gap: var(--comp-checkbox-gap-sm);
 }
 
 .radio[data-density="sm"] {
   --comp-choice-current-mark-size: var(--comp-radio-button-mark-size-sm);
+  --comp-choice-current-indicator-size: var(--comp-radio-button-indicator-size-sm);
   --comp-choice-current-gap: var(--comp-radio-button-gap-sm);
   --comp-choice-current-text-gap: var(--comp-radio-button-gap-sm);
 }
 
 .choice[data-density="lg"] {
   --comp-choice-current-mark-size: var(--component-min-text-line);
-  --comp-choice-current-indicator-font-size: var(--component-icon-size-sm-plus);
+  --comp-choice-current-indicator-size: var(--component-density-icon-size-lg);
+  --comp-choice-current-indicator-font-size: var(--comp-choice-current-indicator-size);
   --comp-choice-current-gap: var(--component-space-md);
 }
 
 .checkbox[data-density="lg"] {
   --comp-choice-current-mark-size: var(--comp-checkbox-mark-size-lg);
-  --comp-choice-current-indicator-font-size: var(--comp-checkbox-indicator-size-lg);
+  --comp-choice-current-indicator-size: var(--comp-checkbox-indicator-size-lg);
+  --comp-choice-current-indicator-font-size: var(--comp-choice-current-indicator-size);
   --comp-choice-current-gap: var(--comp-checkbox-gap-lg);
   --comp-choice-current-text-gap: var(--comp-checkbox-gap-lg);
 }
 
 .radio[data-density="lg"] {
   --comp-choice-current-mark-size: var(--comp-radio-button-mark-size-lg);
+  --comp-choice-current-indicator-size: var(--comp-radio-button-indicator-size-lg);
   --comp-choice-current-gap: var(--comp-radio-button-gap-lg);
   --comp-choice-current-text-gap: var(--comp-radio-button-gap-lg);
 }
 
 .choice[data-variant="compact"] {
   --comp-choice-current-mark-size: var(--component-inline-size-xs);
-  --comp-choice-current-indicator-font-size: var(--component-icon-size-sm);
+  --comp-choice-current-indicator-size: var(--component-icon-size-sm);
+  --comp-choice-current-indicator-font-size: var(--comp-choice-current-indicator-size);
   --comp-choice-current-gap: var(--component-space-xs);
   min-block-size: auto;
   padding-block: 0;
@@ -2385,13 +2922,15 @@
 
 .checkbox[data-variant="compact"] {
   --comp-choice-current-mark-size: var(--comp-checkbox-mark-size-compact);
-  --comp-choice-current-indicator-font-size: var(--comp-checkbox-indicator-size-sm);
+  --comp-choice-current-indicator-size: var(--comp-checkbox-indicator-size-sm);
+  --comp-choice-current-indicator-font-size: var(--comp-choice-current-indicator-size);
   --comp-choice-current-gap: var(--comp-checkbox-gap-sm);
   --comp-choice-current-text-gap: var(--comp-checkbox-gap-sm);
 }
 
 .radio[data-variant="compact"] {
   --comp-choice-current-mark-size: var(--comp-radio-button-mark-size-compact);
+  --comp-choice-current-indicator-size: var(--comp-radio-button-indicator-size-compact);
   --comp-choice-current-gap: var(--comp-radio-button-gap-sm);
   --comp-choice-current-text-gap: var(--comp-radio-button-gap-sm);
 }
@@ -2411,11 +2950,12 @@
   align-items: center;
   background: var(--comp-choice-current-mark-bg);
   border: var(--component-border-width) solid var(--comp-choice-current-mark-border);
+  box-sizing: border-box;
   display: inline-flex;
   block-size: var(--comp-choice-current-mark-size);
   inline-size: var(--comp-choice-current-mark-size);
   justify-content: center;
-  margin-block-start: var(--component-border-width);
+  margin-block-start: 0;
   transition:
     background-color var(--comp-choice-current-motion-duration) var(--comp-choice-current-motion-ease),
     border-color var(--comp-choice-current-motion-duration) var(--comp-choice-current-motion-ease),
@@ -2429,6 +2969,7 @@
 
 .radio .choice__mark {
   border-radius: var(--comp-choice-current-mark-radius);
+  box-shadow: var(--comp-radio-button-rest-shadow);
 }
 
 .checkbox .choice__input:checked + .choice__mark {
@@ -2481,24 +3022,48 @@
   transform: var(--component-transform-scale-rest);
 }
 
-.radio .choice__mark::after {
+.radio .choice__mark:empty::after {
   background: var(--comp-choice-current-dot-bg);
   border-radius: var(--comp-choice-current-mark-radius);
   content: "";
+  display: block;
   block-size: var(--comp-choice-current-indicator-size);
   inline-size: var(--comp-choice-current-indicator-size);
   transform: var(--component-transform-scale-none);
+  transform-origin: center;
   transition: transform var(--comp-choice-current-motion-duration) var(--comp-choice-current-motion-press);
 }
 
-.radio .choice__input:checked + .choice__mark::after {
+.radio .choice__input:checked + .choice__mark:empty::after {
   animation: choice-dot-enter var(--comp-choice-current-motion-duration) var(--comp-choice-current-motion-enter) both;
   transform: var(--component-transform-scale-rest);
 }
 
-.radio .choice__input:checked + .choice__mark {
+.radio .choice__indicator {
+  background: var(--comp-choice-current-dot-bg);
+  border-radius: var(--comp-choice-current-mark-radius);
+  block-size: var(--comp-choice-current-indicator-size);
+  display: block;
+  inline-size: var(--comp-choice-current-indicator-size);
+  opacity: 1;
+  transform: var(--component-transform-scale-none);
+  transform-origin: center;
+  transition: transform var(--comp-choice-current-motion-duration) var(--comp-choice-current-motion-press);
+}
+
+.radio .choice__input:checked + .choice__mark .choice__indicator,
+.radio[data-checked="true"] .choice__mark .choice__indicator,
+.radio[data-state="selected"] .choice__mark .choice__indicator {
+  animation: choice-dot-enter var(--comp-choice-current-motion-duration) var(--comp-choice-current-motion-enter) both;
+  transform: var(--component-transform-scale-rest);
+}
+
+.radio .choice__input:checked + .choice__mark,
+.radio[data-checked="true"] .choice__mark,
+.radio[data-state="selected"] .choice__mark {
   background: var(--comp-choice-current-mark-selected-bg);
   border-color: var(--comp-choice-current-mark-selected-border);
+  box-shadow: var(--comp-radio-button-selected-shadow);
 }
 
 .radio[data-state="error"] .choice__mark,
@@ -2512,8 +3077,12 @@
   border-color: var(--comp-choice-current-mark-error-border);
 }
 
-.radio[data-state="error"] .choice__input:checked + .choice__mark::after,
-.radio[data-invalid="true"] .choice__input:checked + .choice__mark::after {
+.radio[data-state="error"] .choice__input:checked + .choice__mark:empty::after,
+.radio[data-invalid="true"] .choice__input:checked + .choice__mark:empty::after,
+.radio[data-state="error"] .choice__input:checked + .choice__mark .choice__indicator,
+.radio[data-invalid="true"] .choice__input:checked + .choice__mark .choice__indicator,
+.radio[data-state="error"][data-checked="true"] .choice__mark .choice__indicator,
+.radio[data-invalid="true"][data-checked="true"] .choice__mark .choice__indicator {
   background: var(--comp-choice-current-dot-error-bg);
 }
 
@@ -2540,19 +3109,23 @@
 .choice__text {
   display: grid;
   gap: var(--comp-choice-current-text-gap);
+  line-height: var(--component-line-height-snug-state);
 }
 
 .switch__text {
   display: grid;
   gap: var(--comp-switch-current-gap);
+  line-height: var(--component-line-height-snug-state);
 }
 
 .choice__label {
   font-weight: var(--comp-choice-current-label-weight);
+  line-height: var(--component-line-height-snug-state);
 }
 
 .switch__label {
   font-weight: var(--comp-switch-current-label-weight);
+  line-height: var(--component-line-height-snug-state);
 }
 
 .choice__description,
@@ -2671,6 +3244,7 @@
   align-items: center;
   background: var(--comp-switch-current-track-bg);
   border-radius: var(--comp-switch-radius);
+  box-sizing: border-box;
   display: inline-flex;
   inline-size: var(--comp-switch-current-track-width);
   min-block-size: var(--comp-switch-current-track-block);
@@ -2685,6 +3259,7 @@
   background: var(--comp-switch-current-thumb-bg);
   border-radius: var(--comp-switch-radius);
   block-size: var(--comp-switch-current-thumb-size);
+  box-sizing: border-box;
   box-shadow: var(--comp-switch-current-thumb-shadow);
   inline-size: var(--comp-switch-current-thumb-size);
   transition:
@@ -2852,19 +3427,6 @@
   --comp-badge-fg: var(--comp-badge-fg-warning);
 }
 
-body[data-contrast="quiet"] .badge[data-tone="info"],
-body[data-contrast="quiet"] .badge[data-tone="accent"] {
-  --comp-badge-fg: color-mix(in srgb, var(--component-color-action) 46%, var(--component-color-text));
-}
-
-body[data-contrast="quiet"] .badge[data-tone="danger"] {
-  --comp-badge-fg: color-mix(in srgb, var(--component-color-danger) 46%, var(--component-color-text));
-}
-
-body[data-contrast="quiet"] .badge[data-tone="success"] {
-  --comp-badge-fg: color-mix(in srgb, var(--component-color-success) 46%, var(--component-color-text));
-}
-
 .badge[data-variant="dot"] {
   block-size: var(--component-badge-dot-size);
   gap: 0;
@@ -2999,7 +3561,7 @@ body[data-contrast="quiet"] .badge[data-tone="success"] {
 }
 
 .tag[data-variant="link"] {
-  text-decoration: none;
+  text-decoration: var(--component-text-decoration-none);
 }
 
 .tag[data-tone="info"] {
@@ -3024,22 +3586,6 @@ body[data-contrast="quiet"] .badge[data-tone="success"] {
   --comp-tag-bg: var(--comp-tag-bg-danger);
   --comp-tag-border: var(--comp-tag-border-danger);
   --comp-tag-fg: var(--comp-tag-fg-danger);
-}
-
-body[data-contrast="quiet"] .tag[data-tone="info"] {
-  --comp-tag-fg: color-mix(in srgb, var(--component-color-action) 46%, var(--component-color-text));
-}
-
-body[data-contrast="quiet"] .tag[data-tone="success"] {
-  --comp-tag-fg: color-mix(in srgb, var(--component-color-success) 46%, var(--component-color-text));
-}
-
-body[data-contrast="quiet"] .tag[data-tone="warning"] {
-  --comp-tag-fg: color-mix(in srgb, var(--component-color-warning) 52%, var(--component-color-text));
-}
-
-body[data-contrast="quiet"] .tag[data-tone="danger"] {
-  --comp-tag-fg: color-mix(in srgb, var(--component-color-danger) 46%, var(--component-color-text));
 }
 
 .chip {
@@ -3136,6 +3682,8 @@ button.tag {
 }
 
 button.chip {
+  block-size: var(--comp-chip-interactive-min-block-size);
+  box-sizing: border-box;
   min-block-size: var(--comp-chip-interactive-min-block-size);
 }
 
@@ -3223,7 +3771,7 @@ button.tag:disabled,
   --comp-tabs-border-width: var(--component-border-width);
   --comp-tabs-border-color: color-mix(in srgb, var(--component-color-border) 76%, transparent);
   --comp-tabs-border: var(--comp-tabs-border-width) solid var(--comp-tabs-border-color);
-  --comp-tabs-radius: var(--component-radius-pill);
+  --comp-tabs-radius: var(--component-control-frame-radius-action);
   --comp-tabs-display: var(--component-display-inline-flex);
   --comp-tabs-gap: var(--component-space-xs);
   --comp-tabs-isolation: var(--component-isolation-isolate);
@@ -3233,7 +3781,7 @@ button.tag:disabled,
   --comp-tabs-indicator-bg: var(--comp-tabs-tab-bg-selected);
   --comp-tabs-indicator-border-color: color-mix(in srgb, var(--component-color-action) 22%, var(--component-color-border));
   --comp-tabs-indicator-border: var(--comp-tabs-border-width) solid var(--comp-tabs-indicator-border-color);
-  --comp-tabs-indicator-radius: var(--component-radius-pill);
+  --comp-tabs-indicator-radius: var(--component-control-frame-radius-action);
   --comp-tabs-indicator-shadow: 0 0 0 var(--component-border-width-indicator) color-mix(in srgb, var(--component-color-action) 7%, transparent), var(--component-depth-raised-soft);
   --comp-tabs-indicator-content: "";
   --comp-tabs-indicator-inset-block: var(--component-space-xs);
@@ -3246,24 +3794,36 @@ button.tag:disabled,
   --comp-tabs-tab-align: var(--component-align-center);
   --comp-tabs-tab-bg: var(--component-surface-transparent);
   --comp-tabs-tab-border: var(--component-border-none);
-  --comp-tabs-tab-radius: var(--component-radius-pill);
+  --comp-tabs-tab-radius: var(--component-control-frame-radius-action);
   --comp-tabs-tab-fg: var(--component-color-text-muted);
   --comp-tabs-tab-cursor: var(--component-cursor-pointer);
   --comp-tabs-tab-display: var(--component-display-inline-flex);
   --comp-tabs-tab-font: var(--component-font-family-inherit);
-  --comp-tabs-tab-font-size: var(--component-font-size-label);
+  --comp-tabs-tab-font-size-sm: var(--component-control-frame-font-size-sm);
+  --comp-tabs-tab-font-size-md: var(--component-control-frame-font-size-md);
+  --comp-tabs-tab-font-size-lg: var(--component-control-frame-font-size-lg);
+  --comp-tabs-tab-font-size: var(--comp-tabs-tab-font-size-md);
   --comp-tabs-tab-font-weight: var(--component-font-weight-semibold);
   --comp-tabs-tab-gap: var(--component-space-xs);
   --comp-tabs-tab-justify: var(--component-justify-center);
-  --comp-tabs-tab-min-block: var(--component-navigation-target-size-lg);
-  --comp-tabs-tab-min-inline: var(--component-navigation-target-size-lg);
-  --comp-tabs-tab-padding-inline: var(--component-space-lg);
+  --comp-tabs-tab-min-block-sm: var(--component-control-frame-size-sm);
+  --comp-tabs-tab-min-block-md: var(--component-control-frame-size-md);
+  --comp-tabs-tab-min-block-lg: var(--component-control-frame-size-lg);
+  --comp-tabs-tab-min-block: var(--comp-tabs-tab-min-block-md);
+  --comp-tabs-tab-min-inline: var(--component-control-frame-size-md);
+  --comp-tabs-tab-padding-inline-sm: var(--component-control-frame-padding-action-sm);
+  --comp-tabs-tab-padding-inline-md: var(--component-control-frame-padding-action-md);
+  --comp-tabs-tab-padding-inline-lg: var(--component-control-frame-padding-action-lg);
+  --comp-tabs-tab-padding-inline: var(--comp-tabs-tab-padding-inline-md);
   --comp-tabs-tab-position: var(--component-position-relative);
   --comp-tabs-tab-transition: color var(--component-duration-state) var(--component-ease-state), transform var(--component-duration-press) var(--component-ease-press);
   --comp-tabs-tab-z: var(--component-z-raised);
   --comp-tabs-selected-fg: var(--component-color-action);
   --comp-tabs-selected-weight: var(--component-font-weight-extrabold);
   --comp-tabs-hover-fg: var(--component-color-text);
+  --comp-tabs-disabled-fg: var(--component-disabled-text);
+  --comp-tabs-disabled-cursor: var(--component-disabled-cursor);
+  --comp-tabs-disabled-opacity: var(--component-disabled-readable-opacity);
   --comp-tabs-pressed-transform: var(--component-transform-press);
   --comp-tabs-focus-width: var(--component-focus-ring-width);
   --comp-tabs-focus-color: var(--component-color-focus);
@@ -3322,6 +3882,8 @@ button.tag:disabled,
   font-weight: var(--comp-tabs-tab-font-weight);
   gap: var(--comp-tabs-tab-gap);
   justify-content: var(--comp-tabs-tab-justify);
+  block-size: var(--comp-tabs-tab-min-block);
+  box-sizing: border-box;
   min-block-size: var(--comp-tabs-tab-min-block);
   min-height: var(--comp-tabs-tab-min-block);
   min-inline-size: var(--comp-tabs-tab-min-inline);
@@ -3338,6 +3900,20 @@ button.tag:disabled,
 
 .tabs__tab[aria-selected="true"] .tabs__icon {
   font-variation-settings: var(--comp-tabs-icon-selected-variation);
+}
+
+.tabs__tab:disabled {
+  color: var(--comp-tabs-disabled-fg);
+  cursor: var(--comp-tabs-disabled-cursor);
+  opacity: var(--comp-tabs-disabled-opacity);
+  transform: var(--component-transform-scale-rest);
+}
+
+.tabs__tab:disabled .badge {
+  --comp-badge-bg: var(--component-disabled-bg);
+  --comp-badge-border: var(--component-disabled-border);
+  --comp-badge-fg: var(--component-disabled-text);
+  opacity: var(--component-opacity-visible);
 }
 
 .tabs__tab:hover:not([aria-selected="true"]):not(:disabled) {
@@ -3377,15 +3953,15 @@ button.tag:disabled,
 }
 
 .tabs[data-density="sm"] {
-  --comp-tabs-tab-min-block: calc(var(--component-density-control-height) - var(--component-space-3));
-  --comp-tabs-tab-padding-inline: var(--component-space-md);
-  --comp-tabs-tab-font-size: var(--component-font-size-caption);
+  --comp-tabs-tab-min-block: var(--comp-tabs-tab-min-block-sm);
+  --comp-tabs-tab-padding-inline: var(--comp-tabs-tab-padding-inline-sm);
+  --comp-tabs-tab-font-size: var(--comp-tabs-tab-font-size-sm);
 }
 
 .tabs[data-density="lg"] {
-  --comp-tabs-tab-min-block: calc(var(--component-density-control-height) + var(--component-space-sm));
-  --comp-tabs-tab-padding-inline: var(--component-space-xl);
-  --comp-tabs-tab-font-size: var(--component-font-size-body);
+  --comp-tabs-tab-min-block: var(--comp-tabs-tab-min-block-lg);
+  --comp-tabs-tab-padding-inline: var(--comp-tabs-tab-padding-inline-lg);
+  --comp-tabs-tab-font-size: var(--comp-tabs-tab-font-size-lg);
 }
 
 .tabs__tab:focus-visible {
@@ -3401,6 +3977,7 @@ button.tag:disabled,
 .tooltip {
   --comp-tooltip-bubble-bg: var(--component-energy-text-primary);
   --comp-tooltip-bubble-fg: var(--component-energy-surface-primary);
+  --comp-tooltip-bubble-depth: var(--component-depth-tooltip);
   --comp-tooltip-focus-color: var(--component-color-focus);
   --comp-tooltip-trigger-bg: var(--component-color-surface);
   --comp-tooltip-trigger-border: var(--component-color-border);
@@ -3437,6 +4014,7 @@ button.tag:disabled,
   --comp-tooltip-bubble-font-size: var(--comp-tooltip-bubble-font-size-md);
   --comp-tooltip-bubble-min-inline: var(--comp-tooltip-bubble-min-inline-md);
   --comp-tooltip-bubble-radius: var(--component-radius-surface);
+  --comp-tooltip-bubble-z-index: var(--component-overlay-panel-z-index);
   --comp-tooltip-bubble-weight: var(--component-font-weight-medium);
   --comp-tooltip-bubble-placement-gap: var(--component-frame-gap-element);
   --comp-tooltip-bubble-viewport-gap: var(--component-frame-gap-component-lg);
@@ -3458,6 +4036,7 @@ button.tag:disabled,
   background: var(--comp-tooltip-trigger-bg);
   border: var(--component-border-width) solid var(--comp-tooltip-trigger-border);
   border-radius: var(--component-radius-pill);
+  box-sizing: border-box;
   color: var(--comp-tooltip-trigger-fg);
   cursor: help;
   font: inherit;
@@ -3505,7 +4084,8 @@ button.tag:disabled,
 .tooltip__bubble {
   background: var(--comp-tooltip-bubble-bg);
   border-radius: var(--comp-tooltip-bubble-radius);
-  box-shadow: var(--component-depth-tooltip);
+  box-shadow: var(--comp-tooltip-bubble-depth);
+  box-sizing: border-box;
   color: var(--comp-tooltip-bubble-fg);
   display: block;
   font-size: var(--comp-tooltip-bubble-font-size);
@@ -3527,7 +4107,7 @@ button.tag:disabled,
   visibility: hidden;
   white-space: normal;
   overflow-wrap: break-word;
-  z-index: var(--component-z-dropdown);
+  z-index: var(--comp-tooltip-bubble-z-index);
 }
 
 .tooltip__bubble::before {
@@ -3766,8 +4346,8 @@ button.tag:disabled,
 .toast .toast__action {
   min-block-size: var(--comp-toast-action-size);
   padding-inline: var(--comp-toast-action-padding-inline);
-  background: transparent;
-  border-color: transparent;
+  background: var(--component-surface-transparent);
+  border-color: var(--component-border-transparent);
   color: var(--comp-toast-action-fg);
   white-space: nowrap;
 }
@@ -4190,7 +4770,7 @@ button.tag:disabled,
 
 .progress__meter {
   appearance: none;
-  background: transparent;
+  background: var(--component-surface-transparent);
   border-radius: inherit;
   border: 0;
   block-size: 100%;
@@ -4200,7 +4780,7 @@ button.tag:disabled,
 }
 
 .progress__meter::-webkit-progress-bar {
-  background: transparent;
+  background: var(--component-surface-transparent);
   border-radius: inherit;
 }
 
@@ -4495,6 +5075,7 @@ button.tag:disabled,
 .slider__control {
   align-items: center;
   block-size: var(--comp-slider-touch-size);
+  box-sizing: border-box;
   display: flex;
   position: relative;
 }
@@ -4525,6 +5106,7 @@ button.tag:disabled,
   block-size: var(--comp-slider-thumb-size);
   border: var(--comp-slider-thumb-border-width) solid var(--comp-slider-state-color);
   border-radius: var(--comp-slider-thumb-radius);
+  box-sizing: border-box;
   box-shadow: var(--comp-slider-thumb-halo), var(--comp-slider-thumb-depth);
   inline-size: var(--comp-slider-thumb-size);
   inset-block-start: 50%;
@@ -5141,7 +5723,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   min-block-size: var(--comp-kpi-tile-min-block-size);
   padding: var(--comp-kpi-tile-padding);
   position: relative;
-  text-decoration: none;
+  text-decoration: var(--component-text-decoration-none);
   transition: var(--comp-kpi-tile-transition);
 }
 
@@ -5314,14 +5896,16 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   --comp-floating-action-button-inline-size: var(--component-inline-size-fit-content);
   --comp-floating-action-button-justify: var(--component-justify-center);
   --comp-floating-action-button-transition: background-color var(--comp-floating-action-button-motion-duration) var(--comp-floating-action-button-motion-ease), box-shadow var(--comp-floating-action-button-motion-duration) var(--comp-floating-action-button-motion-ease), transform var(--comp-floating-action-button-motion-duration) var(--comp-floating-action-button-motion-enter);
-  --comp-floating-action-button-accent-bg-hover: color-mix(in srgb, var(--component-color-success) 86%, var(--component-color-text));
   --comp-floating-action-button-active-transform: var(--component-transform-rest-quiet);
   --comp-floating-action-button-collapsed-padding-x: var(--component-frame-space-none);
   --comp-floating-action-button-disabled-cursor: var(--component-cursor-not-allowed);
   align-items: var(--comp-floating-action-button-align);
   background: var(--comp-floating-action-button-bg);
   border: var(--comp-floating-action-button-border);
+  border-color: var(--comp-floating-action-button-border-color);
   border-radius: var(--comp-floating-action-button-radius);
+  block-size: var(--comp-floating-action-button-size);
+  box-sizing: border-box;
   box-shadow: var(--comp-floating-action-button-shadow);
   color: var(--comp-floating-action-button-text);
   cursor: var(--comp-floating-action-button-cursor);
@@ -5348,14 +5932,75 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   --comp-floating-action-button-padding-x: var(--comp-floating-action-button-padding-x-lg);
 }
 
-.fab[data-variant="accent"] {
-  background: var(--comp-floating-action-button-accent-bg);
+.fab[data-variant="secondary"] {
+  --comp-floating-action-button-bg: var(--component-action-bg-secondary);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-secondary-hover);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-secondary-pressed);
+  --comp-floating-action-button-border: var(--component-border-width) solid var(--component-action-border-secondary);
+  --comp-floating-action-button-border-color: var(--component-action-border-secondary);
+  --comp-floating-action-button-shadow: var(--component-depth-raised-soft);
+  --comp-floating-action-button-text: var(--component-action-fg-secondary);
 }
 
-.fab[data-variant="mini"] {
-  --comp-floating-action-button-size: var(--comp-floating-action-button-mini-size);
-  --comp-floating-action-button-icon-size: var(--comp-floating-action-button-icon-size-sm);
-  --comp-floating-action-button-padding-x: var(--comp-floating-action-button-collapsed-padding-x);
+.fab[data-variant="tertiary"] {
+  --comp-floating-action-button-bg: var(--component-action-bg-tertiary);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-tertiary-hover);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-tertiary-pressed);
+  --comp-floating-action-button-border: var(--component-border-width) solid var(--component-action-border-tertiary);
+  --comp-floating-action-button-border-color: var(--component-action-border-tertiary);
+  --comp-floating-action-button-shadow: var(--component-depth-low);
+  --comp-floating-action-button-text: var(--component-action-fg-tertiary);
+}
+
+.fab[data-variant="outlined"] {
+  --comp-floating-action-button-bg: var(--component-action-bg-outlined);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-outlined);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-outlined-pressed);
+  --comp-floating-action-button-border: var(--component-border-width) solid var(--component-action-border-outlined);
+  --comp-floating-action-button-border-color: var(--component-action-border-outlined);
+  --comp-floating-action-button-shadow: var(--component-depth-none);
+  --comp-floating-action-button-text: var(--component-action-fg-outlined);
+}
+
+.fab[data-variant="ghost"] {
+  --comp-floating-action-button-bg: var(--component-action-bg-ghost);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-ghost-hover);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-ghost-pressed);
+  --comp-floating-action-button-border: var(--component-border-width) solid var(--component-action-border-ghost);
+  --comp-floating-action-button-border-color: var(--component-action-border-ghost);
+  --comp-floating-action-button-shadow: var(--component-depth-none);
+  --comp-floating-action-button-shadow-hover: var(--component-depth-none);
+  --comp-floating-action-button-text: var(--component-action-fg-ghost);
+}
+
+.fab[data-intent="danger"] {
+  --comp-floating-action-button-bg: var(--component-action-bg-danger);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-danger-hover);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-danger-pressed);
+  --comp-floating-action-button-text: var(--component-action-fg-danger);
+}
+
+.fab[data-intent="warning"] {
+  --comp-floating-action-button-bg: var(--component-action-bg-warning);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-warning-hover);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-warning-pressed);
+  --comp-floating-action-button-text: var(--component-action-fg-warning);
+}
+
+.fab[data-intent="danger"][data-variant="secondary"] {
+  --comp-floating-action-button-bg: var(--component-action-bg-danger-secondary);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-danger-secondary-hover);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-danger-secondary-pressed);
+  --comp-floating-action-button-border-color: var(--component-action-border-danger-secondary);
+  --comp-floating-action-button-text: var(--component-action-fg-danger-secondary);
+}
+
+.fab[data-intent="danger"][data-variant="outlined"] {
+  --comp-floating-action-button-bg: var(--component-action-bg-danger-secondary);
+  --comp-floating-action-button-bg-hover: var(--component-action-bg-danger-secondary-hover);
+  --comp-floating-action-button-bg-pressed: var(--component-action-bg-danger-secondary-pressed);
+  --comp-floating-action-button-border-color: var(--component-action-border-danger-secondary);
+  --comp-floating-action-button-text: var(--component-action-fg-danger-secondary);
 }
 
 .fab:hover:not(:disabled) {
@@ -5364,11 +6009,8 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   transform: var(--comp-floating-action-button-hover-transform);
 }
 
-.fab[data-variant="accent"]:hover:not(:disabled) {
-  background: var(--comp-floating-action-button-accent-bg-hover);
-}
-
 .fab:active:not(:disabled) {
+  background: var(--comp-floating-action-button-bg-pressed);
   transform: var(--comp-floating-action-button-active-transform);
 }
 
@@ -5378,6 +6020,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 }
 
 .fab[data-state="pressed"]:not(:disabled) {
+  background: var(--comp-floating-action-button-bg-pressed);
   transform: var(--comp-floating-action-button-press-transform);
 }
 
@@ -5399,9 +6042,17 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   outline-offset: var(--comp-floating-action-button-focus-offset);
 }
 
-.fab:disabled {
+.fab:disabled:not([data-state="loading"]) {
+  background: var(--comp-floating-action-button-disabled-bg);
+  border: var(--component-border-width) solid var(--comp-floating-action-button-disabled-border);
+  box-shadow: var(--comp-floating-action-button-disabled-shadow);
+  color: var(--comp-floating-action-button-disabled-text);
   cursor: var(--comp-floating-action-button-disabled-cursor);
   opacity: var(--comp-floating-action-button-disabled-opacity);
+}
+
+.fab[data-state="loading"] {
+  cursor: var(--component-loading-busy-cursor);
 }
 
 .breadcrumbs {
@@ -5419,10 +6070,19 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   --comp-breadcrumbs-target-display: var(--component-display-inline-flex);
   --comp-breadcrumbs-target-justify: var(--component-justify-center);
   --comp-breadcrumbs-target-decoration: var(--component-text-decoration-none);
-  --comp-breadcrumbs-target-block: var(--component-navigation-target-size-lg);
-  --comp-breadcrumbs-target-padding-inline: var(--component-space-xs);
-  --comp-breadcrumbs-target-radius: var(--component-radius-sm);
-  --comp-breadcrumbs-font-size: var(--component-font-size-small);
+  --comp-breadcrumbs-target-block-sm: var(--component-control-frame-size-sm);
+  --comp-breadcrumbs-target-block-md: var(--component-control-frame-size-md);
+  --comp-breadcrumbs-target-block-lg: var(--component-control-frame-size-lg);
+  --comp-breadcrumbs-target-block: var(--comp-breadcrumbs-target-block-md);
+  --comp-breadcrumbs-target-padding-inline-sm: var(--component-control-frame-padding-navigation-sm);
+  --comp-breadcrumbs-target-padding-inline-md: var(--component-control-frame-padding-navigation-md);
+  --comp-breadcrumbs-target-padding-inline-lg: var(--component-control-frame-padding-navigation-lg);
+  --comp-breadcrumbs-target-padding-inline: var(--comp-breadcrumbs-target-padding-inline-md);
+  --comp-breadcrumbs-target-radius: var(--component-control-frame-radius-navigation);
+  --comp-breadcrumbs-font-size-sm: var(--component-control-frame-font-size-sm);
+  --comp-breadcrumbs-font-size-md: var(--component-control-frame-font-size-md);
+  --comp-breadcrumbs-font-size-lg: var(--component-control-frame-font-size-lg);
+  --comp-breadcrumbs-font-size: var(--comp-breadcrumbs-font-size-md);
   --comp-breadcrumbs-target-fg: var(--component-color-text-muted);
   --comp-breadcrumbs-target-weight: var(--component-font-weight-extrabold);
   --comp-breadcrumbs-target-line-height: var(--component-line-height-tight);
@@ -5475,6 +6135,8 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 .breadcrumbs__target {
   align-items: var(--comp-breadcrumbs-target-align);
   border-radius: var(--comp-breadcrumbs-target-radius);
+  block-size: var(--comp-breadcrumbs-target-block);
+  box-sizing: border-box;
   color: var(--comp-breadcrumbs-target-fg);
   display: var(--comp-breadcrumbs-target-display);
   font-size: var(--comp-breadcrumbs-font-size);
@@ -5521,16 +6183,16 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 
 .breadcrumbs[data-variant="compact"],
 .breadcrumbs[data-density="sm"] {
-  --comp-breadcrumbs-target-block: var(--component-a11y-touch-target-min);
-  --comp-breadcrumbs-target-padding-inline: var(--component-space-xs);
-  --comp-breadcrumbs-font-size: var(--component-font-size-caption);
+  --comp-breadcrumbs-target-block: var(--comp-breadcrumbs-target-block-sm);
+  --comp-breadcrumbs-target-padding-inline: var(--comp-breadcrumbs-target-padding-inline-sm);
+  --comp-breadcrumbs-font-size: var(--comp-breadcrumbs-font-size-sm);
 }
 
 .breadcrumbs[data-variant="mobile"],
 .breadcrumbs[data-density="lg"] {
-  --comp-breadcrumbs-target-block: var(--component-navigation-target-size-lg);
-  --comp-breadcrumbs-target-padding-inline: var(--component-space-sm);
-  --comp-breadcrumbs-font-size: var(--component-font-size-label);
+  --comp-breadcrumbs-target-block: var(--comp-breadcrumbs-target-block-lg);
+  --comp-breadcrumbs-target-padding-inline: var(--comp-breadcrumbs-target-padding-inline-lg);
+  --comp-breadcrumbs-font-size: var(--comp-breadcrumbs-font-size-lg);
 }
 
 .breadcrumbs[data-state="focus"] a.breadcrumbs__target:first-of-type {
@@ -5557,18 +6219,25 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   --comp-pagination-button-display: var(--component-display-inline-flex);
   --comp-pagination-button-justify: var(--component-justify-center);
   --comp-pagination-current-cursor: var(--component-cursor-default);
-  --comp-pagination-size: var(--component-navigation-target-size-md);
-  --comp-pagination-size-sm: var(--component-navigation-target-size-sm);
-  --comp-pagination-size-lg: var(--component-navigation-target-size-lg);
+  --comp-pagination-size-sm: var(--component-control-frame-size-sm);
+  --comp-pagination-size-md: var(--component-control-frame-size-md);
+  --comp-pagination-size-lg: var(--component-control-frame-size-lg);
+  --comp-pagination-size: var(--comp-pagination-size-md);
   --comp-pagination-gap: var(--component-space-xs);
-  --comp-pagination-radius: var(--component-radius-pill);
+  --comp-pagination-radius: var(--component-control-frame-radius-action);
   --comp-pagination-cursor: var(--component-cursor-pointer);
   --comp-pagination-disabled-cursor: var(--component-cursor-default);
   --comp-pagination-fg: var(--component-color-text-subtle);
   --comp-pagination-font-family: var(--component-font-family-mono);
-  --comp-pagination-font-size: var(--component-font-size-small);
+  --comp-pagination-font-size-sm: var(--component-control-frame-font-size-sm);
+  --comp-pagination-font-size-md: var(--component-control-frame-font-size-md);
+  --comp-pagination-font-size-lg: var(--component-control-frame-font-size-lg);
+  --comp-pagination-font-size: var(--comp-pagination-font-size-md);
   --comp-pagination-font-weight: var(--component-font-weight-semibold);
-  --comp-pagination-padding-inline: var(--component-space-sm);
+  --comp-pagination-padding-inline-sm: var(--component-control-frame-padding-action-sm);
+  --comp-pagination-padding-inline-md: var(--component-control-frame-padding-action-md);
+  --comp-pagination-padding-inline-lg: var(--component-control-frame-padding-action-lg);
+  --comp-pagination-padding-inline: var(--comp-pagination-padding-inline-md);
   --comp-pagination-hover-bg: var(--component-color-surface-muted);
   --comp-pagination-hover-fg: var(--component-color-text);
   --comp-pagination-focus-width: var(--component-focus-ring-width);
@@ -5615,6 +6284,8 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   font-size: var(--comp-pagination-font-size);
   font-weight: var(--comp-pagination-font-weight);
   justify-content: var(--comp-pagination-button-justify);
+  block-size: var(--comp-pagination-size);
+  box-sizing: border-box;
   min-block-size: var(--comp-pagination-size);
   min-inline-size: var(--comp-pagination-size);
   padding-inline: var(--comp-pagination-padding-inline);
@@ -5678,13 +6349,15 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 .pagination[data-density="sm"] {
   --comp-pagination-size: var(--comp-pagination-size-sm);
   --comp-pagination-gap: var(--component-focus-ring-offset);
-  --comp-pagination-padding-inline: var(--component-space-xs);
+  --comp-pagination-font-size: var(--comp-pagination-font-size-sm);
+  --comp-pagination-padding-inline: var(--comp-pagination-padding-inline-sm);
 }
 
 .pagination[data-density="lg"] {
   --comp-pagination-size: var(--comp-pagination-size-lg);
   --comp-pagination-gap: var(--component-space-sm);
-  --comp-pagination-padding-inline: var(--component-space-md);
+  --comp-pagination-font-size: var(--comp-pagination-font-size-lg);
+  --comp-pagination-padding-inline: var(--comp-pagination-padding-inline-lg);
 }
 
 @keyframes pagination-current-enter {
@@ -6210,8 +6883,8 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 
 .card[data-variant="minimal"] {
   --comp-card-current-gap: var(--comp-card-minimal-gap);
-  background: transparent;
-  border-color: transparent;
+  background: var(--component-surface-transparent);
+  border-color: var(--component-border-transparent);
   box-shadow: none;
 }
 
@@ -6222,7 +6895,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 
 .card[data-variant="minimal"] .card__icon {
   align-self: start;
-  background: transparent;
+  background: var(--component-surface-transparent);
   color: var(--comp-card-minimal-icon-fg);
   font-size: var(--comp-card-minimal-icon-size);
   inline-size: var(--comp-card-minimal-icon-size);
@@ -6505,6 +7178,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   background: var(--comp-dialog-panel-bg);
   border: var(--comp-dialog-panel-border-width) solid var(--comp-dialog-panel-border);
   border-radius: var(--comp-dialog-panel-radius);
+  box-sizing: border-box;
   box-shadow: var(--comp-dialog-panel-depth);
   color: var(--comp-dialog-panel-color);
   animation: dialog-enter var(--comp-dialog-enter-duration) var(--comp-dialog-enter-ease) both;
@@ -6631,32 +7305,44 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 
 .menu {
   --comp-menu-gap: var(--component-space-xs);
-  --comp-menu-panel-bg: var(--component-color-surface);
+  --comp-menu-panel-bg: var(--component-listbox-bg);
   --comp-menu-panel-border-width: var(--component-border-width);
-  --comp-menu-panel-border: var(--component-color-border);
+  --comp-menu-panel-border: var(--component-listbox-border);
   --comp-menu-panel-fg: var(--component-color-text);
   --comp-menu-panel-min-inline: var(--component-menu-panel-min-inline-md);
-  --comp-menu-panel-padding: var(--component-space-xs);
-  --comp-menu-panel-radius: var(--component-radius-surface);
-  --comp-menu-panel-depth: var(--component-depth-popover);
-  --comp-menu-panel-offset: var(--component-space-xs);
-  --comp-menu-panel-z-index: var(--component-z-overlay);
-  --comp-menu-panel-gap: var(--component-space-xs);
+  --comp-menu-panel-padding: var(--component-listbox-padding);
+  --comp-menu-panel-radius: var(--component-listbox-radius);
+  --comp-menu-panel-depth: var(--component-listbox-depth);
+  --comp-menu-panel-offset: var(--component-listbox-offset);
+  --comp-menu-panel-z-index: var(--component-overlay-panel-z-index);
+  --comp-menu-panel-gap: var(--component-listbox-gap);
   --comp-menu-item-bg: var(--component-surface-transparent);
-  --comp-menu-item-fg: var(--component-color-text);
-  --comp-menu-item-hover-bg: var(--component-color-surface-muted);
+  --comp-menu-item-fg: var(--component-option-row-color);
+  --comp-menu-item-hover-bg: var(--component-option-row-hover-bg);
+  --comp-menu-item-active-bg: var(--component-option-row-active-bg);
+  --comp-menu-item-active-ring: var(--component-option-row-active-ring);
   --comp-menu-item-danger-fg: var(--component-color-danger);
   --comp-menu-item-danger-hover-bg: color-mix(in srgb, var(--component-color-danger) 10%, var(--component-color-surface));
-  --comp-menu-item-disabled-fg: var(--component-color-text-muted);
-  --comp-menu-item-disabled-opacity: var(--component-opacity-disabled);
-  --comp-menu-item-height: var(--component-option-min-block-size);
-  --comp-menu-item-padding-x: var(--component-space-sm);
-  --comp-menu-item-radius: var(--component-radius-sm);
-  --comp-menu-item-gap: var(--component-space-xs);
+  --comp-menu-item-disabled-bg: var(--component-option-row-disabled-bg);
+  --comp-menu-item-disabled-fg: var(--component-option-row-disabled-color);
+  --comp-menu-item-disabled-opacity: var(--component-option-row-disabled-opacity);
+  --comp-menu-item-height-sm: var(--component-option-row-min-block-size-sm);
+  --comp-menu-item-height-md: var(--component-option-row-min-block-size-md);
+  --comp-menu-item-height-lg: var(--component-option-row-min-block-size-lg);
+  --comp-menu-item-height: var(--comp-menu-item-height-md);
+  --comp-menu-item-padding-x-sm: var(--component-option-row-padding-inline-sm);
+  --comp-menu-item-padding-x-md: var(--component-option-row-padding-inline-md);
+  --comp-menu-item-padding-x-lg: var(--component-option-row-padding-inline-lg);
+  --comp-menu-item-padding-x: var(--comp-menu-item-padding-x-md);
+  --comp-menu-item-radius: var(--component-option-row-radius);
+  --comp-menu-item-gap: var(--component-listbox-gap);
   --comp-menu-item-font-family: var(--component-font-family-inherit);
   --comp-menu-item-font-size: var(--component-font-size-label);
   --comp-menu-item-font-weight: var(--component-font-weight-semibold);
-  --comp-menu-item-icon-size: var(--component-icon-size-sm);
+  --comp-menu-item-icon-size-sm: var(--component-density-icon-size-sm);
+  --comp-menu-item-icon-size-md: var(--component-density-icon-size-md);
+  --comp-menu-item-icon-size-lg: var(--component-density-icon-size-lg);
+  --comp-menu-item-icon-size: var(--comp-menu-item-icon-size-md);
   --comp-menu-item-icon-family: var(--component-font-family-icon);
   --comp-menu-item-icon-weight: var(--component-font-weight-regular);
   --comp-menu-item-shortcut-fg: var(--component-color-text-muted);
@@ -6690,26 +7376,26 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 
 .menu[data-density="sm"] {
   --comp-menu-panel-min-inline: var(--component-menu-panel-min-inline-sm);
-  --comp-menu-panel-padding: calc(var(--component-space-xs) / 2);
-  --comp-menu-panel-radius: var(--component-radius-md);
-  --comp-menu-item-height: var(--component-inline-size-md);
-  --comp-menu-item-padding-x: var(--component-space-xs);
-  --comp-menu-item-radius: var(--component-radius-sm);
-  --comp-menu-item-gap: calc(var(--component-space-xs) / 2);
+  --comp-menu-panel-padding: var(--component-listbox-padding);
+  --comp-menu-panel-radius: var(--component-listbox-radius);
+  --comp-menu-item-height: var(--comp-menu-item-height-sm);
+  --comp-menu-item-padding-x: var(--comp-menu-item-padding-x-sm);
+  --comp-menu-item-radius: var(--component-option-row-radius);
+  --comp-menu-item-gap: var(--component-listbox-gap);
   --comp-menu-item-font-size: var(--component-font-size-small);
-  --comp-menu-item-icon-size: var(--component-icon-size-sm);
+  --comp-menu-item-icon-size: var(--comp-menu-item-icon-size-sm);
 }
 
 .menu[data-density="lg"] {
   --comp-menu-panel-min-inline: var(--component-menu-panel-min-inline-lg);
   --comp-menu-panel-padding: var(--component-space-sm);
-  --comp-menu-panel-radius: var(--component-radius-surface);
-  --comp-menu-item-height: var(--component-inline-size-lg);
-  --comp-menu-item-padding-x: var(--component-space-md);
-  --comp-menu-item-radius: var(--component-radius-md);
-  --comp-menu-item-gap: var(--component-space-sm);
+  --comp-menu-panel-radius: var(--component-listbox-radius);
+  --comp-menu-item-height: var(--comp-menu-item-height-lg);
+  --comp-menu-item-padding-x: var(--comp-menu-item-padding-x-lg);
+  --comp-menu-item-radius: var(--component-option-row-radius);
+  --comp-menu-item-gap: var(--component-option-row-gap);
   --comp-menu-item-font-size: var(--component-font-size-body);
-  --comp-menu-item-icon-size: var(--component-icon-size-md);
+  --comp-menu-item-icon-size: var(--comp-menu-item-icon-size-lg);
 }
 
 .menu__panel {
@@ -6717,6 +7403,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   background: var(--comp-menu-panel-bg);
   border: var(--comp-menu-panel-border-width) solid var(--comp-menu-panel-border);
   border-radius: var(--comp-menu-panel-radius);
+  box-sizing: border-box;
   box-shadow: var(--comp-menu-panel-depth);
   color: var(--comp-menu-panel-fg);
   display: grid;
@@ -6777,6 +7464,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   background: var(--comp-menu-item-bg);
   border: 0;
   border-radius: var(--comp-menu-item-radius);
+  box-sizing: border-box;
   color: var(--comp-menu-item-fg);
   cursor: pointer;
   display: grid;
@@ -6794,8 +7482,19 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 }
 
 .menu__item:hover,
-.menu__item:focus-visible {
+.menu__item:focus-visible,
+.menu__item[data-active="true"] {
   background: var(--comp-menu-item-hover-bg);
+}
+
+.menu__item:focus-visible {
+  outline: var(--component-focus-ring-width) solid var(--comp-menu-item-active-ring);
+  outline-offset: calc(var(--component-focus-ring-offset) * -1);
+}
+
+.menu__item[data-active="true"] {
+  outline: var(--component-focus-ring-width) solid var(--comp-menu-item-active-ring);
+  outline-offset: calc(var(--component-focus-ring-offset) * -1);
 }
 
 .menu__item:hover {
@@ -6812,6 +7511,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 }
 
 .menu__item:disabled {
+  background: var(--comp-menu-item-disabled-bg);
   color: var(--comp-menu-item-disabled-fg);
   cursor: not-allowed;
   opacity: var(--comp-menu-item-disabled-opacity);
@@ -6863,6 +7563,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   background: var(--comp-drawer-panel-bg);
   border: var(--comp-drawer-panel-border-width) solid var(--comp-drawer-panel-border);
   border-radius: var(--comp-drawer-panel-radius);
+  box-sizing: border-box;
   box-shadow: var(--comp-drawer-panel-depth);
   color: var(--comp-drawer-panel-color);
   animation: drawer-enter var(--comp-drawer-enter-duration) var(--comp-drawer-enter-ease);
@@ -7089,7 +7790,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 
 .table__sort {
   align-items: center;
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: 0;
   color: inherit;
   cursor: pointer;
@@ -7137,7 +7838,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 
 .table__expander {
   align-items: center;
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: 0;
   color: var(--comp-table-expander-fg);
   cursor: pointer;
@@ -7355,9 +8056,12 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 
 .biometric-prompt__icon {
   background: var(--comp-biometric-prompt-icon-bg);
+  block-size: var(--comp-biometric-prompt-icon-size);
   border-radius: var(--comp-biometric-prompt-icon-radius);
+  box-sizing: border-box;
   color: var(--comp-biometric-prompt-icon-fg);
   font-size: var(--comp-biometric-prompt-icon-font-size);
+  inline-size: var(--comp-biometric-prompt-icon-size);
   min-block-size: var(--comp-biometric-prompt-icon-size);
   min-inline-size: var(--comp-biometric-prompt-icon-size);
   position: relative;
@@ -7417,7 +8121,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
 .biometric-prompt[data-state="authenticating"] .biometric-prompt__icon::after {
   animation: spinner-spin var(--comp-biometric-prompt-motion-loop-duration) var(--comp-biometric-prompt-motion-linear) infinite;
   border: var(--comp-biometric-prompt-ring-border-width) solid var(--comp-biometric-prompt-ring-border-color);
-  border-block-start-color: transparent;
+  border-block-start-color: var(--component-surface-transparent);
   border-radius: var(--comp-biometric-prompt-icon-radius);
   content: "";
   inset: var(--comp-biometric-prompt-ring-inset);
@@ -7493,7 +8197,7 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   --comp-tree-view-motion-duration: var(--component-duration-medium);
   --comp-tree-view-motion-ease: var(--component-ease-move);
   --comp-tree-view-chevron-ease: var(--component-ease-press);
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -7519,16 +8223,13 @@ body[data-contrast="quiet"] .slider:focus-within .slider__value {
   --comp-tree-view-icon-size: var(--comp-tree-view-icon-size-lg);
 }
 
-body[data-contrast="quiet"] .tree-view {
-  --comp-tree-view-selected-text: color-mix(in srgb, var(--component-color-action) 55%, var(--component-color-text));
-}
-
 .tree-view__control,
 .button.tree-view__control,
 .tree-view .button.tree-view__control {
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: var(--comp-tree-view-control-border-width) solid transparent;
   border-radius: var(--comp-tree-view-control-radius);
+  box-sizing: border-box;
   box-shadow: none;
   color: var(--comp-tree-view-control-text);
   font-weight: var(--comp-tree-view-control-weight);
@@ -8251,6 +8952,11 @@ body[data-contrast="quiet"] .motion-boundary[data-variant="route"] .motion-bound
   .dialog__panel,
   .menu__panel,
   .drawer__panel,
+  .field-control__helper,
+  .field__helper,
+  .field__icon,
+  .inline-validation__message,
+  .inline-validation__message::before,
   .code-input__control,
   .code-input__digit,
   .biometric-prompt__icon,
@@ -8305,6 +9011,14 @@ body[data-contrast="quiet"] .motion-boundary[data-variant="route"] .motion-bound
   --comp-inline-validation-icon-size: var(--component-font-size-small);
   --comp-inline-validation-icon-weight: var(--component-font-weight-semibold);
   --comp-inline-validation-icon-line-height: var(--component-line-height-none);
+  --comp-inline-validation-message-motion-duration: var(--component-duration-state);
+  --comp-inline-validation-message-motion-ease: var(--component-ease-enter);
+  --comp-inline-validation-message-enter-transform: translateY(var(--component-translate-message-enter));
+  --comp-inline-validation-message-rest-transform: var(--component-transform-rest);
+  --comp-inline-validation-icon-motion-duration: var(--component-duration-snappy);
+  --comp-inline-validation-icon-motion-ease: var(--component-ease-enter);
+  --comp-inline-validation-icon-enter-transform: var(--component-transform-scale-enter);
+  --comp-inline-validation-icon-rest-transform: var(--component-transform-scale-rest);
   --comp-inline-validation-error-icon: "error";
   --comp-inline-validation-success-icon: "check_circle";
   --comp-inline-validation-warning-icon: "warning";
@@ -8324,13 +9038,6 @@ body[data-contrast="quiet"] .motion-boundary[data-variant="route"] .motion-bound
 .inline-validation[data-state="warning"] { --comp-inline-validation-tone: var(--comp-inline-validation-warning); }
 .inline-validation[data-state="error"] { --comp-inline-validation-tone: var(--comp-inline-validation-danger); }
 .inline-validation[data-state="disabled"] { --comp-inline-validation-tone: var(--comp-inline-validation-disabled); }
-
-body[data-contrast="quiet"] .inline-validation {
-  --comp-inline-validation-info: color-mix(in srgb, var(--component-color-action) 55%, var(--component-color-text));
-  --comp-inline-validation-success: color-mix(in srgb, var(--component-color-success) 55%, var(--component-color-text));
-  --comp-inline-validation-warning: color-mix(in srgb, var(--component-color-warning) 55%, var(--component-color-text));
-  --comp-inline-validation-danger: color-mix(in srgb, var(--component-energy-status-error) 55%, var(--component-color-text));
-}
 
 .inline-validation .field {
   inline-size: var(--comp-inline-validation-field-width);
@@ -8373,6 +9080,7 @@ body[data-contrast="quiet"] .inline-validation {
 
 .inline-validation__message {
   align-items: var(--comp-inline-validation-message-align);
+  animation: inline-validation-message-enter var(--comp-inline-validation-message-motion-duration) var(--component-ease-enter) both;
   color: var(--comp-inline-validation-tone);
   display: var(--comp-inline-validation-message-display);
   font-size: var(--comp-inline-validation-message-size);
@@ -8381,6 +9089,10 @@ body[data-contrast="quiet"] .inline-validation {
   line-height: var(--comp-inline-validation-message-line-height);
   margin: var(--comp-inline-validation-message-margin);
   min-block-size: var(--comp-inline-validation-message-min-block);
+  transition:
+    color var(--component-duration-state) var(--component-ease-state),
+    opacity var(--comp-inline-validation-message-motion-duration) var(--comp-inline-validation-message-motion-ease),
+    transform var(--comp-inline-validation-message-motion-duration) var(--comp-inline-validation-message-motion-ease);
 }
 
 .inline-validation[data-field="false"] .inline-validation__message {
@@ -8388,11 +9100,36 @@ body[data-contrast="quiet"] .inline-validation {
 }
 
 .inline-validation__message::before {
+  animation: inline-validation-icon-enter var(--comp-inline-validation-icon-motion-duration) var(--component-ease-enter) both;
   content: var(--comp-inline-validation-icon-content);
   font-family: var(--comp-inline-validation-icon-family);
   font-size: var(--comp-inline-validation-icon-size);
   font-weight: var(--comp-inline-validation-icon-weight);
   line-height: var(--comp-inline-validation-icon-line-height);
+}
+
+@keyframes inline-validation-message-enter {
+  from {
+    opacity: 0;
+    transform: var(--comp-inline-validation-message-enter-transform);
+  }
+
+  to {
+    opacity: 1;
+    transform: var(--comp-inline-validation-message-rest-transform);
+  }
+}
+
+@keyframes inline-validation-icon-enter {
+  from {
+    opacity: 0;
+    transform: var(--comp-inline-validation-icon-enter-transform);
+  }
+
+  to {
+    opacity: 1;
+    transform: var(--comp-inline-validation-icon-rest-transform);
+  }
 }
 
 .inline-validation[data-state="error"] .inline-validation__message {
@@ -8520,14 +9257,17 @@ body[data-contrast="quiet"] .inline-validation {
 .stepper__marker {
   align-items: center;
   background: var(--comp-stepper-marker-bg);
+  block-size: var(--comp-stepper-marker-size);
   border: var(--comp-stepper-marker-border-width) solid var(--comp-stepper-marker-border);
   border-radius: var(--comp-stepper-marker-radius);
+  box-sizing: border-box;
   color: var(--comp-stepper-marker-fg);
   display: inline-flex;
   flex: none;
   font-family: var(--comp-stepper-marker-font-family);
   font-size: var(--comp-stepper-marker-font-size);
   font-weight: var(--comp-stepper-marker-font-weight);
+  inline-size: var(--comp-stepper-marker-size);
   justify-content: center;
   min-block-size: var(--comp-stepper-marker-size);
   min-inline-size: var(--comp-stepper-marker-size);
@@ -8905,7 +9645,7 @@ body[data-contrast="quiet"] .inline-validation {
 }
 
 .route-summary[data-variant="compact"] .route-summary__icon {
-  background: transparent;
+  background: var(--component-surface-transparent);
   block-size: auto;
   border-radius: 0;
   color: var(--comp-route-summary-tone);
@@ -9163,9 +9903,9 @@ body[data-contrast="quiet"] .route-summary__icon {
 }
 
 .chart-panel__hit-dot {
-  fill: transparent;
+  fill: var(--component-surface-transparent);
   outline: var(--comp-chart-panel-outline-reset);
-  stroke: transparent;
+  stroke: var(--component-surface-transparent);
 }
 
 .chart-panel__grid-line {
@@ -9328,7 +10068,7 @@ body[data-contrast="quiet"] .route-summary__icon {
 
 .chart-panel__comparison-group {
   align-items: end;
-  background: transparent;
+  background: var(--component-surface-transparent);
   block-size: 100%;
   border-radius: var(--component-radius-sm);
   display: inline-flex;
@@ -9620,11 +10360,6 @@ body[data-contrast="quiet"] .route-summary__icon {
   --comp-station-pin-marker-fg: var(--component-map-pin-cluster-foreground);
 }
 
-body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
-  --comp-station-pin-fg: var(--component-color-surface);
-  --comp-station-pin-marker-fg: var(--component-color-surface);
-}
-
 .station-pin:hover,
 .station-pin[data-state="hover"] {
   border-color: var(--comp-station-pin-hover-border);
@@ -9796,10 +10531,10 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 
 .code-input .code-input__input {
   appearance: none;
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: 0;
-  color: transparent;
-  caret-color: transparent;
+  color: var(--component-surface-transparent);
+  caret-color: var(--component-surface-transparent);
   font-size: var(--comp-code-input-input-font-size);
   inset: 0;
   opacity: var(--component-input-ghost-opacity);
@@ -9823,6 +10558,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   background: var(--comp-code-input-bg);
   border: var(--component-border-width) solid var(--comp-code-input-border);
   border-radius: var(--comp-code-input-radius);
+  box-sizing: border-box;
   color: var(--comp-code-input-fg);
   display: inline-flex;
   font-family: var(--comp-code-input-font-family);
@@ -9964,15 +10700,25 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   --comp-select-control-size-md: var(--component-field-control-size-md);
   --comp-select-control-size-sm: var(--component-field-control-size-sm);
   --comp-select-control-size-lg: var(--component-field-control-size-lg);
-  --comp-select-control-size: var(--component-density-control-height);
-  --comp-select-icon-size-md: var(--component-icon-size-md);
-  --comp-select-icon-size-sm: var(--component-icon-size-sm-plus);
-  --comp-select-icon-size-lg: var(--component-font-size-icon-md);
-  --comp-select-icon-size: var(--component-icon-size-md);
+  --comp-select-control-size: var(--comp-select-control-size-md);
+  --comp-select-icon-size-md: var(--component-density-icon-size-md);
+  --comp-select-icon-size-sm: var(--component-density-icon-size-sm);
+  --comp-select-icon-size-lg: var(--component-density-icon-size-lg);
+  --comp-select-icon-size: var(--component-density-icon-size-md);
   --comp-select-gap: var(--component-field-gap);
-  --comp-select-padding-start: var(--component-space-lg);
-  --comp-select-padding-end: calc(var(--component-space-lg) - var(--component-frame-space-micro));
+  --comp-select-padding-start-sm: var(--component-control-frame-padding-field-sm);
+  --comp-select-padding-start-md: var(--component-control-frame-padding-field-md);
+  --comp-select-padding-start-lg: var(--component-control-frame-padding-field-lg);
+  --comp-select-padding-start: var(--comp-select-padding-start-md);
+  --comp-select-padding-end-sm: calc(var(--component-control-frame-padding-field-sm) - var(--component-frame-space-micro));
+  --comp-select-padding-end-md: calc(var(--component-control-frame-padding-field-md) - var(--component-frame-space-micro));
+  --comp-select-padding-end-lg: calc(var(--component-control-frame-padding-field-lg) - var(--component-frame-space-micro));
+  --comp-select-padding-end: var(--comp-select-padding-end-md);
   --comp-select-inline-padding-end: var(--component-space-sm);
+  --comp-select-font-size-sm: var(--component-control-frame-font-size-sm);
+  --comp-select-font-size-md: var(--component-control-frame-font-size-md);
+  --comp-select-font-size-lg: var(--component-control-frame-font-size-lg);
+  --comp-select-font-size: var(--comp-select-font-size-md);
   --comp-select-bg: var(--component-color-surface);
   --comp-select-border: var(--component-color-border);
   --comp-select-fg: var(--component-color-text);
@@ -9984,6 +10730,11 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   --comp-select-focus-ring: color-mix(in srgb, var(--component-color-action) 35%, transparent);
   --comp-select-error-border: var(--component-color-danger);
   --comp-select-error-bg: color-mix(in srgb, var(--component-color-danger) 8%, var(--component-color-surface));
+  --comp-select-loading-bg: color-mix(in srgb, var(--component-color-action) 7%, var(--component-color-surface));
+  --comp-select-loading-border: color-mix(in srgb, var(--component-color-action) 36%, var(--component-color-border));
+  --comp-select-loading-icon-color: var(--component-color-action);
+  --comp-select-loading-icon-duration: var(--component-duration-loading-spin);
+  --comp-select-loading-icon-ease: var(--component-loading-easing-linear);
   --comp-select-chevron-size: calc(var(--component-font-size-title-md) + var(--component-frame-space-micro));
   --comp-select-chevron-color: var(--component-color-text-muted);
   --comp-select-chevron-family: var(--component-font-family-icon);
@@ -9993,27 +10744,44 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   --comp-select-chevron-motion-ease: var(--component-ease-press);
   --comp-select-overlay-motion-duration: var(--component-duration-state);
   --comp-select-overlay-motion-ease: var(--component-ease-enter);
-  --comp-select-listbox-gap: var(--component-space-2xs);
-  --comp-select-listbox-padding: var(--component-space-xs);
-  --comp-select-listbox-radius: var(--component-radius-control);
-  --comp-select-listbox-bg: var(--component-color-surface);
-  --comp-select-listbox-border: var(--component-color-border);
+  --comp-select-listbox-gap: var(--component-listbox-gap);
+  --comp-select-listbox-padding: var(--component-listbox-padding);
+  --comp-select-listbox-radius: var(--component-listbox-radius);
+  --comp-select-listbox-bg: var(--component-listbox-bg);
+  --comp-select-listbox-border: var(--component-listbox-border);
   --comp-select-listbox-inline: min(100%, calc(100vw - (var(--component-space-md) * 2)));
-  --comp-select-listbox-offset: var(--component-space-xs);
-  --comp-select-listbox-depth: var(--component-depth-popover);
-  --comp-select-listbox-max-block-size: var(--component-content-size-lg);
-  --comp-select-listbox-open-opacity: var(--component-opacity-visible);
-  --comp-select-option-gap: var(--component-space-sm);
-  --comp-select-option-min-size: var(--component-option-min-block-size);
-  --comp-select-option-padding-x: var(--component-space-sm);
-  --comp-select-option-radius: calc(var(--component-radius-control) - var(--component-frame-space-micro));
-  --comp-select-option-color: var(--component-color-text);
-  --comp-select-option-hover-bg: color-mix(in srgb, var(--component-color-action) 9%, transparent);
-  --comp-select-option-selected-bg: color-mix(in srgb, var(--component-color-action) 12%, var(--component-color-surface));
-  --comp-select-option-selected-weight: var(--component-font-weight-semibold);
+  --comp-select-listbox-offset: var(--component-listbox-offset);
+  --comp-select-listbox-depth: var(--component-listbox-depth);
+  --comp-select-listbox-max-block-size: var(--component-listbox-max-block-size);
+  --comp-select-listbox-open-opacity: var(--component-listbox-open-opacity);
+  --comp-select-option-gap: var(--component-option-row-gap);
+  --comp-select-option-min-size-sm: var(--component-option-row-min-block-size-sm);
+  --comp-select-option-min-size-md: var(--component-option-row-min-block-size-md);
+  --comp-select-option-min-size-lg: var(--component-option-row-min-block-size-lg);
+  --comp-select-option-min-size: var(--comp-select-option-min-size-md);
+  --comp-select-option-padding-x-sm: var(--component-option-row-padding-inline-sm);
+  --comp-select-option-padding-x-md: var(--component-option-row-padding-inline-md);
+  --comp-select-option-padding-x-lg: var(--component-option-row-padding-inline-lg);
+  --comp-select-option-padding-x: var(--comp-select-option-padding-x-md);
+  --comp-select-option-radius: var(--component-option-row-radius);
+  --comp-select-option-color: var(--component-option-row-color);
+  --comp-select-option-hover-bg: var(--component-option-row-hover-bg);
+  --comp-select-option-active-bg: var(--component-option-row-active-bg);
+  --comp-select-option-active-ring: var(--component-option-row-active-ring);
+  --comp-select-option-selected-bg: var(--component-option-row-selected-bg);
+  --comp-select-option-selected-color: var(--component-option-row-selected-color);
+  --comp-select-option-selected-weight: var(--component-option-row-selected-weight);
+  --comp-select-option-disabled-bg: var(--component-option-row-disabled-bg);
+  --comp-select-option-disabled-color: var(--component-option-row-disabled-color);
+  --comp-select-option-disabled-opacity: var(--component-option-row-disabled-opacity);
   --comp-select-option-check-family: var(--component-font-family-icon);
+  --comp-select-option-check-size-sm: var(--component-option-row-check-size-sm);
+  --comp-select-option-check-size-md: var(--component-option-row-check-size-md);
+  --comp-select-option-check-size-lg: var(--component-option-row-check-size-lg);
+  --comp-select-option-check-size: var(--comp-select-option-check-size-md);
   --comp-select-option-check-weight: var(--component-font-weight-medium);
   --comp-select-option-check-visible-opacity: var(--component-opacity-visible);
+  --comp-select-option-check-hidden-opacity: var(--component-opacity-hidden);
   --comp-select-current-control-size: var(--comp-select-control-size);
   --comp-select-current-icon-size: var(--comp-select-icon-size);
   display: grid;
@@ -10034,7 +10802,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   --comp-country-selector-trigger-gap: var(--comp-select-gap);
   --comp-country-selector-trigger-padding-start: var(--comp-select-padding-start);
   --comp-country-selector-trigger-padding-end: var(--comp-select-padding-end);
-  --comp-country-selector-trigger-font-size: var(--component-font-size-label);
+  --comp-country-selector-trigger-font-size: var(--comp-select-font-size);
   --comp-country-selector-inline-trigger-bg: var(--component-surface-transparent);
   --comp-country-selector-inline-trigger-border: var(--component-border-transparent);
   --comp-country-selector-inline-trigger-color: var(--component-color-text-muted);
@@ -10101,11 +10869,23 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 .select-control[data-density="sm"] {
   --comp-select-current-control-size: var(--comp-select-control-size-sm);
   --comp-select-current-icon-size: var(--comp-select-icon-size-sm);
+  --comp-select-font-size: var(--comp-select-font-size-sm);
+  --comp-select-padding-start: var(--comp-select-padding-start-sm);
+  --comp-select-padding-end: var(--comp-select-padding-end-sm);
+  --comp-select-option-min-size: var(--comp-select-option-min-size-sm);
+  --comp-select-option-padding-x: var(--comp-select-option-padding-x-sm);
+  --comp-select-option-check-size: var(--comp-select-option-check-size-sm);
 }
 
 .select-control[data-density="lg"] {
   --comp-select-current-control-size: var(--comp-select-control-size-lg);
   --comp-select-current-icon-size: var(--comp-select-icon-size-lg);
+  --comp-select-font-size: var(--comp-select-font-size-lg);
+  --comp-select-padding-start: var(--comp-select-padding-start-lg);
+  --comp-select-padding-end: var(--comp-select-padding-end-lg);
+  --comp-select-option-min-size: var(--comp-select-option-min-size-lg);
+  --comp-select-option-padding-x: var(--comp-select-option-padding-x-lg);
+  --comp-select-option-check-size: var(--comp-select-option-check-size-lg);
 }
 
 .select-control--inline,
@@ -10163,13 +10943,18 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   align-items: center;
   background: var(--comp-select-bg);
   border: var(--component-border-width) solid var(--comp-select-border);
-  border-radius: var(--component-radius-control);
+  border-radius: var(--component-control-frame-radius-field);
+  block-size: var(--comp-select-current-control-size);
+  box-sizing: border-box;
   color: var(--comp-select-fg);
   cursor: pointer;
   display: inline-flex;
   gap: var(--comp-select-gap);
   grid-area: 1 / 1;
-  font: inherit;
+  font-family: inherit;
+  font-size: var(--comp-select-font-size);
+  font-weight: inherit;
+  line-height: var(--component-line-height-none);
   inline-size: 100%;
   justify-content: space-between;
   min-block-size: var(--comp-select-current-control-size);
@@ -10188,9 +10973,11 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   background: var(--comp-country-selector-trigger-bg);
   border-color: var(--comp-country-selector-trigger-border);
   border-radius: var(--comp-country-selector-trigger-radius);
+  box-sizing: border-box;
   color: var(--comp-country-selector-trigger-color);
   font-size: var(--comp-country-selector-trigger-font-size);
   gap: var(--comp-country-selector-trigger-gap);
+  block-size: var(--comp-country-selector-control-size);
   min-block-size: var(--comp-country-selector-control-size);
   padding: 0 var(--comp-country-selector-trigger-padding-end) 0 var(--comp-country-selector-trigger-padding-start);
 }
@@ -10198,10 +10985,12 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 .select-control--inline .select-control__trigger,
 .country-selector.select-control--inline .country-selector__trigger,
 .phone-input__country-trigger {
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: 0;
+  box-sizing: border-box;
   color: var(--comp-country-selector-inline-trigger-color);
   gap: var(--comp-country-selector-inline-trigger-gap);
+  block-size: var(--comp-country-selector-inline-trigger-size);
   inline-size: max-content;
   justify-content: flex-start;
   min-block-size: var(--comp-country-selector-inline-trigger-size);
@@ -10262,7 +11051,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   display: inline-flex;
   flex: 1 1 auto;
   gap: var(--component-space-xs);
-  font-size: var(--component-font-size-label);
+  font-size: inherit;
   font-weight: var(--component-font-weight-medium);
   min-inline-size: 0;
   overflow: hidden;
@@ -10364,6 +11153,17 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   background: var(--comp-select-error-bg);
 }
 
+.select-control[data-state="loading"] .select-control__trigger {
+  background: var(--comp-select-loading-bg);
+  border-color: var(--comp-select-loading-border);
+  cursor: progress;
+}
+
+.select-control[data-state="loading"] .select-control__icon {
+  color: var(--comp-select-loading-icon-color);
+  animation: spinner-spin var(--comp-select-loading-icon-duration) var(--comp-select-loading-icon-ease) infinite;
+}
+
 .select-control__listbox,
 .country-selector__listbox,
 .phone-input__country-listbox {
@@ -10447,6 +11247,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   background: var(--comp-country-selector-search-bg);
   border: var(--component-border-width) solid var(--comp-country-selector-search-border);
   border-radius: var(--comp-country-selector-search-radius);
+  box-sizing: border-box;
   color: var(--comp-country-selector-search-color);
   font: inherit;
   font-size: var(--comp-country-selector-search-font-size);
@@ -10471,6 +11272,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 .phone-input__country-option {
   align-items: center;
   border-radius: var(--comp-select-option-radius);
+  box-sizing: border-box;
   color: var(--comp-select-option-color);
   cursor: pointer;
   display: grid;
@@ -10483,6 +11285,10 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
     color var(--component-duration-state) var(--component-ease-state);
 }
 
+.select-control__option {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
 .country-selector__option,
 .phone-input__country-option {
   border-radius: var(--comp-country-selector-option-radius);
@@ -10492,17 +11298,23 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   padding: 0 var(--comp-country-selector-option-padding-x);
 }
 
-.select-control__option:hover,
-.select-control__option:focus-visible,
-.country-selector__option:hover,
-.country-selector__option:focus-visible {
+.select-control__option:hover:not([data-disabled="true"]):not([aria-disabled="true"]),
+.select-control__option:focus-visible:not([data-disabled="true"]):not([aria-disabled="true"]),
+.country-selector__option:hover:not([data-disabled="true"]):not([aria-disabled="true"]),
+.country-selector__option:focus-visible:not([data-disabled="true"]):not([aria-disabled="true"]) {
   background: var(--comp-select-option-hover-bg);
-  outline: var(--component-focus-ring-width) solid var(--comp-select-focus-ring);
+  outline: var(--component-focus-ring-width) solid var(--comp-select-option-active-ring);
   outline-offset: calc(var(--component-focus-ring-offset) * -1);
 }
 
-.country-selector__option:hover,
-.country-selector__option:focus-visible {
+.select-control__option[data-active="true"]:not([data-selected="true"]):not([data-disabled="true"]):not([aria-disabled="true"]) {
+  background: var(--comp-select-option-active-bg);
+  outline: var(--component-focus-ring-width) solid var(--comp-select-option-active-ring);
+  outline-offset: calc(var(--component-focus-ring-offset) * -1);
+}
+
+.country-selector__option:hover:not([data-disabled="true"]):not([aria-disabled="true"]),
+.country-selector__option:focus-visible:not([data-disabled="true"]):not([aria-disabled="true"]) {
   background: var(--comp-country-selector-option-hover-bg);
   outline-color: var(--comp-country-selector-trigger-focus-ring);
 }
@@ -10510,12 +11322,22 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 .select-control__option[data-selected="true"],
 .country-selector__option[data-selected="true"] {
   background: var(--comp-select-option-selected-bg);
-  color: var(--comp-select-option-color);
+  color: var(--comp-select-option-selected-color);
 }
 
 .country-selector__option[data-selected="true"] {
   background: var(--comp-country-selector-option-selected-bg);
   color: var(--comp-country-selector-option-color);
+}
+
+.select-control__option[data-disabled="true"],
+.select-control__option[aria-disabled="true"],
+.country-selector__option[data-disabled="true"],
+.country-selector__option[aria-disabled="true"] {
+  background: var(--comp-select-option-disabled-bg);
+  color: var(--comp-select-option-disabled-color);
+  cursor: not-allowed;
+  opacity: var(--comp-select-option-disabled-opacity);
 }
 
 .country-selector__option-body {
@@ -10546,6 +11368,21 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   font-size: var(--comp-country-selector-code-font-size);
   font-weight: var(--comp-country-selector-code-font-weight);
   opacity: var(--comp-country-selector-option-code-opacity);
+}
+
+.select-control__option-check {
+  color: currentColor;
+  font-family: var(--comp-select-option-check-family);
+  font-size: var(--comp-select-option-check-size);
+  font-weight: var(--comp-select-option-check-weight);
+  inline-size: var(--comp-select-option-check-size);
+  line-height: var(--component-line-height-none);
+  opacity: var(--comp-select-option-check-hidden-opacity);
+  text-align: center;
+}
+
+.select-control__option[data-selected="true"] .select-control__option-check {
+  opacity: var(--comp-select-option-check-visible-opacity);
 }
 
 .country-selector__option-check {
@@ -10729,7 +11566,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   --comp-date-picker-focus-color: var(--component-color-focus);
   --comp-date-picker-danger: var(--component-color-danger);
   --comp-date-picker-warning: var(--component-color-warning);
-  --comp-date-picker-control-size: var(--component-density-control-height);
+  --comp-date-picker-control-size: var(--component-field-control-size-md);
   --comp-date-picker-control-gap: calc(var(--component-space-sm) + var(--component-frame-space-micro));
   --comp-date-picker-control-padding-inline: var(--component-space-lg);
   --comp-date-picker-control-hover-border: color-mix(in srgb, var(--comp-date-picker-action) 24%, var(--comp-date-picker-border));
@@ -10771,8 +11608,10 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 .date-picker__control {
   align-items: center;
   background: var(--comp-date-picker-bg);
+  block-size: var(--comp-date-picker-control-size);
   border: var(--component-border-width) solid var(--comp-date-picker-border);
   border-radius: var(--comp-date-picker-radius);
+  box-sizing: border-box;
   color: var(--comp-date-picker-fg);
   cursor: pointer;
   display: flex;
@@ -10850,7 +11689,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 }
 
 .date-picker__input {
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: 0;
   block-size: var(--component-control-min-size);
   inline-size: var(--component-control-min-size);
@@ -10903,7 +11742,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 
 .date-picker__nav {
   align-items: center;
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: 0;
   border-radius: var(--component-radius-pill);
   color: var(--comp-date-picker-muted-fg);
@@ -10948,14 +11787,18 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 }
 
 .date-picker__day {
-  background: transparent;
+  background: var(--component-surface-transparent);
+  block-size: var(--comp-date-picker-day-size);
   border: 0;
   border-radius: var(--component-radius-pill);
+  box-sizing: border-box;
   color: var(--comp-date-picker-fg);
   cursor: pointer;
   font: inherit;
   font-size: var(--comp-date-picker-day-font-size);
+  inline-size: var(--comp-date-picker-day-size);
   min-block-size: var(--comp-date-picker-day-size);
+  min-inline-size: var(--comp-date-picker-day-size);
   transition:
     background-color var(--component-duration-instant) var(--component-ease-state),
     color var(--component-duration-instant) var(--component-ease-state),
@@ -11032,8 +11875,10 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 
 .date-range-picker__preset {
   background: var(--comp-date-range-picker-preset-bg);
+  block-size: var(--comp-date-range-picker-preset-min-block-size);
   border: var(--component-border-width) solid var(--comp-date-range-picker-preset-border);
   border-radius: var(--comp-date-range-picker-preset-radius);
+  box-sizing: border-box;
   color: var(--comp-date-range-picker-preset-fg);
   cursor: pointer;
   font: inherit;
@@ -11090,15 +11935,19 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   --comp-segmented-control-display: var(--component-display-inline-flex);
   --comp-segmented-control-gap: var(--component-frame-space-none);
   --comp-segmented-control-position: var(--component-position-relative);
-  --comp-segmented-control-item-min-block-sm: var(--component-segmented-control-item-min-block-sm);
-  --comp-segmented-control-item-min-block-lg: var(--component-segmented-control-item-min-block-lg);
-  --comp-segmented-control-item-min-block: var(--component-inline-trigger-min-block-size-md);
-  --comp-segmented-control-item-padding-inline: var(--component-space-md);
-  --comp-segmented-control-icon-size: var(--component-icon-size-sm);
+  --comp-segmented-control-item-min-block-sm: var(--component-control-frame-size-sm);
+  --comp-segmented-control-item-min-block-md: var(--component-control-frame-size-md);
+  --comp-segmented-control-item-min-block-lg: var(--component-control-frame-size-lg);
+  --comp-segmented-control-item-min-block: var(--comp-segmented-control-item-min-block-md);
+  --comp-segmented-control-item-padding-inline-sm: var(--component-control-frame-padding-action-sm);
+  --comp-segmented-control-item-padding-inline-md: var(--component-control-frame-padding-action-md);
+  --comp-segmented-control-item-padding-inline-lg: var(--component-control-frame-padding-action-lg);
+  --comp-segmented-control-item-padding-inline: var(--comp-segmented-control-item-padding-inline-md);
+  --comp-segmented-control-icon-size: var(--component-density-icon-size-md);
   --comp-segmented-control-bg: var(--component-color-surface);
   --comp-segmented-control-border: var(--component-color-border);
   --comp-segmented-control-border-width: calc(var(--component-border-width) * 2);
-  --comp-segmented-control-radius: var(--component-radius-sm);
+  --comp-segmented-control-radius: var(--component-control-frame-radius-action);
   --comp-segmented-control-inner-radius: calc(var(--comp-segmented-control-radius) - var(--component-frame-space-micro));
   --comp-segmented-control-inline-size: min(100%, var(--component-segmented-control-inline-size));
   --comp-segmented-control-padding: calc(var(--component-space-xs) / 2);
@@ -11164,29 +12013,29 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
 
 .segmented-control[data-variant="toolbar"] {
   --comp-segmented-control-item-min-block: var(--comp-segmented-control-item-min-block-sm);
-  --comp-segmented-control-item-padding-inline: var(--component-space-sm);
-  --comp-segmented-control-icon-size: var(--component-font-size-title-sm);
+  --comp-segmented-control-item-padding-inline: var(--comp-segmented-control-item-padding-inline-sm);
+  --comp-segmented-control-icon-size: var(--component-density-icon-size-sm);
   --comp-segmented-control-bg: color-mix(in srgb, var(--component-color-surface) 76%, var(--component-color-border));
   --comp-segmented-control-inline-size: var(--component-inline-size-auto);
 }
 
 .segmented-control[data-variant="compact"] {
   --comp-segmented-control-item-min-block: var(--comp-segmented-control-item-min-block-sm);
-  --comp-segmented-control-item-padding-inline: var(--component-space-sm);
-  --comp-segmented-control-icon-size: var(--component-font-size-title-sm);
+  --comp-segmented-control-item-padding-inline: var(--comp-segmented-control-item-padding-inline-sm);
+  --comp-segmented-control-icon-size: var(--component-density-icon-size-sm);
   --comp-segmented-control-inline-size: min(100%, var(--component-content-size-md));
 }
 
 .segmented-control[data-density="sm"] {
   --comp-segmented-control-item-min-block: var(--comp-segmented-control-item-min-block-sm);
-  --comp-segmented-control-item-padding-inline: var(--component-space-sm);
-  --comp-segmented-control-icon-size: var(--component-font-size-title-sm);
+  --comp-segmented-control-item-padding-inline: var(--comp-segmented-control-item-padding-inline-sm);
+  --comp-segmented-control-icon-size: var(--component-density-icon-size-sm);
 }
 
 .segmented-control[data-density="lg"] {
   --comp-segmented-control-item-min-block: var(--comp-segmented-control-item-min-block-lg);
-  --comp-segmented-control-item-padding-inline: var(--component-space-lg);
-  --comp-segmented-control-icon-size: var(--component-font-size-title-md);
+  --comp-segmented-control-item-padding-inline: var(--comp-segmented-control-item-padding-inline-lg);
+  --comp-segmented-control-icon-size: var(--component-density-icon-size-lg);
 }
 
 .segmented-control__indicator {
@@ -11215,6 +12064,8 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   flex: var(--comp-segmented-control-item-flex);
   gap: var(--comp-segmented-control-item-gap);
   justify-content: var(--comp-segmented-control-item-justify);
+  block-size: var(--comp-segmented-control-item-min-block);
+  box-sizing: border-box;
   min-inline-size: var(--comp-segmented-control-item-min-inline);
   position: var(--comp-segmented-control-item-position);
   z-index: var(--comp-segmented-control-item-z);
@@ -11290,15 +12141,15 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   --comp-popover-gap: var(--component-space-xs);
   --comp-popover-panel-padding: var(--component-space-md);
   --comp-popover-panel-width: var(--component-content-size-sm);
-  --comp-popover-panel-offset: var(--component-space-xs);
-  --comp-popover-panel-bg: var(--component-color-surface);
+  --comp-popover-panel-offset: var(--component-overlay-panel-offset);
+  --comp-popover-panel-bg: var(--component-overlay-panel-bg);
   --comp-popover-panel-border-width: var(--component-border-width);
-  --comp-popover-panel-border: var(--component-color-border);
+  --comp-popover-panel-border: var(--component-overlay-panel-border);
   --comp-popover-panel-border-warning: var(--component-color-warning);
-  --comp-popover-panel-radius: var(--component-radius-control);
-  --comp-popover-panel-depth: var(--component-depth-popover);
+  --comp-popover-panel-radius: var(--component-overlay-panel-radius);
+  --comp-popover-panel-depth: var(--component-overlay-panel-depth);
   --comp-popover-panel-fg: var(--component-color-text);
-  --comp-popover-panel-z-index: var(--component-z-dropdown);
+  --comp-popover-panel-z-index: var(--component-overlay-panel-z-index);
   --comp-popover-enter-duration: var(--component-duration-enter);
   --comp-popover-enter-ease: var(--component-ease-enter);
   --comp-popover-title-family: var(--component-font-family-title);
@@ -11344,6 +12195,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   background: var(--comp-popover-panel-bg);
   border: var(--comp-popover-panel-border-width) solid var(--comp-popover-panel-border);
   border-radius: var(--comp-popover-panel-radius);
+  box-sizing: border-box;
   box-shadow: var(--comp-popover-panel-depth);
   color: var(--comp-popover-panel-fg);
   display: grid;
@@ -11991,10 +12843,13 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   background: var(--comp-quick-action-control-bg);
   border: var(--comp-quick-action-control-border-width) solid var(--comp-quick-action-control-border);
   border-radius: var(--comp-quick-action-control-radius);
+  block-size: var(--comp-quick-action-icon-size);
+  box-sizing: border-box;
   box-shadow: var(--comp-quick-action-control-shadow);
   color: var(--comp-quick-action-control-fg);
   cursor: var(--comp-quick-action-control-cursor);
   display: var(--comp-quick-action-control-display);
+  inline-size: var(--comp-quick-action-icon-size);
   justify-content: var(--comp-quick-action-control-justify);
   min-block-size: var(--comp-quick-action-icon-size);
   min-inline-size: var(--comp-quick-action-icon-size);
@@ -12040,7 +12895,7 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   color: var(--comp-quick-action-warning-fg);
 }
 
-.quick-action[data-variant="destructive"] .quick-action__control {
+.quick-action[data-intent="danger"] .quick-action__control {
   background: var(--comp-quick-action-danger-bg);
   color: var(--comp-quick-action-danger-fg);
 }
@@ -12171,108 +13026,6 @@ body[data-contrast="quiet"] .station-pin[data-variant="cluster"] {
   background-repeat: no-repeat;
   isolation: isolate;
   position: relative;
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] {
-  --sys-energy-surface-primary: var(--sys-energy-dark-surface-primary);
-  --sys-energy-surface-secondary: var(--sys-energy-dark-surface-secondary);
-  --sys-energy-surface-tertiary: var(--sys-energy-dark-surface-tertiary);
-  --sys-energy-surface-sunken: var(--sys-energy-dark-surface-secondary);
-  --sys-energy-text-primary: var(--sys-energy-dark-text-primary);
-  --sys-energy-text-secondary: var(--sys-energy-dark-text-secondary);
-  --sys-energy-text-tertiary: var(--sys-energy-dark-text-tertiary);
-  --sys-energy-border-default: var(--sys-energy-dark-border-default);
-  --sys-energy-border-strong: var(--sys-energy-dark-border-strong);
-  --sys-color-border: var(--sys-energy-border-default);
-  --sys-color-border-strong: var(--sys-energy-border-strong);
-  --sys-color-surface: var(--sys-energy-surface-primary);
-  --sys-color-surface-muted: var(--sys-energy-surface-sunken);
-  --sys-color-surface-raised: var(--sys-energy-surface-tertiary);
-  --sys-color-text: var(--sys-energy-text-primary);
-  --sys-color-text-muted: var(--sys-energy-text-secondary);
-  --sys-color-text-subtle: var(--sys-energy-text-tertiary);
-  --component-color-bg: var(--sys-energy-surface-primary);
-  --component-color-border: var(--sys-color-border);
-  --component-color-border-strong: var(--sys-color-border-strong);
-  --component-color-surface: var(--sys-color-surface);
-  --component-color-surface-muted: var(--sys-color-surface-muted);
-  --component-color-surface-raised: var(--sys-color-surface-raised);
-  --component-color-surface-sunken: var(--sys-energy-surface-sunken);
-  --component-color-text: var(--sys-color-text);
-  --component-color-text-muted: var(--sys-color-text-muted);
-  --component-color-text-subtle: var(--sys-color-text-subtle);
-  color-scheme: dark;
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] .badge {
-  --comp-badge-bg: color-mix(in srgb, var(--component-color-surface-raised) 74%, transparent);
-  --comp-badge-border: color-mix(in srgb, var(--component-color-border-strong) 76%, transparent);
-  --comp-badge-fg: var(--component-color-text-muted);
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] .badge[data-tone="info"],
-[data-flow-template="docs-shell-template"][data-theme="dark"] .badge[data-tone="accent"] {
-  --comp-badge-bg: color-mix(in srgb, var(--component-color-action) 26%, var(--component-color-surface));
-  --comp-badge-border: color-mix(in srgb, var(--component-color-action) 48%, var(--component-color-border));
-  --comp-badge-fg: var(--component-color-text);
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] .badge[data-tone="danger"] {
-  --comp-badge-bg: color-mix(in srgb, var(--component-color-danger) 20%, var(--component-color-surface));
-  --comp-badge-border: color-mix(in srgb, var(--component-color-danger) 48%, var(--component-color-border));
-  --comp-badge-fg: var(--component-color-text);
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] .badge[data-tone="success"] {
-  --comp-badge-bg: color-mix(in srgb, var(--component-color-success) 20%, var(--component-color-surface));
-  --comp-badge-border: color-mix(in srgb, var(--component-color-success) 48%, var(--component-color-border));
-  --comp-badge-fg: var(--component-color-text);
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] .badge[data-tone="warning"] {
-  --comp-badge-bg: color-mix(in srgb, var(--component-color-warning) 22%, var(--component-color-surface));
-  --comp-badge-border: color-mix(in srgb, var(--component-color-warning) 50%, var(--component-color-border));
-  --comp-badge-fg: var(--component-color-text);
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] .button {
-  --comp-button-bg-secondary: color-mix(in srgb, var(--component-color-surface-raised) 84%, var(--component-color-surface));
-  --comp-button-border-secondary: color-mix(in srgb, var(--component-color-text) 54%, var(--component-color-border));
-  --comp-button-fg-secondary: var(--component-color-text);
-  --comp-button-bg-secondary-hover: color-mix(in srgb, var(--component-color-action) 18%, var(--component-color-surface-raised));
-  --comp-button-bg-tertiary: color-mix(in srgb, var(--component-color-surface-raised) 78%, transparent);
-  --comp-button-fg-tertiary: var(--component-color-text);
-  --comp-button-bg-tertiary-hover: color-mix(in srgb, var(--component-color-action) 16%, var(--component-color-surface-raised));
-  --comp-button-bg-outlined: var(--component-surface-transparent);
-  --comp-button-border-outlined: color-mix(in srgb, var(--component-color-text) 36%, var(--component-color-border));
-  --comp-button-fg-outlined: var(--component-color-text);
-  --comp-button-bg-ghost-hover: color-mix(in srgb, var(--component-color-text) 10%, transparent);
-  --comp-button-bg-danger-secondary: color-mix(in srgb, var(--component-color-danger) 18%, var(--component-color-surface));
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] .field,
-[data-flow-template="docs-shell-template"][data-theme="dark"] .field-control {
-  --comp-input-surface-bg: color-mix(in srgb, var(--component-color-surface-raised) 84%, var(--component-color-surface));
-  --comp-input-surface-border: color-mix(in srgb, var(--component-color-text) 28%, var(--component-color-border));
-  --comp-input-surface-fg: var(--component-color-text);
-  --comp-input-field-fg: var(--component-color-text);
-  --comp-input-helper-fg: var(--component-color-text-muted);
-  --comp-input-affix-fg: var(--component-color-text-muted);
-  --comp-input-action-fg: var(--component-color-text-muted);
-  --comp-input-icon-fg: var(--component-color-text-muted);
-  --comp-input-disabled-bg: color-mix(in srgb, var(--component-color-surface-raised) 62%, transparent);
-}
-
-[data-flow-template="docs-shell-template"][data-theme="dark"] .card {
-  --comp-card-status-bg: color-mix(in srgb, var(--component-color-action) 18%, var(--component-color-surface));
-  --comp-card-status-border: color-mix(in srgb, var(--component-color-action) 42%, var(--component-color-border));
-  --comp-card-status-fg: var(--component-color-text);
-  --comp-card-compact-status-bg: color-mix(in srgb, var(--component-color-surface-raised) 82%, var(--component-color-surface));
-  --comp-card-compact-status-border: color-mix(in srgb, var(--component-color-text) 24%, var(--component-color-border));
-  --comp-card-compact-status-fg: var(--component-color-text-muted);
-  --comp-card-stats-status-neutral-bg: color-mix(in srgb, var(--component-color-surface-raised) 82%, var(--component-color-surface));
-  --comp-card-stats-status-neutral-border: color-mix(in srgb, var(--component-color-text) 24%, var(--component-color-border));
-  --comp-card-stats-status-neutral-fg: var(--component-color-text-muted);
 }
 
 [data-flow-template="docs-shell-template"]::before {

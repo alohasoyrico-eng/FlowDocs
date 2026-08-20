@@ -4,32 +4,48 @@ export function renderShell({ active = "", collectionIcon, collections, content,
   return content;
 }
 
+function docsCollectionTemplateIsland(props) {
+  return `<div class="docs-react-island docs-collection-template-island" data-react-component="docs-collection-template" data-component-source="react-template" data-doc-template="docs-collection-template" data-flowdocs-boundary="docs-collection-template" data-react-props="${escapeHtml(JSON.stringify(props))}"></div>`;
+}
+
+function referenceDetailTemplateIsland(props, { collection, id, referencePageMarker = "" } = {}) {
+  return `<div class="docs-react-island docs-reference-detail-template-island" data-react-component="reference-detail-template" data-component-source="react-template" data-doc-template="reference-detail-template" data-flowdocs-boundary="reference-detail-template" data-doc-primitive="reference-detail-template" ${referencePageMarker ? `data-doc-reference-page="${escapeHtml(referencePageMarker)}"` : ""} data-detail="${escapeHtml(`${collection}:${id}`)}" data-react-props="${escapeHtml(JSON.stringify(props))}"></div>`;
+}
+
 export function renderCollectionContent({ artifactCard, collection, collections, collectionMeta, groupCollection, html, label }) {
   const meta = collectionMeta[collection];
   const groups = groupCollection(collections[collection]);
-  return html`
-    <section class="docs-page-intro">
-      <p class="kicker">${meta.singular}s</p>
-      <h1>${label(collection)}</h1>
-      <p>${meta.intro}</p>
-    </section>
-    <section class="section tight">
-      ${Object.entries(groups)
-        .map(
-          ([group, values]) => html`
-            <div class="group-block">
-              <h2>${group}</h2>
-              <div class="catalog-grid">
-                ${values
-                  .map((entry) => artifactCard(collection, entry))
-                  .join("")}
-              </div>
+  const childrenHtml = html`
+    ${Object.entries(groups)
+      .map(
+        ([group, values]) => html`
+          <div class="group-block">
+            <h2>${group}</h2>
+            <div class="catalog-grid">
+              ${values
+                .map((entry) => artifactCard(collection, entry))
+                .join("")}
             </div>
-          `,
-        )
-        .join("")}
-    </section>
+          </div>
+        `,
+      )
+      .join("")}
   `;
+  return docsCollectionTemplateIsland({
+    title: label(collection),
+    description: meta.intro,
+    density: "md",
+    state: "default",
+    className: `docs-collection-template--${collection}`,
+    childrenHtml,
+    metadata: [
+      { label: `${meta.singular}s`, kind: "tag", variant: "metadata", tone: "neutral" },
+      { label: `${collections[collection].length} entries`, kind: "tag", variant: "metadata", tone: "neutral" },
+    ],
+    "data-doc-template": "docs-collection-template",
+    "data-flowdocs-template-source": "docs-layout",
+    "data-doc-collection": collection,
+  });
 }
 
 function detailMetadataItems({ artifactTypeLabel, collection, componentImplementationStatus, entry }) {
@@ -66,6 +82,7 @@ function docsArtifactDetailTemplateIsland({ artifactTypeLabel, bodyHtml = "", cl
     })),
     selectedTabKey: tabs[0]?.id ?? "",
     bodyHtml: bodyHtml || tabs[0]?.body || "",
+    tabBodiesHtml: Object.fromEntries(tabs.map((tab) => [tab.id, tab.body])),
     className,
     contentClassName,
   };
@@ -77,19 +94,27 @@ export function renderDetailContent({ artifactTypeLabel, collection, componentIm
 }
 
 export function renderReferenceDetailContent({ artifactTypeLabel, bodyHtml, collection, entry, id, label, referencePageMarker, ui }) {
-  return docsArtifactDetailTemplateIsland({
-    artifactTypeLabel,
-    bodyHtml,
+  const sectionLabels = collection === "foundations"
+    ? ["Purpose", "Semantic roles", "Architecture", "Contract"]
+    : ["Purpose", "Live demo", "Responsibilities", "API", "Tokens"];
+  return referenceDetailTemplateIsland({
+    title: entry.title,
+    description: entry.summary,
+    density: "md",
+    state: "default",
     className: `reference-doc ${collection === "foundations" ? "foundation-deep-dive" : "primitive-deep-dive"}`,
-    collection,
-    contentClassName: "reference-main",
-    entry,
-    id,
-    label,
-    referencePageMarker,
-    tabs: [],
-    ui,
-  });
+    bodyHtml,
+    navItems: sectionLabels.map((section, index) => ({
+      id: `${entry.id}-reference-${index + 1}`,
+      label: section,
+      active: index === 0,
+    })),
+    "data-doc-template": "reference-detail-template",
+    "data-flowdocs-template-source": "docs-layout",
+    "data-doc-collection": collection,
+    "data-doc-artifact-type": artifactTypeLabel(collection),
+    "aria-label": `${entry.title} ${ui("shell.sections")}`,
+  }, { collection, id, referencePageMarker });
 }
 
 function componentImplementationLabel(collection, entry, componentImplementationStatus) {

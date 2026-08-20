@@ -6,7 +6,8 @@ import type {
 import type { FlowDataAttributes } from "./internal/props.js";
 import type { floatingActionButtonPlatformContract } from "../components/platforms/index.js";
 
-export type FloatingActionButtonVariant = "primary" | "accent" | "extended" | "mini";
+export type FloatingActionButtonVariant = "primary" | "secondary" | "tertiary" | "outlined" | "ghost";
+export type FloatingActionButtonIntent = "default" | "danger" | "warning";
 export type FloatingActionButtonState = "default" | "hover" | "focus" | "pressed" | "loading" | "disabled";
 export type FloatingActionButtonDensity = "sm" | "md" | "lg";
 export type FloatingActionButtonType = "button" | "submit" | "reset";
@@ -15,6 +16,7 @@ export interface FloatingActionButtonProps extends Omit<ButtonHTMLAttributes<HTM
   label: string;
   icon?: string;
   variant?: FloatingActionButtonVariant;
+  intent?: FloatingActionButtonIntent;
   state?: FloatingActionButtonState;
   density?: FloatingActionButtonDensity;
   extended?: boolean;

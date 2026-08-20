@@ -54,7 +54,7 @@
   padding: var(--sys-space-sm) var(--sys-space-md);
   color: var(--sys-energy-text-secondary);
   font-size: var(--sys-voice-size-2);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .nav-menu a {
@@ -117,7 +117,7 @@
 }
 
 .menu-button:hover {
-  border-color: transparent;
+  border-color: var(--component-border-transparent);
   background: var(--sys-energy-surface-secondary);
 }
 

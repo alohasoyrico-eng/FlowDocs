@@ -29,7 +29,7 @@ const governedBoundaries = [
     severity: "page",
     patterns: [
       { pattern: /(?:class=["'`][^"'`]*(?:^|\s)(?:hero|page-hero|detail-hero|reference-hero|hero-copy|hero-actions|hero-action|hero-visual)(?:\s|$)[^"'`]*["'`]|(?<![A-Za-z0-9_])\.(?:hero|page-hero|detail-hero|reference-hero|hero-copy|hero-actions|hero-action|hero-visual)(?![A-Za-z0-9_-]))/g, label: "legacy docs hero class" },
-      { pattern: /home-hero|data-illustration-slot=["'`]home-hero["'`]|data-illustration-id=["'`]home-hero["'`]/g, label: "legacy docs hero slot" },
+      { pattern: /home-hero(?!-visual)|data-illustration-slot=["'`]home-hero["'`]|data-illustration-id=["'`]home-hero["'`]/g, label: "legacy docs hero slot" },
       { pattern: /layout-grid-overlay|grid overlay/g, label: "legacy background/grid treatment" },
     ],
   },

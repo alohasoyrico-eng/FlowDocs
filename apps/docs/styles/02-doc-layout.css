@@ -63,7 +63,7 @@
   font-size: var(--sys-voice-size-3);
   font-weight: var(--sys-voice-weight-bold);
   letter-spacing: var(--sys-voice-letter-spacing-normal);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 h1,
@@ -197,7 +197,7 @@ p {
   color: var(--sys-energy-status-error);
   font-size: var(--sys-voice-size-3);
   font-weight: var(--sys-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .coverage-grid strong {
@@ -237,7 +237,7 @@ p {
   color: var(--sys-energy-text-secondary);
   font-size: var(--sys-voice-size-3);
   font-weight: var(--sys-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .doc-status-grid strong {

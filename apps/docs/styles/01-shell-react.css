@@ -111,7 +111,7 @@
   right: auto !important;
   transform: translateX(-50%) !important;
   width: min(38rem, calc(100vw - (var(--sys-space-8) * 2))) !important;
-  z-index: 40 !important;
+  z-index: var(--component-z-dropdown) !important;
 }
 
 .docs-react-shell-topbar > [data-flow-slot="search-results"] > * {
@@ -123,8 +123,8 @@
 }
 
 .docs-react-shell-topbar > [data-doc-shell-slot="navigation-action"].icon-button {
-  background: transparent;
-  border-color: transparent;
+  background: var(--component-surface-transparent);
+  border-color: var(--component-border-transparent);
   box-shadow: none;
   min-block-size: var(--sys-frame-height-control-sm);
   min-inline-size: var(--sys-frame-height-control-sm);
@@ -163,7 +163,7 @@
 }
 
 .docs-react-shell-sidebar-mount [aria-label$="groups"] {
-  background: transparent;
+  background: var(--component-surface-transparent);
   block-size: 100%;
   border: 0;
   border-radius: 0;
@@ -179,7 +179,7 @@
 }
 
 .docs-react-shell-sidebar-mount [data-flow-slot="group-accordion"] {
-  background: transparent;
+  background: var(--component-surface-transparent);
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -189,11 +189,11 @@
 .docs-react-shell-sidebar-mount [data-accordion-item],
 .docs-react-shell-sidebar-mount [data-accordion-trigger],
 .docs-react-shell-sidebar-mount [data-accordion-panel] {
-  border-color: transparent;
+  border-color: var(--component-border-transparent);
 }
 
 .docs-react-shell-sidebar-mount [data-accordion-trigger] {
-  background: transparent;
+  background: var(--component-surface-transparent);
   min-block-size: var(--sys-frame-height-control-sm);
   padding-inline: 0;
 }
@@ -264,7 +264,7 @@
   .docs-react-shell-template[data-sidebar-open="true"] .docs-react-shell-sidebar-mount {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(0);
+    transform: var(--component-transform-x-rest);
   }
 
   body[data-nav-open="false"] .docs-react-shell-sidebar-mount,
@@ -343,7 +343,7 @@
   .docs-react-shell-template[data-sidebar-open="true"] .docs-react-shell-sidebar-mount {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(0);
+    transform: var(--component-transform-x-rest);
   }
 
   .docs-react-shell-topbar > [data-flow-slot="search-results"] {
@@ -382,6 +382,6 @@
   body[data-nav-open="true"] .docs-react-shell-sidebar-mount,
   .docs-react-shell-template[data-sidebar-open="true"] .docs-react-shell-sidebar-mount {
     inline-size: min(20rem, calc(100vw - var(--sys-space-4))) !important;
-    transform: translateX(0);
+    transform: var(--component-transform-x-rest);
   }
 }

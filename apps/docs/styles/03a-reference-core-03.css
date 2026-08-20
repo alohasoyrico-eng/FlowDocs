@@ -255,7 +255,7 @@
   display: grid;
   align-content: space-between;
   gap: var(--ref-frame-space-3);
-  min-height: 8.5rem;
+  min-height: calc(var(--component-block-size-lg) + var(--component-space-6));
   padding: var(--ref-frame-space-3);
   border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
   border-radius: var(--ref-frame-radius-2);
@@ -337,7 +337,7 @@
   font-weight: var(--ref-voice-weight-bold);
   line-height: var(--sys-voice-overline-line-height);
   letter-spacing: var(--ref-voice-letter-spacing-caps);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .voice-type-sample[data-style="code"] p,

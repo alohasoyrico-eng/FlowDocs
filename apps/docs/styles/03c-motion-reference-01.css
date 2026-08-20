@@ -197,8 +197,8 @@
 }
 
 @keyframes motion-fill {
-  0% { transform: scaleX(0); }
-  42%, 100% { transform: scaleX(1); }
+  0% { transform: var(--component-motion-cue-idle-transform); }
+  42%, 100% { transform: var(--component-motion-cue-active-transform); }
 }
 
 @keyframes motion-slide {
@@ -327,7 +327,7 @@
   color: var(--sys-energy-status-error);
   font-size: var(--ref-voice-size-3);
   font-weight: var(--ref-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .measurement-demo article strong,

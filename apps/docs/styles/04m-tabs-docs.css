@@ -84,7 +84,7 @@
   font-weight: var(--docs-detail-tabs-font-weight);
   white-space: nowrap;
   cursor: pointer;
-  outline: none;
+  outline: var(--component-outline-none);
   transition: color var(--sys-duration-fast) var(--sys-motion-curve-enter), transform var(--sys-duration-touch) var(--sys-motion-curve-touch);
 }
 
@@ -121,10 +121,10 @@
   --docs-detail-tabs-indicator-block: var(--sys-frame-border-indicator);
   gap: var(--sys-space-5);
   padding: 0;
-  border-color: transparent;
+  border-color: var(--component-border-transparent);
   border-block-end-color: var(--sys-energy-border-default);
   border-radius: 0;
-  background: transparent;
+  background: var(--component-surface-transparent);
 }
 
 .docs-detail-tabs-nav[data-variant="underline"]::before {

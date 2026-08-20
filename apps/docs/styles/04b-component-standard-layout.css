@@ -72,7 +72,7 @@
 
 .standard-popover button {
   border: 0;
-  background: transparent;
+  background: var(--component-surface-transparent);
   color: inherit;
   font-weight: var(--sys-voice-weight-bold);
 }
@@ -121,7 +121,7 @@
   color: var(--sys-energy-text-secondary);
   font-size: var(--sys-voice-size-caption);
   font-weight: var(--sys-voice-weight-semibold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .candidate-assessment span {

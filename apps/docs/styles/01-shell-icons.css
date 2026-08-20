@@ -13,7 +13,7 @@
   line-height: var(--sys-voice-line-height-none);
   color: var(--icon-color);
   letter-spacing: var(--sys-voice-letter-spacing-normal);
-  text-transform: none;
+  text-transform: var(--component-text-transform-none);
   text-align: center;
   white-space: nowrap;
   word-wrap: normal;

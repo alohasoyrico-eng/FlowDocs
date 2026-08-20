@@ -3,52 +3,27 @@ import { loadDocsContent } from "./content-sources.js?v=203";
 import { accessibilityPanel, agentPanel, configureDetailTabs, detailTabs, guidelinesPanel, listPanel, specPanel, threeTabs } from "./detail-tabs.js?v=71";
 import { setupDocumentationInteractions, setupGlobalDocumentInteractions } from "./doc-interactions.js?v=298";
 import { applyLocalizedChrome, configureDocsChrome, setupLanguageToggle } from "./docs-chrome.js?v=3";
-import { renderCollectionContent, renderDetailContent, renderReferenceDetailContent, renderShell } from "./docs-layout.js?v=232";
+import { renderCollectionContent, renderDetailContent, renderReferenceDetailContent, renderShell } from "./docs-layout.js?v=235";
 import { documentationSectionIsland } from "./documentation-section-island.js?v=1";
-import {
-  applyDocsContent,
-  artifactContract,
-  collectionMeta,
-  collections,
-  componentAgentSpec,
-  componentCopy,
-  componentDocs,
-  componentImplementationStatus,
-  configureDocsState,
-  currentLocale,
-  findAny,
-  findComponent,
-  findPattern,
-  foundationCopy,
-  homeContent,
-  patternCopy,
-  primitiveCopy,
-  referenceCopy,
-  searchIndex,
-  setCurrentLocale,
-  stack,
-  templateBlueprintFallbacks,
-  templateBlueprints,
-  ui,
-} from "./docs-state.js";
+import { applyDocsContent, artifactContract, collectionMeta, collections, componentAgentSpec, componentCopy, componentDocs, componentImplementationStatus, configureDocsState, currentLocale, findAny, findComponent, findPattern, foundationCopy, homeContent, patternCopy, primitiveCopy, referenceCopy, searchIndex, setCurrentLocale, stack, templateBlueprintFallbacks, templateBlueprints, ui } from "./docs-state.js";
 import { artifactFoundationTracePanel, configureFamilyComponentDocs, familyComponentTabs } from "./family-component-docs.js?v=4";
 import { configureFoundationReference, foundationReferenceContent, foundationRoles, foundationSubtitle } from "./foundation-reference.js?v=1";
 import { accordionDemo, auditEventDemo, avatarDemo, badgeDemo, biometricPromptDemo, breadcrumbsDemo, buttonDemo, cardDemo, cardExpiryInputDemo, cardNumberInputDemo, cardSecurityCodeInputDemo, cardSummaryDemo, checkboxDemo, chipDemo, comboboxDemo, configureGoldComponentDocs, countrySelectorDemo, demoCell, dialogDemo, drawerDemo, emptyStateDemo, errorPanelDemo, floatingActionButtonDemo, goldComponentDocumentationTabs, iconButtonDemo, inlineValidationDemo, animatedMomentDemo, menuDemo, motionBoundaryDemo, movementRowDemo, paginationDemo, popoverDemo, progressIndicatorDemo, quickActionDemo, radioButtonDemo, selectDemo, skeletonDemo, spinnerDemo, sliderDemo, stepperDemo, switchDemo, tableDemo, tabsDemo, tabsDemoFromData, tagDemo, textAreaDemo, inputDemo, toastDemo, tooltipDemo, treeViewDemo } from "./gold-component-docs.js?v=334";
 import { hydrateHomeHeroIllustration } from "./home-illustrations.js?v=2";
-import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=5";
+import { renderHomeContent, renderStackContent } from "./home-stack-renderers.js?v=6";
 import { collectionIcon, configureIconSystem, icon, iconFor, tabIcon } from "./icon-system.js?v=199";
-import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=7";
+import { configureDocsShell, renderDocsShell } from "./docs-shell-react.js?v=8";
 import { configurePrimitiveReference, primitiveApiReferenceSection, primitiveLiveDemoSection, primitivePurposeSection, primitiveResponsibilitiesReferenceSection, primitiveSpecMatrixSection, primitiveTokenReferenceSection } from "./primitive-reference.js?v=1";
 import { configureReferenceLayout, referenceCallout, referenceCodeBlock, referenceDivider, referenceHeader, referencePeerNav, referenceSection } from "./reference-layout.js?v=6";
-import { setupReactComponentIslands } from "./react-component-islands.js?v=47";
+import { setupReactComponentIslands } from "./react-component-islands.js?v=49";
 import { setupContrastToggle, setupGridOverlay, toggleContrastState, toggleGridOverlay, updateGridOverlay } from "./shell-controls.js?v=4";
 import { escapeHtml, html, interpolateList, referenceTemplate, slug } from "./utils.js";
 import { configureVisualExamples, examplePanel, foundationExample, journeyCopy, primitiveExample, visualPanel } from "./visual-examples.js?v=3";
 
 const $ = (selector) => document.querySelector(selector);
 const shellMount = $("#app");
-let app = shellMount;
 let afterShellRender = () => {};
+let currentPageContent = "";
 window.__systemBoot = { status: "starting" };
 
 function route() {
@@ -60,28 +35,22 @@ function route() {
 function render() {
   configureLocalizedRenderers();
   const current = route();
-  const previousRenderTarget = app;
-  const pageRenderTarget = document.createElement("main");
-  pageRenderTarget.id = "app"; app = pageRenderTarget;
+  currentPageContent = "";
   delete document.body.dataset.navOpen;
   afterShellRender = (root) => setupReactComponentIslands(root);
   if (current.collection === "home") renderHome();
   else if (current.collection === "stack") renderStack();
   else if (current.collection === "foundations" && !current.id) {
-    app = previousRenderTarget;
     window.location.hash = "#/foundations/energy";
     return;
   } else if (current.collection === "primitives" && !current.id) {
-    app = previousRenderTarget;
     window.location.hash = "#/primitives/color";
     return;
   }
   else if (collections[current.collection] && current.id) renderDetail(current.collection, current.id);
   else if (collections[current.collection]) renderCollection(current.collection);
   else renderHome();
-  const pageMarkup = app.innerHTML;
-  app = previousRenderTarget;
-  renderDocsShell(current, { pageMarkup, afterRender: afterShellRender }); // staging replaces renderDocsShell(current, { pageMarkup: app.innerHTML, afterRender: afterShellRender })
+  renderDocsShell(current, { pageContent: currentPageContent, afterRender: afterShellRender });
   shellMount.focus({ preventScroll: true });
   requestAnimationFrame(() => requestAnimationFrame(updateGridOverlay));
 }
@@ -101,8 +70,12 @@ function shell(content, active = "") {
   return renderShell({ active, collectionIcon, collections, content, current: route(), html, icon, iconFor, label, ui });
 }
 
+function setPageContent(content, active = "") {
+  currentPageContent = shell(content, active);
+}
+
 function renderHome() {
-  app.innerHTML = shell(renderHomeContent({ docsLinkCard, collections, findAny, homeContent, html, icon, slug, stack, ui }), "home");
+  setPageContent(renderHomeContent({ docsLinkCard, collections, findAny, homeContent, html, icon, slug, stack, ui }), "home");
   afterShellRender = (root) => {
     setupReactComponentIslands(root);
     requestAnimationFrame(() => hydrateHomeHeroIllustration(root));
@@ -115,7 +88,7 @@ function renderCollection(collection) {
     renderHome();
     return;
   }
-  app.innerHTML = shell(renderCollectionContent({ artifactCard, collection, collections, collectionMeta, groupCollection, html, label }), collection);
+  setPageContent(renderCollectionContent({ artifactCard, collection, collections, collectionMeta, groupCollection, html, label }), collection);
 }
 
 function renderDetail(collection, id) {
@@ -135,26 +108,17 @@ function renderDetail(collection, id) {
   else if (collection === "primitives") renderPrimitiveDetail(entry);
   else {
     const tabs = detailTabs(collection, entry);
-    app.innerHTML = shell(renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }), collection);
+    setPageContent(renderDetailContent({ artifactTypeLabel, collection, componentImplementationStatus, entry, html, icon, id, label, tabIcon, tabs, ui }), collection);
 
     afterShellRender = (root) => {
       setupReactComponentIslands(root);
-      const tabShell = document.querySelector('[data-react-component="docs-artifact-detail-template"], [data-react-component="detail-shell-tabs"]');
-      const activateTab = (tabId) => {
-        const selected = tabs.find((tab) => tab.id === tabId);
-        if (!selected) return;
-        $("#tabPanel").innerHTML = selected.body;
-        setupReactComponentIslands($("#tabPanel"));
-        setupDocumentationInteractions(interactionDeps());
-      };
-      tabShell?.addEventListener("docs-detail-tab-change", (event) => activateTab(event.detail?.tabId));
       setupDocumentationInteractions(interactionDeps());
     };
   }
 }
 
 function renderFoundationDetail(entry) {
-  app.innerHTML = shell(
+  setPageContent(
     renderReferenceDetailContent({
       artifactTypeLabel,
       bodyHtml: html`<div class="reference-stack">${foundationReferenceContent(entry)}</div>`,
@@ -174,7 +138,7 @@ function renderFoundationDetail(entry) {
 }
 
 function renderPrimitiveDetail(entry) {
-  app.innerHTML = shell(
+  setPageContent(
     renderReferenceDetailContent({
       artifactTypeLabel,
       bodyHtml: html`
@@ -204,7 +168,7 @@ function renderPrimitiveDetail(entry) {
 }
 
 function renderStack() {
-  app.innerHTML = shell(renderStackContent({ html, referenceCopy, stack }), "stack");
+  setPageContent(renderStackContent({ html, referenceCopy, stack }), "stack");
 }
 
 

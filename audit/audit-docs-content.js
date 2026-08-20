@@ -308,16 +308,17 @@ function checkDetailShellTemplateReadiness() {
   const templateWrapperReady = templateIslands.includes("function DocsArtifactDetailTemplateIsland")
     && templateIslands.includes('"docs-artifact-detail-template": DocsArtifactDetailTemplateIsland')
     && templateIslands.includes("React.createElement(DocsArtifactDetailTemplate");
-  const legacyWrapperReady = reactIslands.includes("function DetailShellTabsIsland") && reactIslands.includes('"detail-shell-tabs": DetailShellTabsIsland');
-  const bridgeScoped = appRuntime.includes('[data-react-component="docs-artifact-detail-template"], [data-react-component="detail-shell-tabs"]')
-    || appRuntime.includes('document.querySelector(\'[data-react-component="detail-shell-tabs"]\')');
+  const templateOwnsTabBody = templateIslands.includes("tabBodiesHtml")
+    && templateIslands.includes("selectedBodyHtml")
+    && templateIslands.includes("data-legacy-html-slot")
+    && templateIslands.includes("typed-react-tab-children");
 
   result.inventory.detailShellTemplateReadiness = {
     consumesFlowTabsReactIsland: missingTemplateMarkers.length === 0 && templateWrapperReady,
     missingShellMarkers: missingTemplateMarkers,
     rawDetailTabShellMatches,
-    wrapperReady: templateWrapperReady || legacyWrapperReady,
-    vanillaBridgeScoped: bridgeScoped,
+    wrapperReady: templateWrapperReady,
+    templateOwnsTabBody,
   };
 
   if (missingTemplateMarkers.length) {
@@ -329,8 +330,8 @@ function checkDetailShellTemplateReadiness() {
   if (!templateWrapperReady) {
     add("warnings", templateIslandsFile, 1, "Detail shell must have a React island wrapper around Flow DocsArtifactDetailTemplate.");
   }
-  if (!bridgeScoped) {
-    add("warnings", docsAppFile, 1, "Detail shell tab behavior must be scoped to the named artifact-detail bridge.");
+  if (!templateOwnsTabBody) {
+    add("warnings", templateIslandsFile, 1, "DocsArtifactDetailTemplate island must own selected tab body while the legacy HTML tab slot is quarantined.");
   }
 }
 
@@ -786,7 +787,7 @@ function checkFlowDocsV2PagesReadiness() {
     { id: "singleAppMount", ready: docsIndex.includes('<main id="app"') },
     { id: "docsShellTemplateConsumer", ready: docsShellReact.includes('"data-doc-shell-consumer": "docs-shell-template"') },
     { id: "docsShellTemplateRuntime", ready: docsShellReact.includes("React.createElement(DocsShellTemplate") },
-    { id: "pageSlotBridge", ready: docsShellReact.includes("function DocsPageSlot") },
+    { id: "pageSlotBridge", ready: docsShellReact.includes("function LegacyHtmlPageSlot") && docsShellReact.includes('"data-legacy-html-slot": "page"') },
     { id: "mobileToggleOwnsSidebar", ready: docsShellReact.includes('"aria-controls": "docs-shell-sidebar-nav"') },
   ];
   const detailPageMarkers = [

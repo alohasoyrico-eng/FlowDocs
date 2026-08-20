@@ -183,7 +183,7 @@
 
 .frame-density-cards strong {
   font-family: var(--ref-voice-family-brand);
-  text-transform: capitalize;
+  text-transform: var(--component-text-transform-none);
 }
 
 .frame-density-cards span,

@@ -28182,10 +28182,6 @@
               "description": "Default high-prominence circular action."
             },
             {
-              "id": "accent",
-              "description": "Contextual positive or creation action."
-            },
-            {
               "id": "extended",
               "description": "Icon plus label when action clarity matters."
             },
@@ -54237,16 +54233,6 @@
               "badge": false,
               "state": "default",
               "density": "md"
-            },
-            {
-              "label": "Accent",
-              "icon": "language",
-              "ariaLabel": "Switch language",
-              "variant": "accent",
-              "selected": false,
-              "badge": false,
-              "state": "hover",
-              "density": "md"
             }
           ]
         },
@@ -72479,7 +72465,7 @@
           "scenario": {
             "icon": "add",
             "title": "Floating Action Button",
-            "meta": "Expose one high-prominence contextual action above a surface without becoming a speed dial, quick action cluster, or navigation shortcut.",
+            "meta": "Expose one high-prominence contextual action above a surface with action hierarchy variants and optional extended label treatment.",
             "items": [
               {
                 "label": "Primary",
@@ -72487,19 +72473,26 @@
                 "state": "default"
               },
               {
-                "label": "Accent",
-                "variant": "accent"
+                "label": "Secondary",
+                "variant": "secondary",
+                "state": "default"
+              },
+              {
+                "label": "Danger",
+                "variant": "primary",
+                "intent": "danger"
               },
               {
                 "label": "Extended",
-                "variant": "extended"
+                "variant": "primary",
+                "extended": true
               }
             ],
             "rationaleTitle": "Why Floating Action Button",
             "rationale": [
-              "Use Floating Action Button for one primary contextual action that belongs to the current surface.",
-              "Floating Action Button does not fill containers; extended mode may grow to fit a concise label while preserving a single action.",
-              "Use extended labels when ambiguity is risky, mini only in dense contexts, and avoid covering critical content on small screens."
+              "Use Floating Action Button for one contextual action that belongs to the current surface.",
+              "Variant follows the same action hierarchy as Button and Icon Button; danger and warning are intents, not standalone variants.",
+              "Use extended labels when ambiguity is risky and avoid covering critical content on small screens."
             ]
           }
         },
@@ -72555,7 +72548,7 @@
           ]
         },
         "variants": {
-          "copy": "Floating Action Button variants tune prominence and label treatment for one action; action sets and speed dials are patterns.",
+          "copy": "Floating Action Button variants follow action hierarchy; danger and warning are intents; extended label treatment is anatomy, not a variant.",
           "demos": [
             {
               "label": "Primary",
@@ -72563,16 +72556,39 @@
               "state": "default"
             },
             {
-              "label": "Accent",
-              "variant": "accent"
+              "label": "Secondary",
+              "variant": "secondary",
+              "state": "default"
+            },
+            {
+              "label": "Tertiary",
+              "variant": "tertiary",
+              "state": "default"
+            },
+            {
+              "label": "Outlined",
+              "variant": "outlined",
+              "state": "default"
+            },
+            {
+              "label": "Ghost",
+              "variant": "ghost",
+              "state": "default"
+            },
+            {
+              "label": "Danger",
+              "variant": "primary",
+              "intent": "danger"
+            },
+            {
+              "label": "Warning",
+              "variant": "primary",
+              "intent": "warning"
             },
             {
               "label": "Extended",
-              "variant": "extended"
-            },
-            {
-              "label": "Mini",
-              "variant": "mini"
+              "variant": "primary",
+              "extended": true
             }
           ]
         },
@@ -72612,7 +72628,7 @@
           ]
         },
         "variant-state-behavior": {
-          "copy": "Variant defines action prominence; state defines readiness without expanding into multiple commands.",
+          "copy": "Variant defines action hierarchy; state defines readiness; extended controls label treatment.",
           "states": [
             "default",
             "hover",
@@ -72629,15 +72645,23 @@
               }
             },
             {
-              "label": "Accent",
+              "label": "Secondary",
               "demo": {
-                "variant": "accent"
+                "variant": "secondary"
               }
             },
             {
-              "label": "Extended",
+              "label": "Danger primary",
               "demo": {
-                "variant": "extended"
+                "variant": "primary",
+                "intent": "danger"
+              }
+            },
+            {
+              "label": "Extended primary",
+              "demo": {
+                "variant": "primary",
+                "extended": true
               }
             }
           ]
@@ -72657,20 +72681,21 @@
               "label": "Dense panel",
               "layout": "button-stack",
               "demo": {
-                "variant": "accent"
+                "variant": "primary"
               }
             },
             {
               "label": "Mobile surface",
               "layout": "button-stack",
               "demo": {
-                "variant": "extended"
+                "variant": "primary",
+                "extended": true
               }
             }
           ]
         },
         "responsive-layout-patterns": {
-          "copy": "Use extended labels when ambiguity is risky, mini only in dense contexts, and avoid covering critical content on small screens.",
+          "copy": "Use extended labels when ambiguity is risky, compact density only in dense contexts, and avoid covering critical content on small screens.",
           "examples": [
             {
               "label": "Phone",
@@ -72689,10 +72714,8 @@
               "density": "md",
               "demos": [
                 {
-                  "variant": "accent"
-                },
-                {
-                  "variant": "extended"
+                  "variant": "primary",
+                  "extended": true
                 }
               ]
             }
@@ -72718,7 +72741,7 @@
               "layout": "contextual panel",
               "density": "md",
               "demo": {
-                "variant": "accent"
+                "variant": "primary"
               }
             },
             {
@@ -72728,7 +72751,8 @@
               "layout": "work surface",
               "density": "sm",
               "demo": {
-                "variant": "extended"
+                "variant": "primary",
+                "extended": true
               }
             }
           ]
@@ -72749,9 +72773,21 @@
               "value": "primary",
               "options": [
                 "primary",
-                "accent",
-                "extended",
-                "mini"
+                "secondary",
+                "tertiary",
+                "outlined",
+                "ghost"
+              ]
+            },
+            {
+              "name": "intent",
+              "label": "Intent",
+              "type": "select",
+              "value": "default",
+              "options": [
+                "default",
+                "danger",
+                "warning"
               ]
             },
             {
@@ -72769,8 +72805,8 @@
               ]
             },
             {
-              "name": "fullWidth",
-              "label": "Full width",
+              "name": "extended",
+              "label": "Extended label",
               "type": "checkbox",
               "value": false
             }
@@ -72778,9 +72814,11 @@
           "preview": {
             "label": "Floating Action Button",
             "variant": "primary",
-            "state": "default"
+            "intent": "default",
+            "state": "default",
+            "extended": false
           },
-          "snippet": "<FloatingActionButton label=\"Floating Action Button\" />"
+          "snippet": "<FloatingActionButton label=\"Floating Action Button\" variant=\"primary\" intent=\"default\" />"
         },
         "api-foundations": {
           "copy": "Floating Action Button API exposes label, icon, variant, state, position, and loading while Design System owns elevation, focus, and target size.",
@@ -72801,7 +72839,13 @@
               "name": "variant",
               "type": "FloatingActionButtonVariant",
               "required": "No",
-              "notes": "Visual prominence and label treatment."
+              "notes": "Action hierarchy aligned with Button and Icon Button."
+            },
+            {
+              "name": "intent",
+              "type": "FloatingActionButtonIntent",
+              "required": "No",
+              "notes": "Action intent aligned with Button: default, danger, warning."
             },
             {
               "name": "state",
@@ -72831,7 +72875,7 @@
               "name": "extended",
               "type": "boolean",
               "required": "No",
-              "notes": "Shows the label beside the icon."
+              "notes": "Shows the label beside the icon without changing action hierarchy."
             },
             {
               "name": "disabled",

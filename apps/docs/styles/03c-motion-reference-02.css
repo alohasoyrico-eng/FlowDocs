@@ -159,7 +159,7 @@
   block-size: var(--sys-frame-border-indicator);
   border-radius: var(--sys-frame-radius-full);
   background: var(--sys-energy-action-primary);
-  transform: rotate(-12deg);
+  transform: var(--component-transform-rotate-tilt);
 }
 
 .map-stage article {
@@ -277,7 +277,7 @@
   color: var(--sys-energy-text-secondary);
   font-size: var(--ref-voice-size-3);
   font-weight: var(--ref-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .reference-spec-grid strong,

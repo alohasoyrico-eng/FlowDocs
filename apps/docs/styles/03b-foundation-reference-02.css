@@ -49,7 +49,7 @@
 .frame-token-card code,
 .frame-system-grid code {
   display: inline-flex;
-  min-height: 1.7rem;
+  min-height: var(--component-code-slot-block-size-sm);
   align-items: center;
   padding-inline: var(--ref-frame-space-2);
   border: var(--sys-frame-border-thin) solid var(--sys-energy-border-default);
@@ -124,7 +124,7 @@
   color: var(--tone-accent, var(--sys-energy-action-primary));
   font-size: var(--ref-voice-size-3);
   font-weight: var(--ref-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .growth-meter {
@@ -216,7 +216,7 @@
 .voice-label {
   margin: 0;
   font-weight: var(--ref-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .voice-body,
@@ -242,7 +242,7 @@
   font-family: var(--ref-voice-family-sans);
   font-size: var(--ref-voice-size-6);
   font-weight: var(--ref-voice-weight-bold);
-  text-transform: uppercase;
+  text-transform: var(--component-text-transform-uppercase);
 }
 
 .typography-demo[data-type-demo="paragraph"] [data-type-sample] {

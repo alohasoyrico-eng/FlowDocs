@@ -133,7 +133,7 @@
 .pattern-help-demo__results button {
   padding: 0;
   border: 0;
-  background: transparent;
+  background: var(--component-surface-transparent);
 }
 
 .pattern-help-demo__article,

@@ -96,7 +96,7 @@
   padding: 0;
   border: 0;
   border-radius: 0;
-  background: transparent;
+  background: var(--component-surface-transparent);
   box-shadow: none;
 }
 

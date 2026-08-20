@@ -15,7 +15,7 @@ let toggleContrastState = () => false;
 let toggleGridOverlay = () => false;
 
 let shellRoot;
-let lastPageMarkup = "";
+let lastPageContent = "";
 let lastAfterRender = () => {};
 let lastCurrentRoute = {};
 const state = {
@@ -41,17 +41,17 @@ export function renderDocsShell(current, options = {}) {
   const mount = document.querySelector("#app");
   if (!mount) return;
   lastCurrentRoute = current;
-  if (typeof options.pageMarkup === "string") lastPageMarkup = options.pageMarkup;
+  if (typeof options.pageContent === "string") lastPageContent = options.pageContent;
   if (typeof options.afterRender === "function") lastAfterRender = options.afterRender;
   if (mount.nodeType !== 1) {
-    mount.innerHTML = lastPageMarkup;
+    mount.innerHTML = lastPageContent;
     lastAfterRender(mount);
     return;
   }
   ensureSearchKeyboard();
   shellRoot ||= createRoot(mount);
-  shellRoot.render(React.createElement(DocsShellTemplate, docsShellProps(current), React.createElement(DocsPageSlot, {
-    markup: lastPageMarkup,
+  shellRoot.render(React.createElement(DocsShellTemplate, docsShellProps(current), React.createElement(LegacyHtmlPageSlot, {
+    markup: lastPageContent,
     onRendered: lastAfterRender,
   })));
 }
@@ -232,10 +232,12 @@ function docsShellProps(current) {
   };
 }
 
-function DocsPageSlot({ markup, onRendered }) {
+function LegacyHtmlPageSlot({ markup, onRendered }) {
   const ref = React.useRef(null);
   React.useLayoutEffect(() => {
     if (!ref.current) return;
+    ref.current.dataset.legacyHtmlSlotStatus = "active";
+    ref.current.dataset.legacyHtmlSlotReplacement = "typed-react-page-children";
     if (ref.current.innerHTML !== markup) ref.current.innerHTML = markup;
     onRendered?.(ref.current);
   }, [markup, onRendered]);
@@ -244,6 +246,9 @@ function DocsPageSlot({ markup, onRendered }) {
     className: "content-shell density-responsive",
     "data-flow-slot": "page-content",
     "data-doc-shell-page-mount": "",
+    "data-legacy-html-slot": "page",
+    "data-legacy-html-owner": "FlowDocs",
+    "data-legacy-html-exit": "typed-react-page-children",
   });
 }
 
